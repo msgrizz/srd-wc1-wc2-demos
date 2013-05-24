@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DX650 Seamless Transfer</string>
+
+    <string name="remote_service_connected">Connected to remote service</string>
+    <string name="remote_service_disconnected">Disconnected from remote service</string>
+    <string name="remote_call_failed">Failure calling remote service</string>
+    <string name="bind_service">Bind Service</string>
+    <string name="unbind_service">Unbind Service</string>
+    <string name="title_bladerunner_devices">Bladerunner Devices</string>
+    <string name="button_scan_br">Discover Bladerunner Devices</string>
+    <string name="bt_not_enabled_leaving">Could not enable Bluetooth</string>
+    <string name="none_paired">No devices have been paired</string>
+
+</resources>

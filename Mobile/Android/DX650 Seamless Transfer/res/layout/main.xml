@@ -1,0 +1,195 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFF">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/leftLayout"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ddd"
+        android:layout_weight="4">
+
+        <ListView
+            android:id="@+id/devicesListView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+        android:id="@+id/rightLayout"
+        android:layout_height="match_parent"
+        android:background="#eee"
+        android:layout_weight="2">
+
+
+        <TextView
+            android:id="@+id/deviceNameTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Nothing"
+            android:layout_gravity="center|left|top"
+            android:textColor="#0021af"
+            android:textStyle="bold"
+            android:layout_margin="15dp"
+            android:textSize="48dp" />
+
+        <TextView
+            android:id="@+id/deviceAddressTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="00:00:00:00:00:00"
+            android:layout_gravity="center|left|top"
+            android:textColor="#666"
+            android:layout_marginTop="-20dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="24dp"
+            android:layout_below="@id/deviceNameTextView"/>
+
+        <TextView
+            android:id="@+id/deviceConnectionStateTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Disconnected"
+            android:layout_gravity="center|left|top"
+            android:textColor="#AA0000"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="24dp"
+            android:layout_below="@id/deviceAddressTextView"/>
+
+        <TextView
+            android:id="@+id/deviceCallStateTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Not in a call"
+            android:layout_gravity="center|left|top"
+            android:textColor="#222"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="20dp"
+            android:layout_below="@id/deviceConnectionStateTextView"/>
+
+        <TextView
+            android:id="@+id/deviceWearingStateTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Not wearing"
+            android:layout_gravity="center|left|top"
+            android:textColor="#222"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="20dp"
+            android:layout_below="@id/deviceCallStateTextView"/>
+
+        <TextView
+            android:id="@+id/deviceProximityLabelTextView"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:text="Proximity"
+            android:textColor="#222"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="20dp"
+            android:layout_below="@id/deviceWearingStateTextView" />
+
+        <ProgressBar
+            android:id="@+id/deviceProximityProgressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/deviceWearingStateTextView"
+            android:layout_toRightOf="@id/deviceProximityLabelTextView"
+            android:max="50"
+            android:progress="25"/>
+
+        <!--
+         <TextView
+         android:id="@id/proximityValueTextView"
+         android:layout_width="35dp"
+         android:layout_height="wrap_content"
+         android:gravity="right"
+         android:text="-99"
+         android:textColor="#222"
+         android:layout_marginTop="11dp"
+         android:layout_marginRight="15dp"
+         android:textSize="20dp"
+         android:layout_below="@id/deviceWearingStateTextView"
+         android:layout_alignParentRight="true" />
+         -->
+
+    </RelativeLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/debugLayout"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#eee"
+        android:layout_weight="3.8">
+
+        <TextView
+            android:id="@+id/debugTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Debug"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/startRSSIButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Start RSSI" />
+
+        <Button
+            android:id="@+id/stopRSSIButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop RSSI" />
+
+        <Button
+            android:id="@+id/queryCallStateButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Query Call State" />
+
+        <Button
+            android:id="@+id/queryWearingStateButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Query Wearing State" />
+
+        <Button
+            android:id="@+id/placeCallButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Place Call" />
+
+        <Button
+            android:id="@+id/endCallButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="End Call" />
+
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Close Connection" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
