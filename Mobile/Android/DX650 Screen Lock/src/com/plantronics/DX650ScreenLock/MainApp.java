@@ -31,13 +31,11 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 		RecognitionListener, OnInitListener, OnUtteranceCompletedListener {
 
 	public static MainApp mainApp = null;
-
 	private static final String TAG = "com.plantronics.DX650ScreenLock.MainApp";
 
 	private static Context context = null;
 	private SpeechRecognizer sr;
 	private TextToSpeech tts;
-
 	private boolean locked;
 	private boolean hsConnected;
 	private boolean hsNear;
@@ -51,8 +49,9 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 	private BluetoothAdapter mBluetoothAdapter;
 	private static HeadsetDataController mController;
 	private HeadsetDataDevice mLocalDevice;
-	String mDeviceAddress = "";
+	private String mDeviceAddress = "";
 	private boolean isBoundToService = false;
+	private boolean deviceDiscovered = false;
 
 	/* ****************************************************************************************************
 			Application
@@ -71,6 +70,7 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 		// *************** just for now **************
 		hsConnected = true;
 		hsNear = true;
+		// *******************************************
 
 		hsDonned = false;
 		waitingForUsername = false;
@@ -82,22 +82,40 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 		// Bladerunner
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-		// setup the HeadsetDataService and bind to it
 		mController = HeadsetDataController.getHeadsetControllerSingleton(this);
 		if (mController.bindHeadsetDataService(this) == 2) {
 			Log.e(TAG, "Service already bound: register callbacks with the service.");
-
-			isBoundToService = true;
+			//isBoundToService = true;
 			mController.registerServiceCallbacks();
-
-//			try {
-//				int ret =  mController.getBladeRunnerDevices();
-//			}
-//			catch (RemoteException e) {
-//				e.printStackTrace();
-//			}
 		}
+
+
+//		// setup the HeadsetDataService and bind to it
+//		mController = HeadsetDataController.getHeadsetControllerSingleton(this);
+//		if (mController.bindHeadsetDataService(this) == 2) {
+//			// service is already bound so serviceConnected() will not be called
+//			// so register the service here itself
+//			Log.e(TAG, "Service already bound: register callbacks with the service");
+//			mController.registerServiceCallbacks();
+//		}
+//
+//		if (mController.isbServiceConnectionOpen()) {
+//
+//			if (mLocalDevice == null)  {
+//				Log.i(TAG, "Create new device " + mDeviceAddress);
+//				mController.newDevice(mDeviceAddress, this);
+//
+//				mLocalDevice = new HeadsetDataDevice(mDeviceAddress, (byte)0);
+//			}
+//			if (!mController.isbDeviceOpen(mLocalDevice)) {
+//				// open Bladerunner Connection asynchronous call
+//				mController.open(mLocalDevice, this);
+//			}
+//
+//		} else {
+//			Log.e(TAG, "Connection to the service is not open");
+//			Toast.makeText(this, "Service is disconnected.", Toast.LENGTH_SHORT).show();
+//		}
 	}
 
 	@Override
@@ -168,17 +186,31 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 
 	public void setHSConnected(boolean connected) {
 		hsConnected = connected;
-		checkState();
+		checkLockState();
 	}
 
 	public void setHSDonned(boolean donned) {
 		hsDonned = donned;
-		checkState();
+		checkLockState();
 	}
 
 	/* ****************************************************************************************************
 			Private
 	*******************************************************************************************************/
+
+	private void doDiscovery() {
+		Log.i(TAG, "************* doDiscovery() *************");
+
+		deviceDiscovered = false;
+		try {
+			mController.registerDiscoveryCallback();
+			int ret =  mController.getBladeRunnerDevices();
+			Log.i(TAG, "getBladeRunnerDevices() returned " + ret);
+		}
+		catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void connectToDevice(String deviceAddress) {
 		Log.i(TAG, "************* Connecting to device " + deviceAddress + "... *************");
@@ -188,7 +220,8 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 		mController.open(mLocalDevice, this);
 	}
 
-	void checkState() {
+	void checkLockState() {
+		Log.i(TAG, "************* checkLockState() *************");
 		if (locked && hsConnected && hsDonned && hsNear && !speeking) {
 			if (readyToSpeak) {
 				Log.i(TAG, "Starting unlock sequence...");
@@ -266,8 +299,12 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 
 	@Override
 	public void bindSuccess() {
-		Log.i(TAG, "bindSuccess()");
+		Log.i(TAG, "************* bindSuccess() *************");
 		isBoundToService = true;
+		if (mController == null) {
+			Log.i(TAG, "NULL!!!!!!");
+		}
+		//mController.registerServiceCallbacks();
 	}
 
 	@Override
@@ -282,22 +319,15 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 
 	@Override
 	public void serviceConnected() {
-		Log.i(TAG, "serviceConnected()");
+		Log.i(TAG, "************* serviceConnected() *************");
 
 		isBoundToService = true;
-		mController.registerDiscoveryCallback();
-
-		try {
-			int ret =  mController.getBladeRunnerDevices();
-		}
-		catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		doDiscovery();
 	}
 
 	@Override
 	public void serviceDisconnected() {
-		Log.e(TAG, "serviceDisconnected()");
+		Log.e(TAG, "************* serviceDisconnected() *************");
 	}
 
 	/* ****************************************************************************************************
@@ -306,9 +336,10 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 
 	@Override
 	public void foundDevice(final String name) {
-		Log.i(TAG, "foundDevice: " + name);
+		Log.i(TAG, "************* foundDevice: " + name +"*************");
 
-		if (mDeviceAddress == null) {
+		if (!deviceDiscovered) {
+			deviceDiscovered = true;
 			final Handler handler = new Handler(Looper.getMainLooper());
 			handler.post(new Runnable() {
 				@Override
@@ -317,14 +348,6 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 					mDeviceAddress = device.getAddress();
 
 					if (mController.isbServiceConnectionOpen()) {
-
-//						try {
-//							int ret =  mController.getBladeRunnerDevices();
-//						}
-//						catch (RemoteException e) {
-//							e.printStackTrace();
-//						}
-
 						connectToDevice(mDeviceAddress);
 					}
 					else {
@@ -341,6 +364,15 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 	@Override
 	public void discoveryStopped(int res) {
 		Log.i(TAG, "discoveryStopped()");
+
+		if (!deviceDiscovered) {
+			runDelayed(new Runnable() {
+				@Override
+				public void run() {
+					doDiscovery();
+				}
+			}, 1000);
+		}
 	}
 
 	/* ****************************************************************************************************
@@ -372,7 +404,7 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				//connectToDevice(mDeviceAddress);
+				doDiscovery();
 			}
 		});
 	}
@@ -384,12 +416,12 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 	@Override
 	public void deviceClosed(final HeadsetDataDevice device) {
 		Log.e(TAG, "************* deviceClosed:" + device + "*************");
+
 		final Handler handler = new Handler(Looper.getMainLooper());
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				Log.i(TAG, "************* Attempting to reconnect... *************");
-				//connectToDevice(mDeviceAddress);
+				doDiscovery();
 			}
 		});
 	}
@@ -445,8 +477,8 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 	}
 
 	public void onResults(Bundle results) {
-
 		Log.i(TAG, "************* onResults: " + results + "*************");
+
 		sr.stopListening();
 		ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 		String str = new String();
@@ -509,7 +541,7 @@ public class MainApp extends Application implements BindListener, DiscoveryListe
 			}
 
 			readyToSpeak = true;
-			checkState();
+			checkLockState();
 		}
 		else {
 			Log.e(TAG, "Initilization Failed!");
