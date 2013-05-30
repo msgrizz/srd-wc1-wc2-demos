@@ -14,14 +14,17 @@
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
       <GlobalState>
-        <option name="device" value="2.7in QVGA" />
+        <option name="device" value="5.1in WVGA" />
         <option name="dockMode" value="" />
         <option name="nightMode" value="notnight" />
         <option name="targetHashString" value="android-14" />
         <option name="theme" value="AppTheme" />
-        <option name="visible" value="false" />
       </GlobalState>
     </option>
+    <device-configurations>
+      <entry key="file://$PROJECT_DIR$/res/layout/activity_main.xml" value="Landscape" />
+      <entry key="file://$PROJECT_DIR$/res/layout/lock_screen.xml" value="Landscape" />
+    </device-configurations>
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="INFO" />
@@ -30,23 +33,23 @@
     <list default="true" id="a179564b-59f1-4347-b129-1f840afa8d63" name="Default" comment="" />
     <ignored path="BluetoothLocker.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425482741" ignored="false" />
-    <file path="/a.dummy" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369359435550" ignored="false" />
+    <file path="/fragment.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369857094797" ignored="false" />
+    <file path="/a.dummy" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369880244773" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/Messenger/src/com/plantronics/messenger/VoiceService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369185617601" ignored="false" />
     <file path="/VoiceService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369185611789" ignored="false" />
     <file path="/.name" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369267714513" ignored="false" />
     <file path="/BluetoothReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369272965921" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369286703024" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369875237314" ignored="false" />
     <file path="$PROJECT_DIR$/../SpeechStuff/src/com/plantronics/SpeechStuff/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269142295" ignored="false" />
-    <file path="/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369271171341" ignored="false" />
+    <file path="/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369881906944" ignored="false" />
     <file path="$PROJECT_DIR$/../SpeechStuff/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269126919" ignored="false" />
     <file path="/lock_screen.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369356103207" ignored="false" />
     <file path="/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269578333" ignored="false" />
     <file path="/styles.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269640096" ignored="false" />
     <file path="/activity_main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269722636" ignored="false" />
     <file path="/a.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369270124625" ignored="false" />
-    <file path="/LockScreen.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369279457395" ignored="false" />
-    <file path="/MainApp.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369359805012" ignored="false" />
+    <file path="/LockScreen.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369871881255" ignored="false" />
+    <file path="/MainApp.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369783069715" ignored="false" />
     <file path="/PlantronicsXEventListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369271710264" ignored="false" />
     <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369430916172" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/gen/com/plantronics/Manifest.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274305155" ignored="false" />
@@ -55,19 +58,27 @@
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/project.properties" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369273838238" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/src/com/plantronics/bluetooth/PlantronicsReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274249303" ignored="false" />
     <file path="/PlantronicsReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274238914" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/Manifest.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425087190" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425222128" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425087190" ignored="false" />
+    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/Manifest.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369875242674" ignored="false" />
+    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369784597372" ignored="false" />
+    <file path="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369784590873" ignored="false" />
     <file path="$USER_HOME$/Desktop/BluetoothLocker/project.properties" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369290109296" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/controller/HeadsetDataController.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369350918965" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369351239541" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369430813505" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369857605551" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369442164595" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/controller/HeadsetDataController.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369351264735" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425496199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369351426488" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/example/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369355638801" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369357041802" ignored="false" />
     <file path="/RemoteDeviceActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369430751474" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/BladeRunnerTutorialApp.iml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369857030841" ignored="false" />
+    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369788981026" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/build.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856965185" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856965185" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/remote.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/values/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/device_selection.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/discovery_device_list_item.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +93,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -118,7 +130,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -131,7 +142,7 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="305" selection-end="660" vertical-scroll-proportion="0.2">
+            <state line="44" column="19" selection-start="1982" selection-end="1982" vertical-scroll-proportion="0.5836735">
               <folding />
             </state>
           </provider>
@@ -151,25 +162,25 @@
         <option value="$USER_HOME$/Library/Caches/IdeaIC12/compile-server/dx650 screen lock_be2af1e1/targets/java-production/DX650_Screen_Lock/android/generated_sources/build_config/package com/plantronics/DX650ScreenLock;/BuildConfig.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/PlantronicsXEventMessage.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/BluetoothReceiver.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockScreen.java" />
-        <option value="$PROJECT_DIR$/res/layout/lock_screen.xml" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/ui/DiscoveryActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/ui/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java" />
+        <option value="$PROJECT_DIR$/res/layout/lock_screen.xml" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockScreen.java" />
+        <option value="$PROJECT_DIR$/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainActivity.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1556" />
-    <option name="height" value="1054" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -197,7 +208,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -318,14 +328,81 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plantronics" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plantronics" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
@@ -338,12 +415,13 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus7" />
-    <property name="AndroidTargetDevices" value="FCH16368JF3" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="AndroidTargetDevices" value="FCH16368JF3" />
+    <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RunManager" selected="Android Application.DX650 Screen Lock">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -378,6 +456,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -403,19 +494,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -481,7 +559,7 @@
       <option name="DISABLE_BOOT_ANIMATION" value="false" />
       <option name="NETWORK_SPEED" value="full" />
       <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="CLEAR_LOGCAT" value="true" />
       <RunnerSettings RunnerId="AndroidDebugRunner" />
       <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
@@ -521,29 +599,29 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1556" height="1054" extended-state="6" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1556" height="1024" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969153" sideWeight="0.50840753" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32969153" sideWeight="0.50840753" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27142859" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27120823" sideWeight="0.50840753" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32983193" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21113445" sideWeight="0.9994048" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.40325865" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2038736" sideWeight="0.9994048" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.598369" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20179948" sideWeight="0.5967413" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31873727" sideWeight="0.9713752" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23071979" sideWeight="0.401631" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30682978" sideWeight="0.9713752" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -565,10 +643,10 @@
         <is-autoscroll-to-source value="false" />
       </value>
     </option>
-    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="false" />
+    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="false" />
     <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="false" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
     <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
@@ -617,68 +695,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/Library/Caches/IdeaIC12/compile-server/dx650 screen lock_be2af1e1/targets/java-production/DX650_Screen_Lock/android/copied_sources/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="7" selection-start="253" selection-end="253" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="5" column="7" selection-start="253" selection-end="253" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DX650 Screen Lock.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.18133333">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="1043" selection-end="1043" vertical-scroll-proportion="0.41009465">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.18133333" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-14/android/speech/RecognitionListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="17" selection-start="902" selection-end="902" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-14/android/speech/SpeechRecognizer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="13" selection-start="1625" selection-end="1625" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/BluetoothReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="45" selection-start="1888" selection-end="1888" vertical-scroll-proportion="0.42376447">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockerReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.2429022">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/lock_screen.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1207" selection-end="1207" vertical-scroll-proportion="0.5481081">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/PlantronicsXEventMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="13" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0977918">
-          <folding />
-        </state>
+        <state line="25" column="17" selection-start="902" selection-end="902" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listeners/BindListener.java">
@@ -695,32 +722,88 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-14/android/speech/SpeechRecognizer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="13" selection-start="1625" selection-end="1625" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="74" selection-start="4802" selection-end="4802" vertical-scroll-proportion="0.524">
+        <state line="115" column="74" selection-start="4802" selection-end="4802" vertical-scroll-proportion="0.524" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listeners/HeadsetServiceResponseListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="17" selection-start="477" selection-end="477" vertical-scroll-proportion="0.3877551">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockScreen.java">
+    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-14/android/content/Intent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="23" selection-start="3334" selection-end="3334" vertical-scroll-proportion="0.52155626">
+        <state line="2222" column="31" selection-start="103887" selection-end="103887" vertical-scroll-proportion="0.8489796">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="218" column="34" selection-start="6691" selection-end="6691" vertical-scroll-proportion="0.71608835">
+        <state line="4" column="34" selection-start="241" selection-end="241" vertical-scroll-proportion="0.054507338">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5947" column="8" selection-start="173231" selection-end="173231" vertical-scroll-proportion="0.33298862">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="13" selection-start="1254" selection-end="1254" vertical-scroll-proportion="0.33265308">
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#4134#4237#0" expanded="true" />
+            <element signature="e#4232#4233#0" expanded="true" />
+            <element signature="e#10889#11067#0" expanded="true" />
+            <element signature="e#11061#11062#0" expanded="true" />
+            <element signature="e#11667#11748#0" expanded="true" />
+            <element signature="e#11743#11744#0" expanded="true" />
+            <element signature="e#13596#13912#0" expanded="true" />
+            <element signature="e#13669#13901#0" expanded="true" />
+            <element signature="e#13894#13895#0" expanded="true" />
+            <element signature="e#13907#13908#0" expanded="true" />
+            <element signature="e#15292#15308#0" expanded="true" />
+            <element signature="e#15858#15940#0" expanded="true" />
+            <element signature="e#15935#15936#0" expanded="true" />
+            <element signature="e#18321#18733#0" expanded="true" />
+            <element signature="e#18727#18728#0" expanded="true" />
+            <element signature="e#18929#19014#0" expanded="true" />
+            <element signature="e#19008#19009#0" expanded="true" />
+            <element signature="e#19437#19730#0" expanded="true" />
+            <element signature="e#19725#19726#0" expanded="true" />
+            <element signature="e#19935#20040#0" expanded="true" />
+            <element signature="e#20035#20036#0" expanded="true" />
+            <element signature="e#20248#20353#0" expanded="true" />
+            <element signature="e#20348#20349#0" expanded="true" />
+            <element signature="e#21682#21931#0" expanded="true" />
+            <element signature="e#21758#21918#0" expanded="true" />
+            <element signature="e#21910#21911#0" expanded="true" />
+            <element signature="e#21925#21926#0" expanded="true" />
+            <element signature="e#25221#25309#0" expanded="true" />
+            <element signature="e#25303#25304#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="305" selection-end="660" vertical-scroll-proportion="0.2">
+        <state line="44" column="19" selection-start="1982" selection-end="1982" vertical-scroll-proportion="0.5836735">
           <folding />
         </state>
       </provider>

@@ -1,9 +1,10 @@
 package com.plantronics.DX650ScreenLock;
 
 import android.app.Activity;
-import android.app.Application;
+import android.app.admin.DevicePolicyManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.*;
@@ -15,8 +16,11 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
-import android.view.Menu;
-import android.widget.Toast;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+//import android.widget.Toast;
 import com.plantronics.bladerunner.Definitions;
 import com.plantronics.example.controller.HeadsetDataController;
 import com.plantronics.example.controller.HeadsetDeviceCommand;
@@ -31,27 +35,37 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		RecognitionListener, OnInitListener, OnUtteranceCompletedListener {
 
 	public static MainActivity mainActivity = null;
+	private static Context context = null;
 	private static final String TAG = "com.plantronics.DX650ScreenLock.MainActivity";
+	private static final int LOCK_SCREEN_ACTIVITY = 0;
 	private static final double RSSI_FILTER_CONSTANT = .4;
 
-	private static Context context = null;
 	private SpeechRecognizer sr;
 	private TextToSpeech tts;
-	private static Toast lastToast;
+	private static DevicePolicyManager dpm = null;
+	private static ComponentName deviceAdmin = null;
+	private static boolean lockOnPause;
+	//private static Toast lastToast;
+	private ProgressBar progressBar;
 	private boolean locked;
 	private boolean hsConnected;
 	private boolean hsNear;
 	private boolean hsDonned;
 	private int hsRSSI = 0;
-	//List<Integer> recentHSRSSIs;
 	private int hsNearRSSIThreshold = 60;
 	private int hsFarRSSIThreshold = 75;
 	private boolean speeking;
+	private boolean listening;
+	private String spokenUsername;
 	private boolean waitingForUsername;
 	private boolean waitingForPassphrase;
+	private int unknownUsernameAttempts;
+	private int notHeardUsernameAttempts;
+	private int wrongPassphraseAttempts;
+	private int notHeardPassphraseAttempts;
 	private boolean readyToSpeak;
+	private TimerTask timerTask;
 
-	// Bladerunner
 	private BluetoothAdapter mBluetoothAdapter;
 	private static HeadsetDataController mController;
 	private HeadsetDataDevice mLocalDevice;
@@ -66,16 +80,38 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-		mainActivity = this;
 		context = this.getApplicationContext();
 		sr = SpeechRecognizer.createSpeechRecognizer(this);
 		sr.setRecognitionListener(this);
 		tts = new TextToSpeech(this, this);
+		dpm = (DevicePolicyManager)this.getSystemService(Context.DEVICE_POLICY_SERVICE);
+		deviceAdmin = new ComponentName(this, com.plantronics.DX650ScreenLock.LockerReceiver.class);
+		lockOnPause = false;
+		readyToSpeak = false;
 
-		lockScreen(); // initializes LockScreen.lockScreen
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
-		// Bladerunner
+		progressBar = (ProgressBar)findViewById(R.id.progressBar);
+
+		this.findViewById(R.id.unlock).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				unlockScreen();
+			}
+		});
+
+		if (!dpm.isAdminActive(deviceAdmin)) {
+			Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+			intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
+			intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.add_admin_extra_app_text));
+			this.startActivity(intent);
+		}
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		mController = HeadsetDataController.getHeadsetControllerSingleton(this);
@@ -84,43 +120,51 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			isBoundToService = true;
 			mController.registerServiceCallbacks();
 		}
-
-		hsConnected = false;
-		hsNear = false;
-		hsDonned = false;
-		waitingForUsername = false;
-		waitingForPassphrase = false;
-		readyToSpeak = false;
-		//recentHSRSSIs = new ArrayList<Integer>();
-
-		lockScreen();
 	}
 
-//	@Override
-//	protected void onStart() {
-//		super.onStart();
-//
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		if (lockOnPause) {
+			lockDevice();
+		}
+		mainActivity = null;
+	}
+
+	@Override
+	protected void onResume() {
+		Log.i(TAG, "************* onResume() *************");
+		super.onResume();
+
+		mainActivity = this;
+		locked = true;
 //		hsConnected = false;
 //		hsNear = false;
 //		hsDonned = false;
-//		waitingForUsername = false;
-//		waitingForPassphrase = false;
-//		readyToSpeak = false;
-//		//recentHSRSSIs = new ArrayList<Integer>();
-//
-//		lockScreen();
-//	}
+		waitingForUsername = false;
+		waitingForPassphrase = false;
+		speeking = false;
+		listening = false;
+
+		if (mLocalDevice != null) {
+			connectToDevice(mLocalDevice.getAddress());
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
 
-		if (sr !=null) {
+		Log.i(TAG, "************* onDestroy() *************");
+
+		if (sr != null) {
 			sr.stopListening();
 			sr.destroy();
 		}
 		if (tts != null) {
 			tts.stop();
 			tts.shutdown();
+			speeking = false;
 		}
 		if (mBluetoothAdapter != null) {
 			mBluetoothAdapter.cancelDiscovery();
@@ -137,6 +181,31 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		super.onDestroy();
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		switch (requestCode) {
+			case LOCK_SCREEN_ACTIVITY:
+				Log.i(TAG, "************* Lock screen activity closed. *************");
+				break;
+			default:
+				Log.e(TAG, "onActivityResult(): unknown request code: '"+requestCode+"'");
+		}
+	}
+
+	/* ****************************************************************************************************
+			View
+	*******************************************************************************************************/
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 	/* ****************************************************************************************************
 			Private
 	*******************************************************************************************************/
@@ -145,7 +214,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		Log.i(TAG, "************* doDiscovery() *************");
 
 		deviceDiscovered = false;
-		if (LockScreen.lockScreen != null) LockScreen.lockScreen.setProgressBarHidden(false);
+		progressBar.setVisibility(android.widget.ProgressBar.INVISIBLE);
 		try {
 			mController.registerDiscoveryCallback();
 			int ret =  mController.getBladeRunnerDevices();
@@ -212,15 +281,21 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	void checkLockState() {
 		Log.i(TAG, "************* checkLockState() *************");
 
-		Log.i(TAG, "locked: " + locked + " hsConnected: " + hsConnected + " hsDonned: " + hsDonned + " hsNear: " + hsNear + " readyToSpeak: " + readyToSpeak + " speeking: " + speeking);
-		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speeking) {
-			Log.i(TAG, "Starting unlock sequence...");
+		Log.i(TAG, "locked: " + locked + ", hsConnected: " + hsConnected + ", hsDonned: " + hsDonned + ", hsNear: "
+				+ hsNear + ", readyToSpeak: " + readyToSpeak + ", speeking: " + speeking + ", listening: " + listening);
+		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speeking && !listening) {
+			Log.i(TAG, "************* Starting unlock sequence... *************");
 			// regardless of whether we were previously waiting for a new verbal response from the user, start over the "hi say" sequence
 			sr.stopListening();
 			tts.stop();
 			waitingForPassphrase = false;
+			unknownUsernameAttempts = 0;
+			notHeardUsernameAttempts = 0;
+			wrongPassphraseAttempts = 0;
+			notHeardPassphraseAttempts = 0;
 			//recentHSRSSIs.clear();
 
+			speeking = true;
 			runDelayed(new Runnable() {
 				@Override
 				public void run() {
@@ -232,8 +307,10 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			// will start listening after onUtteranceCompleted()
 		}
 		else if (!hsDonned || !hsConnected || !hsNear) {
+			Log.i(TAG, "************* Ending unlock sequence. *************");
 			sr.stopListening();
 			tts.stop();
+			speeking = false;
 			waitingForUsername = false;
 			waitingForPassphrase = false;
 			//lockScreen();
@@ -255,37 +332,112 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	private void lockScreen() {
-		if ((context != null) && !locked) {
-			Log.i(TAG, "************* Locking the screen! *************");
-			Intent intent = new Intent(context, com.plantronics.DX650ScreenLock.LockScreen.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(intent);
+
+		if (!locked) {
+			// bring this activity to the foreground
+			Intent intent = new Intent("intent.come_to_foreground");
+			intent.setComponent(new ComponentName(context.getPackageName(), MainActivity.class.getName()));
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.getApplicationContext().startActivity(intent);
 		}
 		locked = true;
 	}
 
-	private void unlockScreen() {
-
+	public void unlockScreen() {
 		sr.stopListening();
 		tts.stop();
 
 		if (locked) {
 			Log.i(TAG, "************* Unlocking the screen! *************");
-			com.plantronics.DX650ScreenLock.LockScreen.unlockDevice();
+			Intent goHomeIntent = new Intent(Intent.ACTION_MAIN);
+			goHomeIntent.addCategory(Intent.CATEGORY_HOME);
+			goHomeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(goHomeIntent);
 		}
 		locked = false;
+	}
+
+	private void lockDevice() {
+		Log.i(TAG, "************* Locking the device! *************");
+
+		if (dpm != null && deviceAdmin != null && mainActivity != null) {
+			if (dpm.isAdminActive(deviceAdmin)) {
+				dpm.lockNow();
+			}
+
+			PowerManager pm = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
+			PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "DX650 Screen Lock");
+
+			wl.acquire();
+			wl.release();
+		}
 	}
 
 	private void startListening() {
 
 		Log.i(TAG, "************* startListening *************");
 
-		speeking = true;
+		listening = true;
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
-		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.DX650ScreenLock");
+		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
 		sr.startListening(intent);
+
+		// schedule a timer that will check that the recognition gets something, otherwise ask again
+		scheduleTimer(new Runnable() {
+			@Override
+			public void run() {
+				runOnMainThread(new Runnable() {
+					@Override
+					public void run() {
+						Log.i(TAG, "************* Speech recognition timed out. *************");
+						sr.cancel();
+						listening = false;
+						checkForSpeechRecognitionError();
+					}
+				});
+			}
+		}, 5000);
+	}
+
+	private void checkForSpeechRecognitionError() {
+
+		cancelTimer();
+		if (waitingForUsername) {
+			notHeardUsernameAttempts++;
+			switch (notHeardUsernameAttempts) {
+				case 1:
+					startSpeaking("I'm sorry, I didn't catch that. Please say your username again.");
+					break;
+				default:
+					startSpeaking("I'm sorry, I still didn't catch that. Please say your username again.");
+					break;
+			}
+		}
+		else if (waitingForPassphrase) {
+			notHeardPassphraseAttempts++;
+			switch (notHeardPassphraseAttempts) {
+				case 1:
+					startSpeaking("I'm sorry, I didn't catch that. Please say your passphrase again.");
+					break;
+				case 2:
+					startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase again.");
+					break;
+				case 3:
+					startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase one more time.");
+					break;
+				default:
+					waitingForPassphrase = false;
+					waitingForUsername = true;
+					unknownUsernameAttempts = 0;
+					notHeardUsernameAttempts = 0;
+					notHeardPassphraseAttempts = 0;
+					wrongPassphraseAttempts = 0;
+					startSpeaking("Let's start over. Please say your username.");
+					break;
+			}
+		}
 	}
 
 	private void startSpeaking(String text) {
@@ -301,11 +453,31 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private void runOnMainThread(Runnable runnable) {
 		final Handler handler = new Handler(Looper.getMainLooper());
 		handler.post(runnable);
+
+		//runOnUiThread(runnable);
 	}
 
 	private void runDelayed(Runnable runnable, int delay) {
 		final Handler handler = new Handler(Looper.getMainLooper());
 		handler.postDelayed(runnable, delay);
+	}
+
+	private void scheduleTimer(final Runnable runnable, long delay) {
+		timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				runnable.run();
+			}
+		};
+
+		Timer timer = new Timer();
+		timer.schedule(timerTask, delay);
+	}
+
+	private void cancelTimer() {
+		if (timerTask != null) {
+			timerTask.cancel();
+		}
 	}
 
 	private void queryWearingState() {
@@ -325,58 +497,25 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	private void updateRSSI(int rssi) {
 
-		// the second the RSSI hits the "near" threshold, show the dialog
-//		if ((connectedDevice != null) && selDeviceIsWearing && ((selDeviceRSSI > -1) && (selDeviceRSSI <= NEAR_SIGNAL_THRESHOLD))) { // || not in call
-//
-//			if ((askTransferAlertDialog == null) && !askTransferAlertDismissed) {
-//
-//				Log.i(TAG, "******** Asking to transfer ********");
-//
-//				recentHSRSSIs.clear();
-//
-//
-//			}
-//		}
-//		else {
-
-
 		// low-pass filter the RSSI
 		hsRSSI = (int)Math.round(rssi * RSSI_FILTER_CONSTANT + hsRSSI * (1.0 - RSSI_FILTER_CONSTANT));
 
-		Log.i(TAG, "hsRSSI: " + hsRSSI);
 		if (hsRSSI <= hsNearRSSIThreshold) {
 			hsNear = true;
 		}
 		else if (hsRSSI >= hsFarRSSIThreshold) {
 			hsNear = false;
 		}
-		Log.i(TAG, "hsNear: " + hsNear);
-
-
-//			if ( ((count >= 5) && !close) || (connectedDevice == null) || !selDeviceIsWearing) { // || not in call
-//				if (askTransferAlertDialog != null) {
-//					Log.i(TAG, "******** Closing transfer dialog ********");
-//					askTransferAlertDialog.cancel();
-//					askTransferAlertDialog = null;
-//				}
-//				askTransferAlertDismissed = false;
-//			}
-//		}
-
-//		recentHSRSSIs.add(0, hsRSSI);
-//		if (recentHSRSSIs.size() > 5) {
-//			recentHSRSSIs.remove(recentHSRSSIs.size()-1);
-//		}
 
 		checkLockState();
 	}
 
 	private void toast(String text) {
-		if (lastToast != null) {
-			lastToast.cancel();
-		}
-		lastToast = Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT);
-		lastToast.show();
+//		if (lastToast != null) {
+//			lastToast.cancel();
+//		}
+//		lastToast = Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT);
+//		lastToast.show();
 	}
 
 	/* ****************************************************************************************************
@@ -386,15 +525,6 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	@Override
 	public void bindSuccess() {
 		Log.i(TAG, "************* bindSuccess() *************");
-
-//		Log.i(TAG, "mController(2): " + mController);
-//		if (!isBoundToService) {
-//			if (mController == null) {
-//				mController = HeadsetDataController.getHeadsetControllerSingleton(this);
-//			}
-//			mController.registerServiceCallbacks();
-//		}
-
 		isBoundToService = true;
 	}
 
@@ -480,11 +610,11 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			public void run() {
 				toast("Connected.");
 				hsConnected = true;
-				if (LockScreen.lockScreen != null) LockScreen.lockScreen.setProgressBarHidden(true);
 				checkLockState();
 				startListeningForEvents();
 				startMonitoringProximity(true);
 				queryWearingState();
+				progressBar.setVisibility(android.widget.ProgressBar.INVISIBLE);
 			}
 		});
 	}
@@ -554,15 +684,22 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	public void onError(int error) {
-		Log.i(TAG,  "************* onError: " +  error + "*************");
+		Log.i(TAG, "************* onError: " + error + "*************");
 
 		if (error == SpeechRecognizer.ERROR_NO_MATCH) {
-			if (waitingForUsername) {
-				startSpeaking("I'm sorry, I didn't catch that. Please say your username again.");
-			}
-			else if (waitingForPassphrase) {
-				startSpeaking("I'm sorry, I didn't catch that. Please say your passphrase again.");
-			}
+			runOnMainThread(new Runnable() {
+				@Override
+				public void run() {
+					runOnMainThread(new Runnable() {
+						@Override
+						public void run() {
+							sr.cancel();
+							listening = false;
+							checkForSpeechRecognitionError();
+						}
+					});
+				}
+			});
 		}
 		// OTHERS
 	}
@@ -570,6 +707,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	public void onResults(Bundle results) {
 
 		sr.stopListening();
+		cancelTimer();
+		listening = false;
 		ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 		String str = new String();
 		for (int i = 0; i < data.size(); i++) {
@@ -577,13 +716,22 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			Log.i(TAG, "************* Spoken: " + str + " *************");
 
 			if (waitingForUsername) {
-				if (str.toLowerCase().equals("morgan")) {
+				spokenUsername = str.toLowerCase();
+				if (spokenUsername.equals("morgan")) {
 					waitingForUsername = false;
-					startSpeaking("Hi, " + str + ". Please say your passphrase.");
+					startSpeaking("Hi " + str + ". Please say your passphrase.");
 					waitingForPassphrase = true;
 				}
 				else {
-					startSpeaking("I'm sorry, I don't recognize that username. Please say your username again.");
+					unknownUsernameAttempts++;
+					switch (unknownUsernameAttempts) {
+						case 1:
+							startSpeaking("I'm sorry, I don't recognize that username. Please say your username again.");
+							break;
+						default:
+							startSpeaking("I'm sorry, I still don't recognize that username. Please say your username again.");
+							break;
+					}
 				}
 				break;
 			}
@@ -592,7 +740,27 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 					userAuthenticated();
 				}
 				else {
-					startSpeaking("I'm sorry, that's not the correct passphrase. Please say your passphrase.");
+					wrongPassphraseAttempts++;
+					switch (wrongPassphraseAttempts) {
+						case 1:
+							startSpeaking("I'm sorry, that's not the correct passphrase. Please say your passphrase.");
+							break;
+						case 2:
+							startSpeaking("I'm sorry, that's still not the correct passphrase. Please say your passphrase.");
+							break;
+						case 3:
+							startSpeaking("I'm sorry, that's still not the correct passphrase. Please say your passphrase one more time.");
+							break;
+						default:
+							waitingForPassphrase = false;
+							waitingForUsername = true;
+							unknownUsernameAttempts = 0;
+							notHeardUsernameAttempts = 0;
+							notHeardPassphraseAttempts = 0;
+							wrongPassphraseAttempts = 0;
+							startSpeaking("Let's start over. Please say your username.");
+							break;
+					}
 				}
 				break;
 			}
@@ -654,362 +822,359 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			(Class) CommandTask
 	*******************************************************************************************************/
 
-/**
- * Command Task call Bladerunner perform() method on the
- * given {@link com.plantronics.headsetdataservice.io.DeviceCommand}
- * In background it also verifies if the bladerunner connection is open? If not, it initiates the Bladerunner
- * connection and also registers {@link HeadsetServiceConnectionListener}
- * When successful, this Task invokes the Command again
- * Updates the result of the perform() method to UI under onProgressUpdate
- */
-public class CommandTask extends AsyncTask<HeadsetDeviceCommand, RemoteResult, Integer> implements HeadsetServiceResponseListener,
-		HeadsetServiceConnectionListener {
+	/**
+	 * Command Task call Bladerunner perform() method on the
+	 * given {@link com.plantronics.headsetdataservice.io.DeviceCommand}
+	 * In background it also verifies if the bladerunner connection is open? If not, it initiates the Bladerunner
+	 * connection and also registers {@link HeadsetServiceConnectionListener}
+	 * When successful, this Task invokes the Command again
+	 * Updates the result of the perform() method to UI under onProgressUpdate
+	 */
+	public class CommandTask extends AsyncTask<HeadsetDeviceCommand, RemoteResult, Integer> implements HeadsetServiceResponseListener,
+			HeadsetServiceConnectionListener {
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		Log.i(TAG, "Executing the CommandTask ");
-	}
-
-	@Override
-	public void result(int res, RemoteResult result) {
-		publishProgress(result);
-	}
-
-	@Override
-	public void settingResult(int res, SettingsResult settingsResult) {
-		publishProgress(settingsResult.getResult());
-	}
-
-	// onProgressUpdate implements a hack with the value returned from getResultCode()
-	// the idea is to distinguish between deviceOpen()/deviceClose() callbacks
-	// and the actual result returned form the execution of perform() command
-	@Override
-	protected void onProgressUpdate(RemoteResult... values) {
-		super.onProgressUpdate(values);
-
-		// ***************** see SettingTask onProgressUpdate() for info about error handling *************
-		if (values[0].getResultCode() < 2) {
-			Log.i(TAG, "Result returned=" + values[0].getResultCode());
-			Log.i(TAG, "The result=" + values[0].getResultString());
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Log.i(TAG, "Executing the CommandTask ");
 		}
-		else {
-			Log.i(TAG, values[0].getResultString());
-			if (values[0].getResultCode() == 4 ) {
-				Log.e(TAG, "************************** CommandTask: execute the saved Task **************************" );
-				//createRSSICommandObject(bToggleRSSI);
+
+		@Override
+		public void result(int res, RemoteResult result) {
+			publishProgress(result);
+		}
+
+		@Override
+		public void settingResult(int res, SettingsResult settingsResult) {
+			publishProgress(settingsResult.getResult());
+		}
+
+		// onProgressUpdate implements a hack with the value returned from getResultCode()
+		// the idea is to distinguish between deviceOpen()/deviceClose() callbacks
+		// and the actual result returned form the execution of perform() command
+		@Override
+		protected void onProgressUpdate(RemoteResult... values) {
+			super.onProgressUpdate(values);
+
+			// ***************** see SettingTask onProgressUpdate() for info about error handling *************
+			if (values[0].getResultCode() < 2) {
+				Log.i(TAG, "Result returned=" + values[0].getResultCode());
+				Log.i(TAG, "The result=" + values[0].getResultString());
+			}
+			else {
+				Log.i(TAG, values[0].getResultString());
+				if (values[0].getResultCode() == 4 ) {
+					Log.e(TAG, "************************** CommandTask: execute the saved Task **************************" );
+					//createRSSICommandObject(bToggleRSSI);
+				}
 			}
 		}
-	}
 
-	// Call the perform() method to execute the Command on the headset
-	@Override
-	protected Integer doInBackground(HeadsetDeviceCommand... deviceCommands) {
-		int res = -1;
-		RemoteResult remoteRes = new RemoteResult();
-		Log.e(TAG, "doInBack: received args" + deviceCommands);
-		if (!mController.isbDeviceOpen(mLocalDevice))  {
-			Log.e(TAG, "device is not open, saving Command Task");
-			mController.open(mLocalDevice, this);
+		// Call the perform() method to execute the Command on the headset
+		@Override
+		protected Integer doInBackground(HeadsetDeviceCommand... deviceCommands) {
+			int res = -1;
+			RemoteResult remoteRes = new RemoteResult();
+			Log.e(TAG, "doInBack: received args" + deviceCommands);
+			if (!mController.isbDeviceOpen(mLocalDevice))  {
+				Log.e(TAG, "device is not open, saving Command Task");
+				mController.open(mLocalDevice, this);
+			}
+			else {
+				res = mController.perform(deviceCommands[0].getDevice(), deviceCommands[0].getCommand(), remoteRes, this);
+			}
+			return res;
 		}
-		else {
-			res = mController.perform(deviceCommands[0].getDevice(), deviceCommands[0].getCommand(), remoteRes, this);
+
+		@Override
+		protected void onPostExecute(Integer integer) {
+			super.onPostExecute(integer);
+
+			//bToggleRSSI = !bToggleRSSI;
+			// set the screen with the result display
 		}
-		return res;
-	}
 
-	@Override
-	protected void onPostExecute(Integer integer) {
-		super.onPostExecute(integer);
+		// in case the connection was not open, this callback will be called
+		// Its a hack with value - 4  (I just want to distinguish between actual result returned from
+		// the execution of the perform(..cmd ..)  and  the case where BR connection got established successfully
+		// it can be handled better
+		@Override
+		public void deviceOpen(final HeadsetDataDevice device) {
+			Log.e(TAG, "CommandTask: device opened");
+			RemoteResult result = new RemoteResult(4, "Device Open");
+			publishProgress(result);
+		}
 
-		//bToggleRSSI = !bToggleRSSI;
-		// set the screen with the result display
-	}
+		// again the hack with value 2 returned as open failed so that
+		// onProgressUpdate() can act on it
+		@Override
+		public void openFailed(final HeadsetDataDevice device) {
+			Log.e(TAG, "CommandTask: device open failed");
+			RemoteResult result = new RemoteResult(2, "Device Open Failed");
+			publishProgress(result);
+		}
 
-	// in case the connection was not open, this callback will be called
-	// Its a hack with value - 4  (I just want to distinguish between actual result returned from
-	// the execution of the perform(..cmd ..)  and  the case where BR connection got established successfully
-	// it can be handled better
-	@Override
-	public void deviceOpen(final HeadsetDataDevice device) {
-		Log.e(TAG, "CommandTask: device opened");
-		RemoteResult result = new RemoteResult(4, "Device Open");
-		publishProgress(result);
+		// again the hack with value 2 returned as open failed so that
+		// onProgressUpdate() can act on it
+		@Override
+		public void deviceClosed(final HeadsetDataDevice device) {
+			Log.e(TAG, "CommandTask: device closed");
+			RemoteResult result = new RemoteResult(2, "Device Closed");
+			publishProgress(result);
+		}
 	}
-
-	// again the hack with value 2 returned as open failed so that
-	// onProgressUpdate() can act on it
-	@Override
-	public void openFailed(final HeadsetDataDevice device) {
-		Log.e(TAG, "CommandTask: device open failed");
-		RemoteResult result = new RemoteResult(2, "Device Open Failed");
-		publishProgress(result);
-	}
-
-	// again the hack with value 2 returned as open failed so that
-	// onProgressUpdate() can act on it
-	@Override
-	public void deviceClosed(final HeadsetDataDevice device) {
-		Log.e(TAG, "CommandTask: device closed");
-		RemoteResult result = new RemoteResult(2, "Device Closed");
-		publishProgress(result);
-	}
-}
 
 	/* ****************************************************************************************************
 			(Class) SettingTask
 	*******************************************************************************************************/
-/**
- * Setting Task call Bladerunner fetch() method on the
- * given {@link com.plantronics.headsetdataservice.io.DeviceSetting}
- * In background it also verifies if the bladerunner connection is open? If not, it initiates the Bladerunner
- * connection and also registers {@link HeadsetServiceConnectionListener}
- * When successful, this Task invokes the Setting again
- * Updates the result of the fetch() method to UI under onProgressUpdate
- */
-public class SettingTask extends AsyncTask<HeadsetDeviceSetting, RemoteResult, Integer>
-		implements HeadsetServiceResponseListener, HeadsetServiceConnectionListener {
+	/**
+	 * Setting Task call Bladerunner fetch() method on the
+	 * given {@link com.plantronics.headsetdataservice.io.DeviceSetting}
+	 * In background it also verifies if the bladerunner connection is open? If not, it initiates the Bladerunner
+	 * connection and also registers {@link HeadsetServiceConnectionListener}
+	 * When successful, this Task invokes the Setting again
+	 * Updates the result of the fetch() method to UI under onProgressUpdate
+	 */
+	public class SettingTask extends AsyncTask<HeadsetDeviceSetting, RemoteResult, Integer>
+			implements HeadsetServiceResponseListener, HeadsetServiceConnectionListener {
 
-	SettingsResult settingsResult;
+		SettingsResult settingsResult;
 //		RemoteResult queryResult;
 //		Object[] mResult;
 
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		Log.i(TAG, "Executing SettingTask");
-		// print the command going to be executed
-	}
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Log.i(TAG, "Executing SettingTask");
+			// print the command going to be executed
+		}
 
-	@Override
-	public void result(int res, RemoteResult result) {
-		Log.i(TAG, "result");
-		//publishProgress(result);
+		@Override
+		public void result(int res, RemoteResult result) {
+			Log.i(TAG, "result");
+			//publishProgress(result);
 
 
-	}
+		}
 
-	@Override
-	public void settingResult(int res, SettingsResult theResult) {
-		Log.i(TAG, "settingResult");
-		settingsResult = theResult;
-		//mResult = settingsResult.getSetting().getValues();
-		publishProgress(settingsResult.getResult());
-	}
+		@Override
+		public void settingResult(int res, SettingsResult theResult) {
+			Log.i(TAG, "settingResult");
+			settingsResult = theResult;
+			//mResult = settingsResult.getSetting().getValues();
+			publishProgress(settingsResult.getResult());
+		}
 
-	// onProgressUpdate implements a hack with the value returned from getResultCode()
-	// the idea is to distinguish between deviceOpen()/deviceClose() callbacks
-	// and the actual result returned form the execution of fetch() setting
-	// this can be handled differently
-	@Override
-	protected void onProgressUpdate(RemoteResult... values) {
-		super.onProgressUpdate(values);
+		// onProgressUpdate implements a hack with the value returned from getResultCode()
+		// the idea is to distinguish between deviceOpen()/deviceClose() callbacks
+		// and the actual result returned form the execution of fetch() setting
+		// this can be handled differently
+		@Override
+		protected void onProgressUpdate(RemoteResult... values) {
+			super.onProgressUpdate(values);
 
-		if (values[0].getResultCode() < 2) {
-			// publish the result on the screen
-			// This is the result from the execution of the Setting request fetch()
-			Log.i(TAG, "Result returned = " + values[0].getResultCode());
+			if (values[0].getResultCode() < 2) {
+				// publish the result on the screen
+				// This is the result from the execution of the Setting request fetch()
+				Log.i(TAG, "Result returned = " + values[0].getResultCode());
 
-			if (values[0].getResultCode() < 0) {
-				// error case
-				Log.i(TAG, "The result = " + values[0].getResultString());
+				if (values[0].getResultCode() < 0) {
+					// error case
+					Log.i(TAG, "The result = " + values[0].getResultString());
+				}
+				else {
+					// successful result, print the Settings value returned in the fetch()
+					//Log.i(TAG, "Settings = " + Arrays.asList(mResult).toString());
+				}
+
+				int settingType = settingsResult.getSetting().getType().getID();
+				switch (settingType) {
+
+					case Definitions.Settings.WEARING_STATE_SETTING: {
+						Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
+						List resultList = Arrays.asList(settingsResult.getSetting().getValues());
+						Log.i(TAG, "resultList: " + resultList);
+						Boolean on = (resultList.get(0).toString() == "true");
+						Log.i(TAG, "------------- Don/Doff Setting: " + on + " -------------");
+						updateWearingState(on);
+						break;
+					}
+
+					case Definitions.Settings.CALL_STATUS_SETTING: {
+						Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
+						List resultList = Arrays.asList(settingsResult.getSetting().getValues());
+						Log.i(TAG, "resultList: " + resultList);
+						String status = resultList.get(0).toString();
+						Log.i(TAG, "------------- Call Status Setting: " + status + " -------------");
+						break;
+					}
+
+					case Definitions.Settings.CURRENT_SIGNAL_STRENGTH_SETTING:
+						Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
+						List resultList = Arrays.asList(settingsResult.getSetting().getValues());
+						Log.i(TAG, "resultList: " + resultList);
+						String strength = resultList.get(0).toString();
+						Log.i(TAG, "------------- Signal Strength Setting: " + strength + " -------------");
+						break;
+				}
 			}
 			else {
-				// successful result, print the Settings value returned in the fetch()
-				//Log.i(TAG, "Settings = " + Arrays.asList(mResult).toString());
+				// This is the case where Bladerunner connection was not opened
+				// hence the result is whether we were successful to open the connection or not
+				Log.i(TAG, values[0].getResultString());
+				if (values[0].getResultCode() == 4) {
+					// result code == 4 ; means that we were successful in opening connection
+					// now execute the Setting request again
+					Log.e(TAG, "************* CommandTask: execute the saved Task *************");
+					// execute settings api
+					//createBatterySettingObject();
+				}
 			}
+		}
 
-			int settingType = settingsResult.getSetting().getType().getID();
-			switch (settingType) {
+		// call the fetch() for the Setting request
+		@Override
+		protected Integer doInBackground(HeadsetDeviceSetting... deviceSettings) {
+			int res = -1;
+			RemoteResult remoteRes = new RemoteResult();
+			Log.e(TAG, "doInBackground: received args" + deviceSettings);
+			if (!mController.isbDeviceOpen(mLocalDevice)) {
+				Log.e(TAG, "device is not open, saving Setting Task");
+				// start the connection open process. It will result in asynchronous api callbacks handled from
+				// deviceOpen() and openFailed()
+				mController.open(mLocalDevice, this);
 
-				case Definitions.Settings.WEARING_STATE_SETTING: {
-					Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
-					List resultList = Arrays.asList(settingsResult.getSetting().getValues());
-					Log.i(TAG, "resultList: " + resultList);
-					Boolean on = (resultList.get(0).toString() == "true");
-					Log.i(TAG, "------------- Don/Doff Setting: " + on + " -------------");
+			}
+			else {
+				// connection is already open
+				res = mController.fetch(deviceSettings[0].getDevice(), deviceSettings[0].getSetting(), remoteRes, this);
+				// save the Setting result returned
+				Log.e(TAG, "Copying setting - " + deviceSettings[0].getSetting().toString());
+
+				//mResult = deviceSettings[0].getSetting().getValues();
+				//Log.e(TAG, "Result=" + Arrays.asList(mResult).toString());
+				//publishProgress(remoteRes);
+			}
+			return res;
+		}
+
+		@Override
+		protected void onPostExecute(Integer integer) {
+			super.onPostExecute(integer);
+
+			// set the screen with the result display
+		}
+
+		// in case the connection was not open, this callback will be called
+		// Its a hack with value (4)  (I just want to distinguish between actual result returned from
+		// the execution of the fetch(..setting ..)  and  the case where BR connection got established successfully
+		// it can be handled better
+		@Override
+		public void deviceOpen(final HeadsetDataDevice device) {
+			Log.e(TAG, "SettingTask: device opened");
+			RemoteResult result = new RemoteResult(4, "Device Open");
+			publishProgress(result);
+
+		}
+
+		@Override
+		public void openFailed(final HeadsetDataDevice device) {
+			Log.e(TAG, "SettingTask: device open failed");
+			RemoteResult result = new RemoteResult(2, "Device Open Failed");
+			publishProgress(result);
+		}
+
+		@Override
+		public void deviceClosed(final HeadsetDataDevice device) {
+			Log.e(TAG, "SettingTask: device closed");
+			RemoteResult result = new RemoteResult(2, "Device Closed");
+			publishProgress(result);
+		}
+	}
+
+	/* ****************************************************************************************************
+			(Class) ReceiveEventTask
+	*******************************************************************************************************/
+	public class ReceiveEventTask extends AsyncTask<HeadsetDataDevice, DeviceEvent, Integer>
+			implements HeadsetServiceEventListener, HeadsetServiceConnectionListener {
+
+		@Override
+		protected void onProgressUpdate(DeviceEvent... values) {
+			super.onProgressUpdate(values);
+
+			// print the device event
+			switch ( ((DeviceEvent)values[0]).getType().getID()) {
+
+				case Definitions.Events.CUSTOM_BUTTON_EVENT:
+					String button = ((DeviceEvent)values[0]).getEventData()[0].toString();
+					Log.i(TAG, "------------- Custom Button Event: " + button + " -------------");
+					break;
+
+				case Definitions.Events.WEARING_STATE_CHANGED_EVENT:
+					boolean on = false;
+					if (((DeviceEvent)values[0]).getEventData()[0].toString() == "true") on = true;
+					Log.i(TAG, "------------- Don/Doff Event: " + on + " -------------");
 					updateWearingState(on);
-					break;
-				}
 
-				case Definitions.Settings.CALL_STATUS_SETTING: {
-					Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
-					List resultList = Arrays.asList(settingsResult.getSetting().getValues());
-					Log.i(TAG, "resultList: " + resultList);
-					String status = resultList.get(0).toString();
-					Log.i(TAG, "------------- Call Status Setting: " + status + " -------------");
+				case Definitions.Events.BATTERY_STATUS_CHANGED_EVENT:
+					Log.i(TAG, "------------- Battery Status Event: " + Arrays.asList( ((DeviceEvent)values[0]).getEventData()).toString() + " -------------");
 					break;
-				}
 
-				case Definitions.Settings.CURRENT_SIGNAL_STRENGTH_SETTING:
-					Log.i(TAG, "settingsResult.getSetting().toString(): " + settingsResult.getSetting().toString());
-					List resultList = Arrays.asList(settingsResult.getSetting().getValues());
-					Log.i(TAG, "resultList: " + resultList);
-					String strength = resultList.get(0).toString();
-					Log.i(TAG, "------------- Signal Strength Setting: " + strength + " -------------");
+				case Definitions.Events.CALL_STATUS_CHANGE_EVENT:
+					String status = ((DeviceEvent)values[0]).getEventData()[0].toString();
+					Log.i(TAG, "------------- Call Status Event: " + status + " -------------");
+					break;
+
+				case Definitions.Events.SIGNAL_STRENGTH_EVENT:
+					String strengthString = ((DeviceEvent)values[0]).getEventData()[1].toString();
+					int strength = Integer.parseInt(strengthString); // this is stupid.
+					Log.i(TAG, "------------- Signal Strength Event: " + strengthString + " -------------");
+					updateRSSI(strength);
+					break;
+
+				case Definitions.Events.CONFIGURE_SIGNAL_STRENGTH_EVENT_EVENT:
+					String enabled = ((DeviceEvent)values[0]).getEventData()[1].toString();
+					Log.i(TAG, "------------- Configure Signal Strength Event: " + enabled + " -------------");
+					break;
+
+				default:
+					Log.i(TAG, "------------- Other Event: " + values[0] + " -------------");
 					break;
 			}
 		}
-		else {
-			// This is the case where Bladerunner connection was not opened
-			// hence the result is whether we were successful to open the connection or not
-			Log.i(TAG, values[0].getResultString());
-			if (values[0].getResultCode() == 4) {
-				// result code == 4 ; means that we were successful in opening connection
-				// now execute the Setting request again
-				Log.e(TAG, "************* CommandTask: execute the saved Task *************");
-				// execute settings api
-				//createBatterySettingObject();
+
+		// register to receive all Bladerunner Events
+		@Override
+		protected Integer doInBackground(HeadsetDataDevice... headsetDataDevices) {
+			if (mController.registerEventListener(mLocalDevice, this)) {
+				Log.i(TAG, "Registered for events.");
+				return 0; // success
+			}
+			else {
+				Log.e(TAG, "Device not open, failed to register for events.");
+				return -1;  // failed
 			}
 		}
-	}
 
-	// call the fetch() for the Setting request
-	@Override
-	protected Integer doInBackground(HeadsetDeviceSetting... deviceSettings) {
-		int res = -1;
-		RemoteResult remoteRes = new RemoteResult();
-		Log.e(TAG, "doInBackground: received args" + deviceSettings);
-		if (!mController.isbDeviceOpen(mLocalDevice)) {
-			Log.e(TAG, "device is not open, saving Setting Task");
-			// start the connection open process. It will result in asynchronous api callbacks handled from
-			// deviceOpen() and openFailed()
-			mController.open(mLocalDevice, this);
-
+		@Override
+		public void eventReceived(DeviceEvent de) {
+			publishProgress(de);
 		}
-		else {
-			// connection is already open
-			res = mController.fetch(deviceSettings[0].getDevice(), deviceSettings[0].getSetting(), remoteRes, this);
-			// save the Setting result returned
-			Log.e(TAG, "Copying setting - " + deviceSettings[0].getSetting().toString());
 
-			//mResult = deviceSettings[0].getSetting().getValues();
-			//Log.e(TAG, "Result=" + Arrays.asList(mResult).toString());
-			//publishProgress(remoteRes);
+		@Override
+		public void deviceOpen(final HeadsetDataDevice device) {
+			//To change body of implemented methods use File | Settings | File Templates.
 		}
-		return res;
-	}
 
-	@Override
-	protected void onPostExecute(Integer integer) {
-		super.onPostExecute(integer);
+		@Override
+		public void openFailed(final HeadsetDataDevice device) {
+			//To change body of implemented methods use File | Settings | File Templates.
+		}
 
-		// set the screen with the result display
-	}
-
-
-	// in case the connection was not open, this callback will be called
-	// Its a hack with value (4)  (I just want to distinguish between actual result returned from
-	// the execution of the fetch(..setting ..)  and  the case where BR connection got established successfully
-	// it can be handled better
-	@Override
-	public void deviceOpen(final HeadsetDataDevice device) {
-		Log.e(TAG, "SettingTask: device opened");
-		RemoteResult result = new RemoteResult(4, "Device Open");
-		publishProgress(result);
-
-	}
-
-	@Override
-	public void openFailed(final HeadsetDataDevice device) {
-		Log.e(TAG, "SettingTask: device open failed");
-		RemoteResult result = new RemoteResult(2, "Device Open Failed");
-		publishProgress(result);
-	}
-
-	@Override
-	public void deviceClosed(final HeadsetDataDevice device) {
-		Log.e(TAG, "SettingTask: device closed");
-		RemoteResult result = new RemoteResult(2, "Device Closed");
-		publishProgress(result);
-	}
-}
-
-/* ****************************************************************************************************
-		(Class) ReceiveEventTask
-*******************************************************************************************************/
-public class ReceiveEventTask extends AsyncTask<HeadsetDataDevice, DeviceEvent, Integer>
-		implements HeadsetServiceEventListener, HeadsetServiceConnectionListener {
-
-	@Override
-	protected void onProgressUpdate(DeviceEvent... values) {
-		super.onProgressUpdate(values);
-
-		// print the device event
-		switch ( ((DeviceEvent)values[0]).getType().getID()) {
-
-			case Definitions.Events.CUSTOM_BUTTON_EVENT:
-				Log.i(TAG, "------------- Custom Button Event -------------");
-				break;
-
-			case Definitions.Events.WEARING_STATE_CHANGED_EVENT:
-				boolean on = false;
-				if (((DeviceEvent)values[0]).getEventData()[0].toString() == "true") on = true;
-				Log.i(TAG, "------------- Don/Doff Event: " + on + " -------------");
-				updateWearingState(on);
-
-			case Definitions.Events.BATTERY_STATUS_CHANGED_EVENT:
-				Log.i(TAG, "------------- Battery Status Event: " + Arrays.asList( ((DeviceEvent)values[0]).getEventData()).toString() + " -------------");
-				break;
-
-			case Definitions.Events.CALL_STATUS_CHANGE_EVENT:
-				String status = ((DeviceEvent)values[0]).getEventData()[0].toString();
-				Log.i(TAG, "------------- Call Status Event: " + status + " -------------");
-				//updateCallStatus();
-				break;
-
-			case Definitions.Events.SIGNAL_STRENGTH_EVENT:
-				String strengthString = ((DeviceEvent)values[0]).getEventData()[1].toString();
-				int strength = Integer.parseInt(strengthString); // this is stupid.
-				Log.i(TAG, "------------- Signal Strength Event: " + strengthString + " -------------");
-//					strength = -strength;
-//					strength += 80;
-				updateRSSI(strength);
-				break;
-
-			case Definitions.Events.CONFIGURE_SIGNAL_STRENGTH_EVENT_EVENT:
-				String enabled = ((DeviceEvent)values[0]).getEventData()[1].toString();
-				Log.i(TAG, "------------- Configure Signal Strength Event: " + enabled + " -------------");
-				break;
-
-			default:
-				Log.i(TAG, "------------- Other Event: " + values[0] + " -------------");
-				break;
+		@Override
+		public void deviceClosed(final HeadsetDataDevice device) {
+			//To change body of implemented methods use File | Settings | File Templates.
 		}
 	}
-
-	// register to receive all Bladerunner Events
-	@Override
-	protected Integer doInBackground(HeadsetDataDevice... headsetDataDevices) {
-		if (mController.registerEventListener(mLocalDevice, this)) {
-			Log.i(TAG, "Registered for events.");
-			return 0; // success
-		}
-		else {
-			Log.e(TAG, "Device not open, failed to register for events.");
-			return -1;  // failed
-		}
-	}
-
-	@Override
-	public void eventReceived(DeviceEvent de) {
-		publishProgress(de);
-	}
-
-	@Override
-	public void deviceOpen(final HeadsetDataDevice device) {
-		//To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public void openFailed(final HeadsetDataDevice device) {
-		//To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	public void deviceClosed(final HeadsetDataDevice device) {
-		//To change body of implemented methods use File | Settings | File Templates.
-	}
-}
 }
 

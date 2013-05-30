@@ -2,7 +2,7 @@
 
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/mdavis/plantronics-innovation/core-team/DX650 Seamless Transfer/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl
+ * Original file: /Users/mdavis/plantronics-innovation/core-team/Mobile/Android/DX650 Seamless Transfer/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl
  */
 package com.plantronics.headsetdataservice;
 /**

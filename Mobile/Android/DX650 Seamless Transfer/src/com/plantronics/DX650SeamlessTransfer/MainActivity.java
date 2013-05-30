@@ -376,8 +376,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		objs[2] = (Boolean) false;   /* If true, report near far events only when headset is donned. */
 		objs[3] = (Boolean) false;  /* trend - If true don't use trend detection */
 		objs[4] = (Boolean) false;  /* report rssi audio - If true, Report rssi and trend events in headset audio */
-		objs[5] = (Boolean) true;  /* report near far audio - If true, report Near/Far events in headset Audio */
-		objs[6] = (Boolean) true;  /*report near far to base - If true, report RSSI and Near Far events to base  */
+		objs[5] = (Boolean) false;  /* report near far audio - If true, report Near/Far events in headset Audio */
+		objs[6] = (Boolean) false;  /*report near far to base - If true, report RSSI and Near Far events to base  */
 		objs[7] = (Byte)(byte) 5;  /* sensitivity - This number multiplies the dead_band value (currently 5 dB) in the headset configuration.
                     This result is added to an minimum dead-band, currently 5 dB to compute the total deadband.
                     in the range 0 to 9*/
