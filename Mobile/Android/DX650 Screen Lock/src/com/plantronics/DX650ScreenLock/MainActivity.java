@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.*;
 import android.os.RemoteException;
 import android.speech.RecognitionListener;
@@ -37,8 +38,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	public static MainActivity mainActivity = null;
 	private static Context context = null;
 	private static final String TAG = "com.plantronics.DX650ScreenLock.MainActivity";
-	private static final int LOCK_SCREEN_ACTIVITY = 0;
+	private static final int SETTINGS_ACTIVITY = 100;
 	private static final double RSSI_FILTER_CONSTANT = .4;
+	public static String PREFERENCES_THRESHOLD = "PREFERENCES_THRESHOLD";
 
 	private SpeechRecognizer sr;
 	private TextToSpeech tts;
@@ -53,7 +55,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private boolean hsDonned;
 	private int hsRSSI = 0;
 	private int hsNearRSSIThreshold = 60;
-	private int hsFarRSSIThreshold = 75;
+	private int hsFarRSSIThreshold = 80;
 	private boolean speeking;
 	private boolean listening;
 	private String spokenUsername;
@@ -91,18 +93,28 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		lockOnPause = false;
 		readyToSpeak = false;
 
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+		hsNearRSSIThreshold = preferences.getInt(PREFERENCES_THRESHOLD, 60);
+		hsFarRSSIThreshold = hsNearRSSIThreshold + 20;
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
-		this.findViewById(R.id.unlock).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.unlock).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				unlockScreen();
+			}
+		});
+		findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showSettings();
 			}
 		});
 
@@ -183,10 +195,24 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
-			case LOCK_SCREEN_ACTIVITY:
-				Log.i(TAG, "************* Lock screen activity closed. *************");
+			case SETTINGS_ACTIVITY:
+				Log.i(TAG, "************* Settings activity closed. *************");
+
+				if (resultCode==RESULT_OK) {
+					hsNearRSSIThreshold = data.getExtras().getInt(SettingsActivity.EXTRA_THRESHOLD, 0);
+					hsFarRSSIThreshold = hsNearRSSIThreshold + 20;
+				}
+
+				Log.i(TAG, "hsNearRSSIThreshold: " + hsNearRSSIThreshold);
+
+				SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+				SharedPreferences.Editor editor = preferences.edit();
+				editor.putInt(PREFERENCES_THRESHOLD, hsNearRSSIThreshold);
+				editor.commit();
+
 				break;
 			default:
 				Log.e(TAG, "onActivityResult(): unknown request code: '"+requestCode+"'");
@@ -281,9 +307,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	void checkLockState() {
 		Log.i(TAG, "************* checkLockState() *************");
 
-		Log.i(TAG, "locked: " + locked + ", hsConnected: " + hsConnected + ", hsDonned: " + hsDonned + ", hsNear: "
-				+ hsNear + ", readyToSpeak: " + readyToSpeak + ", speeking: " + speeking + ", listening: " + listening);
-		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speeking && !listening) {
+		Log.i(TAG, "locked: " + locked + ", hsConnected: " + hsConnected + ", hsDonned: " + hsDonned + ", hsNear: " + hsNear + ", readyToSpeak: "
+				+ readyToSpeak + ", speeking: " + speeking + ", listening: " + listening + ", mainActivity: " + mainActivity);
+		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speeking && !listening && (mainActivity != null)) {
 			Log.i(TAG, "************* Starting unlock sequence... *************");
 			// regardless of whether we were previously waiting for a new verbal response from the user, start over the "hi say" sequence
 			sr.stopListening();
@@ -381,7 +407,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.DX650ScreenLock");
-		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 10);
+		//intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 		sr.startListening(intent);
 
 		// schedule a timer that will check that the recognition gets something, otherwise ask again
@@ -446,8 +473,24 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 		speeking = true;
 		HashMap <String, String> params = new HashMap<String, String>();
-		params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "stringId");
+		params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "voice.tts.DX650ScreenLock");
 		tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+	}
+
+	private boolean checkUsername(String username) {
+		// lookup all usernames and compare to 'username'
+		if (username.toLowerCase().equals("morgan")) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean checkPassword(String password) {
+		// lookup the correct password for 'spokenUsername' and compare to 'password'
+		if (password.toLowerCase().equals("santa cruz")) {
+			return true;
+		}
+		return false;
 	}
 
 	private void runOnMainThread(Runnable runnable) {
@@ -497,7 +540,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	private void updateRSSI(int rssi) {
 
-		// low-pass filter the RSSI
+		// low-pass the RSSI
 		hsRSSI = (int)Math.round(rssi * RSSI_FILTER_CONSTANT + hsRSSI * (1.0 - RSSI_FILTER_CONSTANT));
 
 		if (hsRSSI <= hsNearRSSIThreshold) {
@@ -516,6 +559,14 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 //		}
 //		lastToast = Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT);
 //		lastToast.show();
+	}
+
+	private void showSettings() {
+		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt(SettingsActivity.EXTRA_THRESHOLD, hsNearRSSIThreshold);
+		intent.putExtras(bundle);
+		startActivityForResult(intent, SETTINGS_ACTIVITY);
 	}
 
 	/* ****************************************************************************************************
@@ -684,43 +735,85 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	public void onError(int error) {
-		Log.i(TAG, "************* onError: " + error + "*************");
 
-		if (error == SpeechRecognizer.ERROR_NO_MATCH) {
-			runOnMainThread(new Runnable() {
-				@Override
-				public void run() {
-					runOnMainThread(new Runnable() {
-						@Override
-						public void run() {
-							sr.cancel();
-							listening = false;
-							checkForSpeechRecognitionError();
-						}
-					});
-				}
-			});
+		switch (error) {
+			case SpeechRecognizer.ERROR_NO_MATCH:
+			case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+				Log.i(TAG, "************* No speech match/timeout *************");
+				runOnMainThread(new Runnable() {
+					@Override
+					public void run() {
+						sr.cancel();
+						listening = false;
+						checkForSpeechRecognitionError();
+					}
+				});
+				break;
+			default:
+				Log.i(TAG, "************* on(speech recognition)Error: " + error + "*************");
+				break;
 		}
-		// OTHERS
+	}
+
+	public void onPartialResults(Bundle partialResults) {
+		Log.i(TAG, "************* onPartialResults() *************");
+
+//		ArrayList data = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+//		String str = new String();
+//		for (int i = 0; i < data.size(); i++) {
+//			str += data.get(i);
+//			Log.i(TAG, "------------- " + str + " -------------");
+//		}
+//
+//		str = new String();
+//		for (int i = 0; i < data.size(); i++) {
+//			str += data.get(i);
+//
+//			if (waitingForUsername) {
+//				if (checkUsername(str)) {
+//					sr.cancel();
+//					spokenUsername = str.toLowerCase();
+//					waitingForUsername = false;
+//					waitingForPassphrase = true;
+//					startSpeaking("Hi " + str + ". Please say your passphrase.");
+//					break;
+//				}
+//			}
+//			else if (waitingForPassphrase) {
+//				if (checkPassword(str)) {
+//					sr.cancel();
+//					userAuthenticated();
+//					break;
+//				}
+//			}
+//		}
 	}
 
 	public void onResults(Bundle results) {
+		Log.i(TAG, "************* onResults() *************");
 
 		sr.stopListening();
 		cancelTimer();
 		listening = false;
 		ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 		String str = new String();
+
 		for (int i = 0; i < data.size(); i++) {
 			str += data.get(i);
-			Log.i(TAG, "************* Spoken: " + str + " *************");
+			Log.i(TAG, "============== " + str + " ==============");
+		}
+
+		str = new String();
+		for (int i = 0; i < data.size(); i++) {
+			str += data.get(i);
 
 			if (waitingForUsername) {
-				spokenUsername = str.toLowerCase();
-				if (spokenUsername.equals("morgan")) {
+				if (checkUsername(str)) {
+					spokenUsername = str.toLowerCase();
 					waitingForUsername = false;
 					startSpeaking("Hi " + str + ". Please say your passphrase.");
 					waitingForPassphrase = true;
+					break;
 				}
 				else {
 					unknownUsernameAttempts++;
@@ -736,8 +829,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 				break;
 			}
 			else if (waitingForPassphrase) {
-				if (str.toLowerCase().equals("santa cruz")) {
+				if (checkPassword(str)) {
 					userAuthenticated();
+					break;
 				}
 				else {
 					wrongPassphraseAttempts++;
@@ -767,10 +861,6 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		}
 	}
 
-	public void onPartialResults(Bundle partialResults) {
-		Log.i(TAG, "onPartialResults");
-	}
-
 	public void onEvent(int eventType, Bundle params) {
 		Log.i(TAG, "onEvent " + eventType);
 	}
@@ -788,9 +878,11 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 				Log.e(TAG, "This Language is not supported.");
 			}
 			else {
+				tts.setSpeechRate((float)1.3);
 				tts.setOnUtteranceCompletedListener(this);
 			}
 
+			Log.i(TAG, "************* Ready to speak *************");
 			readyToSpeak = true;
 			checkLockState();
 		}

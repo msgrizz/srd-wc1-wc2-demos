@@ -32,6 +32,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SettingsActivity" />
+
         <receiver
             android:name="com.plantronics.DX650ScreenLock.LockerReceiver"
         	android:label="@string/device_admin_receiver"
