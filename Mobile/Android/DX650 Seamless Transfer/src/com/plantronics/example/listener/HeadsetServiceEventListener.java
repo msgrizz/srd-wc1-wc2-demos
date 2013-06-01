@@ -5,11 +5,12 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.listener;
+package com.plantronics.example.listeners;
 
-public interface HeadsetServiceBluetoothListener {
+import com.plantronics.headsetdataservice.io.DeviceEvent;
 
-       public void onBluetoothConnected(String bdaddr);
-       public void onBluetoothDisconnected(String bdaddr);
+public interface HeadsetServiceEventListener {
+
+    public void eventReceived(DeviceEvent de);
 }
 

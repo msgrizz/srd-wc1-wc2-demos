@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_ask_transfer_root"
+    android:orientation="vertical"
+    android:layout_width="256dp"
+    android:layout_height="128dp"
+    android:layout_marginLeft="112dp"
+    android:layout_marginTop="96dp"
+    android:background="@drawable/pony_bitmap" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="8dp"
+        android:layout_weight="1" >
+
+        <ImageView android:src="@drawable/ic_launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp" />
+
+        <TextView android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+            android:text="I am an activity." />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="8dp"
+        android:layout_weight="1" >
+
+        <Button
+            android:id="@+id/yes_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/no_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</LinearLayout>

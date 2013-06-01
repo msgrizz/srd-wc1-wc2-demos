@@ -5,12 +5,16 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.controller;
+package com.plantronics.example.controller;
 
 
 import com.plantronics.headsetdataservice.io.DeviceCommand;
 import com.plantronics.headsetdataservice.io.HeadsetDataDevice;
 
+/**
+ * Class defined to group together HeadsetDataDevice with the Device Command which is
+ * executed on it.
+ */
 public class HeadsetDeviceCommand {
 
     DeviceCommand command;

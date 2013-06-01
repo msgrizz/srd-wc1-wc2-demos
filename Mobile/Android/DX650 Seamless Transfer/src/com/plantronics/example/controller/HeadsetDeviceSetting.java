@@ -5,7 +5,7 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.controller;
+package com.plantronics.example.controller;
 
 import com.plantronics.headsetdataservice.io.DeviceSetting;
 import com.plantronics.headsetdataservice.io.HeadsetDataDevice;

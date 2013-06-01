@@ -14,7 +14,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="bladerunnersdk" level="project" />
+    <orderEntry type="library" name="bladerunnerdsp" level="project" />
   </component>
 </module>
 

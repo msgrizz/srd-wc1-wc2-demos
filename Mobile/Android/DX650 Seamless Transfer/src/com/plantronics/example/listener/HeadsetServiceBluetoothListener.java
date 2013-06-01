@@ -5,13 +5,11 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.listener;
+package com.plantronics.example.listeners;
 
-public interface HeadsetServiceConnectionListener {
+public interface HeadsetServiceBluetoothListener {
 
-    public void deviceOpen();
-    public void openFailed();
-    public void deviceClosed();
-
+       public void onBluetoothConnected(String bdaddr);
+       public void onBluetoothDisconnected(String bdaddr);
 }
 

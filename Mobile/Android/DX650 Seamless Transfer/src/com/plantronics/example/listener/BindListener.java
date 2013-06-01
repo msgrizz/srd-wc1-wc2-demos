@@ -5,7 +5,7 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.listener;
+package com.plantronics.example.listeners;
 
 /**
  * Interface defines the events generated from binding/unbinding and

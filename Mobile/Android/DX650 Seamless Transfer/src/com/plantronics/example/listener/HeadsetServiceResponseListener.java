@@ -5,9 +5,9 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.listener;
+package com.plantronics.example.listeners;
 
-import com.plantronics.BladeRunner.controller.SettingsResult;
+import com.plantronics.example.controller.SettingsResult;
 import com.plantronics.headsetdataservice.io.RemoteResult;
 
 import java.security.PublicKey;

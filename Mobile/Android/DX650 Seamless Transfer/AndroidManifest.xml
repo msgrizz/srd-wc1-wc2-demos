@@ -9,28 +9,33 @@
 
     <application
         android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher">
-        <activity
-            android:name="MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
+        android:icon="@drawable/ic_launcher"
+        android:name=".MainApp">
+
+        <activity android:name=".AskTransferActivity"
+            android:screenOrientation="reverseLandscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="intent.come_to_foreground" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".SettingsActivity" />
 
         <!--=============================================================
            HeadsetData Service. Its recommended that the service is started as remote process
         ================================================================ -->
-        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService" android:process=":remote">
+        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService"
+            android:process=":remote">
             <intent-filter>
                 <!-- These are the interfaces supported by the service, which
                      you can bind to. -->
                 <action android:name="com.plantronics.headsetdataservice.IHeadsetDataService" />
             </intent-filter>
         </service>
-
 
         <!--============================================================
             Bluetooth Manager Service
@@ -47,7 +52,6 @@
                 <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
             </intent-filter>
         </service>
-
 
         <!--============================================================
             Receiver of Android's native Bluetooth Intents
@@ -68,7 +72,6 @@
 
             </intent-filter>
         </receiver>
-
 
     </application>
 </manifest>

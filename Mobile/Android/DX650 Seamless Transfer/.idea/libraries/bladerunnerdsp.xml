@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="bladerunnerdsp">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/" />
+    </SOURCES>
+  </library>
+</component>

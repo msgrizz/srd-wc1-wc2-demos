@@ -1,9 +1,4 @@
-package com.plantronics.BladeRunner.controller;
-
-
-// ******************* morgan: there must be a better way to do this. ideally BR should have its own string/R file. *******************
-import com.plantronics.DX650SeamlessTransfer.R;
-
+package com.plantronics.example.controller;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,12 +8,12 @@ import android.os.*;
 
 import android.util.Log;
 import android.widget.Toast;
-import com.plantronics.BladeRunner.listener.BindListener;
-import com.plantronics.BladeRunner.listener.DiscoveryListener;
-import com.plantronics.BladeRunner.listener.HeadsetServiceBluetoothListener;
-import com.plantronics.BladeRunner.listener.HeadsetServiceConnectionListener;
-import com.plantronics.BladeRunner.listener.HeadsetServiceEventListener;
-import com.plantronics.BladeRunner.listener.HeadsetServiceResponseListener;
+import com.plantronics.example.listeners.BindListener;
+import com.plantronics.example.listeners.DiscoveryListener;
+import com.plantronics.example.listeners.HeadsetServiceBluetoothListener;
+import com.plantronics.example.listeners.HeadsetServiceConnectionListener;
+import com.plantronics.example.listeners.HeadsetServiceEventListener;
+import com.plantronics.example.listeners.HeadsetServiceResponseListener;
 import com.plantronics.headsetdataservice.*;
 import com.plantronics.headsetdataservice.io.DeviceCommand;
 import com.plantronics.headsetdataservice.io.DeviceCommandType;
@@ -30,7 +25,9 @@ import com.plantronics.headsetdataservice.io.HeadsetDataDevice;
 import com.plantronics.headsetdataservice.io.RemoteResult;
 import com.plantronics.headsetdataservice.io.SessionErrorException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Example of binding and unbinding to the remote service.
@@ -57,16 +54,16 @@ public class HeadsetDataController {
 
     private boolean bHeadsetServiceCallbacksRegistered = false;
 
-    private boolean bDeviceOpen;
     // Bladerunner device object - The Headset
     private HeadsetDataDevice mLocalDevice;
     // Bladerunner device object - remote phone also connected to the headset
     private HeadsetDataDevice mRemoteDevice;
 
-    HeadsetServiceConnectionListener mConnectionListener;
-    HeadsetServiceResponseListener mCommandListener;
-    HeadsetServiceResponseListener mSettingListener;
-    HeadsetServiceEventListener mEventListener;
+    Map<HeadsetDataDevice, HeadsetServiceConnectionListener> mDeviceToConnectionListeners = new HashMap<HeadsetDataDevice, HeadsetServiceConnectionListener>();
+    Map<HeadsetDataDevice, Boolean> mDeviceToOpen = new HashMap<HeadsetDataDevice, Boolean>();
+    Map<HeadsetDataDevice, HeadsetServiceResponseListener> mCommandListener = new HashMap<HeadsetDataDevice, HeadsetServiceResponseListener>();
+    Map<HeadsetDataDevice, HeadsetServiceResponseListener> mSettingListener = new HashMap<HeadsetDataDevice, HeadsetServiceResponseListener>();
+    Map<HeadsetDataDevice, HeadsetServiceEventListener> mEventListener = new HashMap<HeadsetDataDevice, HeadsetServiceEventListener>();
     HeadsetServiceBluetoothListener mBluetoothListener;
 
     /**
@@ -91,9 +88,10 @@ public class HeadsetDataController {
 
     /**
      * Constructor is private to make this class a singleton
+     *
      * @param context
      */
-    private HeadsetDataController(Context context ) {
+    private HeadsetDataController(Context context) {
 
         // Bind to the headsetDataService
         boolean ret = context.bindService(new Intent(IHeadsetDataService.class.getName()), mConnection, Context.BIND_AUTO_CREATE);
@@ -109,13 +107,11 @@ public class HeadsetDataController {
         }
     }
 
-
     /**
      * Class for interacting with the main interface of the service.
      */
     private ServiceConnection mConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service) {
             // This is called when the connection with the service has been
             // established, giving us the service object we can use to
             // interact with the service.  We are communicating with our
@@ -125,7 +121,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = true;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, R.string.remote_service_connected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "headset data service connected.", Toast.LENGTH_SHORT).show();
 
             // Call the asynchronous listener to tell that the service is connected
             ((BindListener)mContext).serviceConnected();
@@ -138,8 +134,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = false;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, R.string.remote_service_disconnected,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Headset data service disconnected.", Toast.LENGTH_SHORT).show();
 
             ((BindListener)mContext).serviceDisconnected();
         }
@@ -151,12 +146,13 @@ public class HeadsetDataController {
 
 
     /**
-     *  Register callback to get the discovered devices
-     *  Only needed if App has called getConnectedBladeRunnerBluetoothDevice() or
-     *  discoverHeadsetDataServiceDevices()
+     * Register callback to get the discovered devices
+     * Only needed if App has called getConnectedBladeRunnerBluetoothDevice() or
+     * discoverHeadsetDataServiceDevices()
+     *
      * @return
      */
-    public boolean registerDiscoveryCallback()  {
+    public boolean registerDiscoveryCallback() {
         try {
             mService.registerDiscoveryCallback(mCallbackDiscovery);
         } catch (RemoteException e) {
@@ -167,12 +163,13 @@ public class HeadsetDataController {
     }
 
     /**
-     *  Unregister callback to get the discovered devices
-     *  Only needed if App has called getConnectedBladeRunnerBluetoothDevice() or
-     *  discoverHeadsetDataServiceDevices()
+     * Unregister callback to get the discovered devices
+     * Only needed if App has called getConnectedBladeRunnerBluetoothDevice() or
+     * discoverHeadsetDataServiceDevices()
+     *
      * @return
      */
-    public boolean unregisterDiscoveryCallback()  {
+    public boolean unregisterDiscoveryCallback() {
         try {
             mService.unregisterDiscoveryCallback(mCallbackDiscovery);
         } catch (RemoteException e) {
@@ -184,23 +181,26 @@ public class HeadsetDataController {
 
 
     /**
-     *  Utility method to register all other callback listeners
-     *  MetadataCallback is not necessary, but its better to register remaining.
-     *
+     * Utility method to register all other callback listeners
+     * MetadataCallback is not necessary, but its better to register remaining.
      */
     public void registerServiceCallbacks() {
         Log.i(TAG, "register Service callbacks");
         if (!bHeadsetServiceCallbacksRegistered) {
             try {
-                mService.registerOpenCallback(mCallbackOpen);
-                mService.registerEventsCallback(mCallbackEvents);
-                mService.registerSessionCallback(mCallbackSession);
-                mService.registerMetadataCallback(mCallbackMetadata);
-                mService.registerBluetoothConnectionCallback(mCallbackBluetoothConnection);
+                if (mService != null) {
+                    mService.registerOpenCallback(mCallbackOpen);
+                    mService.registerEventsCallback(mCallbackEvents);
+                    mService.registerSessionCallback(mCallbackSession);
+                    mService.registerMetadataCallback(mCallbackMetadata);
+                    mService.registerBluetoothConnectionCallback(mCallbackBluetoothConnection);
 
-                // record that the callbacks to the service is done. Multiple registerations will result in
-                // multiple callbacks to the App
-                bHeadsetServiceCallbacksRegistered = true;
+                    // record that the callbacks to the service is done. Multiple registrations will result in
+                    // multiple callbacks to the App
+                    bHeadsetServiceCallbacksRegistered = true;
+                } else {
+                    Log.e(TAG, "mService is null; failed to register service");
+                }
             } catch (RemoteException e) {
             }
         } else {
@@ -212,14 +212,18 @@ public class HeadsetDataController {
     public void unregisterServiceCallbacks() {
         Log.i(TAG, "Unregister Service callbacks");
         try {
-            mService.unregisterOpenCallback(mCallbackOpen);
-            mService.unregisterEventsCallback(mCallbackEvents);
-            mService.unregisterSessionCallback(mCallbackSession);
-            mService.unregisterMetadataCallback(mCallbackMetadata);
-            mService.unregisterBluetoothConnectionCallback(mCallbackBluetoothConnection);
+            if (mService != null) {
+                mService.unregisterOpenCallback(mCallbackOpen);
+                mService.unregisterEventsCallback(mCallbackEvents);
+                mService.unregisterSessionCallback(mCallbackSession);
+                mService.unregisterMetadataCallback(mCallbackMetadata);
+                mService.unregisterBluetoothConnectionCallback(mCallbackBluetoothConnection);
 
-            // record the unregister of the Service Callbacks.
-            bHeadsetServiceCallbacksRegistered = false;
+                // record the unregister of the Service Callbacks.
+                bHeadsetServiceCallbacksRegistered = false;
+            } else {
+                Log.e(TAG, "mService is null; failed to un-register service");
+            }
         } catch (RemoteException e) {
 
         }
@@ -231,41 +235,44 @@ public class HeadsetDataController {
      *
      * @param listener
      */
-    public void registerConnectionListeners(HeadsetServiceConnectionListener listener) {
-        Log.e(TAG, "Register Connection listeners=" + listener );
-        mConnectionListener = listener;
+    public void registerConnectionListeners( HeadsetDataDevice device, HeadsetServiceConnectionListener listener) {
+        Log.e(TAG, "Register Connection listeners=" + listener);
+        mDeviceToConnectionListeners.put(device, listener);
         try {
-            mService.addDeviceOpenListener(mLocalDevice);
-            mService.addDeviceSessionListener(mLocalDevice);
-            mService.addDeviceEventListener(mLocalDevice);
-            mService.addMetadataListener(mLocalDevice);
+            mService.addDeviceOpenListener(device);
+            mService.addDeviceSessionListener(device);
+            mService.addDeviceEventListener(device);
+            mService.addMetadataListener(device);
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
-    public void unregisterConnectionListeners() {
-        Log.e(TAG, "Unregister Connection listeners" );
+    public void unregisterConnectionListeners(HeadsetDataDevice device) {
+        Log.e(TAG, "Unregister Connection listeners");
 
         try {
-            mService.removeDeviceOpenListener(mLocalDevice);
-            mService.removeDeviceSessionListener(mLocalDevice);
-            mService.removeDeviceEventListener(mLocalDevice);
-            mService.removeMetadataListener(mLocalDevice);
+            mService.removeDeviceOpenListener(device);
+            mService.removeDeviceSessionListener(device);
+            mService.removeDeviceEventListener(device);
+            mService.removeMetadataListener(device);
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        mConnectionListener = null;
+        mDeviceToConnectionListeners.remove(device);
     }
 
 
     /**
      * Bind to the HeadsetDataService
+     *
      * @param context
      * @return
      */
-    public boolean bindHeadsetDataService(Context context) {
+    public int bindHeadsetDataService(Context context) {
+
+        int status = -1;
 
         if (!bIsBound) {
             boolean ret = context.bindService(new Intent(IHeadsetDataService.class.getName()), mConnection, Context.BIND_AUTO_CREATE);
@@ -273,13 +280,20 @@ public class HeadsetDataController {
                 Log.e(TAG, "Failed to bind to the IHeadsetDataService");
                 bIsBound = false;
                 ((BindListener)context).bindFailed();
+                status = -1;
             } else {
                 bIsBound = true;
                 ((BindListener)context).bindSuccess();
                 mBindContext = context;
+                // bindService is called which will result in asynchronous call to onServiceConnected()
+                status = 1;
             }
+        } else {
+            // Service is already bound, so service connection event onServiceConencted() will not be called
+            status = 2;
         }
-        return bIsBound;
+
+        return status;
     }
 
     public boolean unbindHeadsetDataService(Context context) {
@@ -310,16 +324,18 @@ public class HeadsetDataController {
      * Discover the bluetooth devices which supports Bladerunner protocol
      * among the paired Bluetooth devices. Its a asynchronous API call and the
      * actual discovery results are returned as callback
+     *
      * @return
-     * @throws RemoteException
+     * @exception RemoteException
      */
     public int getBladeRunnerDevices() throws RemoteException {
-          return mService.discoverHeadsetDataServiceDevices();
+        return mService.discoverHeadsetDataServiceDevices();
     }
 
 
     /**
      * Create a new Device object to represent Bluetooth headset
+     *
      * @param addr
      * @param btListener
      * @return
@@ -345,70 +361,117 @@ public class HeadsetDataController {
 
 
     /**
+     * Create a new Device object to represent Bluetooth headset
+     *
+     * @param addr
+     * @param btListener
+     * @return
+     */
+    public boolean newDevice(String addr, byte port,  HeadsetServiceBluetoothListener btListener) {
+        try {
+            mService.newRemoteDevice(addr, port);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        mRemoteDevice = new HeadsetDataDevice(addr, port);
+        if (mRemoteDevice == null) {
+            Log.e(TAG, "Error: remoteDevice is null");
+            return false;
+        } else {
+            Log.e(TAG, "remoteDevice: " + mRemoteDevice);
+            mBluetoothListener = btListener;
+        }
+        return true;
+    }
+
+
+    /**
      * Open bladerunner connection with the Bluetooth headset
      * Its a asynchronous API and result is returned via callbacks deviceOpen()/ openFailed()
+     *
      * @param listener
      */
-    public void open(HeadsetServiceConnectionListener listener) {
+    public int open(HeadsetDataDevice device, HeadsetServiceConnectionListener listener) {
 
         // register bladerunner listeners
-        registerConnectionListeners(listener);
+        registerConnectionListeners(device,  listener);
+        int ret = -1;
 
         try {
             Log.e(TAG, "calling open()");
-            mService.open(mLocalDevice);
+            ret = mService.open(device);
+            if (ret == 1) {
+                Log.e(TAG, "BR connection is already open for " + device);
+
+                mDeviceToOpen.put(device, true);
+                //bDeviceOpen = true;
+
+                // call the deviceOpen callback from here itself
+                HeadsetServiceConnectionListener clistener = mDeviceToConnectionListeners.get(device);
+                if (clistener != null) {
+                    clistener.deviceOpen(device);
+                } else {
+                    Log.e(TAG, "deviceOpen(): connectionListener is null for device " + device);
+                }
+            }
         } catch (RemoteException e) {
-			Log.e(TAG, "**** Exception opening connection ****");
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        return ret;
     }
 
     /**
-     * Close the Balderunner Connection to the bluetooth headset
+     * Close the Bladerunner Connection to the bluetooth headset
      */
-    public void close()  {
+    public void close(HeadsetDataDevice device)  {
         try {
-            mService.close(mLocalDevice);
+            unregisterConnectionListeners(device);
+            mService.close(device);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *
      * @return
      */
-    public boolean isbDeviceOpen() {
-        return bDeviceOpen;
+    public boolean isbDeviceOpen(HeadsetDataDevice device) {
+        if (mDeviceToOpen.get(device) != null) {
+            return mDeviceToOpen.get(device);
+        }  else {
+            return false;
+        }
     }
 
 
     /**
      * Another API to register for a Events later than the connection open time
+     *
      * @param listener
      * @return
      */
-    public boolean registerEventListener(HeadsetServiceEventListener listener) {
-//		//******* morgan: false return was commented out... (?) *******
-//        if (!bDeviceOpen )  {
-//            return false;
-//        }
-        mEventListener = listener;
+    public boolean registerEventListener(HeadsetDataDevice device,  HeadsetServiceEventListener listener) {
+        /*if (!bDeviceOpen )  {
+            return false;
+        } */
+        mEventListener.put(device, listener);
         return true;
     }
 
+
     /**
      *
-     * @param bdaddr
+     * @param device
      * @param id
      * @param objs
      * @return
      */
-    public DeviceCommand getCommand(String bdaddr, short id, Object[] objs) {
+    public DeviceCommand getCommand(HeadsetDataDevice device, short id, Object[] objs) {
 
         DeviceCommandType dct;
         DeviceCommand dc = null;
-        HeadsetDataDevice device = new HeadsetDataDevice(bdaddr);
 
         try {
             dct = mService.getCommandType(device, id);
@@ -416,20 +479,32 @@ public class HeadsetDataController {
             if (dct != null) {
                 // the device command is available on the headset
                 dc = mService.getCommand(device, dct);
-                dc.internalSetValue(objs);
+                if (objs != null) {
+                    dc.internalSetValue(objs);
+                } else {
+                    dc.internalSetValue(new Object[0]);
+                }
             }
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }  finally {
+        } finally {
             return dc;
         }
     }
 
 
+    /**
+     *
+     * @param device
+     * @param command
+     * @param result
+     * @param listener
+     * @return
+     */
     public int perform(HeadsetDataDevice device, DeviceCommand command, RemoteResult result, HeadsetServiceResponseListener listener) {
 
         int res = 0;
-        mCommandListener = listener;
+        mCommandListener.put(device, listener);
 
         try {
             res = mService.perform(device, command, result);
@@ -441,11 +516,10 @@ public class HeadsetDataController {
     }
 
 
-    public DeviceSetting getSetting(String bdaddr, short id, Object[] objs) {
+    public DeviceSetting getSetting(HeadsetDataDevice device, short id, Object[] objs) {
 
         DeviceSettingType dst;
         DeviceSetting ds = null;
-        HeadsetDataDevice device = new HeadsetDataDevice(bdaddr);
 
         try {
             dst = mService.getSettingType(device, id);
@@ -453,27 +527,38 @@ public class HeadsetDataController {
             if (dst != null) {
                 // the device setting is available on the headset
                 ds = mService.getSetting(device, dst);
-                if ((objs != null ) && (objs.length > 0)) {
+                if ((objs != null) && (objs.length > 0)) {
                     ds.setDeviceSettingInputValue(objs);
                 }
             }
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }  finally {
+        } finally {
             return ds;
         }
     }
 
-
+    /**
+     *
+     * @param device
+     * @param setting
+     * @param result
+     * @param listener
+     * @return
+     */
     public int fetch(HeadsetDataDevice device, DeviceSetting setting, RemoteResult result, HeadsetServiceResponseListener listener) {
 
-       int res = 0;
-       mSettingListener = listener;
+        int res = 0;
+        mSettingListener.put(device, listener);
         try {
 
             res = mService.fetch(device, setting, result);
-            SettingsResult settingsResult = new SettingsResult(result, setting);
-            listener.settingResult(res, settingsResult);
+            if (res >= 0) {
+                SettingsResult settingsResult = new SettingsResult(result, setting);
+                listener.settingResult(res, settingsResult);
+            } else {
+                listener.result(res, result);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -481,13 +566,12 @@ public class HeadsetDataController {
     }
 
     /**
-     *
-     * @param device  HeadsetDataDevice object for the Bluetooth headset
+     * @param device HeadsetDataDevice object for the Bluetooth headset
      * @return
      */
     public List<DeviceSettingType> getSupportedSettings(HeadsetDataDevice device) {
         try {
-        return mService.getSupportedSettings(device);
+            return mService.getSupportedSettings(device);
         } catch (RemoteException e) {
             e.printStackTrace();
             return null;
@@ -496,28 +580,26 @@ public class HeadsetDataController {
     }
 
     /**
-     *
-     * @param device   HeadsetDataDevice object for the Bluetooth headset
+     * @param device HeadsetDataDevice object for the Bluetooth headset
      * @return
      */
     public List<DeviceCommandType> getSupportedCommands(HeadsetDataDevice device) {
-       try {
-       return  mService.getSupportedCommands(device);
-       } catch (RemoteException e) {
-           e.printStackTrace();
-           return null;
-       }
+        try {
+            return mService.getSupportedCommands(device);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
     /**
-     *
      * @param device HeadsetDataDevice object for the Bluetooth headset
      * @return
      */
     public List<DeviceEventType> getSupportedEvents(HeadsetDataDevice device) {
         try {
-        return  mService.getSupportedEvents(device);
+            return mService.getSupportedEvents(device);
         } catch (RemoteException e) {
             e.printStackTrace();
             return null;
@@ -556,38 +638,44 @@ public class HeadsetDataController {
 
         @Override
         public void deviceOpen(HeadsetDataDevice hdDevice) throws RemoteException {
-            bDeviceOpen = true;
-            if (mConnectionListener  != null) {
-                mConnectionListener.deviceOpen();
+            mDeviceToOpen.put(hdDevice, true);
+            //bDeviceOpen = true;
+            HeadsetServiceConnectionListener listener = mDeviceToConnectionListeners.get(hdDevice);
+            if (listener != null) {
+                listener.deviceOpen(hdDevice);
             } else {
-                Log.e(TAG, "deviceOpen(): mConnectionListener is null");
+                Log.e(TAG, "deviceOpen(): connectionListener is null for device " + hdDevice);
             }
         }
 
         @Override
         public void openFailed(HeadsetDataDevice hdDevice, SessionErrorException s) throws RemoteException {
-            if (mConnectionListener  != null) {
-                mConnectionListener.openFailed();
-            }  else {
-                Log.e(TAG, "openFailed(): mConnectionListener is null");
+            HeadsetServiceConnectionListener listener = mDeviceToConnectionListeners.get(hdDevice);
+            if (listener != null) {
+                listener.openFailed(hdDevice);
+            } else {
+                Log.e(TAG, "openFailed(): mConnectionListener is null for device " + hdDevice);
             }
             Log.e(TAG, "Setting device open to false");
-            bDeviceOpen = false;
-            unregisterConnectionListeners();
+            //bDeviceOpen = false;
+            mDeviceToOpen.put(hdDevice, false);
+            unregisterConnectionListeners(hdDevice);
         }
     };
 
     private IHeadsetDataServiceCallbackSession mCallbackSession = new IHeadsetDataServiceCallbackSession.Stub() {
         @Override
         public void deviceClose(HeadsetDataDevice hdDevice, SessionErrorException s) throws RemoteException {
-            if (mConnectionListener  != null) {
-                mConnectionListener.deviceClosed();
+            HeadsetServiceConnectionListener listener = mDeviceToConnectionListeners.get(hdDevice);
+            if (listener != null) {
+                listener.deviceClosed(hdDevice);
             } else {
                 Log.e(TAG, "deviceClose(): mConnectionListener is null");
             }
             Log.e(TAG, "Setting device open to false");
-            bDeviceOpen = false;
-            unregisterConnectionListeners();
+            //bDeviceOpen = false;
+            mDeviceToOpen.put(hdDevice, false);
+            unregisterConnectionListeners(hdDevice);
         }
     };
 
@@ -596,10 +684,11 @@ public class HeadsetDataController {
         @Override
         public void receiveEvent(HeadsetDataDevice hdDevice, DeviceEvent de) throws RemoteException {
             Log.e(TAG, "received event " + de);
-            if (mEventListener != null) {
-                mEventListener.eventReceived(de);
+            HeadsetServiceEventListener eventListener =  mEventListener.get(hdDevice);
+            if (eventListener != null) {
+                eventListener.eventReceived(de);
             } else {
-                Log.e(TAG, "receiveEvent(): event listener is null");
+                Log.e(TAG, "receiveEvent(): event listener is null for device " + hdDevice);
             }
         }
     };
@@ -630,14 +719,10 @@ public class HeadsetDataController {
      */
     private IHeadsetDataServiceCallbackMetadata mCallbackMetadata = new IHeadsetDataServiceCallbackMetadata.Stub() {
         @Override
-        public void metadataReceived(HeadsetDataDevice hdDevice,
-                                     List<DeviceCommandType> commands,
-                                     List<DeviceSettingType> settings, List<DeviceEventType> events) throws RemoteException {
+        public void metadataReceived(HeadsetDataDevice hdDevice, List<DeviceCommandType> commands, List<DeviceSettingType> settings, List<DeviceEventType> events) throws RemoteException {
             //To change body of implemented methods use File | Settings | File Templates.
         }
     };
-
-
 
 
 }

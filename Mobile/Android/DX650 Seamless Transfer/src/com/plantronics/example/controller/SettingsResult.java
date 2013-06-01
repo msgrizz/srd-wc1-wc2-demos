@@ -5,11 +5,17 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.BladeRunner.controller;
+package com.plantronics.example.controller;
 
 import com.plantronics.headsetdataservice.io.DeviceSetting;
 import com.plantronics.headsetdataservice.io.RemoteResult;
 
+/**
+ * Class to group DeviceSetting result returned from the headset and the
+ * RemoteResult in case there was a failure. In case of success, RemoteResult just
+ * has "success" string.  But in case of failure, RemoteResult includes the Exception Id as
+ * defined by Deckard Exceptions and Exception payload (if any)
+ */
 public class SettingsResult {
 
     RemoteResult mResult;
