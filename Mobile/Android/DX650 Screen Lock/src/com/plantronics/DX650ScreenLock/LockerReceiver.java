@@ -9,20 +9,20 @@ public class LockerReceiver extends DeviceAdminReceiver {
 
 	@Override
 	public CharSequence onDisableRequested(Context context, Intent intent) {
-		Toast.makeText(context, "onDisableRequested", Toast.LENGTH_LONG).show();
+		//Toast.makeText(context, "onDisableRequested", Toast.LENGTH_LONG).show();
 		return context.getString(R.string.disable_requested_text);
 	}
 
 	@Override
 	public void onDisabled(Context context, Intent intent) {
 		super.onDisabled(context, intent);
-		Toast.makeText(context, "onDisabled", Toast.LENGTH_LONG).show();
+		//Toast.makeText(context, "onDisabled", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onEnabled(Context context, Intent intent) {
 		super.onEnabled(context, intent);
-		Toast.makeText(context, "onEnabled", Toast.LENGTH_LONG).show();
+		//Toast.makeText(context, "onEnabled", Toast.LENGTH_LONG).show();
 	}
 
 	@Override

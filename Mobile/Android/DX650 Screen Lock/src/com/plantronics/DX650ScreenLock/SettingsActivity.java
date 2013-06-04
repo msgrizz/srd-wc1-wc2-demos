@@ -14,21 +14,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.*;
 
 public class SettingsActivity extends Activity {
 
 	public static String EXTRA_THRESHOLD = "EXTRA_THRESHOLD";
+	//public static String EXTRA_UNLOCK = "EXTRA_UNLOCK";
 
 	public static SettingsActivity settingsActivity = null;
+	public static final int SETTINGS_ACTIVITY = 100;
+
 	private static final String TAG = "com.plantronics.DX650ScreenLock.SettingsActivity";
 
 	private SeekBar thresholdSeekBar;
 	private TextView thresholdValueTextView;
 	private Button useCurrentDistanceButton;
+	//private ArrayAdapter<UserListItem> usersArrayAdapter;
 	private int threshold;
 
 	@Override

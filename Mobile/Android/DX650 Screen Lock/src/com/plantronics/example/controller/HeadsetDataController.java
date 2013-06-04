@@ -121,7 +121,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = true;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, "headset data service connected.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "headset data service connected.", Toast.LENGTH_SHORT).show();
 
             // Call the asynchronous listener to tell that the service is connected
             ((BindListener)mContext).serviceConnected();
@@ -134,7 +134,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = false;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, "Headset data service disconnected.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Headset data service disconnected.", Toast.LENGTH_SHORT).show();
 
             ((BindListener)mContext).serviceDisconnected();
         }
@@ -675,6 +675,14 @@ public class HeadsetDataController {
             Log.e(TAG, "Setting device open to false");
             //bDeviceOpen = false;
             mDeviceToOpen.put(hdDevice, false);
+
+			if (isbDeviceOpen(hdDevice)) {
+				Log.i("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", "open");
+			}
+			else {
+				Log.i("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", "znot open");
+			}
+
             unregisterConnectionListeners(hdDevice);
         }
     };

@@ -4,7 +4,8 @@
     android:id="@+id/parentLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/child1Layout"
@@ -64,7 +65,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/child3Layout"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -73,6 +74,36 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Use Current Distance" />
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Users"
+            android:gravity="center"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textSize="22dp"/>
+
+        <ListView
+            android:id="@+id/usersListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stackFromBottom="true"
+            android:layout_weight="2" />
+
+        <Button
+            android:id="@+id/addUserButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add User" />
+
+        <Button
+            android:id="@+id/removeUserButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Remove User" />
 
     </LinearLayout>
 

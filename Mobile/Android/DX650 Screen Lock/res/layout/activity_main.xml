@@ -1,34 +1,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#003366" >
+    android:id="@+id/mainLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_locked" >
+
+    <TextView
+        android:id="@+id/bigTextView"
+        android:layout_width="320dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="189dp"
+        android:layout_marginLeft="186dp"
+        android:layout_gravity="left"
+        android:text="Screen is Locked"
+        android:textColor="#FFFFFF"
+        android:textSize="34dp" />
+
+    <TextView
+        android:id="@+id/smallTextView"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="272dp"
+        android:layout_marginLeft="135dp"
+        android:layout_gravity="left"
+        android:text="Please say your username"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="440dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="142dp"
+        android:layout_marginLeft="555dp"
+        android:text="11:36"
+        android:textColor="#FFFFFF"
+        android:textSize="150dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="440dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="334dp"
+        android:layout_marginLeft="555dp"
+        android:text="MON, JUN 03"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:gravity="center"/>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#003366" >
+        android:layout_alignParentBottom="true" >
 
         <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/progressBar"
+            android:layout_width="38dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="1dp"
+            android:layout_alignParentLeft="true"
+            android:animationResolution="50"
             android:indeterminate="true" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:id="@+id/unlock"
-            android:text="Unlock" />
+        <TextureView
+            android:layout_width="932dp"
+            android:layout_height="0dp"
+            android:text="" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/settings"
-            android:text="Settings" />
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="9dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/cog"
+            android:background="@null" />
 
     </LinearLayout>
 

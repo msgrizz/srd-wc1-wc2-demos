@@ -1,13 +1,11 @@
 package com.plantronics.DX650ScreenLock;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.bluetooth.*;
+import android.content.*;
+import android.media.AudioManager;
 import android.os.*;
 import android.os.RemoteException;
 import android.speech.RecognitionListener;
@@ -16,12 +14,15 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 //import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.plantronics.bladerunner.Definitions;
 import com.plantronics.example.controller.HeadsetDataController;
 import com.plantronics.example.controller.HeadsetDeviceCommand;
@@ -29,7 +30,10 @@ import com.plantronics.example.controller.HeadsetDeviceSetting;
 import com.plantronics.example.controller.SettingsResult;
 import com.plantronics.example.listeners.*;
 import com.plantronics.headsetdataservice.io.*;
+import android.bluetooth.BluetoothProfile;
+import org.apache.commons.lang3.text.WordUtils;
 
+import java.text.DateFormat;
 import java.util.*;
 
 public class MainActivity extends Activity implements BindListener, DiscoveryListener, HeadsetServiceConnectionListener, HeadsetServiceBluetoothListener,
@@ -38,8 +42,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	public static MainActivity mainActivity = null;
 	private static Context context = null;
 	private static final String TAG = "com.plantronics.DX650ScreenLock.MainActivity";
-	private static final int SETTINGS_ACTIVITY = 100;
-	private static final double RSSI_FILTER_CONSTANT = .4;
+	private static final double RSSI_FILTER_CONSTANT = .6;
 	public static String PREFERENCES_THRESHOLD = "PREFERENCES_THRESHOLD";
 
 	private SpeechRecognizer sr;
@@ -48,15 +51,16 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private static ComponentName deviceAdmin = null;
 	private static boolean lockOnPause;
 	//private static Toast lastToast;
-	private ProgressBar progressBar;
 	private boolean locked;
 	private boolean hsConnected;
+	private boolean hsA2DPOpen;
 	private boolean hsNear;
 	private boolean hsDonned;
 	private int hsRSSI = 0;
 	private int hsNearRSSIThreshold = 60;
 	private int hsFarRSSIThreshold = 80;
-	private boolean speeking;
+	private boolean aboutToSpeak;
+	private boolean speaking;
 	private boolean listening;
 	private String spokenUsername;
 	private boolean waitingForUsername;
@@ -67,6 +71,15 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private int notHeardPassphraseAttempts;
 	private boolean readyToSpeak;
 	private TimerTask timerTask;
+	private Timer clockTimer;
+	private TimerTask clockTimerTask;
+
+	private RelativeLayout mainLayout;
+	private ProgressBar progressBar;
+	private TextView bigTextView;
+	private TextView smallTextView;
+	private TextView timeTextView;
+	private TextView dateTextView;
 
 	private BluetoothAdapter mBluetoothAdapter;
 	private static HeadsetDataController mController;
@@ -74,6 +87,25 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private String mDeviceAddress = "";
 	private boolean isBoundToService = false;
 	private boolean deviceDiscovered = false;
+
+//	private BluetoothProfile.ServiceListener mHeadsetProfileListener = new BluetoothProfile.ServiceListener() {
+//
+//		@Override
+//		public void onServiceDisconnected(int profile) {
+//			Log.d(TAG, "************* A2DP disconnected. *************");
+//			hsA2DPOpen = false;
+//		}
+//
+//		@Override
+//		public void onServiceConnected(int profile, BluetoothProfile proxy) {
+//			BluetoothA2dp profileProxy = (BluetoothA2dp)proxy;
+//			List<BluetoothDevice> devices = profileProxy.getConnectedDevices();
+//			Log.i(TAG, "************* A2DP devices connected: " + devices + " *************");
+//			// ****** this assumes that the connected device is our BR device.
+//			// this is done because onServiceDisconnected() doesn't tell us which device disconnected...
+//			hsA2DPOpen = true;
+//		}
+//	};
 
 	/* ****************************************************************************************************
 			Activity
@@ -95,7 +127,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		hsNearRSSIThreshold = preferences.getInt(PREFERENCES_THRESHOLD, 60);
-		hsFarRSSIThreshold = hsNearRSSIThreshold + 20;
+		hsFarRSSIThreshold = hsNearRSSIThreshold + 15;
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -103,15 +135,15 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
+		mainLayout = (RelativeLayout)findViewById(R.id.mainLayout);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
+		bigTextView = (TextView)findViewById(R.id.bigTextView);
+		smallTextView = (TextView)findViewById(R.id.smallTextView);
+		//instructionsTextView = (TextView)findViewById(R.id.instructionsTextView);
+		timeTextView = (TextView)findViewById(R.id.timeTextView);
+		dateTextView = (TextView)findViewById(R.id.dateTextView);
 
-		findViewById(R.id.unlock).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				unlockScreen();
-			}
-		});
-		findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.settingsButton).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showSettings();
@@ -126,6 +158,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		}
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		//mBluetoothAdapter.getProfileProxy(this, mHeadsetProfileListener, BluetoothProfile.A2DP);
 		mController = HeadsetDataController.getHeadsetControllerSingleton(this);
 		if (mController.bindHeadsetDataService(this) == 2) {
 			Log.i(TAG, "Service already bound: register callbacks with the service.");
@@ -142,6 +175,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 			lockDevice();
 		}
 		mainActivity = null;
+
+		clockTimerTask.cancel();
+		clockTimer = null;
 	}
 
 	@Override
@@ -151,17 +187,31 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 		mainActivity = this;
 		locked = true;
-//		hsConnected = false;
-//		hsNear = false;
-//		hsDonned = false;
 		waitingForUsername = false;
 		waitingForPassphrase = false;
-		speeking = false;
+		aboutToSpeak = false;
+		speaking = false;
 		listening = false;
+
+		setUILocked();
 
 		if (mLocalDevice != null) {
 			connectToDevice(mLocalDevice.getAddress());
 		}
+
+		if (clockTimer == null) {
+			clockTimerTask = new TimerTask() {
+				@Override
+				public void run() {
+					updateClockUI();
+				}
+			};
+			clockTimer = new Timer();
+			clockTimer.scheduleAtFixedRate(clockTimerTask, 30, 30);
+		}
+		updateClockUI();
+
+		checkLockState();
 	}
 
 	@Override
@@ -176,7 +226,6 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		if (tts != null) {
 			tts.stop();
 			tts.shutdown();
-			speeking = false;
 		}
 		if (mBluetoothAdapter != null) {
 			mBluetoothAdapter.cancelDiscovery();
@@ -198,12 +247,12 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
-			case SETTINGS_ACTIVITY:
-				Log.i(TAG, "************* Settings activity closed. *************");
+			case SettingsActivity.SETTINGS_ACTIVITY:
+				Log.i(TAG, "************* SettingsActivity closed. *************");
 
 				if (resultCode==RESULT_OK) {
 					hsNearRSSIThreshold = data.getExtras().getInt(SettingsActivity.EXTRA_THRESHOLD, 0);
-					hsFarRSSIThreshold = hsNearRSSIThreshold + 20;
+					hsFarRSSIThreshold = hsNearRSSIThreshold + 15;
 				}
 
 				Log.i(TAG, "hsNearRSSIThreshold: " + hsNearRSSIThreshold);
@@ -239,13 +288,18 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private void doDiscovery() {
 		Log.i(TAG, "************* doDiscovery() *************");
 
+		hsConnected = false;
+		hsDonned = false;
+		hsNear = false;
 		deviceDiscovered = false;
-		progressBar.setVisibility(android.widget.ProgressBar.INVISIBLE);
+		mLocalDevice = null;
+		mDeviceAddress = null;
+		progressBar.animate();
+		progressBar.setVisibility(android.widget.ProgressBar.VISIBLE);
 		try {
 			mController.registerDiscoveryCallback();
 			int ret =  mController.getBladeRunnerDevices();
 			Log.i(TAG, "getBladeRunnerDevices() returned " + ret);
-			toast("Looking for headset...");
 		}
 		catch (RemoteException e) {
 			e.printStackTrace();
@@ -254,13 +308,14 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	private void connectToDevice(String deviceAddress) {
 		Log.i(TAG, "************* Connecting to device " + deviceAddress + "... *************");
-		toast("Connecting to headset...");
 
 		mController.newDevice(deviceAddress, this);
 		mLocalDevice = new HeadsetDataDevice(deviceAddress, (byte)0);
 		int ret = mController.open(mLocalDevice, this);
 		if (ret==1) {
-			// device already open.
+			Log.i(TAG, "************* Connection already open! *************");
+			isBoundToService = true;
+			mController.registerServiceCallbacks();
 		}
 	}
 
@@ -307,59 +362,81 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	void checkLockState() {
 		Log.i(TAG, "************* checkLockState() *************");
 
-		Log.i(TAG, "locked: " + locked + ", hsConnected: " + hsConnected + ", hsDonned: " + hsDonned + ", hsNear: " + hsNear + ", readyToSpeak: "
-				+ readyToSpeak + ", speeking: " + speeking + ", listening: " + listening + ", mainActivity: " + mainActivity);
-		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speeking && !listening && (mainActivity != null)) {
+		if (goodToGo()) {
 			Log.i(TAG, "************* Starting unlock sequence... *************");
 			// regardless of whether we were previously waiting for a new verbal response from the user, start over the "hi say" sequence
 			sr.stopListening();
 			tts.stop();
+			waitingForUsername = true; // will start listening after onUtteranceCompleted()
 			waitingForPassphrase = false;
 			unknownUsernameAttempts = 0;
 			notHeardUsernameAttempts = 0;
 			wrongPassphraseAttempts = 0;
 			notHeardPassphraseAttempts = 0;
-			//recentHSRSSIs.clear();
 
-			speeking = true;
+			aboutToSpeak = true;
 			runDelayed(new Runnable() {
 				@Override
 				public void run() {
 					startSpeaking("Welcome to the Cisco-Plantronics DX six-fifty screen lock demo. Please say your username.");
 				}
 			}, 1000);
-
-			waitingForUsername = true;
-			// will start listening after onUtteranceCompleted()
+			runDelayed(new Runnable() {
+				@Override
+				public void run() {
+					setUIUsername();
+				}
+			}, 5800);
 		}
-		else if (!hsDonned || !hsConnected || !hsNear) {
+		else if ((!hsDonned || !hsConnected || !hsNear) && !aboutToSpeak) {
 			Log.i(TAG, "************* Ending unlock sequence. *************");
 			sr.stopListening();
 			tts.stop();
-			speeking = false;
+			listening = false;
+			//aboutToSpeak = false;
+			speaking = false;
 			waitingForUsername = false;
 			waitingForPassphrase = false;
-			//lockScreen();
+			lockScreen();
 		}
+	}
+
+	private boolean goodToGo() {
+		// returns true if state indicates that the unlock sequence can start/continue
+
+		Log.i(TAG, "locked: " + locked + ", hsConnected: " + hsConnected + ", hsDonned: " + hsDonned + ", hsNear: " + hsNear + ", readyToSpeak: "
+				+ readyToSpeak + ", aboutToSpeak: " + aboutToSpeak + ", speaking: " + speaking + ", tts.isSpeaking(): " + tts.isSpeaking()
+				+ ", listening: " + listening + ", mainActivity: " + mainActivity);// + ", hsA2DPOpen: " + hsA2DPOpen);
+		if (locked && hsConnected && hsDonned && hsNear && readyToSpeak && !speaking && !tts.isSpeaking()
+				&& !aboutToSpeak && !listening && (mainActivity != null)) {// && hsA2DPOpen) {
+			Log.i(TAG, "GOOD!");
+			return true;
+		}
+		Log.i(TAG, "NOT GOOD!");
+		return false;
 	}
 
 	private void userAuthenticated() {
 		Log.i(TAG, "************* userAuthenticated() *************");
 
-		waitingForPassphrase = false;
-		startMonitoringProximity(false);
+		//startMonitoringProximity(false);
+		setUIPassphrase(true);
 		startSpeaking("Thank you. Access granted.");
 		runDelayed(new Runnable() {
 			@Override
 			public void run() {
 				unlockScreen();
 			}
-		}, 2000);
+		}, 2200);
+		waitingForUsername = false;
+		waitingForPassphrase = false;
+		spokenUsername = null;
 	}
 
 	private void lockScreen() {
 
 		if (!locked) {
+			setUILocked();
 			// bring this activity to the foreground
 			Intent intent = new Intent("intent.come_to_foreground");
 			intent.setComponent(new ComponentName(context.getPackageName(), MainActivity.class.getName()));
@@ -370,9 +447,10 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	public void unlockScreen() {
+		Log.i(TAG, "unlockScreen()");
+
 		sr.stopListening();
 		tts.stop();
-
 		if (locked) {
 			Log.i(TAG, "************* Unlocking the screen! *************");
 			Intent goHomeIntent = new Intent(Intent.ACTION_MAIN);
@@ -431,39 +509,46 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private void checkForSpeechRecognitionError() {
 
 		cancelTimer();
-		if (waitingForUsername) {
-			notHeardUsernameAttempts++;
-			switch (notHeardUsernameAttempts) {
-				case 1:
-					startSpeaking("I'm sorry, I didn't catch that. Please say your username again.");
-					break;
-				default:
-					startSpeaking("I'm sorry, I still didn't catch that. Please say your username again.");
-					break;
+
+		if (goodToGo()) {
+
+			if (waitingForUsername) {
+				notHeardUsernameAttempts++;
+				switch (notHeardUsernameAttempts) {
+					case 1:
+						startSpeaking("I'm sorry, I didn't catch that. Please say your username again.");
+						break;
+					default:
+						startSpeaking("I'm sorry, I still didn't catch that. Please say your username again.");
+						break;
+				}
+			}
+			else if (waitingForPassphrase) {
+				notHeardPassphraseAttempts++;
+				switch (notHeardPassphraseAttempts) {
+					case 1:
+						startSpeaking("I'm sorry, I didn't catch that. Please say your passphrase again.");
+						break;
+					case 2:
+						startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase again.");
+						break;
+					case 3:
+						startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase one more time.");
+						break;
+					default:
+						waitingForPassphrase = false;
+						waitingForUsername = true;
+						unknownUsernameAttempts = 0;
+						notHeardUsernameAttempts = 0;
+						notHeardPassphraseAttempts = 0;
+						wrongPassphraseAttempts = 0;
+						startSpeaking("Let's start over. Please say your username.");
+						break;
+				}
 			}
 		}
-		else if (waitingForPassphrase) {
-			notHeardPassphraseAttempts++;
-			switch (notHeardPassphraseAttempts) {
-				case 1:
-					startSpeaking("I'm sorry, I didn't catch that. Please say your passphrase again.");
-					break;
-				case 2:
-					startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase again.");
-					break;
-				case 3:
-					startSpeaking("I'm sorry, I still didn't catch that. Please say your passphrase one more time.");
-					break;
-				default:
-					waitingForPassphrase = false;
-					waitingForUsername = true;
-					unknownUsernameAttempts = 0;
-					notHeardUsernameAttempts = 0;
-					notHeardPassphraseAttempts = 0;
-					wrongPassphraseAttempts = 0;
-					startSpeaking("Let's start over. Please say your username.");
-					break;
-			}
+		else {
+			checkLockState();
 		}
 	}
 
@@ -471,9 +556,22 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 		Log.i(TAG, "************* startSpeaking: " + text + " *************");
 
-		speeking = true;
+//		BluetoothA2dp bluetoothA2dp = new BluetoothA2dp();
+//		BluetoothDevice device = BluetoothAdapter.getDefaultAdapter();
+//// Loop through paired devices
+//		for (BluetoothDevice device : mBluetoothAdapter.getBondedDevices()) {
+//			if (device.getAddress() == mLocalDevice.getAddress()) {
+//				Log.i(TAG, "Adding BT device: " + device.getAddress());
+//				bluetoothA2dp.addSink(device);
+//			}
+//		}
+
+		tts.stop();
+		aboutToSpeak = false;
+		speaking = true;
 		HashMap <String, String> params = new HashMap<String, String>();
 		params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "voice.tts.DX650ScreenLock");
+		params.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
 		tts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
 	}
 
@@ -494,10 +592,10 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	private void runOnMainThread(Runnable runnable) {
-		final Handler handler = new Handler(Looper.getMainLooper());
-		handler.post(runnable);
+//		final Handler handler = new Handler(Looper.getMainLooper());
+//		handler.post(runnable);
 
-		//runOnUiThread(runnable);
+		runOnUiThread(runnable);
 	}
 
 	private void runDelayed(Runnable runnable, int delay) {
@@ -518,6 +616,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	}
 
 	private void cancelTimer() {
+		Log.i(TAG, "cancelTimer");
+
 		if (timerTask != null) {
 			timerTask.cancel();
 		}
@@ -543,6 +643,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		// low-pass the RSSI
 		hsRSSI = (int)Math.round(rssi * RSSI_FILTER_CONSTANT + hsRSSI * (1.0 - RSSI_FILTER_CONSTANT));
 
+		Log.d(TAG, "hsRSSI: " + hsRSSI);
+
 		if (hsRSSI <= hsNearRSSIThreshold) {
 			hsNear = true;
 		}
@@ -553,20 +655,59 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		checkLockState();
 	}
 
-	private void toast(String text) {
-//		if (lastToast != null) {
-//			lastToast.cancel();
-//		}
-//		lastToast = Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT);
-//		lastToast.show();
-	}
-
 	private void showSettings() {
+		Log.i(TAG, "showSettings()");
+
 		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putInt(SettingsActivity.EXTRA_THRESHOLD, hsNearRSSIThreshold);
 		intent.putExtras(bundle);
-		startActivityForResult(intent, SETTINGS_ACTIVITY);
+		startActivityForResult(intent, SettingsActivity.SETTINGS_ACTIVITY);
+	}
+
+	private void setUILocked() {
+		progressBar.setVisibility(android.widget.ProgressBar.INVISIBLE);
+		mainLayout.setBackgroundResource(R.drawable.bg_locked);
+		bigTextView.setText(Html.fromHtml("Screen is <b>Locked</b>"));
+		smallTextView.setText("");
+	}
+
+	private void setUIUsername() {
+		mainLayout.setBackgroundResource(R.drawable.bg_userpass);
+		bigTextView.setText(Html.fromHtml("Screen is <b>Locked</b>"));
+		smallTextView.setText("Please say your username");
+	}
+
+	private void setUIPassphrase(boolean titleOnly) {
+
+		String capitalizedName = WordUtils.capitalize(spokenUsername);
+		String nameString = String.format("Welcome <b>%s</b>", capitalizedName);
+		bigTextView.setText(Html.fromHtml(nameString));
+
+		if (titleOnly) {
+			mainLayout.setBackgroundResource(R.drawable.bg_locked);
+			smallTextView.setText("");
+		}
+		else {
+			mainLayout.setBackgroundResource(R.drawable.bg_userpass);
+			smallTextView.setText("Please say your passphrase");
+		}
+	}
+
+	private void updateClockUI() {
+
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				final String[] weekdays = { "SUN", "MON", "TUES", "WED", "THURS", "FRI", "SAT" };
+				final String[] months = { "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" };
+				Date date = new Date();
+				String timeString = String.format("<b>%d</b>:%02d", date.getHours(), date.getMinutes());
+				String dateString = String.format("<b>%s, %s %02d</b>", weekdays[date.getDay()], months[date.getMonth()], date.getDay());
+				timeTextView.setText(Html.fromHtml(timeString));
+				dateTextView.setText(Html.fromHtml(dateString));
+			}
+		});
 	}
 
 	/* ****************************************************************************************************
@@ -613,21 +754,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 		if (!deviceDiscovered) {
 			deviceDiscovered = true;
-			runOnMainThread(new Runnable() {
-				@Override
-				public void run() {
-					toast("Found headset.");
 
-					BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(name);
-					mDeviceAddress = device.getAddress();
-
-					if (mController.isbServiceConnectionOpen()) {
-						connectToDevice(mDeviceAddress);
-					} else {
-						Log.e(TAG, "************* Connection to the service is not open!!! *************");
-					}
-				}
-			});
+			BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(name);
+			mDeviceAddress = device.getAddress();
 		}
 		else {
 			Log.i(TAG, "Already found a device.");
@@ -638,7 +767,16 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	public void discoveryStopped(int res) {
 		Log.i(TAG, "discoveryStopped()");
 
-		if (!deviceDiscovered) {
+		if (deviceDiscovered) {
+			if (mController.isbServiceConnectionOpen()) {
+				connectToDevice(mDeviceAddress);
+			}
+			else {
+				Log.e(TAG, "************* Connection to the service is not open!!! *************");
+			}
+		}
+		else {
+			Log.i(TAG, "************* No devices found. Restarting discovery... *************");
 			runDelayed(new Runnable() {
 				@Override
 				public void run() {
@@ -654,14 +792,13 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	@Override
 	public void deviceOpen(final HeadsetDataDevice device) {
-		Log.i(TAG, "************* deviceOpen:" + device + "*************");
+		Log.i(TAG, "************* deviceOpen: " + device + " *************");
+
+		hsConnected = true;
 
 		runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				toast("Connected.");
-				hsConnected = true;
-				checkLockState();
 				startListeningForEvents();
 				startMonitoringProximity(true);
 				queryWearingState();
@@ -672,8 +809,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	@Override
 	public void openFailed(final HeadsetDataDevice device) {
-		Log.e(TAG, "************* openFailed: " + device + "*************");
-		toast("Headset connection failed.");
+		Log.i(TAG, "************* openFailed: " + device + "*************");
 
 		runOnMainThread(new Runnable() {
 			@Override
@@ -686,8 +822,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	@Override
 	public void deviceClosed(final HeadsetDataDevice device) {
-		Log.e(TAG, "************* deviceClosed:" + device + "*************");
-		toast("Headset connection closed.");
+		Log.i(TAG, "************* deviceClosed:" + device + "*************");
 
 		runOnMainThread(new Runnable() {
 			@Override
@@ -703,11 +838,19 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	*******************************************************************************************************/
 
 	public void onBluetoothConnected(String bdaddr) {
-		Log.i(TAG, "onBluetoothConnected()");
+		Log.i(TAG, "************* onBluetoothConnected() *************");
 	}
 
 	public void onBluetoothDisconnected(String bdaddr) {
-		Log.i(TAG, "onBluetoothDisconnected()");
+		Log.i(TAG, "************* onBluetoothDisconnected() *************");
+
+//		runOnMainThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				hsConnected = false;
+//				doDiscovery();
+//			}
+//		});
 	}
 
 	/* ****************************************************************************************************
@@ -807,10 +950,17 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		for (int i = 0; i < data.size(); i++) {
 			str += data.get(i);
 
-			if (waitingForUsername) {
+			if ((spokenUsername == null) || waitingForUsername) {
 				if (checkUsername(str)) {
 					spokenUsername = str.toLowerCase();
 					waitingForUsername = false;
+					setUIPassphrase(true);
+					runDelayed(new Runnable() {
+						@Override
+						public void run() {
+							setUIPassphrase(false);
+						}
+					}, 2000);
 					startSpeaking("Hi " + str + ". Please say your passphrase.");
 					waitingForPassphrase = true;
 					break;
@@ -878,11 +1028,16 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 				Log.e(TAG, "This Language is not supported.");
 			}
 			else {
-				tts.setSpeechRate((float)1.3);
+				tts.setSpeechRate((float)1.25);
 				tts.setOnUtteranceCompletedListener(this);
 			}
 
 			Log.i(TAG, "************* Ready to speak *************");
+
+//			HashMap <String, String> params = new HashMap<String, String>();
+//			params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "voice.tts.DX650ScreenLock.silence");
+//			tts.playSilence(10, TextToSpeech.QUEUE_FLUSH, params);
+
 			readyToSpeak = true;
 			checkLockState();
 		}
@@ -897,10 +1052,20 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	public void onUtteranceCompleted(String utteranceId) {
 
-		Log.i(TAG, "************* onUtteranceCompleted *************");
+		Log.i(TAG, "************* onUtteranceCompleted: " + utteranceId + " *************");
 
-		speeking = false;
-		if (waitingForUsername || waitingForPassphrase) {
+		//aboutToSpeak = false;
+		speaking = false;
+		Log.i(TAG, "waitingForUsername: " + waitingForUsername + ", waitingForPassphrase: " + waitingForPassphrase);
+		if ((spokenUsername == null) || waitingForUsername ) {
+			runOnMainThread(new Runnable() {
+				@Override
+				public void run() {
+					startListening();
+				}
+			});
+		}
+		else if (waitingForPassphrase) {
 			runOnMainThread(new Runnable() {
 				@Override
 				public void run() {
@@ -1228,6 +1393,9 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 					String enabled = ((DeviceEvent)values[0]).getEventData()[1].toString();
 					Log.i(TAG, "------------- Configure Signal Strength Event: " + enabled + " -------------");
 					break;
+
+				case Definitions.Events.DISCONNECTED_DEVICE_EVENT:
+					deviceClosed(mLocalDevice);
 
 				default:
 					Log.i(TAG, "------------- Other Event: " + values[0] + " -------------");
