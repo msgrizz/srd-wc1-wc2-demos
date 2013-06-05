@@ -2,9 +2,11 @@ package com.plantronics.DX650ScreenLock;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.bluetooth.*;
 import android.content.*;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.*;
 import android.os.RemoteException;
@@ -23,6 +25,8 @@ import android.widget.ProgressBar;
 //import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.plantronics.bladerunner.Definitions;
 import com.plantronics.example.controller.HeadsetDataController;
 import com.plantronics.example.controller.HeadsetDeviceCommand;
@@ -33,6 +37,7 @@ import com.plantronics.headsetdataservice.io.*;
 import android.bluetooth.BluetoothProfile;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -44,21 +49,21 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private static final String TAG = "com.plantronics.DX650ScreenLock.MainActivity";
 	private static final double RSSI_FILTER_CONSTANT = .6;
 	public static String PREFERENCES_THRESHOLD = "PREFERENCES_THRESHOLD";
+	public static String PREFERENCES_USERS = "PREFERENCES_USERS";
 
 	private SpeechRecognizer sr;
 	private TextToSpeech tts;
 	private static DevicePolicyManager dpm = null;
 	private static ComponentName deviceAdmin = null;
 	private static boolean lockOnPause;
-	//private static Toast lastToast;
 	private boolean locked;
 	private boolean hsConnected;
-	private boolean hsA2DPOpen;
+	//private boolean hsA2DPOpen;
 	private boolean hsNear;
 	private boolean hsDonned;
 	private int hsRSSI = 0;
 	private int hsNearRSSIThreshold = 60;
-	private int hsFarRSSIThreshold = 80;
+	private int hsFarRSSIThreshold = 75;
 	private boolean aboutToSpeak;
 	private boolean speaking;
 	private boolean listening;
@@ -87,6 +92,8 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 	private String mDeviceAddress = "";
 	private boolean isBoundToService = false;
 	private boolean deviceDiscovered = false;
+
+	private ArrayList<User> users;
 
 //	private BluetoothProfile.ServiceListener mHeadsetProfileListener = new BluetoothProfile.ServiceListener() {
 //
@@ -128,6 +135,13 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		hsNearRSSIThreshold = preferences.getInt(PREFERENCES_THRESHOLD, 60);
 		hsFarRSSIThreshold = hsNearRSSIThreshold + 15;
+		Gson gson = new Gson();
+		String usersString = preferences.getString(MainActivity.PREFERENCES_USERS, "[]");
+		Type collectionType = new TypeToken<ArrayList<User>>(){}.getType();
+		users = gson.fromJson(usersString, collectionType);
+		if ((users == null) || users.isEmpty()) {
+			users = new ArrayList<User>();
+		}
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -176,8 +190,10 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		}
 		mainActivity = null;
 
-		clockTimerTask.cancel();
-		clockTimer = null;
+		if (clockTimerTask != null) {
+			clockTimerTask.cancel();
+			clockTimer = null;
+		}
 	}
 
 	@Override
@@ -185,33 +201,43 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		Log.i(TAG, "************* onResume() *************");
 		super.onResume();
 
-		mainActivity = this;
-		locked = true;
-		waitingForUsername = false;
-		waitingForPassphrase = false;
-		aboutToSpeak = false;
-		speaking = false;
-		listening = false;
+//		if (users.isEmpty()) {
+//			scheduleTimer(new Runnable() {
+//				@Override
+//				public void run() {
+//					askAddUser();
+//				}
+//			}, 1000);
+//		}
+//		else {
+			mainActivity = this;
+			locked = true;
+			waitingForUsername = false;
+			waitingForPassphrase = false;
+			aboutToSpeak = false;
+			speaking = false;
+			listening = false;
 
-		setUILocked();
+			setUILocked();
 
-		if (mLocalDevice != null) {
-			connectToDevice(mLocalDevice.getAddress());
-		}
+			if (mLocalDevice != null) {
+				connectToDevice(mLocalDevice.getAddress());
+			}
 
-		if (clockTimer == null) {
-			clockTimerTask = new TimerTask() {
-				@Override
-				public void run() {
-					updateClockUI();
-				}
-			};
-			clockTimer = new Timer();
-			clockTimer.scheduleAtFixedRate(clockTimerTask, 30, 30);
-		}
-		updateClockUI();
+			if (clockTimer == null) {
+				clockTimerTask = new TimerTask() {
+					@Override
+					public void run() {
+						updateClockUI();
+					}
+				};
+				clockTimer = new Timer();
+				clockTimer.scheduleAtFixedRate(clockTimerTask, 30, 30);
+			}
+			updateClockUI();
 
-		checkLockState();
+			checkLockState();
+//		}
 	}
 
 	@Override
@@ -253,16 +279,23 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 				if (resultCode==RESULT_OK) {
 					hsNearRSSIThreshold = data.getExtras().getInt(SettingsActivity.EXTRA_THRESHOLD, 0);
 					hsFarRSSIThreshold = hsNearRSSIThreshold + 15;
+					users = (ArrayList<User>)data.getExtras().get(SettingsActivity.EXTRA_USERS);
 				}
 
 				Log.i(TAG, "hsNearRSSIThreshold: " + hsNearRSSIThreshold);
+				Log.i(TAG, "users: " + users);
+
+				Gson gson = new Gson();
+				String usersString = gson.toJson(users);
+				Log.i(TAG,"usersString: " + usersString);
 
 				SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 				SharedPreferences.Editor editor = preferences.edit();
 				editor.putInt(PREFERENCES_THRESHOLD, hsNearRSSIThreshold);
+				editor.putString(PREFERENCES_USERS, usersString);
 				editor.commit();
-
 				break;
+
 			default:
 				Log.e(TAG, "onActivityResult(): unknown request code: '"+requestCode+"'");
 		}
@@ -280,6 +313,14 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+//	/* ****************************************************************************************************
+//			Public
+//	*******************************************************************************************************/
+//
+//	public int getHSRSSI() {
+//		return hsRSSI;
+//	}
 
 	/* ****************************************************************************************************
 			Private
@@ -542,6 +583,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 						notHeardUsernameAttempts = 0;
 						notHeardPassphraseAttempts = 0;
 						wrongPassphraseAttempts = 0;
+						setUIUsername();
 						startSpeaking("Let's start over. Please say your username.");
 						break;
 				}
@@ -577,16 +619,24 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 
 	private boolean checkUsername(String username) {
 		// lookup all usernames and compare to 'username'
-		if (username.toLowerCase().equals("morgan")) {
-			return true;
+		for (int i = 0; i<users.size(); ++i) {
+			User user = (User)users.get(i);
+			if (user.getUsername().toLowerCase().equals(username.toLowerCase())) {
+				return true;
+			}
 		}
 		return false;
 	}
 
-	private boolean checkPassword(String password) {
+	private boolean checkPassword(String username, String password) {
 		// lookup the correct password for 'spokenUsername' and compare to 'password'
-		if (password.toLowerCase().equals("santa cruz")) {
-			return true;
+		for (int i = 0; i<users.size(); ++i) {
+			User user = (User)users.get(i);
+			if (user.getUsername().toLowerCase().equals(username.toLowerCase())) {
+				if (user.getPassphrase().toLowerCase().equals(password.toLowerCase())) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -655,13 +705,29 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 		checkLockState();
 	}
 
+	private void askAddUser() {
+		AlertDialog askDialog= new AlertDialog.Builder(this).create();
+		askDialog.setTitle("Add User");
+		askDialog.setMessage("Please add a new user before continuing.");
+		askDialog.setButton("Yes", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Log.i(TAG, "Yes");
+				showSettings();
+			}
+		});
+		askDialog.setIcon(R.drawable.ic_launcher);
+		askDialog.show();
+	}
+
 	private void showSettings() {
 		Log.i(TAG, "showSettings()");
 
 		Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-		Bundle bundle = new Bundle();
-		bundle.putInt(SettingsActivity.EXTRA_THRESHOLD, hsNearRSSIThreshold);
-		intent.putExtras(bundle);
+//		Bundle bundle = new Bundle();
+//		bundle.putInt(SettingsActivity.EXTRA_THRESHOLD, hsNearRSSIThreshold);
+		intent.putExtra(SettingsActivity.EXTRA_THRESHOLD, hsNearRSSIThreshold);
+		intent.putExtra(SettingsActivity.EXTRA_USERS, users);
+		//intent.putExtras(bundle);
 		startActivityForResult(intent, SettingsActivity.SETTINGS_ACTIVITY);
 	}
 
@@ -979,7 +1045,7 @@ public class MainActivity extends Activity implements BindListener, DiscoveryLis
 				break;
 			}
 			else if (waitingForPassphrase) {
-				if (checkPassword(str)) {
+				if (checkPassword(spokenUsername, str)) {
 					userAuthenticated();
 					break;
 				}

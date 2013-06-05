@@ -32,7 +32,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SettingsActivity">
+        <intent-filter>
+            <action android:name="intent.come_to_foreground" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".AddUserActivity">
+            <intent-filter>
+                <action android:name="intent.come_to_foreground" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name="com.plantronics.DX650ScreenLock.LockerReceiver"
