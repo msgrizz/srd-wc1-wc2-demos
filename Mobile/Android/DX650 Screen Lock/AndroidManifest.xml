@@ -7,20 +7,27 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="15" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" >
+        android:label="Lock Screen"
+        android:theme="@android:style/Theme.NoTitleBar"
+        android:name=".MainApp"
+        android:launchMode="singleInstance"
+        android:screenOrientation="reverseLandscape">
 
-        <activity
-            android:name="com.plantronics.DX650ScreenLock.MainActivity"
+        <activity android:name=".LockActivity"
             android:label="@string/app_name"
             android:theme="@style/LockTheme"
             android:screenOrientation="reverseLandscape" >
@@ -31,6 +38,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!--<activity-->
+            <!--android:name=".LockActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/LockTheme"-->
+            <!--android:screenOrientation="reverseLandscape" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="intent.come_to_foreground" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <activity android:name=".SettingsActivity">
         <intent-filter>
@@ -46,6 +64,14 @@
             </intent-filter>
         </activity>
 
+        <!--<activity android:name=".HelperActivity"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+
         <receiver
             android:name="com.plantronics.DX650ScreenLock.LockerReceiver"
         	android:label="@string/device_admin_receiver"
@@ -58,16 +84,21 @@
     		</intent-filter>
 		</receiver>
 
-        <!--<receiver android:name=".A2DPStateReceiver">-->
+        <!--&lt;!&ndash;=============================================================-->
+            <!--HeadsetData Service. Its recommended that the service is started as remote process-->
+        <!--================================================================ &ndash;&gt;-->
+        <!--<service android:name="com.plantronics.headsetdataservice.HeadsetDataService" android:process=":remote">-->
             <!--<intent-filter>-->
-                <!--<action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"/>-->
+                <!--&lt;!&ndash; These are the interfaces supported by the service, which-->
+                     <!--you can bind to. &ndash;&gt;-->
+                <!--<action android:name="com.plantronics.headsetdataservice.IHeadsetDataService" />-->
             <!--</intent-filter>-->
-        <!--</receiver>-->
-
+        <!--</service>-->
         <!--=============================================================
-            HeadsetData Service. Its recommended that the service is started as remote process
-        ================================================================ -->
-        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService" android:process=":remote">
+    HeadsetData Service. Its recommended that the service is started as remote process
+================================================================ -->
+
+        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService">
             <intent-filter>
                 <!-- These are the interfaces supported by the service, which
                      you can bind to. -->

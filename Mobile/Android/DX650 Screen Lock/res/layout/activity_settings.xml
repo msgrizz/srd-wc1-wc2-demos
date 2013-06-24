@@ -105,6 +105,13 @@
             android:layout_height="wrap_content"
             android:text="Remove User" />
 
+        <Button
+            android:id="@+id/terminateButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="Terminate" />
+
     </LinearLayout>
 
 </LinearLayout>

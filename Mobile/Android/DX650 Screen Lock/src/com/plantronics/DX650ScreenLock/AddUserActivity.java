@@ -22,7 +22,7 @@ public class AddUserActivity extends Activity {
 	public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
 	public static final String EXTRA_PASSPHRASE = "EXTRA_PASSPHRASE";
 
-	private static final String TAG = "com.plantronics.DX650ScreenLock.AddUserActivity";
+	private static final String TAG = "DX650ScreenLock.AddUserActivity";
 
 	private EditText usernameEditText;
 	private EditText passphraseEditText;

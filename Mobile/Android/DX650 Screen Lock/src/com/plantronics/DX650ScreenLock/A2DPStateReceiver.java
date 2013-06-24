@@ -17,7 +17,7 @@ import android.bluetooth.BluetoothProfile;
 
 public class A2DPStateReceiver extends BroadcastReceiver {
 
-	private static final String TAG = "com.plantronics.DX650ScreenLock.A2DPStateReceiver";
+	private static final String TAG = "DX650ScreenLock.A2DPStateReceiver";
 
 	public void onReceive(Context context, Intent intent) {
 		Log.i(TAG, "onReceive: " + intent);

@@ -10,19 +10,11 @@ package com.plantronics.DX650ScreenLock;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SettingsActivity extends Activity {
 
@@ -32,7 +24,7 @@ public class SettingsActivity extends Activity {
 	public static SettingsActivity settingsActivity = null;
 	public static final int SETTINGS_ACTIVITY = 100;
 
-	private static final String TAG = "com.plantronics.DX650ScreenLock.SettingsActivity";
+	private static final String TAG = "DX650ScreenLock.SettingsActivity";
 
 	private SeekBar thresholdSeekBar;
 	private TextView thresholdValueTextView;
@@ -43,6 +35,7 @@ public class SettingsActivity extends Activity {
 	private ArrayList<User> users;
 	private Button addUserButton;
 	private Button removeUserButton;
+	private Button terminateButton;
 
 	/* ****************************************************************************************************
 			Activity
@@ -56,11 +49,10 @@ public class SettingsActivity extends Activity {
 		thresholdSeekBar = (SeekBar)findViewById(R.id.thresholdSeekBar);
 		thresholdValueTextView = (TextView)findViewById(R.id.thresholdValueTextView);
 		useCurrentDistanceButton = (Button)findViewById(R.id.useCurrentDistanceButton);
-
 		useCurrentDistanceButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// set from MainActivity's hsRSSI
+				useCurrentDistanceButtonClicked();
 			}
 		});
 
@@ -73,6 +65,7 @@ public class SettingsActivity extends Activity {
 		usersListView = (ListView)findViewById(R.id.usersListView);
 		addUserButton = (Button)findViewById(R.id.addUserButton);
 		removeUserButton = (Button)findViewById(R.id.removeUserButton);
+		terminateButton = (Button)findViewById(R.id.terminateButton);
 
 		addUserButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -86,10 +79,16 @@ public class SettingsActivity extends Activity {
 				removeButtonClicked();
 			}
 		});
+		terminateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				terminateButton();
+			}
+		});
 
 		users = (ArrayList<User>)getIntent().getExtras().get(EXTRA_USERS);
 		usersArrayAdapter = new ArrayAdapter<User>(this, R.layout.listitem_users);
-		ListView usersListView = (ListView) findViewById(R.id.usersListView);
+		ListView usersListView = (ListView)findViewById(R.id.usersListView);
 		usersArrayAdapter.addAll(users);
 		usersListView.setOnItemClickListener(userOnClickListener);
 		usersListView.setAdapter(usersArrayAdapter);
@@ -113,8 +112,8 @@ public class SettingsActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		Intent result = getIntent();
+		Log.i("DX650", "threshold: " + threshold);
 		result.putExtra(EXTRA_THRESHOLD, threshold);
-		Log.i(TAG, "onBackPressed() users: " + users);
 		result.putExtra(EXTRA_USERS, users);
 		setResult(RESULT_OK, result);
 		finish();
@@ -177,6 +176,12 @@ public class SettingsActivity extends Activity {
 		}
 	};
 
+	private void useCurrentDistanceButtonClicked() {
+		threshold = MainApp.mainApp.getHSSignalStrength();
+		thresholdValueTextView.setText(new Integer(threshold).toString());
+		thresholdSeekBar.setProgress(MainApp.mainApp.getHSSignalStrength());
+	}
+
 	private void addButtonClicked() {
 		Intent intent = new Intent(getApplicationContext(), AddUserActivity.class);
 		startActivityForResult(intent, AddUserActivity.ADDUSER_ACTIVITY);
@@ -188,5 +193,9 @@ public class SettingsActivity extends Activity {
 		if (position != ListView.INVALID_POSITION ) {
 			usersArrayAdapter.remove((User)usersListView.getSelectedItem());
 		}
+	}
+
+	private void terminateButton() {
+		MainApp.mainApp.kill();
 	}
 }
