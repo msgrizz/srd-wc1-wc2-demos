@@ -4,7 +4,8 @@
     android:id="@+id/parentLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/child1Layout"
@@ -63,16 +64,30 @@
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/child3Layout"
-        android:orientation="horizontal"
+        android:id="@+id/child2Layout"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <Button
             android:id="@+id/useCurrentDistanceButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Use Current Distance" />
+
+        <Button
+            android:id="@+id/terminateButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="Terminate" />
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80px"
+            android:text="Save" />
 
     </LinearLayout>
 

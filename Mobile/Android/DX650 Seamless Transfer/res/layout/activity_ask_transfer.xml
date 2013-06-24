@@ -3,53 +3,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_ask_transfer_root"
     android:orientation="vertical"
-    android:layout_width="256dp"
-    android:layout_height="128dp"
-    android:layout_marginLeft="112dp"
-    android:layout_marginTop="96dp"
-    android:background="@drawable/pony_bitmap" >
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    android:layout_marginLeft="335dp"
+    android:layout_marginTop="160dp"
+    android:background="@drawable/transfer_backing" >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="8dp"
+        android:padding="0dp"
         android:layout_weight="1" >
 
-        <ImageView android:src="@drawable/ic_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="8dp" />
-
-        <TextView android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:textSize="18dp"
-            android:text="I am an activity." />
-
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="8dp"
-        android:layout_weight="1" >
-
-        <Button
-            android:id="@+id/yes_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Yes"
-            android:layout_weight="1" />
-
-        <Button
+        <ImageButton
             android:id="@+id/no_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="No"
-            android:layout_weight="1" />
+            android:layout_width="175dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="151dp"
+            android:src="@drawable/button_no"
+            />
+
+        <ImageButton
+            android:id="@+id/yes_button"
+            android:layout_width="174dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="151dp"
+            android:layout_marginLeft="1dp"
+            android:src="@drawable/button_yes"
+            />
 
     </LinearLayout>
 

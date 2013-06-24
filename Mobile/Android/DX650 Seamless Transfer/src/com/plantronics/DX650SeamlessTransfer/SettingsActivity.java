@@ -6,68 +6,65 @@
 	Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 ***********************************************************************************************************/
 
-package com.plantronics.DX650ScreenLock;
+package com.plantronics.DX650SeamlessTransfer;
 
-import android.R;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SettingsActivity extends Activity {
 
-	public static String EXTRA_THRESHOLD = "EXTRA_THRESHOLD";
-
+	public static String PREFERENCES_THRESHOLD = "PREFERENCES_THRESHOLD";
 	public static SettingsActivity settingsActivity = null;
-	public static final int SETTINGS_ACTIVITY = 100;
 
-	private static final String TAG = "com.plantronics.DX650SeamlessTransfer.SettingsActivity";
+	private static final String TAG = "DX650SeamlessTransfer.SettingsActivity";
+	//private static boolean killYourself = true;
 
 	private SeekBar thresholdSeekBar;
 	private TextView thresholdValueTextView;
-	private Button useCurrentDistanceButton;
 	private int threshold;
+
+	/* ****************************************************************************************************
+			Activity
+	*******************************************************************************************************/
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_settings);
-//
-//		thresholdSeekBar = (SeekBar)findViewById(R.id.thresholdSeekBar);
-//		thresholdValueTextView = (TextView)findViewById(R.id.thresholdValueTextView);
-//		useCurrentDistanceButton = (Button)findViewById(R.id.useCurrentDistanceButton);
-//
-//		findViewById(R.id.useCurrentDistanceButton).setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//
-//			}
-//		});
-//
-//		((SeekBar)findViewById(R.id.thresholdSeekBar)).setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//			@Override
-//			public void onStartTrackingTouch (SeekBar seekBar) {
-//				Log.i(TAG, "onStartTrackingTouch()");
-//			}
-//			@Override
-//			public void onStopTrackingTouch (SeekBar seekBar) {
-//				Log.i(TAG, "onStopTrackingTouch()");
-//			}
-//			@Override
-//			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//				threshold = progress;
-//				thresholdValueTextView.setText(new Integer(threshold).toString());
-//				Log.i(TAG, "Seek bar changed: " + progress);
-//			}
-//		});
+		setContentView(R.layout.activity_settings);
 
-		threshold = getIntent().getExtras().getInt(EXTRA_THRESHOLD, 0);
+		thresholdSeekBar = (SeekBar)findViewById(R.id.thresholdSeekBar);
+		thresholdValueTextView = (TextView)findViewById(R.id.thresholdValueTextView);
+
+		((Button)findViewById(R.id.useCurrentDistanceButton)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				useCurrentDistanceButtonClicked();
+			}
+		});
+		((Button)findViewById(R.id.terminateButton)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MainApp.mainApp.kill();
+			}
+		});
+		((Button)findViewById(R.id.saveButton)).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
+		((SeekBar)findViewById(R.id.thresholdSeekBar)).setOnSeekBarChangeListener(onSeekBarChangeListener);
+
+		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+		MainApp.mainApp.setPreferences(preferences);
+		threshold = preferences.getInt(PREFERENCES_THRESHOLD, 60);
 		thresholdValueTextView.setText(new Integer(threshold).toString());
 		thresholdSeekBar.setProgress(threshold);
 	}
@@ -76,26 +73,55 @@ public class SettingsActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		settingsActivity = this;
+
+//		if (killYourself) {
+//			Log.i(TAG, "Killing myself now!");
+//			killYourself = false;
+//			finish();
+//		}
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+
+		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putInt(PREFERENCES_THRESHOLD, threshold);
+		editor.commit();
+
 		settingsActivity = null;
 	}
 
 	@Override
 	public void onBackPressed() {
 
-		//Intent result = new Intent();
-		Intent result = getIntent();
-//		Bundle bundle = new Bundle();
-//		bundle.putInt(SettingsActivity.EXTRA_THRESHOLD, threshold);
-//		result.putExtras(bundle);
-		result.putExtra(SettingsActivity.EXTRA_THRESHOLD, threshold);
-		setResult(RESULT_OK, result);
-		finish();
+	}
 
-		super.onBackPressed();
+	/* ****************************************************************************************************
+			Private
+	*******************************************************************************************************/
+
+	private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+		@Override
+		public void onStartTrackingTouch (SeekBar seekBar) {
+			Log.i(TAG, "onStartTrackingTouch()");
+		}
+		@Override
+		public void onStopTrackingTouch (SeekBar seekBar) {
+			Log.i(TAG, "onStopTrackingTouch()");
+		}
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+			threshold = progress;
+			thresholdValueTextView.setText(new Integer(threshold).toString());
+			Log.i(TAG, "Seek bar changed: " + progress);
+		}
+	};
+
+	private void useCurrentDistanceButtonClicked() {
+		threshold = MainApp.mainApp.getHSSignalStrength();
+		thresholdValueTextView.setText(new Integer(threshold).toString());
+		thresholdSeekBar.setProgress(MainApp.mainApp.getHSSignalStrength());
 	}
 }

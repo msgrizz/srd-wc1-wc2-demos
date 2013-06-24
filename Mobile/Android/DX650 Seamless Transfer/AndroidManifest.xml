@@ -3,33 +3,49 @@
     package="com.plantronics.DX650SeamlessTransfer"
     android:versionCode="1"
     android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="15" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-sdk android:minSdkVersion="14" />
+    <uses-permission android:name="cisco.telephony.permission.DEVICE_PERMISSION"></uses-permission>
+    <uses-permission android:name="cisco.telephony.permission.CALL_PERMISSION"></uses-permission>
+    <uses-permission android:name="cisco.telephony.permission.LINE_PERMISSION"></uses-permission>
+    <uses-permission android:name="cisco.telephony.permission.CALL_INFO_PERMISSION"></uses-permission>
+    <uses-permission android:name="cisco.telephony.permission.DEVICE_INFO_PERMISSION"></uses-permission>
+    <uses-permission android:name="cisco.telephony.permission.LINE_INFO_PERMISSION"></uses-permission>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:label="@string/app_name"
+        android:label="Seamless Transfer"
         android:icon="@drawable/ic_launcher"
-        android:name=".MainApp">
+        android:name=".MainApp"
+        android:launchMode="singleInstance" >
 
-        <activity android:name=".AskTransferActivity"
-            android:screenOrientation="reverseLandscape"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        <uses-library android:name="CiscoTelephony" android:required="true" />
+
+        <activity android:name=".SettingsActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".AskTransferActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
                 <action android:name="intent.come_to_foreground" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".MainActivity" />
 
         <!--=============================================================
            HeadsetData Service. Its recommended that the service is started as remote process
         ================================================================ -->
-        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService"
-            android:process=":remote">
+        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService" >
+
             <intent-filter>
                 <!-- These are the interfaces supported by the service, which
                      you can bind to. -->
@@ -56,8 +72,7 @@
         <!--============================================================
             Receiver of Android's native Bluetooth Intents
         ============================================================-->
-        <receiver
-            android:name="com.plantronics.service.bluetooth.plugins.nativebluetooth.NativeBluetoothBroadcastReceiver">
+        <receiver android:name="com.plantronics.service.bluetooth.plugins.nativebluetooth.NativeBluetoothBroadcastReceiver">
             <intent-filter>
 
                 <!-- These two are there only as triggers for the Service to wake up. They do not correspond to connect/disconnect events -->

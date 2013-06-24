@@ -5,7 +5,7 @@
       <profile>
         <option name="device" value="2.7in QVGA" />
         <option name="deviceConfiguration" value="Portrait" />
-        <option name="targetHashString" value="android-14" />
+        <option name="targetHashString" value="android-15" />
         <option name="theme" value="Theme" />
       </profile>
     </option>
@@ -14,79 +14,112 @@
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
       <GlobalState>
-        <option name="device" value="5.1in WVGA" />
+        <option name="device" value="10.1in WXGA (Tablet)" />
         <option name="dockMode" value="" />
         <option name="nightMode" value="notnight" />
-        <option name="targetHashString" value="android-14" />
+        <option name="targetHashString" value="android-15" />
         <option name="theme" value="Theme" />
       </GlobalState>
     </option>
     <device-configurations>
+      <entry key="file://$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" value="Landscape" />
+      <entry key="file://$PROJECT_DIR$/res/layout/activity_main.xml" value="Landscape" />
       <entry key="file://$PROJECT_DIR$/res/layout/device_list_item.xml" value="Landscape" />
     </device-configurations>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="INFO" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="================ call state:" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08d9b7eb-6f79-4334-acbe-963571ee8a77" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/layout/activity_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/bladerunnerdsp.xml" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/BluetoothReceiver.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$1.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$2.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$10.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$12.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$13.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$14.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$15.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$16.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$17.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$18.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$3.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$8.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$9.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$CommandTask.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$ReceiveEventTask.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$SettingTask.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub$Proxy.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventMessage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/bladerunnersdk.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/libs/bladerunnersdk.jar" afterPath="$PROJECT_DIR$/libs/bladerunnerdsp.jar" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/controller/HeadsetDataController.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/controller/HeadsetDeviceCommand.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDeviceCommand.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/controller/HeadsetDeviceSetting.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDeviceSetting.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/controller/SettingsResult.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/SettingsResult.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/BindListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/BindListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/DiscoveryListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/HeadsetServiceBluetoothListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/HeadsetServiceConnectionListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/HeadsetServiceEventListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/plantronics/BladeRunner/listener/HeadsetServiceResponseListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/res/layout/button_no.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/res/layout/button_yes.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/copyright/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/dictionaries/mdavis.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/uiDesigner.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/HFPFinagler.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/src/com/plantronics/HFPFinagler/FinaglePhoneStateListener.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.apk" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.apk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.unaligned.apk" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.unaligned.apk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp.class" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/BindListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/BindListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DX650 Seamless Transfer.iml" afterPath="$PROJECT_DIR$/DX650 Seamless Transfer.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" afterPath="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/MainActivity.java" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/main.xml" afterPath="$PROJECT_DIR$/res/layout/main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" afterPath="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/res/layout/activity_main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/res/layout/activity_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.properties" afterPath="$PROJECT_DIR$/project.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DX650 Seamless Transfer.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="$PROJECT_DIR$/../BRTest/.idea/workspace.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367354331478" ignored="false" />
-    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370046415275" ignored="false" />
+    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372054951652" ignored="false" />
     <file path="/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370040121628" ignored="false" />
-    <file path="/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370041676129" ignored="false" />
+    <file path="/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372036141465" ignored="false" />
     <file path="/HeadsetServiceResponseListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367353918547" ignored="false" />
     <file path="$PROJECT_DIR$/../BRTest/src/com/plantronics/BRTest/ui/ChooserActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367354866474" ignored="false" />
     <file path="/a.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370030876089" ignored="false" />
-    <file path="/HeadsetDataController.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367371960461" ignored="false" />
+    <file path="/HeadsetDataController.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371942580890" ignored="false" />
     <file path="$USER_HOME$/Desktop/BladeRunnerTutorialDocs/BladeRunnerTutorialApp/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367355445534" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370047428075" ignored="false" />
+    <file path="/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372050242370" ignored="false" />
     <file path="/device_list_item.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367457294215" ignored="false" />
     <file path="$PROJECT_DIR$/../BRTest/src/com/plantronics/BRTest/ui/DeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367368730434" ignored="false" />
     <file path="$USER_HOME$/Desktop/BladeRunnerTutorialDocs/BladeRunnerTutorialApp 3/project.properties" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367371289865" ignored="false" />
@@ -103,9 +136,9 @@
     <file path="$USER_HOME$/Desktop/BR 2/BladeRunnerTutorialDocs2/BladeRunnerTutorialApp/res/layout/remote.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367876942863" ignored="false" />
     <file path="/remote.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367876853277" ignored="false" />
     <file path="$USER_HOME$/Desktop/BR 2/BladeRunnerTutorialDocs2/BladeRunnerTutorialApp/res/values/strings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367876476740" ignored="false" />
-    <file path="/RemoteDeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369430751474" ignored="false" />
+    <file path="/RemoteDeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370557638510" ignored="false" />
     <file path="$USER_HOME$/Desktop/BR 2/BladeRunnerTutorialDocs2/BladeRunnerTutorialApp/src/com/plantronics/example/controller/HeadsetDataController.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367955296476" ignored="false" />
-    <file path="/a.dummy" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369359435550" ignored="false" />
+    <file path="/a.dummy" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372046772247" ignored="false" />
     <file path="$USER_HOME$/Desktop/UCMDeviceInfoLogger/project.properties" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1368563550874" ignored="false" />
     <file path="$USER_HOME$/Desktop/BluetoothLocker/project.properties" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1368563655503" ignored="false" />
     <file path="$USER_HOME$/Desktop/DT/BladeRunnerTutorialDocs 2/BladeRunnerTutorialApp/gen/com/plantronics/example/BuildConfig.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1368736030045" ignored="false" />
@@ -115,37 +148,66 @@
     <file path="$USER_HOME$/Desktop/DT/BR 2 from Ruchi/BladeRunnerTutorialDocs2 2/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1368736093831" ignored="false" />
     <file path="$USER_HOME$/Desktop/DT/BR 2 from Ruchi/BladeRunnerTutorialDocs2 2/BladeRunnerTutorialApp/project.properties" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1368736098114" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.aidl" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369271557469" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784587866" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369271710264" ignored="false" />
     <file path="/PlantronicsXEventListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369271710264" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/BluetoothReceiver.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369272966937" ignored="false" />
     <file path="/BluetoothReceiver.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369272965921" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/MainApp.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369783134350" ignored="false" />
-    <file path="/MainApp.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370048528818" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369351239541" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369430813505" ignored="false" />
+    <file path="/MainApp.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372090426958" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370554589862" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370908681838" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/controller/HeadsetDataController.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369351264735" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369425496199" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369351426488" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/Manifest.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784590873" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/R.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784590873" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784597372" ignored="false" />
-    <file path="/fragment.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370048026654" ignored="false" />
+    <file path="/fragment.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372050385853" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/res/layout/lock_screen.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784207802" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/LockScreen.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369785562744" ignored="false" />
     <file path="/LockScreen.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784363184" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369856918584" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369856918584" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/res/layout/activity_settings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369949399216" ignored="false" />
-    <file path="/activity_settings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369947996207" ignored="false" />
-    <file path="/SettingsActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370036852823" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Screen Lock/res/layout/activity_main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369946506395" ignored="false" />
+    <file path="/activity_settings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371852258484" ignored="false" />
+    <file path="/SettingsActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372047580869" ignored="false" />
     <file path="/TransferDialogIntentService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370034188135" ignored="false" />
     <file path="/transfer_toast.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370033672844" ignored="false" />
     <file path="/activity_transfer.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370036249565" ignored="false" />
     <file path="/TransferActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370040820030" ignored="false" />
-    <file path="/AskTransferActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370048172057" ignored="false" />
+    <file path="/AskTransferActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370633523179" ignored="false" />
     <file path="/StayAliveIntentService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370038586224" ignored="false" />
+    <file path="/activity_main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371845344622" ignored="false" />
+    <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370370278786" ignored="false" />
+    <file path="/listItem_users.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370382143392" ignored="false" />
+    <file path="/AddUserActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370462004445" ignored="false" />
+    <file path="/listitem_users.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370461126970" ignored="false" />
+    <file path="/User.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370463470781" ignored="false" />
+    <file path="$USER_HOME$/Desktop/UCMDeviceInfoLogger/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370548359178" ignored="false" />
+    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/DiscoveryActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370554581461" ignored="false" />
+    <file path="/DiscoveryActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370554575687" ignored="false" />
+    <file path="/activity_ask_transfer.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370909253907" ignored="false" />
+    <file path="$USER_HOME$/Desktop/UCMDeviceInfoLogger/src/com/cisco/sample/ucmdeviceinfologger/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370908713385" ignored="false" />
+    <file path="$USER_HOME$/Desktop/UCMDeviceInfoLogger/src/com/cisco/sample/ucmdeviceinfologger/LoggerService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370903127755" ignored="false" />
+    <file path="/LoggerService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370900397842" ignored="false" />
+    <file path="$USER_HOME$/Desktop/UCMDeviceInfoLogger/res/layout/activity_main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370889426966" ignored="false" />
+    <file path="/button_no.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370907011807" ignored="false" />
+    <file path="/button_yes.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370906249522" ignored="false" />
+    <file path="$PROJECT_DIR$/../HFPFinagler/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371936451489" ignored="false" />
+    <file path="$PROJECT_DIR$/../HFPFinagler/res/values/strings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371934272453" ignored="false" />
+    <file path="$PROJECT_DIR$/../HFPFinagler/res/layout/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940278934" ignored="false" />
+    <file path="$PROJECT_DIR$/../HFPFinagler/src/com/plantronics/HFPFinagler/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940287162" ignored="false" />
+    <file path="$PROJECT_DIR$/../HFPFinagler/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371934272453" ignored="false" />
+    <file path="/FinaglePhoneStateListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372090682213" ignored="false" />
+    <file path="/BuildConfig.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940375025" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/HFPFinagler/FinaglePhoneStateListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940391647" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/HFPFinagler/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940398019" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/HFPFinagler/Manifest.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940401679" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/HFPFinagler/R.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940405712" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/res/values/strings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940413209" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372050242370" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940476933" ignored="false" />
+    <file path="$USER_HOME$/Library/android-sdk-macosx/tools/ant/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940510074" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371950571276" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/FinaglePhoneStateListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372090837005" ignored="false" />
+    <file path="/MainService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372024867012" ignored="false" />
+    <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372025436956" ignored="false" />
+    <file path="/HelperActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372037229485" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,8 +271,11 @@
       <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="272" column="31" selection-start="10662" selection-end="10665" vertical-scroll-proportion="0.60855263">
-              <folding />
+            <state line="134" column="0" selection-start="5510" selection-end="5510" vertical-scroll-proportion="0.5687023">
+              <folding>
+                <element signature="e#0#42810#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -234,30 +299,29 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/res/drawable-hdpi/pony_bitmap.xml" />
-        <option value="$PROJECT_DIR$/res/layout/pony_view.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/ConfigurationActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/BladeRunner/controller/HeadsetDataController.java" />
-        <option value="$PROJECT_DIR$/res/layout/transfer_toast.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/TransferActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/TransferDialogIntentService.java" />
-        <option value="$PROJECT_DIR$/res/layout/activity_transfer.xml" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
+        <option value="$PROJECT_DIR$/res/layout/activity_main.xml" />
+        <option value="$PROJECT_DIR$/res/layout/button_yes.xml" />
+        <option value="$PROJECT_DIR$/res/layout/button_no.xml" />
+        <option value="$PROJECT_DIR$/res/drawable-hdpi/button_no.xml" />
+        <option value="$PROJECT_DIR$/res/drawable-hdpi/button_yes.xml" />
         <option value="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/StayAliveIntentService.java" />
-        <option value="$PROJECT_DIR$/res/layout/main.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" />
+        <option value="$PROJECT_DIR$/res/layout/activity_settings.xml" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" />
+        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="159" />
     <option name="y" value="22" />
-    <option name="width" value="1521" />
-    <option name="height" value="1024" />
+    <option name="width" value="1193" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -285,8 +349,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -294,10 +356,6 @@
               <option name="myItemId" value="DX650 Seamless Transfer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -324,40 +382,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="plantronics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="example" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="listener" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plantronics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="example" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controller" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -432,61 +456,31 @@
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="drawable-hdpi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DX650 Seamless Transfer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bladerunnerdsp.jar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.10928962" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Background" />
+    <property name="options.lastSelected" value="preferences.keymap" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/bladerunnerdsp.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/android-support-v4.jar!/" />
     <property name="AndroidLayoutSelectedEditor" value="text-editor" />
     <property name="project.structure.side.proportion" value="0.17326732" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="AndroidTargetDevices" value="FCH16368JF3" />
+    <property name="AndroidTargetDevices" value="FCH16368JNP" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
@@ -686,30 +680,30 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="159" y="22" width="1521" height="1024" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="22" width="1193" height="1054" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33267587" sideWeight="0.6617647" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925585" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3368201" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.67161226" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3382353" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.56092435" sideWeight="0.9987923" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33706722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.69246435" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24720578" sideWeight="0.43907562" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30147058" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25314334" sideWeight="0.30753565" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30753565" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41260925" sideWeight="0.45824847" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -780,104 +774,117 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java">
+    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/button_no.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="17" selection-start="664" selection-end="664" vertical-scroll-proportion="0.19607843">
+        <state line="4" column="38" selection-start="186" selection-end="186" vertical-scroll-proportion="0.08">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/SettingsResult.java">
+    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/button_yes.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="447" selection-end="447" vertical-scroll-proportion="0.07722772">
+        <state line="7" column="27" selection-start="257" selection-end="257" vertical-scroll-proportion="0.14">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/transfer_toast.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_ask_transfer.xml">
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="40" selection-start="1643" selection-end="1643" vertical-scroll-proportion="0.013626834">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-14/android/content/Intent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2645" column="28" selection-start="122381" selection-end="122381" vertical-scroll-proportion="-2.294898">
+        <state line="25" column="0" selection-start="915" selection-end="915" vertical-scroll-proportion="0.7222222">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png">
+    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/transfer_btn_no_depressed.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/activity_ask_transfer.xml">
+    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/transfer_btn_yes_depressed.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="34" selection-start="147" selection-end="147" vertical-scroll-proportion="0.021558871">
+        <state line="16" column="13" selection-start="573" selection-end="573" vertical-scroll-proportion="0.0795107">
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer">
-        <state />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.45463812">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_settings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="android-designer">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1284" selection-end="2369" vertical-scroll-proportion="0.33017877">
+        <state line="85" column="33" selection-start="2999" selection-end="2999" vertical-scroll-proportion="0.79581153">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/android-sdk-macosx/add-ons/addon_cisco_dx650_15/libs/telephony.jar!/com/cisco/telephony/CallStateEnum.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="58" selection-start="780" selection-end="780" vertical-scroll-proportion="0.17227319" />
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/android-sdk-macosx/platforms/android-15/android.jar!/android/os/Binder.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="36" selection-start="509" selection-end="509" vertical-scroll-proportion="0.08450704" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="490" column="25" selection-start="17016" selection-end="17016" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="73" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.8417266">
+        <state line="45" column="76" selection-start="2280" selection-end="2280" vertical-scroll-proportion="0.5963303">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/SettingsResult.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="46" selection-start="2055" selection-end="2055" vertical-scroll-proportion="0.62798095">
+        <state line="18" column="13" selection-start="763" selection-end="763" vertical-scroll-proportion="0.08562691">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="74" column="32" selection-start="2599" selection-end="2599" vertical-scroll-proportion="0.4587156">
+          <folding>
+            <element signature="e#1658#1780#0" expanded="true" />
+            <element signature="e#1775#1776#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="13" selection-start="487" selection-end="487" vertical-scroll-proportion="0.45463812" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="272" column="31" selection-start="10662" selection-end="10665" vertical-scroll-proportion="0.60855263">
-          <folding />
+        <state line="134" column="0" selection-start="5510" selection-end="5510" vertical-scroll-proportion="0.5687023">
+          <folding>
+            <element signature="e#0#42810#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -890,7 +897,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.17326732" />
               </list>
             </option>
           </splitter-proportions>
@@ -913,7 +920,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.17326732" />
               </list>
             </option>
           </splitter-proportions>
@@ -932,11 +939,11 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.7</last-edited>
+          <last-edited>Android 4.2.2 Platform</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.17326732" />
               </list>
             </option>
           </splitter-proportions>
@@ -944,12 +951,11 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>DX650 Seamless Transfer</last-edited>
+          <last-edited>Android|DX650 Seamless Transfer</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.17326732" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -969,7 +975,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>bladerunnerdsp</last-edited>
+          <last-edited>android-support-v4</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

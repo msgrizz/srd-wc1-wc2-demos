@@ -1,3 +1,5 @@
+/*___Generated_by_IDEA___*/
+
 /*
  * This file is auto-generated.  DO NOT MODIFY.
  * Original file: /Users/mdavis/plantronics-innovation/core-team/Mobile/Android/DX650 Seamless Transfer/aidl/com/plantronics/headsetdataservice/IHeadsetDataService.aidl

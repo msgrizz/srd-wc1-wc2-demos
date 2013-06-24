@@ -21,7 +21,7 @@ public class AskTransferActivity extends Activity {
 
 	private static final String TAG = "com.plantronics.DX650SeamlessTransfer.AskTransferActivity";
 
-	private static boolean killYourself = true;
+	//private static boolean killYourself = true;
 
 	/* ****************************************************************************************************
 			Activity
@@ -32,24 +32,16 @@ public class AskTransferActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ask_transfer);
 
-		Log.i(TAG, "*********************************************** &^%#@&^%$@&*#^%$&*@^#%$&*@#%$&*^@%#$&^%@#$&^%@#$&^%@#*&$^%@&*^#$%&*^%#$&*^@%$ onCreate()");
-
 		findViewById(R.id.yes_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "yes_button");
-				Intent result = getIntent();
-				setResult(RESULT_OK, result);
-				finish();
+				yesClicked();
 			}
 		});
 		findViewById(R.id.no_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i(TAG, "no_button");
-				Intent result = getIntent();
-				setResult(RESULT_CANCELED, result);
-				finish();
+				noClicked();
 			}
 		});
 	}
@@ -59,16 +51,36 @@ public class AskTransferActivity extends Activity {
 		super.onResume();
 		askTransferActivity = this;
 
-		if (killYourself) {
-			Log.i(TAG, "Killing myself now!");
-			killYourself = false;
-			finish();
-		}
+//		if (killYourself) {
+//			Log.i(TAG, "Killing myself now!");
+//			killYourself = false;
+//			finish();
+//		}
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		askTransferActivity = null;
+	}
+
+	/* ****************************************************************************************************
+			Private
+	*******************************************************************************************************/
+
+	private void yesClicked() {
+		Log.i(TAG, "yes_button");
+//		Intent result = getIntent();
+//		setResult(RESULT_OK, result);
+		MainApp.mainApp.transferActivityResult(true);
+		finish();
+	}
+
+	private void noClicked() {
+		Log.i(TAG, "no_button");
+//		Intent result = getIntent();
+//		setResult(RESULT_CANCELED, result);
+		MainApp.mainApp.transferActivityResult(false);
+		finish();
 	}
 }

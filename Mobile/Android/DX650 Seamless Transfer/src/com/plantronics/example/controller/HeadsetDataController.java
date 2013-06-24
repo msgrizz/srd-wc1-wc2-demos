@@ -8,12 +8,12 @@ import android.os.*;
 
 import android.util.Log;
 import android.widget.Toast;
-import com.plantronics.example.listeners.BindListener;
-import com.plantronics.example.listeners.DiscoveryListener;
-import com.plantronics.example.listeners.HeadsetServiceBluetoothListener;
-import com.plantronics.example.listeners.HeadsetServiceConnectionListener;
-import com.plantronics.example.listeners.HeadsetServiceEventListener;
-import com.plantronics.example.listeners.HeadsetServiceResponseListener;
+import com.plantronics.example.listener.BindListener;
+import com.plantronics.example.listener.DiscoveryListener;
+import com.plantronics.example.listener.HeadsetServiceBluetoothListener;
+import com.plantronics.example.listener.HeadsetServiceConnectionListener;
+import com.plantronics.example.listener.HeadsetServiceEventListener;
+import com.plantronics.example.listener.HeadsetServiceResponseListener;
 import com.plantronics.headsetdataservice.*;
 import com.plantronics.headsetdataservice.io.DeviceCommand;
 import com.plantronics.headsetdataservice.io.DeviceCommandType;
@@ -121,7 +121,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = true;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, "headset data service connected.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "headset data service connected.", Toast.LENGTH_SHORT).show();
 
             // Call the asynchronous listener to tell that the service is connected
             ((BindListener)mContext).serviceConnected();
@@ -134,7 +134,7 @@ public class HeadsetDataController {
             bServiceConnectionOpen = false;
 
             // As part of the sample, tell the user what happened.
-            Toast.makeText(mContext, "Headset data service disconnected.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Headset data service disconnected.", Toast.LENGTH_SHORT).show();
 
             ((BindListener)mContext).serviceDisconnected();
         }
@@ -237,15 +237,25 @@ public class HeadsetDataController {
      */
     public void registerConnectionListeners( HeadsetDataDevice device, HeadsetServiceConnectionListener listener) {
         Log.e(TAG, "Register Connection listeners=" + listener);
-        mDeviceToConnectionListeners.put(device, listener);
-        try {
-            mService.addDeviceOpenListener(device);
-            mService.addDeviceSessionListener(device);
-            mService.addDeviceEventListener(device);
-            mService.addMetadataListener(device);
-        } catch (RemoteException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+		if (!mDeviceToConnectionListeners.containsKey(device)) {
+			if (mDeviceToConnectionListeners.get(device) != listener) {
+				mDeviceToConnectionListeners.put(device, listener);
+				try {
+					mService.addDeviceOpenListener(device);
+					mService.addDeviceSessionListener(device);
+					mService.addDeviceEventListener(device);
+					mService.addMetadataListener(device);
+				} catch (RemoteException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				}
+			}
+			else {
+				Log.e(TAG, "Already registered.");
+			}
+		}
+		else {
+			Log.e(TAG, "Already registered.");
+		}
     }
 
     public void unregisterConnectionListeners(HeadsetDataDevice device) {
@@ -456,7 +466,17 @@ public class HeadsetDataController {
         /*if (!bDeviceOpen )  {
             return false;
         } */
-        mEventListener.put(device, listener);
+		if (!mEventListener.containsKey(device)) {
+			if (mEventListener.get(device) != listener) {
+        		mEventListener.put(device, listener);
+			}
+			else {
+				Log.e(TAG, "Already registered.");
+			}
+		}
+		else {
+			Log.e(TAG, "Already registered.");
+		}
         return true;
     }
 
@@ -531,6 +551,9 @@ public class HeadsetDataController {
                     ds.setDeviceSettingInputValue(objs);
                 }
             }
+			else {
+				Log.i(TAG, "Device setting type null in API.");
+			}
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } finally {
@@ -675,6 +698,14 @@ public class HeadsetDataController {
             Log.e(TAG, "Setting device open to false");
             //bDeviceOpen = false;
             mDeviceToOpen.put(hdDevice, false);
+
+			if (isbDeviceOpen(hdDevice)) {
+				Log.i("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", "open");
+			}
+			else {
+				Log.i("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", "znot open");
+			}
+
             unregisterConnectionListeners(hdDevice);
         }
     };

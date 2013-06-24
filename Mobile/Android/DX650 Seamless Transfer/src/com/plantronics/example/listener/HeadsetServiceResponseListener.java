@@ -5,7 +5,7 @@
  * without the express written consent of Plantronics, Inc.
  */
 
-package com.plantronics.example.listeners;
+package com.plantronics.example.listener;
 
 import com.plantronics.example.controller.SettingsResult;
 import com.plantronics.headsetdataservice.io.RemoteResult;
