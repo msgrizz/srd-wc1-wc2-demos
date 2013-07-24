@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SettingsAreInitialized</key>
+	<true/>
+	<key>DefaultsVersion</key>
+	<string></string>
+	<key>ContextServerAddress</key>
+	<string>23.23.249.221</string>
+	<key>ContextServerPort</key>
+	<string>8080</string>
+	<key>ContextServerUsername</key>
+	<string>mdavis</string>
+	<key>ContextServerPassword</key>
+	<string>plt123</string>
+	<key>ContextServerAutoConnect</key>
+	<false/>
+	<key>VideoSwitchAutoConnect</key>
+	<false/>
+	<key>Cam1Location</key>
+	<dict>
+		<key>X</key>
+		<integer>-65</integer>
+		<key>Y</key>
+		<integer>0</integer>
+	</dict>
+	<key>Cam2Location</key>
+	<dict>
+		<key>X</key>
+		<integer>0</integer>
+		<key>Y</key>
+		<integer>0</integer>
+	</dict>
+	<key>Cam3Location</key>
+	<dict>
+		<key>X</key>
+		<integer>65</integer>
+		<key>Y</key>
+		<integer>0</integer>
+	</dict>
+	<key>HeadTrackingDataFilter</key>
+	<real>0.5</real>
+</dict>
+</plist>
