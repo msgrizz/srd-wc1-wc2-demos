@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DX650 Screen Lock</string>
+    <string name="menu_settings">Settings</string>
+    <string name="device_admin_receiver">DX650 Screen Lock</string>
+    <string name="device_admin_receiver_description">This application locks and unlocks the device based on a combination of proximity and voice authentication via a Plantronics Voyager Legend headset.</string>
+    <string name="add_admin_extra_app_text">Enable this app to enable Plantronics Voyager Legend-based locking and unlocking of the device.</string>
+    <string name="disable_requested_text">Disabling this app will remove Plantronics Voyager Legend-based locking and unlocking capabilities.</string>
+
+</resources>

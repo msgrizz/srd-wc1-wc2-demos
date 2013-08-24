@@ -28,10 +28,476 @@
     </device-configurations>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="================ call state:" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="DX650" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08d9b7eb-6f79-4334-acbe-963571ee8a77" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/A2DPStateReceiver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/A2DPStateReceiver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/AddUserActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/BTFinagler.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/BTFinagler.unaligned.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/BindListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/BindListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/BuildConfig.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.apk.zip" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/DX650 Screen Lock.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/DX650 Screen Lock.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/DX650 Screen Lock.unaligned.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/DX650 Screen Lock.unaligned.apk" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/Default-568h@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/Default.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/Default@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/DiscoveryListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/DiscoveryListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/FinaglePhoneStateListener$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/FinaglePhoneStateListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController$7.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController$7.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDataController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDataController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDeviceCommand.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDeviceCommand.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/HeadsetDeviceSetting.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/HeadsetDeviceSetting.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/HeadsetServiceBluetoothListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/HeadsetServiceBluetoothListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/HeadsetServiceConnectionListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/HeadsetServiceConnectionListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/HeadsetServiceEventListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/HeadsetServiceEventListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/listeners/HeadsetServiceResponseListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/listeners/HeadsetServiceResponseListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/LockerReceiver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/LockerReceiver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$10$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$10.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$10.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$12.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$12.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$13.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$13.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$14.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$14.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$15.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$15.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$16$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$16.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$16.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$17$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$17.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$17.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$18.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$18.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$19.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$19.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$20$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$20.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$20.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$21$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$21.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$21.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$22.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$23.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$24.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$8.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$8.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$9.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$9.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$CommandTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$CommandTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$NamedTimerTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$ReceiveEventTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$ReceiveEventTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$SettingTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$SettingTask.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/MainActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/MainActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/MainActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub$Proxy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/R$attr.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$attr.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$attr.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/R$drawable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$drawable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$drawable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$id.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$id.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/R$layout.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$layout.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$layout.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$menu.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$menu.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/R$string.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$string.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$string.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$style.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$style.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R$xml.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R$xml.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/out/production/BTFinagler/com/plantronics/BTFinagler/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/R.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$3.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$4.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$5.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity$6.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/SettingsActivity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/example/controller/SettingsResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/example/controller/SettingsResult.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/DX650ScreenLock/User.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/DX650ScreenLock/User.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/bg_locked.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-hdpi/bg_locked.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/bg_userpass.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-hdpi/bg_userpass.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/libs/bladerunnerdsp.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/libs/bladerunnerdsp.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/cog.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-hdpi/cog.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/libs/commons-lang3-3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/libs/commons-lang3-3.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/libs/gson-2.2.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/libs/gson-2.2.4.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/home_button.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/ic_launcher-web.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/ic_launcher-web.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/res/drawable-hdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/res/drawable-ldpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/res/drawable-mdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-ldpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-mdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-xhdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-hdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-ldpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-mdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/drawable-xhdpi/ic_launcher.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/drawable-hdpi/kill_button.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.classpath" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.classpath" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/.name" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/.name" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/.name" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/.name" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.project" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.project" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/A2DPStateReceiver.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/A2DPStateReceiver.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/AddUserActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/AddUserActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/AndroidManifest.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/AppDelegate.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/AppDelegate.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/BindListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/BindListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/BTFinagler/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/DX650 Screen Lock.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/DX650 Screen Lock.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceCommand.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceCommand.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceCommand.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceCommand.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceCommandType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceCommandType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceCommandType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceCommandType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceEvent.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceEvent.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceEvent.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceEvent.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceEventType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceEventType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceEventType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceEventType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceSetting.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceSetting.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceSetting.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceSetting.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/DeviceSettingType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/DeviceSettingType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/DeviceSettingType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/DeviceSettingType.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/DiscoveryListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/DiscoveryListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/FinaglePhoneStateListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/controller/HeadsetDataController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/controller/HeadsetDataController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/HeadsetDataDevice.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/HeadsetDataDevice.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/HeadsetDataDevice.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/HeadsetDataDevice.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/controller/HeadsetDeviceCommand.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/controller/HeadsetDeviceCommand.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/controller/HeadsetDeviceSetting.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/controller/HeadsetDeviceSetting.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/HeadsetServiceBluetoothListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/HeadsetServiceBluetoothListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/HeadsetServiceConnectionListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/HeadsetServiceConnectionListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/HeadsetServiceEventListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/HeadsetServiceEventListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/listeners/HeadsetServiceResponseListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/listeners/HeadsetServiceResponseListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataService.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataService.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataService.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/en.lproj/InfoPlist.strings" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/LockerReceiver.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/LockerReceiver.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/MainActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/MainActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/MainActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/BTFinagler/Manifest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/DX650ScreenLock/Manifest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/DX650ScreenLock/Manifest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice-Prefix.pch" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/PLTDevice.xcscheme" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/PLTDeviceExample-Info.plist" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/PLTDeviceExample-Prefix.pch" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDeviceManager.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDeviceManager.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/BTFinagler/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/gen/com/plantronics/DX650ScreenLock/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/gen/com/plantronics/DX650ScreenLock/R.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/Registration.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/Registration.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/Registration.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/Registration.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/RemotePort.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/RemotePort.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/RemotePort.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/RemotePort.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/RemoteResult.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/RemoteResult.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/RemoteResult.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/RemoteResult.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/aidl/com/plantronics/headsetdataservice/io/SessionErrorException.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/bin/classes/com/plantronics/headsetdataservice/io/SessionErrorException.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/aidl/com/plantronics/headsetdataservice/io/SessionErrorException.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/bin/classes/com/plantronics/headsetdataservice/io/SessionErrorException.aidl" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/example/controller/SettingsResult.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/example/controller/SettingsResult.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/User.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/src/com/plantronics/DX650ScreenLock/User.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/ViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/ViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/en.lproj/ViewController_iPad.xib" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/en.lproj/ViewController_iPhone.xib" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/WorkspaceSettings.xcsettings" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/layout/activity_adduser.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/layout/activity_adduser.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/layout/activity_main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/menu/activity_main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/layout/activity_main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/menu/activity_main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/layout/activity_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/layout/activity_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/ant.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/libraries/bladerunnerdsp.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/libraries/bladerunnerdsp.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/build.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/libraries/commons_lang3_3_1.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/libraries/commons_lang3_3_1.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/compiler.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/contents.xcworkspacedata" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/xml/device_admin.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/xml/device_admin.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/libraries/gson_2_2_4.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/libraries/gson_2_2_4.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/layout/listitem_users.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/layout/listitem_users.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/local.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample/main.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/res/layout/main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/dictionaries/mdavis.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/dictionaries/mdavis.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/dictionaries/mdavis.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/copyright/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/copyright/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/copyright/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/proguard-project.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/proguard-project.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/proguard-project.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDeviceExample/PLTDeviceExample.xcodeproj/project.pbxproj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/project.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/project.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/project.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/res/values/strings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/values/strings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/values/strings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/values/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/values-v11/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/res/values-v14/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/values/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/values-v11/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/res/values-v14/styles.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/uiDesigner.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/uiDesigner.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/uiDesigner.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- preservice/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Screen Lock -- webex demo/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/xcschememanagement.plist" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/BluetoothReceiver.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$1.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$2.class" afterPath="" />
@@ -68,52 +534,33 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventMessage.class" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/layout/button_no.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/layout/button_yes.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/compiler.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/copyright/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/dictionaries/mdavis.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/scopes/scope_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/uiDesigner.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/HFPFinagler.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../HFPFinagler/src/com/plantronics/HFPFinagler/FinaglePhoneStateListener.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.apk" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.unaligned.apk" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/DX650 Screen Lock.unaligned.apk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp.class" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainApp.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/BindListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/BindListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DX650 Seamless Transfer.iml" afterPath="$PROJECT_DIR$/DX650 Seamless Transfer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/DiscoveryListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" afterPath="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" afterPath="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" afterPath="$PROJECT_DIR$/res/layout/activity_ask_transfer.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/res/layout/activity_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.properties" afterPath="$PROJECT_DIR$/project.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/Images/plt_banner.png" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/Images/plt_banner.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppSettings.plist" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppSettings.plist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTCam-Prefix.pch" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTCam-Prefix.pch" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTDemoController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTDemoController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/en.lproj/MainMenu.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/en.lproj/MainMenu.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/PLTHeadsetManager.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/PLTHeadsetManager.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindow.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindow.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/VideoSwitchController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/VideoSwitchController.m" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../DX650 Screen Lock/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DX650 Seamless Transfer.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="$PROJECT_DIR$/../BRTest/.idea/workspace.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367354331478" ignored="false" />
-    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372054951652" ignored="false" />
-    <file path="/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370040121628" ignored="false" />
-    <file path="/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372036141465" ignored="false" />
+    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1375919616136" ignored="false" />
+    <file path="/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372110715836" ignored="false" />
+    <file path="/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372114523160" ignored="false" />
     <file path="/HeadsetServiceResponseListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367353918547" ignored="false" />
     <file path="$PROJECT_DIR$/../BRTest/src/com/plantronics/BRTest/ui/ChooserActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367354866474" ignored="false" />
     <file path="/a.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1370030876089" ignored="false" />
@@ -158,7 +605,7 @@
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/controller/HeadsetDataController.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369351264735" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369425496199" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369351426488" ignored="false" />
-    <file path="/fragment.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372050385853" ignored="false" />
+    <file path="/fragment.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372111641388" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/res/layout/lock_screen.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784207802" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/src/com/plantronics/DX650ScreenLock/LockScreen.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369785562744" ignored="false" />
     <file path="/LockScreen.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1369784363184" ignored="false" />
@@ -199,15 +646,15 @@
     <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/HFPFinagler/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940398019" ignored="false" />
     <file path="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/HFPFinagler/Manifest.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940401679" ignored="false" />
     <file path="$PROJECT_DIR$/../BTFinagler/gen/com/plantronics/HFPFinagler/R.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940405712" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/res/values/strings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940413209" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372050242370" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940476933" ignored="false" />
     <file path="$USER_HOME$/Library/android-sdk-macosx/tools/ant/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371940510074" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1371950571276" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/FinaglePhoneStateListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372090837005" ignored="false" />
     <file path="/MainService.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372024867012" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372025436956" ignored="false" />
     <file path="/HelperActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372037229485" ignored="false" />
+    <file path="$USER_HOME$/TypefaceTest/AndroidManifest.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372109031717" ignored="false" />
+    <file path="$USER_HOME$/TypefaceTest/res/layout/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372110715836" ignored="false" />
+    <file path="$USER_HOME$/TypefaceTest/res/values/strings.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372109031717" ignored="false" />
+    <file path="$USER_HOME$/TypefaceTest/src/com/plantronics/TypefaceTest/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372114981714" ignored="false" />
+    <file path="$USER_HOME$/TypefaceTest/build.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372109031718" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,6 +669,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -258,7 +706,6 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -268,14 +715,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+      <file leaf-file-name="Definitions.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="134" column="0" selection-start="5510" selection-end="5510" vertical-scroll-proportion="0.5687023">
-              <folding>
-                <element signature="e#0#42810#0" expanded="true" />
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="1072" column="19" selection-start="28986" selection-end="28986" vertical-scroll-proportion="0.39035088">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -299,7 +743,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
@@ -315,13 +758,14 @@
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
+        <option value="$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1193" />
-    <option name="height" value="1054" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -458,6 +902,86 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="drawable-hdpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plantronics" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunnerdsp.jar" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plantronics" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bladerunner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Seamless Transfer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -680,31 +1204,31 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1193" height="1054" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1193" height="1024" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3368201" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.67161226" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33706722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.69246435" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.71428573" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25314334" sideWeight="0.30753565" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25314334" sideWeight="0.2857143" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30753565" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41260925" sideWeight="0.45824847" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3368201" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33706722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -774,28 +1298,14 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/button_no.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="38" selection-start="186" selection-end="186" vertical-scroll-proportion="0.08">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/button_yes.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="27" selection-start="257" selection-end="257" vertical-scroll-proportion="0.14">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_ask_transfer.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="25" column="0" selection-start="915" selection-end="915" vertical-scroll-proportion="0.7222222">
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/drawable-hdpi/transfer_btn_no_depressed.png">
@@ -823,13 +1333,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_settings.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="85" column="33" selection-start="2999" selection-end="2999" vertical-scroll-proportion="0.79581153">
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/Library/android-sdk-macosx/add-ons/addon_cisco_dx650_15/libs/telephony.jar!/com/cisco/telephony/CallStateEnum.class">
@@ -844,9 +1354,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/HeadsetDataController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="490" column="25" selection-start="17016" selection-end="17016" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="490" column="25" selection-start="17016" selection-end="17016" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
@@ -858,9 +1366,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/controller/SettingsResult.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="13" selection-start="763" selection-end="763" vertical-scroll-proportion="0.08562691">
-          <folding />
-        </state>
+        <state line="18" column="13" selection-start="763" selection-end="763" vertical-scroll-proportion="0.08562691" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
@@ -880,11 +1386,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="134" column="0" selection-start="5510" selection-end="5510" vertical-scroll-proportion="0.5687023">
+        <state line="134" column="0" selection-start="5510" selection-end="5510" vertical-scroll-proportion="-0.48464912">
           <folding>
             <element signature="e#0#42810#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/SignatureDescription.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="170" selection-end="170" vertical-scroll-proportion="0.2975815" />
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1072" column="19" selection-start="28986" selection-end="28986" vertical-scroll-proportion="0.39035088">
+          <folding />
         </state>
       </provider>
     </entry>

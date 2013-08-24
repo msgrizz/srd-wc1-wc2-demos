@@ -1,0 +1,65 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf340
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww27180\viewh18320\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs24 \cf0 PLT Sensor
+\b0  
+\b App Read Me\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Overview\
+\
+
+\b0 The PLT Sensor app is used to send and display MFi headset sensor information. The app can connect to and display info from a local MFi headset via Bluetooth, broadcast that info to a Context Server, or read and display info from a remote headset via relay from the Context Server.\
+\
+The app has four main interfaces:\
+1. Head - displays a 3D rendering of head orientation data\
+2. Sensors - displays raw sensor data\
+3. Street View - displays a Google Street View rendering using headset location and head orientation\
+4. Settings\
+\
+
+\b Modes of Operation
+\b0 \
+\
+There are three basic modes the app is intended to operate in.\
+1. Local: Displaying local data via bluetooth\
+2. Broadcast: Displaying local data via bluetooth and broadcasting it to a context server\
+3. Client: Displaying info for a remote headset via context server relay\
+\
+To enter one of these modes, follow the respective steps:\
+\
+1. Local:\
+	- Pair with and connect your MFi headset with your iDevice\
+	- Open PLT Sensor app. The data app should automatically open a stream with the headset and start displaying the data.\
+\
+2. Broadcast:	\
+- Pair with and connect your MFi headset with your iDevice\
+	- Open PLT Sensor app. Tap on the butting button in the upper-right of screen. Click "Connect". (You will be asked to enter your server credentials if you haven't already).\
+	- After connected, tap the row at the top of the Settings screen labeled "Connected\'85". This will display the Server Status screen. Toggle the "Registered" switch to "ON". This will register your headset with the server and begin broadcasting your data.\
+\
+3. Client:\
+	- Disconnect any connected MFi headset from your iDevice\
+	- Open PLT Sensor app. Tap on the butting button in the upper-right of screen. Click "Connect". (You will be asked to enter your server credentials if you haven't already). If another instance of the app is broadcasting data, your local instance should now be reading and displaying it.\
+\
+Light-colored icons in the upper-left of the screen indicate the app's current mode. A bluetooth icon appears when a local headset is connected. Whenever this icon is visible sensor information being displayed is coming from the locally connected headset. A globe appears when the app is connected to the context server. This can happen in conjunction with the bluetooth icon, but doesn't hold much significance. The globe icon does hold significance when a headset is not connected locally, because the app is listening from data from a remote device. A third arrow icon is displayed when a local device is both connected and registered with the server. This indicates that the app is broadcasting info to the server.\
+\
+
+\b Using Street View and Location Override
+\b0 \
+\
+Street View can be used with local or remote data. By default, the location of the street view "camera" is the GPS location of the iDevice that is connected to the headset. This can be changed in the "Location Override" section of the app settings. If a location override is enabled on an app in Broadcasting mode (2), the app tells the server that it's at the overridden location. A Client mode (3) app listening to this stream will begin to render street view images from the Broadcast app overridden location, not any override location of its own. This is to say that, location override only applies to data created on a Local or Broadcast mode, app, and is not applied to incoming data in a Client mode app.\
+\
+Street view uses asynchronous network requests to load frame images for a given location, heading and pitch. This means that many different frame images are required to create a good street view rendering at a given location. This can be done on-the-fly, but for best performance it's recommended that you ensure two things:\
+1. Pin street view to an override location.\
+2. Precache frames for the location.\
+\
+If you're using two devices, one in Broadcast mode and one in Client mode,\
+1. Enable location override on the Broadcast device.\
+2. Tap the "Precache Current Location" button in the Settings screen on the Client device.\
+\
+If you're using on device locally, perform the preceding two steps, both on the local iDevice.\
+\
+Precaching may take several minutes, and the cache is saved to a persistent store on the iDevice.}

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.plantronics.DX650ScreenLock"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <user-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="Lock Screen"
+        android:theme="@android:style/Theme.NoTitleBar" >
+
+        <activity
+            android:name="com.plantronics.DX650ScreenLock.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/LockTheme"
+            android:screenOrientation="reverseLandscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="intent.come_to_foreground" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".SettingsActivity">
+        <intent-filter>
+            <action android:name="intent.come_to_foreground" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
+
+        <activity android:name=".AddUserActivity">
+            <intent-filter>
+                <action android:name="intent.come_to_foreground" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.plantronics.DX650ScreenLock.LockerReceiver"
+        	android:label="@string/device_admin_receiver"
+        	android:description="@string/device_admin_receiver_description"
+        	android:permission="android.permission.BIND_DEVICE_ADMIN">
+    		<meta-data android:name="android.app.device_admin"
+            	android:resource="@xml/device_admin" />
+    		<intent-filter>
+        		<action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+    		</intent-filter>
+		</receiver>
+
+        <!--<receiver android:name=".A2DPStateReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <!--=============================================================
+            HeadsetData Service. Its recommended that the service is started as remote process
+        ================================================================ -->
+        <service android:name="com.plantronics.headsetdataservice.HeadsetDataService" android:process=":remote">
+            <intent-filter>
+                <!-- These are the interfaces supported by the service, which
+                     you can bind to. -->
+                <action android:name="com.plantronics.headsetdataservice.IHeadsetDataService" />
+            </intent-filter>
+        </service>
+
+
+        <!--============================================================
+            Bluetooth Manager Service
+        ============================================================-->
+        <service android:name="com.plantronics.service.bluetooth.BluetoothManagerService">
+            <intent-filter>
+                <action android:name="com.plantronics.service.bluetooth.headsetdataservice.EVENT_FROM_RECEIVER_ACTION"/>
+                <action android:name="com.plantronics.service.bluetooth.headsetdataservice.PROCESSED_EVENT_ACTION"/>
+                <action android:name="com.plantronics.service.bluetooth.headsetdataservice.REQUEST_ACTION"/>
+                <action android:name="com.plantronics.service.bluetooth.headsetdataservice.RESPONSE_ACTION"/>
+
+                <!-- These two are there just to wake the service up -->
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+            </intent-filter>
+        </service>
+
+
+        <!--============================================================
+            Receiver of Android's native Bluetooth Intents
+        ============================================================-->
+        <receiver
+            android:name="com.plantronics.service.bluetooth.plugins.nativebluetooth.NativeBluetoothBroadcastReceiver">
+            <intent-filter>
+
+                <!-- These two are there only as triggers for the Service to wake up. They do not correspond to connect/disconnect events -->
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
+
+                <!-- We only log this one. The BMS creates a broadcast receiver for this one dynamically during runtime -->
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/>
+
+                <!-- TODO We do not have any responding to this one implemented -->
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"/>
+
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

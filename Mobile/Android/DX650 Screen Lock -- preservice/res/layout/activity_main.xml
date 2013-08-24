@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_locked" >
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/settingsButton"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginRight="9dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:src="@drawable/cog"-->
+        <!--android:background="@null" />-->
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="38dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_alignParentRight="true"
+        android:animationResolution="50"
+        android:indeterminate="true" />
+
+    <TextView
+        android:id="@+id/bigTextView"
+        android:layout_width="320dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="189dp"
+        android:layout_marginLeft="186dp"
+        android:layout_gravity="left"
+        android:text="Screen is locked"
+        android:textColor="#FFFFFF"
+        android:textSize="34dp" />
+
+    <TextView
+        android:id="@+id/smallTextView"
+        android:layout_width="320dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="272dp"
+        android:layout_marginLeft="135dp"
+        android:layout_gravity="left"
+        android:text="Please say your username"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="440dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="142dp"
+        android:layout_marginLeft="555dp"
+        android:text="11:36"
+        android:textColor="#FFFFFF"
+        android:textSize="150dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="440dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="334dp"
+        android:layout_marginLeft="555dp"
+        android:text="MON, JUN 03"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <ImageButton
+            android:id="@+id/killButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="9dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/kill_button"
+            android:background="@null" />
+
+        <TextureView
+            android:layout_width="443dp"
+            android:layout_height="0dp"
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/home_button"
+            android:background="@null" />
+
+        <TextureView
+            android:layout_width="443dp"
+            android:layout_height="0dp"
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="9dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/cog"
+            android:background="@null" />
+
+    </LinearLayout>
+
+</RelativeLayout>

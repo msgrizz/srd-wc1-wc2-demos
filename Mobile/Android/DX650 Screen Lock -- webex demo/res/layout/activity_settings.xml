@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parentLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/child1Layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <TextView
+            android:id="@+id/nearFarCalibrationTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Near/Far Calibration"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textSize="22dp" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/child2Layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/thresholdLabelTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="left"
+            android:text="Threshold:"
+            android:textColor="#222"
+            android:layout_margin="10dp"
+            android:textSize="18dp" />
+
+        <SeekBar
+            android:id="@+id/thresholdSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/thresholdValueTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:text="76"
+            android:textColor="#222"
+            android:layout_margin="10dp"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/child3Layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/useCurrentDistanceButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Use Current Distance" />
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Users"
+            android:gravity="center"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textSize="22dp"/>
+
+        <ListView
+            android:id="@+id/usersListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stackFromBottom="false"
+            android:layout_weight="2" />
+
+        <Button
+            android:id="@+id/addUserButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add User" />
+
+        <Button
+            android:id="@+id/removeUserButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Remove User" />
+
+        <Button
+            android:id="@+id/terminateButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:text="Terminate" />
+
+    </LinearLayout>
+
+</LinearLayout>

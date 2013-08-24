@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>3DHeadMirrorImage</key>
+	<true/>
+	<key>SettingsAreInitialized</key>
+	<true/>
+	<key>DefaultsVersion</key>
+	<string></string>
+	<key>ShowStatusIcons</key>
+	<true/>
+	<key>ContextServerAddress</key>
+	<string>23.23.249.221</string>
+	<key>ContextServerPort</key>
+	<string>8080</string>
+	<key>ContextServerSecureSockets</key>
+	<false/>
+	<key>ContextServerUsername</key>
+	<string></string>
+	<key>ContextServerPassword</key>
+	<string></string>
+	<key>ContextServerAutoConnect</key>
+	<false/>
+	<key>ContextServerAutoRegister</key>
+	<false/>
+	<key>SelectedOverrideLocation</key>
+	<string>__none</string>
+	<key>OverrideLocations</key>
+	<array>
+		<dict>
+			<key>Label</key>
+			<string>Downtown Santa Cruz</string>
+			<key>Latitude</key>
+			<real>36.972478</real>
+			<key>Longitude</key>
+			<real>-122.025717</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>Lafayette Park, San Francisco</string>
+			<key>Latitude</key>
+			<real>37.792702</real>
+			<key>Longitude</key>
+			<real>-122.426156</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>UCSC Quarry Plaza</string>
+			<key>Latitude</key>
+			<real>36.99717</real>
+			<key>Longitude</key>
+			<real>-122.055382</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>Bardejov, Slovakia</string>
+			<key>Latitude</key>
+			<real>49.292184</real>
+			<key>Longitude</key>
+			<real>21.276038</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+	</array>
+	<key>StreetViewRoundingMultiple</key>
+	<integer>10</integer>
+	<key>StreetViewInfoOverlay</key>
+	<true/>
+	<key>StreetViewDebugOverlay</key>
+	<true/>
+	<key>SendOldSkewlEvents</key>
+	<false/>
+	<key>GestureRecognition</key>
+	<true/>
+	<key>HeadTrackingCalibrationTriggers</key>
+	<integer>3</integer>
+</dict>
+</plist>

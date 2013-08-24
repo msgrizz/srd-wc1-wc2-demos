@@ -32,138 +32,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a179564b-59f1-4347-b129-1f840afa8d63" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-hdpi/home_button.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable-hdpi/kill_button.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/transfer_backing.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/transfer_btn_no.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/transfer_btn_no_depressed.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/transfer_btn_yes.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/transfer_btn_yes_depressed.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BTFinagler/BTFinagler.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/libraries/android_support_v4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/button_no.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/button_yes.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainActivity.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDataController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDeviceCommand.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/HeadsetDeviceSetting.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/controller/SettingsResult.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/BindListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/DiscoveryListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/HeadsetServiceBluetoothListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/HeadsetServiceConnectionListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/HeadsetServiceEventListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/BladeRunner/listener/HeadsetServiceResponseListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650ScreenLock/SettingsActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$10.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$11.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$12.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$13.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$14.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$15.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$16.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$17.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$9.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$BRDevice.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$CALL_STATUS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$CommandTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$ReceiveEventTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity$SettingTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$CALL_STATUS.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/BindListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/DiscoveryListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/HeadsetServiceBluetoothListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/HeadsetServiceConnectionListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/HeadsetServiceEventListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/listeners/HeadsetServiceResponseListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-ldpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-mdpi/ic_launcher.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity$1.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity$2.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/DX650 Seamless Transfer.apk" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/DX650 Seamless Transfer.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/DX650 Seamless Transfer.unaligned.apk" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/DX650 Seamless Transfer.unaligned.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$1.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$2.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$3.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$4.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$5.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$6.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$7.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/example/controller/HeadsetDataController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$1.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$2.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$3.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$4.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$5.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$CommandTask.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$CommandTask.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$ReceiveEventTask.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$ReceiveEventTask.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$SettingTask.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp$SettingTask.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/MainApp.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$drawable.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$drawable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$id.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$id.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$layout.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$layout.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$string.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R$string.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R.class" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/out/production/DX650 Seamless Transfer/com/plantronics/DX650SeamlessTransfer/R.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/drawable-hdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/A2DPStateReceiver.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/A2DPStateReceiver.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/AddUserActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/AddUserActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/AndroidManifest.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/AskTransferActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/BindListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/BindListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/DX650SeamlessTransfer/BuildConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DX650 Screen Lock.iml" afterPath="$PROJECT_DIR$/DX650 Screen Lock.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/DX650 Seamless Transfer.iml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/DX650 Seamless Transfer.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/DiscoveryListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/DiscoveryListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/controller/HeadsetDataController.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/controller/HeadsetDataController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceBluetoothListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceConnectionListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceEventListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/example/listener/HeadsetServiceResponseListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_ask_transfer.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_ask_transfer.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/res/layout/activity_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_settings.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/misc.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.properties" afterPath="$PROJECT_DIR$/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/project.properties" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/workspace.xml" />
     </list>
@@ -209,7 +78,7 @@
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/values/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/device_selection.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
     <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/discovery_device_list_item.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="/Dummy.txt" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372035268610" ignored="false" />
+    <file path="/Dummy.txt" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372110698632" ignored="false" />
     <file path="/activity_settings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371852258484" ignored="false" />
     <file path="/SettingsActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372047580869" ignored="false" />
     <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/TransferDialogIntentService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370034189427" ignored="false" />
@@ -255,9 +124,10 @@
     <file path="$PROJECT_DIR$/../HFPFinagler/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371934272651" ignored="false" />
     <file path="$PROJECT_DIR$/../HFPFinagler/src/com/plantronics/HFPFinagler/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371935575654" ignored="false" />
     <file path="$PROJECT_DIR$/../HFPFinagler/build.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371934272651" ignored="false" />
-    <file path="/FinaglePhoneStateListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371936238835" ignored="false" />
+    <file path="/FinaglePhoneStateListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372050882075" ignored="false" />
     <file path="/MainService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372024867012" ignored="false" />
     <file path="/HelperActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372037229454" ignored="false" />
+    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/FinaglePhoneStateListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372050882983" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -318,10 +188,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
+      <file leaf-file-name="activity_main.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
+          <provider editor-type-id="android-designer">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1209" column="29" selection-start="39417" selection-end="39417" vertical-scroll-proportion="0.7386707">
+            <state line="104" column="39" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.77513516">
               <folding />
             </state>
           </provider>
@@ -365,10 +238,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
     <option name="y" value="22" />
     <option name="width" value="1570" />
-    <option name="height" value="1054" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -396,8 +268,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -606,6 +476,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -624,7 +496,7 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus7" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="AndroidTargetDevices" value="FCH17148W1S" />
+    <property name="AndroidTargetDevices" value="FCH16368JNP" />
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
@@ -807,31 +679,31 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="22" width="1570" height="1054" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="22" width="1570" height="1024" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34840766" sideWeight="0.67107946" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39918533" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.697556" sideWeight="0.5002957" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.9994048" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6150713" sideWeight="0.49970433" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21464968" sideWeight="0.70162934" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29837066" sideWeight="0.9713752" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21464968" sideWeight="0.3849287" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29837066" sideWeight="0.9713752" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23200513" sideWeight="0.4025717" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23586118" sideWeight="0.4025717" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34890598" sideWeight="0.67107946" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.9994048" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -933,21 +805,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="39" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.78219897">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listeners/HeadsetServiceConnectionListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="17" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4811417">
-          <folding />
-        </state>
+        <state line="12" column="17" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4811417" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/MainActivity.java">
@@ -995,16 +855,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="8" selection-start="3837" selection-end="3837" vertical-scroll-proportion="0.6802326">
+        <state line="911" column="8" selection-start="30632" selection-end="30767" vertical-scroll-proportion="0.013251784">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1209" column="29" selection-start="39417" selection-end="39417" vertical-scroll-proportion="0.7386707">
+        <state line="136" column="8" selection-start="4511" selection-end="4747" vertical-scroll-proportion="0.36067298">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="39" selection-start="3529" selection-end="3529" vertical-scroll-proportion="0.77513516">
           <folding />
         </state>
       </provider>
