@@ -2,218 +2,516 @@
 //  PLTDevice.m
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 8/13/13.
+//  Created by Davis, Morgan on 9/9/13.
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
 #import "PLTDevice.h"
+#import "PLTDevice_Internal.h"
+#import "PLTDeviceWatcher.h"
 #import <ExternalAccessory/ExternalAccessory.h>
-#import <CoreMotion/CoreMotion.h>
 #import <UIKit/UIKit.h>
+#import "PLTInfo_Internal.h"
+#import "PLTWearingStateInfo_Internal.h"
+#import "PLTProximityInfo_Internal.h"
+#import "PLTOrientationTrackingInfo_Internal.h"
+#import "PLTTapsInfo_Internal.h"
+#import "PLTPedometerInfo_Internal.h"
+#import "PLTFreeFallInfo_Internal.h"
+#import "PLTMagnetometerCalibrationInfo_Internal.h"
+#import "PLTGyroscopeCalibrationInfo_Internal.h"
 
 
-//#define HS_STATS
-#define PACKET_RATE_UPDATE_RATE		5.0 // Hz
+#define TICKER_RATE											20.0 // Hz
 
 
-NSString *const PLTDeviceDidConnectNotification =							@"PLTDeviceDidConnectNotification";
-NSString *const PLTDeviceDidDisconnectNotification =						@"PLTDeviceDidDisconnectNotification";
-NSString *const PLTDeviceInfoDidUpdateNotification =						@"PLTDeviceInfoDidUpdateNotification";
-NSString *const PLTDeviceHeadTrackingCalibrationDidUpdateNotification =		@"PLTDeviceHeadTrackingCalibrationDidUpdateNotification";
+NSString *const PLTDeviceNewDeviceAvailableNotification =	@"PLTDeviceNewDeviceAvailableNotification";
+NSString *const PLTDeviceNewDeviceNotificationKey =			@"PLTDeviceNewDeviceNotificationKey";
+
+NSString *const PLTDeviceErrorDomain =						@"com.plantronics.PLTDevice";
+
+NSString *const PLTSubscriptionKeyService =					@"service";
+NSString *const PLTSubscriptionKeyMode =					@"mode";
+NSString *const PLTSubscriptionKeyPeriod =					@"period";
+NSString *const PLTSubscriptionKeyLastUpdateDate =			@"lastUpdateDate";
+NSString *const PLTSubscriptionKeyLastUpdateInfo =			@"lastUpdateInfo";
+
+NSString *const PLTQueryObserverKeyObserver =				@"observer";
+NSString *const PLTQueryObserverKeyService =				@"service";
 
 
-NSString *const PLTDeviceInfoSerialNumber =									@"serialNumber";   // NSString
-NSString *const PLTDeviceInfoPacketData =									@"pData";          // NSData containing raw 23-byte packet (not calibrated)
-NSString *const PLTDeviceInfoCalibratedPacketData =							@"calPData";       // NSData containing raw 23-byte packet (calibrated)
-NSString *const PLTDeviceInfoQuaternionData =								@"qData";          // NSData containing Vec4 (calibrated)
-NSString *const PLTDeviceInfoOrientationVectorData =						@"orientVecData";  // NSData containing Vec3 (calibrated)
-NSString *const PLTDeviceInfoTemperature =									@"temp";           // NSNumber containing degrees Celcius
-NSString *const PLTDeviceInfoFreeFall =										@"freeFall";       // NSNumber containing boolean
-NSString *const PLTDeviceInfoPedometerCount =								@"pedCount";       // NSNumber
-NSString *const PLTDeviceInfoTapCount =										@"tapCount";       // NSNumber
-NSString *const PLTDeviceInfoTapDirection =									@"tapDir";         // NSNumber containing PLTTapDirection
-NSString *const PLTDeviceInfoMagnetometerCalibrationStatus =				@"magCal";         // NSNumber containing PLTMagnetometerCalibrationStatus
-NSString *const PLTDeviceInfoGyroscopeCalibrationStatus =					@"gyroCal";        // NSNumber containing PLTGyroscopeCalibrationStatus
-NSString *const PLTDeviceInfoMajorVersion =									@"majVers";        // NSNumber
-NSString *const PLTDeviceInfoMinorVersion =									@"minVers";        // NSNumber
-NSString *const PLTDeviceInfoIsDonned =										@"isDonned";	   // NSNumber
-
-NSString *const PLTDeviceHeadTrackingKeyCalibrationPacket =					@"PLTDeviceHeadTrackingKeyCalibrationPacket"; // NSData containing Vec4
+typedef NS_ENUM(NSInteger, PLTService_Internal) {
+	PLTServiceVersions = 0x0008
+};
 
 
-double *MultipliedQuaternions(double *p, double *q)
-{
-    // quaternion multiplication
-    double *newquat = malloc(sizeof(double)*4);
-    memset(newquat, 0, sizeof(double)*4);
-    
-    double quatmat[4][4] =
-    {   { p[0], -p[1], -p[2], -p[3] },
-        { p[1], p[0], -p[3], p[2] },
-        { p[2], p[3], p[0], -p[1] },
-        { p[3], -p[2], p[1], p[0] },
-    };
-    
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            newquat[i] += quatmat[i][j] * q[j];
-        }
-    }
-    
-    return newquat;
-}
+@interface PLTDevice() <NSStreamDelegate>
 
-double *InverseQuaternion(double *quat)
-{
-    double *newquat = malloc(sizeof(double)*4);
-    
-    newquat[0] = quat[0];
-    newquat[1] = -quat[1];
-    newquat[2] = -quat[2];
-    newquat[3] = -quat[3];
-    
-    return newquat;
-}
+- (void)closeConnection:(BOOL)notifyClose;
+- (void)didGetNewPacket:(NSData *)packetData;
+- (BOOL)getWearingStateInfo:(PLTWearingStateInfo **)wearingStateInfo
+			  proximityInfo:(PLTProximityInfo **)proximityInfo
+	orientationTrackingInfo:(PLTOrientationTrackingInfo **)orientationTrackingInfo
+				   tapsInfo:(PLTTapsInfo **)tapsInfo
+			  pedometerInfo:(PLTPedometerInfo **)pedometerInfo
+			   freeFallInfo:(PLTFreeFallInfo **)freeFallInfo
+magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalibrationInfo
+   gyroscapeCalibrationInfo:(PLTGyroscopeCalibrationInfo **)gyroscopeCalibrationInfo
+			 fwMajorVersion:(NSNumber **)fwMajorVersion
+			 fwMinorVersion:(NSNumber **)fwMinorVersion
+			 fromPacketData:(NSData *)packetData
+				requestType:(PLTInfoRequestType)requestType
+				  timestamp:(NSDate *)timestamp;
+- (void)didGetNewWearingStateInfo:(PLTWearingStateInfo *)wearingStateInfo
+					proximityInfo:(PLTProximityInfo *)proximityInfo
+		  orientationTrackingInfo:(PLTOrientationTrackingInfo *)orientationTrackingInfo
+						 tapsInfo:(PLTTapsInfo *)tapsInfo
+					pedometerInfo:(PLTPedometerInfo *)pedometerInfo
+					 freeFallInfo:(PLTFreeFallInfo *)freeFallInfo
+	  magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo *)magnetometerCalibrationInfo
+		 gyroscapeCalibrationInfo:(PLTGyroscopeCalibrationInfo *)gyroscopeCalibrationInfo;
+- (void)checkTicker;
+- (void)ticker:(NSTimer *)aTimer;
+- (BOOL)versionsCompatible;
 
-PLTVec3 RotationVectorFromQuaternion(PLTVec4 quaternion)
-{
-	float quat[4] = {quaternion.x, quaternion.y, quaternion.z, quaternion.w};
-	// pitch
-	float theta = -180.0 / 3.14159 * asin(-2.0 * quat[1] * quat[3] + 2.0 * quat[0] * quat[2]);
-	// roll
-	float psi = -180.0 / 3.14159 * atan2((quat[2] * quat[1] + quat[0] * quat[3]), (quat[0] * quat[0] + quat[1] * quat[1] - (double)0.5));
-	// heading
-	float phi = +180.0 / 3.14159 * atan2((quat[2] * quat[3] + quat[0] * quat[1]), (quat[0] * quat[0] + quat[3] * quat[3] - (double)0.5));
-	
-	PLTVec3 rotationVector = (PLTVec3){ phi, psi, theta };
-	
-	// modify pitch to be 0 at level, 90 straight up and -90 straight down.
-	PLTVec3 newRotationVector = rotationVector;
-	if ((rotationVector.y == 180) || (rotationVector.y == -180)) {
-		newRotationVector.y = 0;
-	}
-	else if (rotationVector.y > 0) {
-		newRotationVector.y = (180 - rotationVector.y);
-	}
-	else if (rotationVector.y < 0) {
-		newRotationVector.y = -(180 + rotationVector.y);
-	}
-	
-	return newRotationVector;
-}
-
-
-@interface PLTDevice () <EAAccessoryDelegate, NSStreamDelegate, UIAccelerometerDelegate> {
-    double  *lastQuat;
-    double  *calQuat;
-}
-
-- (BOOL)getQuaternionData:(NSData **)quaternionData rotationVectorData:(NSData **)rotationVectorData temperature:(NSNumber **)temperature
-				 freeFall:(NSNumber **)freeFall pedometerCount:(NSNumber **)pedometerCount tapCount:(NSNumber **)tapCount tapDirection:(NSNumber **)tapDirection
-magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyroscopeCalibrationStatus:(NSNumber **)gyroscopeCalibrationStatus
-			 majorVersion:(NSNumber **)majorVersion minorVersion:(NSNumber **)minorVersion isDonned:(NSNumber **)isDonned calibratedPacketData:(NSData **)calibratedPacketData
-		   fromPacketData:(NSData *)packetData;
-- (void)applicationDidBecomeActive:(NSNotification *)note;
-- (BOOL)connectToAccessory;
-- (void)disconnectFromAccessory;
-- (void)accessoryNotification:(NSNotification *)notification;
-- (BOOL)accelerationIsShaking:(UIAcceleration *)last current:(UIAcceleration *) current threshold:(double)threshold;
-- (void)updateCalibration;
-- (void)startPacketRateTimer;
-- (void)stopPacketRateTimer;
-- (void)packetRateTimer:(NSTimer *)theTimer;
-- (NSDictionary *)infoFromPacketData:(NSData *)packetData;
-- (NSData *)packetDataWithCalibration:(double *)cal packet:(NSData *)inPacket; // TEMPORARY
-
-@property(nonatomic,readwrite)	BOOL			isConnected;
-@property(nonatomic,retain)		EASession       *session;
-@property(nonatomic,retain)		EAAccessory     *accessory;
-@property(nonatomic,assign)		BOOL            histeresisExcited;
-@property(nonatomic,retain)		UIAcceleration  *lastAcceleration;
-@property(nonatomic,assign)		double          theta_ave;
-@property(nonatomic,assign)		double          psi_ave;
-@property(nonatomic,assign)		long long       oldtime;
-@property(nonatomic,retain)		NSDictionary    *latestInfo;
-@property(nonatomic,strong)		NSTimer			*packetRateTimer;
-@property(nonatomic,assign)		NSInteger		packetRateCounter;
-@property(nonatomic,strong)		NSDate			*packetRateCounterDate;
-@property(nonatomic,strong)		NSData			*lastPacketData;
+@property(nonatomic, readwrite)			BOOL								isConnectionOpen;
+@property(nonatomic, readwrite, strong)	NSString							*model;
+@property(nonatomic, readwrite, strong)	NSString							*name;
+@property(nonatomic, readwrite, strong)	NSString							*serialNumber;
+@property(nonatomic, readwrite)			NSUInteger							fwMajorVersion;
+@property(nonatomic, readwrite)			NSUInteger							fwMinorVersion;
+@property(nonatomic, retain)			EASession							*session;
+@property(nonatomic)					BOOL								didGetVersionInfo;
+@property(nonatomic)					BOOL								didNotifyOfConnectionOpen;
+@property(nonatomic)					BOOL								didNotifyOfConnectionClosed;
+@property(nonatomic, retain)			PLTWearingStateInfo					*latestWearingStateInfo;
+@property(nonatomic, retain)			PLTProximityInfo					*latestProximityInfo;
+@property(nonatomic, retain)			PLTOrientationTrackingInfo			*latestOrientationTrackingInfo;
+@property(nonatomic, retain)			PLTTapsInfo							*latestTapsInfo;
+@property(nonatomic, retain)			PLTPedometerInfo					*latestPedometerInfo;
+@property(nonatomic, retain)			PLTFreeFallInfo						*latestFreeFallInfo;
+@property(nonatomic, retain)			PLTMagnetometerCalibrationInfo		*latestMagnetometerCalibrationInfo;
+@property(nonatomic, retain)			PLTGyroscopeCalibrationInfo			*latestGyroscopeCalibrationInfo;
+@property(nonatomic, retain)			NSMutableDictionary					*subscribers;
+@property(nonatomic, retain)			NSTimer								*ticker;
+@property(nonatomic, retain)			NSMutableArray						*queryObservers;
+@property(nonatomic, retain)			PLTOrientationTrackingCalibration	*orientationTrackingCalibration;
+@property(nonatomic)					NSUInteger							pedometerOffset;
+@property(nonatomic)					BOOL								didGetFreeFallUp;
+@property(nonatomic)					BOOL								didGetFreeFallDown;
+@property(nonatomic)					BOOL								didGetTapsUp;
+@property(nonatomic)					BOOL								didGetTapsDown;
 
 @end
 
 
 @implementation PLTDevice
 
+@dynamic supportedServices;
+
+- (NSArray *)supportedServices
+{
+	// hard-coded for first revision
+	
+	return @[@(PLTServiceProximity),
+			 @(PLTServiceWearingState),
+			 @(PLTServiceOrientationTracking),
+			 @(PLTServicePedometer),
+			 @(PLTServiceFreeFall),
+			 @(PLTServiceTaps),
+			 @(PLTServiceMagnetometerCalStatus),
+			 @(PLTServiceGyroscopeCalibrationStatus)];
+}
+
 #pragma mark - Public
 
-- (void)updateCalibration
++ (NSArray *)availableDevices
 {
-    NSLog(@"updateCalibration");
-    memcpy(calQuat, lastQuat, sizeof(double)*4);
+	return [[PLTDeviceWatcher sharedWatcher] devices];
+}
+
+- (void)openConnection
+{
+	NSLog(@"openConnection (%@)", self.accessory);
 	
-	if (self.lastPacketData) {
-		NSDictionary *useInfo = @{PLTDeviceHeadTrackingKeyCalibrationPacket : self.lastPacketData};
-		[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceHeadTrackingCalibrationDidUpdateNotification object:nil userInfo:useInfo];
+	if (!self.session) {
+		// create data session if we found a matching accessory
+		if (self.accessory) {
+			NSLog(@"Attempting to create data session with accessory %@", [self.accessory name]);
+			
+			self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:PLTDeviceProtocolString];
+			if (self.session) {
+				NSLog(@"Created EA session: %@", self.session);
+				
+				// reset state
+				self.didGetVersionInfo = NO;
+				self.didGetTapsUp = NO;
+				self.didGetTapsDown = YES;
+				self.didGetFreeFallUp = NO;
+				self.didGetFreeFallDown = NO;
+				
+				// open input and output streams
+				[[self.session inputStream] setDelegate:self];
+				[[self.session inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+				[[self.session inputStream] open];
+				[[self.session outputStream] setDelegate:self];
+				[[self.session outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+				[[self.session outputStream] open];
+				
+				// wait for version info to come through to set isConnectionOpen = YES and notify
+			}
+			else {
+				NSLog(@"Failed to create EA session.");
+				NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+													 code:PLTDeviceErrorCodeFailedToCreateDataSession
+												 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
+				[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+			}
+		}
+		else {
+			NSLog(@"No accessory accociated!");
+			NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+												 code:PLTDeviceErrorCodeNoAccessoryAssociated
+											 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
+			[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+		}
+	}
+	else {
+		NSLog(@"Data session already active.");
+		NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+											 code:PLTDeviceErrorCodeConnectionAlreadyOpen
+										 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
+		[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
 	}
 }
 
-#pragma mark - Private
-
-- (NSDictionary *)infoFromPacketData:(NSData *)packetData
+- (void)closeConnection
 {
-	NSData *quaternionData = nil;
-	NSData *rotationVectorData = nil;
-	NSNumber *temperature = nil;
-	NSNumber *freeFall = nil;
-	NSNumber *pedometerCount = nil;
-	NSNumber *tapCount = nil;
-	NSNumber *tapDirection = nil;
-	NSNumber *magnetometerCalibrationStatus = nil;
-	NSNumber *gyroscopeCalibrationStatus = nil;
-	NSNumber *majorVersion = nil;
-	NSNumber *minorVersion = nil;
-	NSData *calibratedPacketData = nil;
-	NSNumber *isDonned = nil;
+	[self closeConnection:YES];
+}
+
+- (void)setConfiguration:(PLTConfiguration *)aConfiguration forService:(PLTService)theService
+{
 	
-	if ([self getQuaternionData:&quaternionData rotationVectorData:&rotationVectorData temperature:&temperature freeFall:&freeFall pedometerCount:&pedometerCount
-					   tapCount:&tapCount tapDirection:&tapDirection magnetometerCalibrationStatus:&magnetometerCalibrationStatus gyroscopeCalibrationStatus:&gyroscopeCalibrationStatus
-				   majorVersion:&majorVersion minorVersion:&minorVersion isDonned:&isDonned calibratedPacketData:&calibratedPacketData fromPacketData:packetData] ) {
-		
-		if ((self.headTrackingCalibrationTriggers & PLTDeviceHeadTrackingCalibrationTriggerDon) && [isDonned boolValue] && ![self.latestInfo[PLTDeviceInfoIsDonned] boolValue]) {
-			// Don event is a calibration trigger. Do calibration.
-			[self performSelector:@selector(updateCalibration) withObject:nil afterDelay:self.donCalibrationDelay];
-		}
-		
-		NSData *calPacketData = packetData;
-		calPacketData = calibratedPacketData;
-		
-		NSDictionary *newInfo = @{
-								  PLTDeviceInfoPacketData : packetData,
-								  PLTDeviceInfoCalibratedPacketData : calPacketData,
-								  PLTDeviceInfoQuaternionData : quaternionData,
-								  PLTDeviceInfoOrientationVectorData : rotationVectorData,
-								  PLTDeviceInfoTemperature : temperature,
-								  PLTDeviceInfoFreeFall : freeFall,
-								  PLTDeviceInfoPedometerCount : pedometerCount,
-								  PLTDeviceInfoTapCount : tapCount,
-								  PLTDeviceInfoTapDirection : tapDirection,
-								  PLTDeviceInfoMagnetometerCalibrationStatus : magnetometerCalibrationStatus,
-								  PLTDeviceInfoGyroscopeCalibrationStatus : gyroscopeCalibrationStatus,
-								  PLTDeviceInfoMajorVersion : majorVersion,
-								  PLTDeviceInfoMinorVersion : minorVersion,
-								  PLTDeviceInfoIsDonned : isDonned };
-		return newInfo;
+}
+
+- (PLTConfiguration *)configurationForService:(PLTService)theService
+{
+	return nil;
+}
+
+- (void)setCalibration:(PLTCalibration *)aCalibration forService:(PLTService)theService
+{
+	switch (theService) {
+		case PLTServiceOrientationTracking: {
+			// set the reference quaternion
+			PLTOrientationTrackingCalibration *cal = (PLTOrientationTrackingCalibration *)aCalibration;
+			if (!cal) {
+				cal = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:self.latestOrientationTrackingInfo.rawQuaternion];
+			}
+			self.orientationTrackingCalibration = cal;
+			break; }
+		case PLTServicePedometer:
+			// set pedometer offset
+			self.pedometerOffset = self.latestPedometerInfo.steps;
+			break;
+		default:
+			break;
+	}
+}
+
+- (PLTCalibration *)calibrationForService:(PLTService)theService
+{
+	if (theService == PLTServiceOrientationTracking) {
+		return self.orientationTrackingCalibration;
 	}
 	return nil;
 }
 
-- (BOOL)getQuaternionData:(NSData **)quaternionData rotationVectorData:(NSData **)rotationVectorData temperature:(NSNumber **)temperature
-				 freeFall:(NSNumber **)freeFall pedometerCount:(NSNumber **)pedometerCount tapCount:(NSNumber **)tapCount tapDirection:(NSNumber **)tapDirection
-magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyroscopeCalibrationStatus:(NSNumber **)gyroscopeCalibrationStatus
-			 majorVersion:(NSNumber **)majorVersion minorVersion:(NSNumber **)minorVersion isDonned:(NSNumber **)isDonned calibratedPacketData:(NSData **)calibratedPacketData
-		   fromPacketData:(NSData *)packetData
+- (NSError *)subscribe:(id <PLTDeviceInfoObserver>)aSubscriber toService:(PLTService)service withMode:(PLTSubscriptionMode)mode minPeriod:(NSUInteger)minPeriod
 {
-    NSUInteger len = [packetData length];
+	NSLog(@"subscribe: %@ toService: %d withMode: %d minPeriod: %d", aSubscriber, service, mode, minPeriod);
+	
+	if (!aSubscriber) {
+		NSDictionary *info = @{ NSLocalizedDescriptionKey : @"Subscriber is nil.", };
+		return [NSError errorWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorInvalidArgument userInfo:info];
+	}
+	else if (![self.supportedServices containsObject:@(service)]) {
+		NSDictionary *info = @{ NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Invalid service: %d.", service] };
+		return [NSError errorWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorInvalidService userInfo:info];
+	}
+	else if (mode == PLTSubscriptionModePeriodic) {
+		if ((service==PLTServiceTaps) || (service==PLTServiceFreeFall)) {
+			NSDictionary *info = @{ NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Periodic subscription is not supported by service %d.", service] };
+			return [NSError errorWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorUnsupportedMode userInfo:info];
+		}
+	}
+	else if (mode > PLTSubscriptionModePeriodic) {
+		NSDictionary *info = @{ NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Invalid mode: %d", service], };
+		return [NSError errorWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorInvalidMode userInfo:info];
+	}
+	
+	// look up or add aSubscriber
+	NSMutableArray *subscriptions = self.subscribers[[NSValue valueWithPointer:(__bridge const void *)(aSubscriber)]];
+	if (!subscriptions) {
+		subscriptions = [NSMutableArray array];
+		self.subscribers[[NSValue valueWithPointer:(__bridge const void *)(aSubscriber)]] = subscriptions;
+		//NSLog(@"Created empty subscription list.");
+	}
+	else {
+		//NSLog(@"Found subscriptions: %@", subscriptions);
+	}
+	
+	// look up or add a subscribed service
+	NSMutableDictionary *subscription = nil;
+	int subscriptionIndex = -1;
+	for (int i=0; i<[subscriptions count]; i++) {
+		NSMutableDictionary *s = subscriptions[i];
+		if ([s[PLTSubscriptionKeyService] isEqualToNumber:@(service)]) {
+			subscription = s;
+			subscriptionIndex = i;
+			//NSLog(@"Found subscription (index %d): %@", subscriptionIndex, subscription);
+			break;
+		}
+	}
+	if (!subscription) {
+		subscription = [NSMutableDictionary dictionary];
+		//NSLog(@"Created new subscription.");
+	}
+	
+	subscription[PLTSubscriptionKeyService] = @(service);
+	subscription[PLTSubscriptionKeyMode] = @(mode);
+	subscription[PLTSubscriptionKeyPeriod] = @(minPeriod);
+	
+	//NSLog(@"New subscription: %@", subscription);
+	
+	if (subscriptionIndex >= 0) {
+		[subscriptions replaceObjectAtIndex:subscriptionIndex withObject:subscription];
+		//NSLog(@"Replaced subscription at index %d with new subscription.", subscriptionIndex);
+	}
+	else {
+		[subscriptions addObject:subscription];
+		//NSLog(@"Added new subscription.");
+	}
+	
+	[self checkTicker];
+	
+	return nil;
+}
+
+- (void)unsubscribe:(id <PLTDeviceInfoObserver>)aSubscriber fromService:(PLTService)theService
+{
+	NSLog(@"unsubscribe: %@ fromService: %d", aSubscriber, theService);
+	
+	// look up aSubscriber
+	NSMutableArray *subscriptions = self.subscribers[[NSValue valueWithPointer:(__bridge const void *)(aSubscriber)]];
+	if (subscriptions) {
+		// look up and remove the subscription
+	}
+	
+	NSMutableIndexSet *removalIndexes = [NSMutableIndexSet indexSet];
+	for (int i=0; i<[subscriptions count]; i++) {
+		NSMutableDictionary *s = subscriptions[i];
+		if ([s[PLTSubscriptionKeyService] isEqualToNumber:@(theService)]) {
+			[removalIndexes addIndex:i];
+		}
+	}
+	[subscriptions removeObjectsAtIndexes:removalIndexes];
+	self.subscribers[[NSValue valueWithPointer:(__bridge const void *)(aSubscriber)]] = subscriptions;
+}
+
+- (void)unsubscribeFromAll:(id <PLTDeviceInfoObserver>)aSubscriber
+{
+	NSArray *services = [self supportedServices];
+	for (NSNumber *service in services) {
+		[self unsubscribe:aSubscriber fromService:[service unsignedIntegerValue]];
+	}
+}
+
+- (NSArray *)subscriptions
+{
+	NSLog(@"*** Not implemented. ***");
+	return nil;
+}
+
+- (PLTInfo *)cachedInfoForService:(PLTService)aService
+{
+	switch (aService) {
+		case PLTServiceProximity:
+			return self.latestProximityInfo;
+			break;
+		case PLTServiceWearingState:
+			return self.latestWearingStateInfo;
+			break;
+		case PLTServiceOrientationTracking:
+			return self.latestOrientationTrackingInfo;
+			break;
+		case PLTServicePedometer:
+			return self.latestPedometerInfo;
+			break;
+		case PLTServiceFreeFall:
+			return self.latestFreeFallInfo;
+			break;
+		case PLTServiceTaps:
+			return self.latestTapsInfo;
+			break;
+		case PLTServiceMagnetometerCalStatus:
+			return self.latestMagnetometerCalibrationInfo;
+			break;
+		case PLTServiceGyroscopeCalibrationStatus:
+			return self.latestGyroscopeCalibrationInfo;
+			break;
+	}
+	return nil;
+}
+
+- (void)queryInfo:(id <PLTDeviceInfoObserver>)theObserver forService:(PLTService)aService;
+{
+	// add theObserver to the list of waiting observers for service info and then notify the observers when the info comes in
+	
+	if (!self.queryObservers) {
+		self.queryObservers = [NSMutableArray array];
+	}
+	
+	BOOL contains = NO;
+	for (NSDictionary *queryObserver in self.queryObservers) {
+		
+		id observer = queryObserver[PLTQueryObserverKeyObserver];
+		if (theObserver == observer) {
+			if ([queryObserver[PLTQueryObserverKeyService] isEqualToNumber:@(aService)]) {
+				contains = YES;
+				break;
+			}
+		}
+	}
+	
+	if (!contains) {
+		NSDictionary *queryObserver = @{ PLTQueryObserverKeyObserver : theObserver, PLTQueryObserverKeyService : @(aService) };
+		[self.queryObservers addObject:queryObserver];
+	}
+}
+
+#pragma mark - API Internal
+
+- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory
+{
+	if (self = [super init]) {
+		
+		self.accessory = anAccessory;
+		self.model = self.accessory.modelNumber;
+		self.name = self.accessory.name;
+		self.serialNumber = self.accessory.serialNumber;
+		self.subscribers = [NSMutableDictionary dictionary];
+        
+		self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:(PLTQuaternion){ 1, 0, 0, 0 }];
+    }
+	
+    return self;
+}
+
+#pragma mark - Private
+
+- (void)closeConnection:(BOOL)notifyClose
+{
+	NSLog(@"closeConnection (%@)", self.accessory);
+
+	if (self.session) {
+		[[self.session inputStream] close];
+        [[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [[self.session inputStream] setDelegate:nil];
+        [[self.session outputStream] close];
+        [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [[self.session outputStream] setDelegate:nil];
+        
+        self.session = nil;
+		self.isConnectionOpen = NO;
+		
+		if (notifyClose) {
+			[self.connectionDelegate PLTDeviceDidCloseConnection:self];
+		}
+	}
+}
+
+- (void)didGetNewPacket:(NSData *)packetData
+{
+	PLTWearingStateInfo *wearingStateInfo;
+	PLTProximityInfo *proximityInfo;
+	PLTOrientationTrackingInfo *orientationTrackingInfo;
+	PLTTapsInfo *tapsInfo;
+	PLTPedometerInfo *pedometerInfo;
+	PLTFreeFallInfo *freeFallInfo;
+	PLTMagnetometerCalibrationInfo *magnetometerCalibrationInfo;
+	PLTGyroscopeCalibrationInfo *gyroscopeCalibrationInfo;
+	NSNumber *fwMajorVersion;
+	NSNumber *fwMinorVersion;
+
+	if (![self getWearingStateInfo:&wearingStateInfo
+					 proximityInfo:&proximityInfo
+		   orientationTrackingInfo:&orientationTrackingInfo
+						  tapsInfo:&tapsInfo
+					 pedometerInfo:&pedometerInfo
+					  freeFallInfo:&freeFallInfo
+	   magnetometerCalibrationInfo:&magnetometerCalibrationInfo
+		  gyroscapeCalibrationInfo:&gyroscopeCalibrationInfo
+					fwMajorVersion:&fwMajorVersion
+					fwMinorVersion:&fwMinorVersion
+					fromPacketData:packetData
+					   requestType:PLTInfoRequestTypeSubscription
+						 timestamp:[NSDate date]]) {
+		
+		NSLog(@"Error parsing packet data.");
+	}
+	else {
+		if (!self.didGetVersionInfo) {
+			//NSLog(@"Got version info.");
+			
+			self.fwMajorVersion = fwMajorVersion.unsignedIntegerValue;
+			self.fwMinorVersion = fwMinorVersion.unsignedIntegerValue;
+			self.didGetVersionInfo = YES;
+			
+			BOOL versionsOK = [self versionsCompatible];
+			if (!versionsOK) {
+				[self closeConnection:NO];
+				self.isConnectionOpen = NO;
+				NSString *description = [NSString stringWithFormat:@"API version %.1f is incompatible with device version %u.%u", PLT_API_VERSION, self.fwMajorVersion, self.fwMinorVersion];
+				NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : description };
+				NSError *error = [[NSError alloc] initWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorIncompatibleVersions userInfo:userInfo];
+				[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+			}
+			else {
+				self.isConnectionOpen = YES;
+				// notify delegate of connection open
+				[self.connectionDelegate PLTDeviceDidOpenConnection:self];
+			}
+		}
+		
+		[self didGetNewWearingStateInfo:wearingStateInfo
+						  proximityInfo:proximityInfo
+				orientationTrackingInfo:orientationTrackingInfo
+							   tapsInfo:tapsInfo
+						  pedometerInfo:pedometerInfo
+						   freeFallInfo:freeFallInfo
+			magnetometerCalibrationInfo:magnetometerCalibrationInfo
+			   gyroscapeCalibrationInfo:gyroscopeCalibrationInfo];
+	}
+}
+
+- (BOOL)getWearingStateInfo:(PLTWearingStateInfo **)wearingStateInfo
+			  proximityInfo:(PLTProximityInfo **)proximityInfo
+	orientationTrackingInfo:(PLTOrientationTrackingInfo **)orientationTrackingInfo
+				   tapsInfo:(PLTTapsInfo **)tapsInfo
+			  pedometerInfo:(PLTPedometerInfo **)pedometerInfo
+			   freeFallInfo:(PLTFreeFallInfo **)freeFallInfo
+magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalibrationInfo
+   gyroscapeCalibrationInfo:(PLTGyroscopeCalibrationInfo **)gyroscopeCalibrationInfo
+			 fwMajorVersion:(NSNumber **)fwMajorVersion
+			 fwMinorVersion:(NSNumber **)fwMinorVersion
+			 fromPacketData:(NSData *)packetData
+				requestType:(PLTInfoRequestType)requestType
+				  timestamp:(NSDate *)timestamp
+
+{
+	NSUInteger len = [packetData length];
     uint8_t *buf = malloc(len);
     [packetData getBytes:buf length:len];
     
@@ -257,20 +555,20 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     temp = (((uint32_t)quatdata[14]) << 8) + ((uint32_t)quatdata[15]);
     quatn[3] = (long)temp;
     
-    // new for extra info DA IDES OF MARCH
-    *temperature = @(buf[2]);
-    *freeFall = @(buf[6]);
+	*wearingStateInfo = [[PLTWearingStateInfo alloc] initWithRequestType:requestType timestamp:timestamp wearingState:[@(buf[5]) boolValue]];
+	PLTProximity mobileProximity = buf[2] >> 4;
+	PLTProximity pcProximity = ((uint8_t)((uint8_t)buf[2] << 4)) >> 4;
+	*proximityInfo = [[PLTProximityInfo alloc] initWithRequestType:requestType timestamp:timestamp pcProximity:pcProximity mobileProximity:mobileProximity];
+    *freeFallInfo = [[PLTFreeFallInfo alloc] initWithRequestType:requestType timestamp:timestamp freeFall:buf[6]];
     temp = (((uint16_t)buf[9]) << 8) + ((uint16_t)buf[10]);
-    *pedometerCount = @((uint16_t)temp);
-    *tapDirection = @(buf[13]);
-    *tapCount = @(buf[14]);
-    *magnetometerCalibrationStatus = @(buf[17]);
-    *gyroscopeCalibrationStatus = @(buf[18]);
-    *majorVersion = @(buf[19]);
-    *minorVersion = @(buf[20]);
-	*isDonned = @(buf[5]);
+	*pedometerInfo = [[PLTPedometerInfo alloc] initWithRequestType:requestType timestamp:timestamp steps:(uint16_t)temp];
+	*tapsInfo = [[PLTTapsInfo alloc] initWithRequestType:requestType timestamp:timestamp taps:buf[14] direction:buf[13]];
+	*magnetometerCalibrationInfo = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType timestamp:timestamp calibrationStatus:buf[17]];
+	*gyroscopeCalibrationInfo = [[PLTGyroscopeCalibrationInfo alloc] initWithRequestType:requestType timestamp:timestamp  calibrationStatus:buf[18]];
+    *fwMajorVersion = @(buf[19]);
+	*fwMinorVersion = @(buf[20]);
     
-    // process for use
+    // process the quaternion
     for (int i = 0; i < 4; i++) {
         if (quatn[i] > 32767) {
             quatn[i] -= 65536;
@@ -278,241 +576,313 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
         quat[i] = ((double)quatn[i]) / 16384.0f;// 32768.0f
 	}
 	
-	// save for calibration (if the user shakes the devise)
-	memcpy(lastQuat, quat, sizeof(double)*4);
-    
     for (int i=0; i<3; i++) {
         if (quat[i] > 1.0001f) {
             NSLog(@"Bad quaternion! %f, %f, %f, %f",quat[0],quat[1],quat[2],quat[3]);
-            *quaternionData = nil;
-            *rotationVectorData = nil;
+            *orientationTrackingInfo = nil;
 			return NO;
         }
     }
-    
-	double *nCalQuat = quat;
-	if (PLT_DEVICE_CONNECTED) {
-		// correct for calibration
-		double *invCalQuat = InverseQuaternion(calQuat);
-		nCalQuat = MultipliedQuaternions(invCalQuat, quat);
+	
+    printf(".");
+	
+	PLTQuaternion quaternion = { quat[0], quat[1], quat[2], quat[3] };
+	*orientationTrackingInfo = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
+																			 timestamp:timestamp
+																		 rawQuaternion:quaternion
+																   referenceQuaternion:self.orientationTrackingCalibration.referenceQuaternion];
+	
+	return YES;
+}
+
+- (void)didGetNewWearingStateInfo:(PLTWearingStateInfo *)wearingStateInfo
+					proximityInfo:(PLTProximityInfo *)proximityInfo
+		  orientationTrackingInfo:(PLTOrientationTrackingInfo *)orientationTrackingInfo
+						 tapsInfo:(PLTTapsInfo *)tapsInfo
+					pedometerInfo:(PLTPedometerInfo *)pedometerInfo
+					 freeFallInfo:(PLTFreeFallInfo *)freeFallInfo
+	  magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo *)magnetometerCalibrationInfo
+		 gyroscapeCalibrationInfo:(PLTGyroscopeCalibrationInfo *)gyroscopeCalibrationInfo
+{
+//	NSLog(@"\n---------------------------------------------");
+//	NSLog(@"wearingStateInfo: %@", wearingStateInfo);
+//	NSLog(@"proximityInfo: %@", proximityInfo);
+//	NSLog(@"orientationTrackingInfo: %@", orientationTrackingInfo);
+//	NSLog(@"tapsInfo: %@", tapsInfo);
+//	NSLog(@"pedometerInfo: %@", pedometerInfo);
+//	NSLog(@"freeFallInfo: %@", freeFallInfo);
+//	NSLog(@"magnetometerCalibrationInfo: %@", magnetometerCalibrationInfo);
+//	NSLog(@"gyroscopeCalibrationInfo: %@", gyroscopeCalibrationInfo);
+		
+	self.latestWearingStateInfo = wearingStateInfo;
+	self.latestProximityInfo = proximityInfo;
+	self.latestOrientationTrackingInfo = orientationTrackingInfo;
+	
+//	if (!self.latestTapsInfo && tapsInfo.taps==0) {
+//		self.latestTapsInfo = [[PLTTapsInfo alloc] initWithRequestType:0 timestamp:nil taps:0 direction:0];
+//	}
+//	else if (tapsInfo.taps != 0) {
+//		self.latestTapsInfo = tapsInfo;
+//	}
+
+	BOOL notifyTapsChanged = NO;
+	PLTTapsInfo *lastTapsInfo = self.latestTapsInfo;
+	self.latestTapsInfo = tapsInfo;
+	if (tapsInfo.taps != 0) {
+		if ((!self.didGetTapsUp && ![tapsInfo isEqual:lastTapsInfo]) || self.didGetTapsDown) {
+			self.didGetTapsUp = YES;
+			self.didGetTapsDown = NO;
+			notifyTapsChanged = YES;
+		}
+		else {
+			self.latestTapsInfo = [[PLTTapsInfo alloc] initWithRequestType:tapsInfo.requestType timestamp:tapsInfo.timestamp taps:0 direction:0];
+		}
+	}
+	else {
+		self.latestTapsInfo = [[PLTTapsInfo alloc] initWithRequestType:tapsInfo.requestType timestamp:tapsInfo.timestamp taps:0 direction:0];
+		self.didGetTapsUp = NO;
+		self.didGetTapsDown = YES;
+	}
+
+	// apply pedometer cal
+	self.latestPedometerInfo = [[PLTPedometerInfo alloc] initWithRequestType:pedometerInfo.requestType timestamp:pedometerInfo.timestamp steps:pedometerInfo.steps - self.pedometerOffset];
+	
+	// only notify for free fall once at high, and once at low.
+	// *** NOTE: for first API version we notify low immediately after high! (since time in ff==yes is arbitrary) ***
+	BOOL notifyFreeFallChanged = NO;
+	self.latestFreeFallInfo = freeFallInfo;
+	if (freeFallInfo.isInFreeFall) {
+		if (!self.didGetFreeFallUp) {
+			notifyFreeFallChanged = YES;
+			self.didGetFreeFallUp = YES;
+			self.didGetFreeFallDown = NO;
+		}
+		else {
+			self.latestFreeFallInfo = [[PLTFreeFallInfo alloc] initWithRequestType:freeFallInfo.requestType timestamp:freeFallInfo.timestamp freeFall:NO];
+			if (!self.didGetFreeFallDown) {
+				notifyFreeFallChanged = YES;
+				self.didGetFreeFallDown = YES;
+			}
+		}
+	}
+	else {
+		self.didGetFreeFallUp = NO;
+		self.didGetFreeFallDown = NO;
 	}
 	
-	*calibratedPacketData = [self packetDataWithCalibration:nCalQuat packet:packetData];
-    
-    for (int i=0; i<3; i++) {
-        if (nCalQuat[i] > 1.0001f) {
-            NSLog(@"Bad quatquaternion after cal! %f, %f, %f, %f",nCalQuat[0],nCalQuat[1],nCalQuat[2],nCalQuat[3]);
-            *quaternionData = nil;
-            *rotationVectorData = nil;
-			return NO;
-        }
-    }
-    
-    //printf(".");
-    
-    PLTVec4 quaternion = { -nCalQuat[1], nCalQuat[2], -nCalQuat[3], nCalQuat[0] };
-    PLTVec3 rotationVector = RotationVectorFromQuaternion(quaternion);
-    
-    *quaternionData = [NSData dataWithBytes:&quaternion length:sizeof(PLTVec4)];
-    *rotationVectorData = [NSData dataWithBytes:&rotationVector length:sizeof(PLTVec3)];
-    
-    return YES;
-}
-
-- (void)applicationDidBecomeActive:(NSNotification *)note
-{
-    NSLog(@"applicationDidBecomeActive:");
-    [self connectToAccessory];
-}
-
-- (BOOL)connectToAccessory
-{
-    NSLog(@"connectToAccessory");
-    
-    if (!self.session) {
-        NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
-        NSLog(@"Connected accessories: %@",accessories);
-        NSString *protocolString = @"com.csr.datapath";
-        EAAccessory *accessory = nil;
-        
-        // search for accessory supporting our protocol
-        for (EAAccessory *obj in accessories) {
-            if ([[obj protocolStrings] containsObject:protocolString]) {
-                accessory = obj;
-                accessory.delegate = self;
-                self.accessory = accessory;
-                break;
-            }
-        }
-        
-        // create data session if we found a matching accessory
-        if (accessory) {
-            NSLog(@"Found accessory '%@' attempting to create data session", [accessory name]);
-            //NSMutableString *sernum = [accessory serialNumber];
-            
-            self.session = [[EASession alloc] initWithAccessory:accessory forProtocol:protocolString];
-            if (self.session) {
-                NSLog(@"Create EA session: %@", self.session);
-                
-                [[self.session inputStream] setDelegate:self];
-                [[self.session inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-                [[self.session inputStream] open];
-                [[self.session outputStream] setDelegate:self];
-                [[self.session outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-                [[self.session outputStream] open];
-                
-                _isConnected = YES;
-#ifdef HS_STATS
-				[self startPacketRateTimer];
-#endif
-				[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidConnectNotification object:nil];
-                
-                return TRUE;
-            }
-            else {
-                NSLog(@"Failed to create EA session.");
-                return FALSE;
-            }
-        }
-        else {
-            NSLog(@"No accessory found for protocol %@", protocolString);
-            return FALSE;
-        }
-    }
-    else {
-        NSLog(@"Session already active.");
-        return YES;
-    }
-}
-
-- (void)disconnectFromAccessory
-{
-    NSLog(@"disconnectFromAccessory");
-    
-    if (self.session) {
-        NSLog(@"Destroy data session %p", self.session);
-        
-        [[self.session inputStream] close];
-        [[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session inputStream] setDelegate:nil];
-        [[self.session outputStream] close];
-        [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session outputStream] setDelegate:nil];
-        
-        self.session = nil;
-        self.accessory = nil;
-        _isConnected = NO;
-		[self stopPacketRateTimer];
-		[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidDisconnectNotification object:nil];
-    }
-}
-
-- (void)accessoryNotification:(NSNotification *)notification
-{
-    NSLog(@"%@", [notification name]);
-    
-    // if accessory has connected try to open data session
-    if ([[notification name] isEqualToString:EAAccessoryDidConnectNotification]) {
-        if (!self.session) {
-            [self connectToAccessory];
-        }
-    }
-    
-    // if accessory has disconnected, tell user and release data session
-    if ([[notification name] isEqualToString:EAAccessoryDidDisconnectNotification]) {
-        [self disconnectFromAccessory];
-    }
-}
-
-- (BOOL)accelerationIsShaking:(UIAcceleration *)last current:(UIAcceleration *) current threshold:(double)threshold
-{
-	double deltaX = fabs(last.x - current.x), deltaY = fabs(last.y - current.y), deltaZ = fabs(last.z - current.z);
-	return (deltaX > threshold && deltaY > threshold) || (deltaX > threshold && deltaZ > threshold) || (deltaY > threshold && deltaZ > threshold);
-}
-
-- (void)startPacketRateTimer
-{
-	if (![self.packetRateTimer isValid]) {
-		self.packetRateCounter = 0;
-		self.packetRateCounterDate = [NSDate date];
-		self.packetRateTimer = [NSTimer scheduledTimerWithTimeInterval:PACKET_RATE_UPDATE_RATE
-																target:self selector:@selector(packetRateTimer:)
-															  userInfo:nil repeats:YES];
+	self.latestMagnetometerCalibrationInfo = magnetometerCalibrationInfo;
+	self.latestGyroscopeCalibrationInfo = gyroscopeCalibrationInfo;
+	
+	// notify query observers
+	
+	for (NSDictionary *queryObserver in self.queryObservers) {
+		id <PLTDeviceInfoObserver> observer = queryObserver[PLTQueryObserverKeyObserver];
+		
+		PLTInfo *newInfo = nil;
+		PLTService service = [queryObserver[PLTQueryObserverKeyService] unsignedIntegerValue];
+		switch (service) {
+			case PLTServiceProximity:
+				newInfo = self.latestProximityInfo;
+				break;
+			case PLTServiceWearingState:
+				newInfo = self.latestWearingStateInfo;
+				break;
+			case PLTServiceOrientationTracking:
+				newInfo = self.latestOrientationTrackingInfo;
+				break;
+			case PLTServicePedometer:
+				newInfo = self.latestPedometerInfo;
+				break;
+			case PLTServiceFreeFall:
+				newInfo = self.latestFreeFallInfo;
+				break;
+			case PLTServiceTaps:
+				newInfo = self.latestTapsInfo;
+				break;
+			case PLTServiceMagnetometerCalStatus:
+				newInfo = self.latestMagnetometerCalibrationInfo;
+				break;
+			case PLTServiceGyroscopeCalibrationStatus:
+				newInfo = self.latestGyroscopeCalibrationInfo;
+				break;
+		}
+		
+		newInfo.requestType = PLTInfoRequestTypeQuery;
+		
+		if (newInfo) {
+			[observer PLTDevice:self didUpdateInfo:newInfo];
+		}
+	}
+	
+	self.queryObservers = nil;
+	
+	// notify on change subscribers
+	
+	NSDate *date = [NSDate date];
+	
+	for (NSValue *v in self.subscribers) {
+		NSMutableArray *subscriber = self.subscribers[v];
+		
+		for (NSMutableDictionary *subscription in subscriber) {
+			if ([subscription[PLTSubscriptionKeyMode] isEqualToNumber:@(PLTSubscriptionModeOnChange)]) {
+				
+				PLTInfo *newInfo = nil;
+				PLTService service = [subscription[PLTSubscriptionKeyService] unsignedIntegerValue];
+				switch (service) {
+					case PLTServiceProximity:
+						newInfo = self.latestProximityInfo;
+						break;
+					case PLTServiceWearingState:
+						newInfo = self.latestWearingStateInfo;
+						break;
+					case PLTServiceOrientationTracking:
+						newInfo = self.latestOrientationTrackingInfo;
+						break;
+					case PLTServicePedometer:
+						newInfo = self.latestPedometerInfo;
+						break;
+					case PLTServiceFreeFall:
+						if (!notifyFreeFallChanged) continue;
+						newInfo = self.latestFreeFallInfo;
+						break;
+					case PLTServiceTaps:
+						if (!notifyTapsChanged) continue;
+						newInfo = self.latestTapsInfo;
+						break;
+					case PLTServiceMagnetometerCalStatus:
+						newInfo = self.latestMagnetometerCalibrationInfo;
+						break;
+					case PLTServiceGyroscopeCalibrationStatus:
+						newInfo = self.latestGyroscopeCalibrationInfo;
+						break;
+				}
+				
+				if (newInfo) {
+					PLTInfo *lastInfo = subscription[PLTSubscriptionKeyLastUpdateInfo];
+					if (!lastInfo || ![newInfo isEqual:lastInfo] || notifyTapsChanged) { // ugh
+						
+						NSDate *lastUpdate = subscription[PLTSubscriptionKeyLastUpdateDate];
+						NSTimeInterval updatePeriod = [subscription[PLTSubscriptionKeyPeriod] doubleValue];
+						if (!lastUpdate || ([date timeIntervalSinceDate:lastUpdate] >= ((float)updatePeriod/1000.0))) {
+							subscription[PLTSubscriptionKeyLastUpdateDate] = date;
+							subscription[PLTSubscriptionKeyLastUpdateInfo] = newInfo;
+							
+							id<PLTDeviceInfoObserver> s = [v pointerValue];
+							[s PLTDevice:self didUpdateInfo:newInfo];
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
-- (void)stopPacketRateTimer
+- (void)checkTicker
 {
-	if ([self.packetRateTimer isValid]) {
-		[self.packetRateTimer invalidate];
-		self.packetRateTimer = nil;
+	// check if there are any subscribers with mode == periodic, if so make sure the ticker is running. if not, kill the ticker.
+	
+	if (![self.subscribers count]) {
+		//NSLog(@"No periodic subscribers. Killing ticker.");
+		[self.ticker invalidate];
+		self.ticker = nil;
+	}
+	
+	BOOL foundSubscription = NO;
+	for (NSValue *v in self.subscribers) {
+		NSMutableArray *subscriber = self.subscribers[v];
+		
+		for (NSDictionary *subscription in subscriber) {
+			if ([subscription[PLTSubscriptionKeyMode] isEqualToNumber:@(PLTSubscriptionModePeriodic)]) {
+				foundSubscription = YES;
+				break;
+			}
+		}
+		if (foundSubscription) {
+			break;
+		}
+	}
+	
+	if (foundSubscription) {
+		//NSLog(@"Found a periodic subscription. Checking/starting ticker.");
+		if (![self.ticker isValid]) {
+			self.ticker = [NSTimer scheduledTimerWithTimeInterval:(1.0/TICKER_RATE) target:self selector:@selector(ticker:) userInfo:nil repeats:YES];
+		}
+	}
+	else {
+		//NSLog(@"No periodic subscriptions found. Killing kicker.");
+		[self.ticker invalidate];
+		self.ticker = nil;
 	}
 }
 
-- (void)packetRateTimer:(NSTimer *)theTimer
+- (void)ticker:(NSTimer *)aTimer
 {
-	float avg = ((float)self.packetRateCounter) / [[NSDate date] timeIntervalSinceDate:self.packetRateCounterDate];
-	NSLog(@"Headset packet receive rate: %.1f messages/sec",avg);
+	// see if any subscribers need an update
 	
-	self.packetRateCounter = 0;
-	self.packetRateCounterDate = [NSDate date];
+	NSDate *date = [NSDate date];
+	
+	for (NSValue *v in self.subscribers) {
+		NSMutableArray *subscriber = self.subscribers[v];
+		
+		for (NSMutableDictionary *subscription in subscriber) {
+			if ([subscription[PLTSubscriptionKeyMode] isEqualToNumber:@(PLTSubscriptionModePeriodic)]) {
+				NSDate *lastUpdate = subscription[PLTSubscriptionKeyLastUpdateDate];
+				NSTimeInterval updatePeriod = [subscription[PLTSubscriptionKeyPeriod] doubleValue];
+				if (!lastUpdate || ([date timeIntervalSinceDate:lastUpdate] >= ((float)updatePeriod/1000.0))) {
+					subscription[PLTSubscriptionKeyLastUpdateDate] = date;
+					PLTInfo *info = nil;
+					PLTService service = [subscription[PLTSubscriptionKeyService] unsignedIntegerValue];
+					switch (service) {
+						case PLTServiceProximity:
+							info = self.latestProximityInfo;
+							break;
+						case PLTServiceWearingState:
+							info = self.latestWearingStateInfo;
+							break;
+						case PLTServiceOrientationTracking:
+							info = self.latestOrientationTrackingInfo;
+							break;
+						case PLTServicePedometer:
+							info = self.latestPedometerInfo;
+							break;
+						case PLTServiceFreeFall:
+							info = self.latestFreeFallInfo;
+							break;
+						case PLTServiceTaps:
+							info = self.latestTapsInfo;
+							break;
+						case PLTServiceMagnetometerCalStatus:
+							info = self.latestMagnetometerCalibrationInfo;
+							break;
+						case PLTServiceGyroscopeCalibrationStatus:
+							info = self.latestGyroscopeCalibrationInfo;
+							break;
+					}
+					
+					if (info) {
+						id<PLTDeviceInfoObserver> s = [v pointerValue];
+						[s PLTDevice:self didUpdateInfo:info];
+					}
+				}
+			}
+		}
+	}
 }
 
-- (NSData *)packetDataWithCalibration:(double *)cal packet:(NSData *)inPacket // TEMPORARY
+- (BOOL)versionsCompatible
 {
-	// this is pretty inconvenient... get a packet over MFi wire, decode it, apply cal,
-	// then RE-PACK it to look like an MFi packet (with header and all).
-	
-	uint8_t *buf = malloc([inPacket length]);
-	[inPacket getBytes:buf length:[inPacket length]];
-	uint16_t quaternion[8];
-	memset(&quaternion, 0, 8);
-	
-	quaternion[0] = (uint16_t)lround(cal[0] * 16384.0f);
-	quaternion[1] = (uint16_t)lround(cal[1] * 16384.0f);
-	quaternion[2] = (uint16_t)lround(cal[2] * 16384.0f);
-	quaternion[3] = (uint16_t)lround(cal[3] * 16384.0f);
-	
-	buf[2+1] = quaternion[0] >> 8;
-	quaternion[0] = (quaternion[0] << 8) >> 8;
-	buf[3+1] = (uint8_t)quaternion[0];
-	
-	buf[6+1] = quaternion[1] >> 8;
-	quaternion[1] = (quaternion[1] << 8) >> 8;
-	buf[7+1] = (uint8_t)quaternion[1];
-	
-	buf[10+1] = quaternion[2] >> 8;
-	quaternion[2] = (quaternion[2] << 8) >> 8;
-	buf[11+1] = (uint8_t)quaternion[2];
-	
-	buf[14+1] = quaternion[3] >> 8;
-	quaternion[3] = (quaternion[3] << 8) >> 8;
-	buf[15+1] = (uint8_t)quaternion[3];
-	
-	NSData *packetData = [NSData dataWithBytes:buf length:[inPacket length]];
-	
-	//	NSMutableString *hexStr = [NSMutableString stringWithCapacity:[inPacket length]*2];
-	//	for (int i = 0; i < [inPacket length]; i++) [hexStr appendFormat:@"%02x", buf[i]];
-	//	NSLog(@"Calibrated packet:\t%@",hexStr);
-	
-	return packetData;
-}
-
-#pragma mark - EAAccessoryDelegate
-
-- (void)accessoryDidDisconnect:(EAAccessory *)accessory;
-{
-    NSLog(@"accessoryDidDisconnect");
+	return (self.fwMajorVersion==2 && self.fwMinorVersion==8);
+	//return YES;
 }
 
 #pragma mark - NSStreamDelegate
 
-- (void)stream:(NSStream*)theStream handleEvent:(NSStreamEvent)streamEvent
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
-    switch (streamEvent) {
+	switch (streamEvent) {
         case NSStreamEventErrorOccurred: {
             NSError *error = [theStream streamError];
-            NSString *errorMessage = [NSString stringWithFormat:@"%@ (Code = %d)", [error localizedDescription], [error code]];
+            NSString *errorMessage = [NSString stringWithFormat:@"%@ (code %d)", [error localizedDescription], [error code]];
             NSLog(@"StreamEventError %@", errorMessage);
             break; }
             
@@ -525,10 +895,6 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
             break;
             
         case NSStreamEventHasBytesAvailable: {
-            //printf(".");
-            
-            // Process the incoming stream data
-            //uint8_t buf[23];
             uint8_t buf[1024];
 			const int pLen = 22;
             unsigned int len = pLen;
@@ -539,7 +905,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
                 len = [[self.session inputStream] read:buf maxLength:1];
                 if (len==0) return;
             }
-            //len = [[session inputStream] read:(buf+1) maxLength:22];
+			
             len = [[self.session inputStream] read:(buf+1) maxLength:1023];
             
             if (len < 22) {
@@ -548,14 +914,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
             }
 			
 			NSData *packetData = [NSData dataWithBytes:buf length:pLen]; // notice trim to pLen
-			self.lastPacketData = packetData;
-			//NSLog(@"len = %d",[packetData length]);
-			NSDictionary *newInfo = [self infoFromPacketData:packetData];
-			if (newInfo) {
-				self.latestInfo = newInfo;
-				self.packetRateCounter += 1;
-				[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceInfoDidUpdateNotification object:nil userInfo:newInfo];
-            }
+			[self didGetNewPacket:packetData];
             break; }
 			
 		case NSStreamEventOpenCompleted:
@@ -564,49 +923,21 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     }
 }
 
-#pragma mark - UIAccelerometerDelegate
-
-- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
-    
-	if (self.lastAcceleration) {
-		if (!self.histeresisExcited && [self accelerationIsShaking:self.lastAcceleration current:acceleration threshold:0.7]) {
-			self.histeresisExcited = YES;
-            
-			[self updateCalibration];
-            
-		} else if (self.histeresisExcited && ![self accelerationIsShaking:self.lastAcceleration current:acceleration threshold:0.2]) {
-			self.histeresisExcited = NO;
-		}
-	}
-    
-	self.lastAcceleration = acceleration;
-}
-
 #pragma mark - NSObject
 
-- (id)init
+- (BOOL)isEqual:(id)object
 {
-    if (self = [super init]) {
-        
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        
-        [[EAAccessoryManager sharedAccessoryManager] registerForLocalNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryNotification:) name:nil object:[EAAccessoryManager sharedAccessoryManager]];
-        
-        [UIAccelerometer sharedAccelerometer].delegate = self;
-		
-		// set starting calibration quat to 1,0,0,0 and allocate space for lastQuat
-        calQuat = malloc(sizeof(double)*4);
-        memset(calQuat, 0, sizeof(double)*4);
-        calQuat[0] = 1;
-        lastQuat = malloc(sizeof(double)*4);
-        memset(lastQuat, 0, sizeof(double)*4);
-		
-		self.headTrackingCalibrationTriggers = PLTDeviceHeadTrackingCalibrationTriggerShake & PLTDeviceHeadTrackingCalibrationTriggerDon;
-		self.donCalibrationDelay = 2.0;
-    }
-	
-    return self;
+	if ([object isKindOfClass:[PLTDevice class]]) {
+		EAAccessory *compareAccessory = ((PLTDevice *)object).accessory;
+		return (self.accessory.connectionID == compareAccessory.connectionID);
+	}
+	return NO;
+}
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"<PLTDevice: %p> {\n\tisConnectionOpen: %@\n\tname: %@\n\tmodel: %@\n\tserialNumber: %@\n\tfwMajorVersion: %u\n\tfwMinorVersion: %u\n}",
+			self, (self.isConnectionOpen ? @"YES" : @"NO"), self.name, self.model, self.serialNumber, self.fwMajorVersion, self.fwMinorVersion];
 }
 
 @end
