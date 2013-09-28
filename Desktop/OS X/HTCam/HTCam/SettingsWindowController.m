@@ -27,6 +27,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 - (void)updateCSSettings;
 - (void)saveCSSettings;
 - (void)updateSwitchSettings;
+- (void)updateCamSwitchDelay;
 
 @property (nonatomic, assign) CGPoint cam1Location;
 @property (nonatomic, assign) CGPoint cam2Location;
@@ -56,7 +57,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (void)setCSStatusConnected:(BOOL)connected
 {
-	NSLog(@"setCSStatusConnected: %@", (connected ? @"YES" : @"NO"));
+	DLog(@"setCSStatusConnected: %@", (connected ? @"YES" : @"NO"));
 	
 	[self.csConnectDisconnectButton setEnabled:YES];
 	[self.csConnectingSpinner stopAnimation:self];
@@ -80,7 +81,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (void)setSwitchStatusConnected:(BOOL)connected
 {
-	NSLog(@"setSwitchStatusConnected: %@", (connected ? @"YES" : @"NO"));
+	DLog(@"setSwitchStatusConnected: %@", (connected ? @"YES" : @"NO"));
 	
 	if (connected) {
 		self.switchStatusTextField.stringValue = @"Connected";
@@ -135,11 +136,18 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 	self.switchAutoConnectCheckbox.state = ([[DEFAULTS objectForKey:PLTDefaultsKeyVideoSwitchAutoConnect] boolValue] ? NSOnState : NSOffState);
 }
 
+- (void)updateCamSwitchDelay
+{
+	float delay = [DEFAULTS floatForKey:PLTDefaultsKeyCamSwitchDelay];
+	self.camSwitchDelaySlider.floatValue = delay;
+	self.camSwitchDelayTextField.stringValue = [NSString stringWithFormat:@"%.1f seconds", delay];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)csConnectDisconnectButton:(id)sender
 {
-	NSLog(@"csConnectDisconnectButton:");
+	DLog(@"csConnectDisconnectButton:");
 	
 	PLTContextServer *cs = [PLTContextServer sharedContextServer];
 	if (cs.state >= PLT_CONTEXT_SERVER_AUTHENTICATED) {
@@ -155,7 +163,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (IBAction)switchConnectDisconnectButton:(id)sender
 {
-	NSLog(@"switchConnectDisconnectButton:");
+	DLog(@"switchConnectDisconnectButton:");
 	
 	VideoSwitchController *vsm = [VideoSwitchController sharedController];
 	if (vsm.isConncetionOpen) {
@@ -170,11 +178,12 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (IBAction)calCam1Button:(id)sender
 {
-	NSLog(@"calCam1Button:");
+	DLog(@"calCam1Button:");
 	NSData *rotationData = ([HTDemoController sharedController].latestHeadsetInfo)[PLTHeadsetInfoKeyRotationVectorData];
 	Vec3 rotation;
 	[rotationData getBytes:&rotation length:[rotationData length]];
 	CGPoint location = CGPointMake(rotation.x, rotation.y);
+	[self log:@"Setting Cam 1 location to %@.", NSStringFromPoint(location)];
 	NSDictionary *locationDict = (__bridge NSDictionary *)(CGPointCreateDictionaryRepresentation(location));
 	[DEFAULTS setObject:locationDict forKey:PLTDefaultsKeyCam1Location];
 	[self camLocationChanged];
@@ -182,11 +191,12 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (IBAction)calCam2Button:(id)sender
 {
-	NSLog(@"calCam2Button:");
+	DLog(@"calCam2Button:");
 	NSData *rotationData = ([HTDemoController sharedController].latestHeadsetInfo)[PLTHeadsetInfoKeyRotationVectorData];
 	Vec3 rotation;
 	[rotationData getBytes:&rotation length:[rotationData length]];
 	CGPoint location = CGPointMake(rotation.x, rotation.y);
+	[self log:@"Setting Cam 2 location to %@.", NSStringFromPoint(location)];
 	NSDictionary *locationDict = (__bridge NSDictionary *)(CGPointCreateDictionaryRepresentation(location));
 	[DEFAULTS setObject:locationDict forKey:PLTDefaultsKeyCam2Location];
 	[self camLocationChanged];
@@ -194,11 +204,12 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (IBAction)calCam3Button:(id)sender
 {
-	NSLog(@"calCam3Button:");
+	DLog(@"calCam3Button:");
 	NSData *rotationData = ([HTDemoController sharedController].latestHeadsetInfo)[PLTHeadsetInfoKeyRotationVectorData];
 	Vec3 rotation;
 	[rotationData getBytes:&rotation length:[rotationData length]];
 	CGPoint location = CGPointMake(rotation.x, rotation.y);
+	[self log:@"Setting Cam 3 location to %@.", NSStringFromPoint(location)];
 	NSDictionary *locationDict = (__bridge NSDictionary *)(CGPointCreateDictionaryRepresentation(location));
 	[DEFAULTS setObject:locationDict forKey:PLTDefaultsKeyCam3Location];
 	[self camLocationChanged];
@@ -206,19 +217,21 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (IBAction)csAutoConnectCheckbox:(id)sender
 {
-	NSLog(@"csAutoConnectCheckbox:");
+	DLog(@"csAutoConnectCheckbox:");
 	[self saveCSSettings];
 }
 
 - (IBAction)switchAutoConnectCheckbox:(id)sender
 {
-	NSLog(@"switchAutoConnectCheckbox:");
+	DLog(@"switchAutoConnectCheckbox:");
 	[DEFAULTS setBool:(self.switchAutoConnectCheckbox.state == NSOnState) forKey:PLTDefaultsKeyVideoSwitchAutoConnect];
 }
 
-- (IBAction)htFilterSlider:(id)sender
+- (IBAction)camSwitchDelaySlider:(id)sender
 {
-	NSLog(@"htFilterSlider:");
+	float delay = [sender floatValue];
+	[DEFAULTS setFloat:delay forKey:PLTDefaultsKeyCamSwitchDelay];
+	[self updateCamSwitchDelay];
 }
 
 #pragma mark - PLTContextServerDelegate
@@ -230,7 +243,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (void)server:(PLTContextServer *)sender didAuthenticate:(BOOL)authenticationWasSuccessful
 {
-	NSLog(@"server:didAuthenticate: %@", (authenticationWasSuccessful ? @"YES" : @"NO"));
+	DLog(@"server:didAuthenticate: %@", (authenticationWasSuccessful ? @"YES" : @"NO"));
 	
 	[self setCSStatusConnected:authenticationWasSuccessful];
 	
@@ -272,7 +285,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor
 {
-	NSLog(@"control:textShouldEndEditing:");
+	DLog(@"control:textShouldEndEditing:");
 	[self saveCSSettings];
 	return YES;
 }
@@ -304,6 +317,7 @@ NSString *const PLTHTCamNotificationCamLocationChanged =		@"PLTHTCamNotification
 	
 	[self updateCSSettings];
 	[self updateSwitchSettings];
+	[self updateCamSwitchDelay];
 	
 	[[self window] center];
 	

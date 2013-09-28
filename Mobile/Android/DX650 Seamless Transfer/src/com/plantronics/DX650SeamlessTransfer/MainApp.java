@@ -138,7 +138,7 @@ public class MainApp extends Application
 					ciscoCallState = callInfo.getCallState().toString();
 
 					if (callInfo.getCallState().toString().contentEquals(CallStateEnum.REMCONNECTED.toString())) {
-						Log.i(FN(), "************* REMCONNECTED, killing BT audio! *************");
+//						Log.i(FN(), "************* REMCONNECTED, killing BT audio! *************");
 
 						// this apparently turns off the connection on both ends
 //						runDelayed(new Runnable() {

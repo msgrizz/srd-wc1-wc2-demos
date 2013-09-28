@@ -7,7 +7,10 @@
 //
 
 #import "VideoSwitchController.h"
+#import "MainWindowController.h"
 
+
+#define FAKE_SWITCH					NO
 
 #define CONNECT_SCRIPT_PATH			[[NSBundle mainBundle] pathForResource:@"Connect" ofType:@"scpt"]
 #define DISCONNECT_SCRIPT_PATH		[[NSBundle mainBundle] pathForResource:@"Disconnect" ofType:@"scpt"]
@@ -19,6 +22,7 @@
 
 @interface VideoSwitchController ()
 
+- (void)log:(NSString *)text, ...;
 - (BOOL)killTerminal;
 - (void)launchTerminal;
 - (void)waitForTerminalQuit;
@@ -49,7 +53,7 @@
 
 - (void)openConnection
 {
-	NSLog(@"Opening video switch serial connection...");
+	[self log:@"Opening video switch serial connection..."];
 	
 //	if ([self killTerminal]) {
 //		[self waitForTerminalLaunch];
@@ -65,12 +69,15 @@
 {
 	// uses AppleScript to actually close the switch connection in the serial terminal
 	
-	NSLog(@"Closing video switch serial connection...");
+	[self log:@"Closing video switch serial connection..."];
 	
 	NSDictionary *errInfo;
 	[self.disconnectScript executeAndReturnError:&errInfo];
 	if (errInfo) {
-		NSLog(@"Error closing serial connection! %@", errInfo);
+		[self log:@"Error closing serial connection: %@", errInfo];
+	}
+	else {
+		[self log:@"Closed."];
 	}
 	self.isConncetionOpen = NO;
 }
@@ -81,7 +88,7 @@
 	
 	if (self.isConncetionOpen) {
 		if (self.activeCam != cam) {
-			NSLog(@"Activating camera %d...", cam);
+			[self log:@"Activating camera %d...", cam];
 			
 			NSAppleScript *script = nil;
 			switch (cam) {
@@ -99,21 +106,38 @@
 //					break;
 			}
 			
+//#warning !!!!!!!!!!!!!!!!!!! DEBUG ONLY !!!!!!!!!!!!!!!!!!!!!!
+//			return;
+			
 			self.activeCam = cam;
+			
+			if (FAKE_SWITCH) {
+				DLog(@"(Fake switching)");
+				return;
+			}
 			
 			NSDictionary *errInfo;
 			[script executeAndReturnError:&errInfo];
 			if (errInfo) {
-				NSLog(@"Error executing script: %@", errInfo);
+				[self log:@"Error executing script: %@", errInfo];
 			}
 		}
 	}
 	else {
-		if (cam != HTCamNone) NSLog(@"Can't activate camera %d. Video switch connection not open.", cam);
+		if (cam != HTCamNone) DLog(@"Can't activate camera %d. Video switch connection not open.", cam);
 	}
 }
 
 #pragma mark - Private
+
+- (void)log:(NSString *)text, ...
+{
+	va_list list;
+	va_start(list, text);
+    NSString *message = [[NSString alloc] initWithFormat:text arguments:list];
+	va_end(list);
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTHTCamNotificationLogMessage object:nil userInfo:@{PLTHTCamNotificationKeyLogMessage: message}];
+}
 
 - (BOOL)killTerminal
 {
@@ -122,7 +146,7 @@
 	NSArray *runningApps = [[NSWorkspace sharedWorkspace] runningApplications];
 	for (NSRunningApplication *app in runningApps) {
 		if ([app.bundleIdentifier isEqualToString:@"org.the-meiers.coolterm"]) {
-			NSLog(@"Killing CoolTerm...");
+			[self log:@"Killing CoolTerm..."];
 			[app forceTerminate]; // fails to check return value
 			return YES;
 		}
@@ -137,23 +161,23 @@
 	NSString *appPath = [[NSBundle mainBundle] pathForResource:@"CoolTerm" ofType:@"app"];
 	NSURL *appURL = [NSURL fileURLWithPath:appPath];
 	NSError *err;
-	NSLog(@"Launching CoolTerm...");
+	[self log:@"Launching CoolTerm..."];
 	[[NSWorkspace sharedWorkspace] launchApplicationAtURL:appURL options:nilHandleErr configuration:nil error:&err];
 	if (!err) {
 		[self waitForTerminalLaunch];
 	}
 	else {
-		NSLog(@"Error launching terminal app! %@", err);
+		[self log:@"Error launching terminal app: %@", err];
 	}
 }
 
 - (void)waitForTerminalQuit
 {
-	NSLog(@"Waiting for CoolTerm to quit...");
+	DLog(@"Waiting for CoolTerm to quit...");
 	
 	[[[NSWorkspace sharedWorkspace] notificationCenter] addObserverForName:NSWorkspaceDidTerminateApplicationNotification object:nil queue:NULL usingBlock:^(NSNotification *note) {
 		[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self name:NSWorkspaceDidTerminateApplicationNotification object:nil];
-		NSLog(@"CoolTerm did terminate.");
+		[self log:@"CoolTerm terminated."];
 		[self waitForTerminalLaunch];
 		[self launchTerminal];
 	}];
@@ -161,11 +185,11 @@
 
 - (void)waitForTerminalLaunch
 {
-	NSLog(@"Waiting for CoolTerm to launch...");
+	DLog(@"Waiting for CoolTerm to launch...");
 	
 	[[[NSWorkspace sharedWorkspace] notificationCenter] addObserverForName:NSWorkspaceDidLaunchApplicationNotification object:nil queue:NULL usingBlock:^(NSNotification *note) {
 		[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self name:NSWorkspaceDidLaunchApplicationNotification object:nil];
-		NSLog(@"CoolTerm did launch.");
+		[self log:@"CoolTerm launched."];
 		[self _openConnection];
 	}];
 }
@@ -177,10 +201,11 @@
 	NSDictionary *errInfo;
 	[self.connectScript executeAndReturnError:&errInfo];
 	if (errInfo) {
-		NSLog(@"Error opening serial connection! %@", errInfo);
+		[self log:@"Error opening serial connection! %@", errInfo];
 		self.isConncetionOpen = NO;
 	}
 	else {
+		[self log:@"Connection open."];
 		self.isConncetionOpen = YES;
 	}
 }

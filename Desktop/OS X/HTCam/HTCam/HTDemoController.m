@@ -13,6 +13,12 @@
 #import "AppDelegate.h"
 #import "SettingsWindowController.h"
 #import "VideoSwitchController.h"
+#import "MainWindowController.h"
+
+
+#define HT_FILTER_CONSTANT		.8
+#define CAM_SWTICH_TIME			.5 // seconds
+#define FORCE_DON				NO
 
 
 float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
@@ -23,9 +29,13 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 
 @interface HTDemoController () <PLTContextServerDelegate>
 
+- (void)log:(NSString *)text, ...;
 - (void)updateCamLocations;
 - (void)processHSInfo:(NSDictionary *)info;
 - (HTCam)closestCamForOrientation:(Vec3)orientation;
+- (void)startCamSwitchTimerForCam:(HTCam)cam;
+- (void)stopCamSwitchTimer;
+- (void)camSwitchTimer:(NSTimer *)theTimer;
 
 @property (nonatomic, retain) NSDictionary *_latestHeadsetInfo;
 @property (nonatomic, assign) CGPoint cam1Location;
@@ -34,6 +44,8 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 @property (nonatomic, assign) float htFilterConstant;
 @property (nonatomic, assign) Vec3 htOrientation;
 @property (nonatomic, assign) Vec3 filteredHTOrientation;
+@property (nonatomic, retain) NSTimer *camSwitchTimer;
+@property (nonatomic, assign) HTCam camToSwitchTo;
 
 @end
 
@@ -62,7 +74,7 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 
 - (void)startDemo
 {
-	NSLog(@"Starting demo.");
+	DLog(@"Starting demo.");
 	
 	if (!self.isStarted) {
 		self.isStarted = YES;
@@ -73,7 +85,7 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 
 - (void)stopDemo
 {
-	NSLog(@"Stopping demo.");
+	DLog(@"Stopping demo.");
 	
 	if (self.isStarted) {
 		self.isStarted = NO;
@@ -87,13 +99,20 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 
 #pragma mark - Private
 
+- (void)log:(NSString *)text, ...
+{
+	va_list list;
+	va_start(list, text);
+    NSString *message = [[NSString alloc] initWithFormat:text arguments:list];
+	va_end(list);
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTHTCamNotificationLogMessage object:nil userInfo:@{PLTHTCamNotificationKeyLogMessage: message}];
+}
+
 - (void)updateCamLocations
 {
 	CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)([DEFAULTS objectForKey:PLTDefaultsKeyCam1Location]), &_cam1Location);
 	CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)([DEFAULTS objectForKey:PLTDefaultsKeyCam2Location]), &_cam2Location);
 	CGPointMakeWithDictionaryRepresentation((__bridge CFDictionaryRef)([DEFAULTS objectForKey:PLTDefaultsKeyCam3Location]), &_cam3Location);
-	// cheating and including filter constant here, too
-	self.htFilterConstant = [[DEFAULTS objectForKey:PLTDefaultsKeyHeadTrackingDataFilter] floatValue];
 }
 
 - (void)processHSInfo:(NSDictionary *)info
@@ -104,12 +123,12 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 	self.htOrientation = orientation;
 	BOOL isDonned = [info[PLTHeadsetInfoKeyIsDonned] boolValue];
 	
-	if (!isDonned) {
+	if (FORCE_DON && !isDonned) {
 		[self stopDemo];
 	}
 	else {
 		if (self.isStarted) {
-			self.htFilterConstant = .2;
+			self.htFilterConstant = HT_FILTER_CONSTANT;
 //			// low-pass the HT orientation
 			Vec3 filteredOrientation;
 			filteredOrientation.x = orientation.x * self.htFilterConstant + self.filteredHTOrientation.x * (1.0 - self.htFilterConstant);
@@ -117,21 +136,19 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 			filteredOrientation.z = orientation.z * self.htFilterConstant + self.filteredHTOrientation.z * (1.0 - self.htFilterConstant);
 			self.filteredHTOrientation = filteredOrientation;
 			
-			HTCam activeCam = [self closestCamForOrientation:self.filteredHTOrientation];
-			[self.delegate HTDemoController:self changedActiveCam:activeCam];
-			
-			[[VideoSwitchController sharedController] activateCam:activeCam];
+			HTCam cam = [self closestCamForOrientation:self.filteredHTOrientation];
+			[self startCamSwitchTimerForCam:cam];
 		}
 	}
 }
 
 - (HTCam)closestCamForOrientation:(Vec3)orientation
 {
-//	NSLog(@"closestCamForOrientation: (%.2f, %.2f)", orientation.x, orientation.y);
+//	DLog(@"closestCamForOrientation: (%.2f, %.2f)", orientation.x, orientation.y);
 //	
-//	NSLog(@"self.cam1Location: %@", NSStringFromPoint(self.cam1Location));
-//	NSLog(@"self.cam2Location: %@", NSStringFromPoint(self.cam2Location));
-//	NSLog(@"self.cam3Location: %@", NSStringFromPoint(self.cam3Location));
+//	DLog(@"self.cam1Location: %@", NSStringFromPoint(self.cam1Location));
+//	DLog(@"self.cam2Location: %@", NSStringFromPoint(self.cam2Location));
+//	DLog(@"self.cam3Location: %@", NSStringFromPoint(self.cam3Location));
 	
 	float o = orientation.x;
 	float a = self.cam1Location.x; if ((a-o) > 180) a = self.cam1Location.x-360;
@@ -142,9 +159,9 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 	int cam2Distance = abs((int)lroundf(b-o));
 	int cam3Distance = abs((int)lroundf(c-o));
 	
-//	NSLog(@"cam1Distance: %d", cam1Distance);
-//	NSLog(@"cam2Distance: %d", cam2Distance);
-//	NSLog(@"cam3Distance: %d", cam3Distance);
+//	DLog(@"cam1Distance: %d", cam1Distance);
+//	DLog(@"cam2Distance: %d", cam2Distance);
+//	DLog(@"cam3Distance: %d", cam3Distance);
 	
 	if ((cam1Distance<=cam2Distance) && (cam1Distance<=cam3Distance)) { // cam1
 		return HTCam1;
@@ -154,9 +171,9 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 	}
 	return HTCam2;
 	
-//	NSLog(@"self.cam1Location: %@", NSStringFromPoint(self.cam1Location));
-//	NSLog(@"self.cam2Location: %@", NSStringFromPoint(self.cam2Location));
-//	NSLog(@"self.cam3Location: %@", NSStringFromPoint(self.cam3Location));
+//	DLog(@"self.cam1Location: %@", NSStringFromPoint(self.cam1Location));
+//	DLog(@"self.cam2Location: %@", NSStringFromPoint(self.cam2Location));
+//	DLog(@"self.cam3Location: %@", NSStringFromPoint(self.cam3Location));
 //	
 //	float cam1Distance = DistanceBetweenPoints(self.cam1Location, CGPointMake(orientation.x, orientation.y));
 //	float cam1Distance_r = DistanceBetweenPoints(self.cam1Location, CGPointMake(orientation.x+360, orientation.y+360));
@@ -165,12 +182,12 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 //	float cam3Distance = DistanceBetweenPoints(self.cam3Location, CGPointMake(orientation.x, orientation.y));
 //	float cam3Distance_r = DistanceBetweenPoints(self.cam3Location, CGPointMake(orientation.x+360, orientation.y+360));
 //	
-//	NSLog(@"cam1Distance: %.2f", cam1Distance);
-//	NSLog(@"cam1Distance_r: %.2f", cam1Distance_r);
-//	NSLog(@"cam2Distance: %.2f", cam2Distance);
-//	NSLog(@"cam2Distance_r: %.2f", cam2Distance_r);
-//	NSLog(@"cam3Distance: %.2f", cam3Distance);
-//	NSLog(@"cam3Distance_r: %.2f", cam3Distance_r);
+//	DLog(@"cam1Distance: %.2f", cam1Distance);
+//	DLog(@"cam1Distance_r: %.2f", cam1Distance_r);
+//	DLog(@"cam2Distance: %.2f", cam2Distance);
+//	DLog(@"cam2Distance_r: %.2f", cam2Distance_r);
+//	DLog(@"cam3Distance: %.2f", cam3Distance);
+//	DLog(@"cam3Distance_r: %.2f", cam3Distance_r);
 //	
 //	if ((cam1Distance<=cam2Distance) && (cam1Distance<=cam3Distance)) { // cam1
 //		return HTCam1;
@@ -179,6 +196,36 @@ float DistanceBetweenPoints(CGPoint p1, CGPoint p2)
 //		return HTCam3;
 //	}
 //	return HTCam2;
+}
+
+- (void)startCamSwitchTimerForCam:(HTCam)cam
+{
+	DLog(@"startCamSwitchTimerForCam: %d", cam);
+	
+	if (cam != self.camToSwitchTo) {
+		[self stopCamSwitchTimer];
+	}
+	
+	self.camToSwitchTo = cam;
+	self.camSwitchTimer = [NSTimer scheduledTimerWithTimeInterval:CAM_SWTICH_TIME target:self selector:@selector(camSwitchTimer:) userInfo:nil repeats:NO];
+}
+
+- (void)stopCamSwitchTimer
+{
+	DLog(@"stopCamSwitchTimer");
+	
+	if ([self.camSwitchTimer isValid]) {
+		[self.camSwitchTimer invalidate];
+		self.camSwitchTimer = nil;
+	}
+}
+
+- (void)camSwitchTimer:(NSTimer *)theTimer
+{
+	DLog(@"switchTimer:");
+	
+	[self.delegate HTDemoController:self changedActiveCam:self.camToSwitchTo];
+	[[VideoSwitchController sharedController] activateCam:self.camToSwitchTo];
 }
 
 #pragma mark - PLTContextServerDelegate

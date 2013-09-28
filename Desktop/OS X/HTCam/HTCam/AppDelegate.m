@@ -24,7 +24,7 @@ NSString *const PLTDefaultsKeyVideoSwitchAutoConnect =						@"VideoSwitchAutoCon
 NSString *const PLTDefaultsKeyCam1Location =								@"Cam1Location";
 NSString *const PLTDefaultsKeyCam2Location =								@"Cam2Location";
 NSString *const PLTDefaultsKeyCam3Location =								@"Cam3Location";
-NSString *const PLTDefaultsKeyHeadTrackingDataFilter =						@"HeadTrackingDataFilter";
+NSString *const PLTDefaultsKeyCamSwitchDelay =								@"CamSwitchDelay";
 
 
 @interface AppDelegate () <PLTContextServerDelegate>
@@ -82,7 +82,7 @@ NSString *const PLTDefaultsKeyHeadTrackingDataFilter =						@"HeadTrackingDataFi
 {
 	NSBundle *mainBundle = [NSBundle mainBundle];
 	if (![DEFAULTS boolForKey:@"SettingsAreInitialized"]) {
-		NSLog(@"Initializing defaults.");
+		DLog(@"Initializing defaults.");
         // if this is the first time the application has run, read
         // the default application settings from PLTAppSettings.plist
         NSString *settingsFilePath = [mainBundle pathForResource:@"AppSettings" ofType:@"plist"];
@@ -92,14 +92,14 @@ NSString *const PLTDefaultsKeyHeadTrackingDataFilter =						@"HeadTrackingDataFi
 	
 	// do version upgrade stuff here in the future
 	NSString *previousVersion = [DEFAULTS objectForKey:PLTDefaultsKeyDefaultsVersion];
-	NSLog(@"Previously used version: %@",previousVersion);
+	DLog(@"Previously used version: %@",previousVersion);
 	[DEFAULTS setObject:[[mainBundle infoDictionary] objectForKey:@"CFBundleVersion"] forKey:PLTDefaultsKeyDefaultsVersion];
 	[DEFAULTS synchronize];
 }
 
 - (void)checkAutoConnectToContextServer
 {
-	NSLog(@"checkAutoConnectToContextServer");
+	DLog(@"checkAutoConnectToContextServer");
 	
 	BOOL autoConnect = [DEFAULTS boolForKey:PLTDefaultsKeyContextServerAutoConnect];
 	if ([self hasServerCredentials]) {
@@ -119,10 +119,15 @@ NSString *const PLTDefaultsKeyHeadTrackingDataFilter =						@"HeadTrackingDataFi
 
 #pragma mark - PLTContextServerDelegate
 
+- (void)serverDidOpen:(PLTContextServer *)sender
+{
+	[self log:@"Connection open."];
+}
+
 - (void)server:(PLTContextServer *)sender didAuthenticate:(BOOL)authenticationWasSuccessful
 {
 	if (authenticationWasSuccessful) {
-		[self log:@"Context Server connection open and authenticated."];
+		[self log:@"Context Server connection authenticated."];
 	}
 	else {
 		[self log:@"Context Server authentication failed."];
@@ -159,7 +164,7 @@ NSString *const PLTDefaultsKeyHeadTrackingDataFilter =						@"HeadTrackingDataFi
 {
 	[self registerDefaults];
 	[self.mainWindowController window];
-	[PLTContextServer sharedContextServer];
+	[[PLTContextServer sharedContextServer] addDelegate:self];
 	[VideoSwitchController sharedController];
 	[HTDemoController sharedController];
 	self.settingsWindowController = [[SettingsWindowController alloc] initWithWindowNibName:nil];

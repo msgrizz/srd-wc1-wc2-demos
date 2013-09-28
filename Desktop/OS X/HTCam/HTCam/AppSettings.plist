@@ -7,13 +7,13 @@
 	<key>DefaultsVersion</key>
 	<string></string>
 	<key>ContextServerAddress</key>
-	<string>23.23.249.221</string>
+	<string>10.0.1.2</string>
 	<key>ContextServerPort</key>
 	<string>8080</string>
 	<key>ContextServerUsername</key>
-	<string>mdavis</string>
+	<string>plt-demo</string>
 	<key>ContextServerPassword</key>
-	<string>plt123</string>
+	<string>Plantr0nics789</string>
 	<key>ContextServerAutoConnect</key>
 	<false/>
 	<key>VideoSwitchAutoConnect</key>
@@ -21,7 +21,7 @@
 	<key>Cam1Location</key>
 	<dict>
 		<key>X</key>
-		<integer>-65</integer>
+		<integer>-90</integer>
 		<key>Y</key>
 		<integer>0</integer>
 	</dict>
@@ -35,11 +35,11 @@
 	<key>Cam3Location</key>
 	<dict>
 		<key>X</key>
-		<integer>65</integer>
+		<integer>90</integer>
 		<key>Y</key>
 		<integer>0</integer>
 	</dict>
-	<key>HeadTrackingDataFilter</key>
-	<real>0.5</real>
+	<key>CamSwitchDelay</key>
+	<integer>1</integer>
 </dict>
 </plist>

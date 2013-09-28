@@ -6,6 +6,7 @@
 //  
 
 #import "PLTHeadsetManager.h"
+#import "MainWindowController.h"
 
 
 //#define HS_STATS
@@ -90,6 +91,7 @@ Vec3 RotationVectorFromQuaternion(Vec4 quaternion)
     double  *calQuat;
 }
 
+- (void)log:(NSString *)text, ...;
 - (BOOL)getQuaternionData:(NSData **)quaternionData rotationVectorData:(NSData **)rotationVectorData temperature:(NSNumber **)temperature
 				 freeFall:(NSNumber **)freeFall pedometerCount:(NSNumber **)pedometerCount tapCount:(NSNumber **)tapCount tapDirection:(NSNumber **)tapDirection
 magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyroscopeCalibrationStatus:(NSNumber **)gyroscopeCalibrationStatus
@@ -164,7 +166,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
 		calPacketData = calibratedPacketData;
 		
 //		if (calQuat[0] && calQuat[1] && calQuat[2] && calQuat[3] && HEADSET_CONNECTED) {
-//			NSLog(@"cal");
+//			DLog(@"cal");
 //			
 //			//Vec4 quaternion = { -nCalQuat[1], nCalQuat[2], -nCalQuat[3], nCalQuat[0] };
 //			Vec4 quatVec;
@@ -203,6 +205,15 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
 
 #pragma mark - Private
 
+- (void)log:(NSString *)text, ...
+{
+	va_list list;
+	va_start(list, text);
+    NSString *message = [[NSString alloc] initWithFormat:text arguments:list];
+	va_end(list);
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTHTCamNotificationLogMessage object:nil userInfo:@{PLTHTCamNotificationKeyLogMessage: message}];
+}
+
 - (BOOL)getQuaternionData:(NSData **)quaternionData rotationVectorData:(NSData **)rotationVectorData temperature:(NSNumber **)temperature
 				 freeFall:(NSNumber **)freeFall pedometerCount:(NSNumber **)pedometerCount tapCount:(NSNumber **)tapCount tapDirection:(NSNumber **)tapDirection
 magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyroscopeCalibrationStatus:(NSNumber **)gyroscopeCalibrationStatus
@@ -214,13 +225,13 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     [packetData getBytes:buf length:len];
     
     if (!(buf[0] == 0x24) && !(buf[21] == 0xd) && !(buf[22] == 0xa)) {
-        NSLog(@"*** Badly formed or misaligned packet. Discarding. ***");
+        DLog(@"*** Badly formed or misaligned packet. Discarding. ***");
         return NO;
     }
     
 //	NSMutableString *hexStr = [NSMutableString stringWithCapacity:len*2];
 //	for (int i = 0; i < len; i++) [hexStr appendFormat:@"%02x", buf[i]];
-//	NSLog(@"Raw packet:\t\t\t%@",hexStr);
+//	DLog(@"Raw packet:\t\t\t%@",hexStr);
     
     uint8_t quatdata[16];
     quatdata[0] = 0;
@@ -279,7 +290,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     
     for (int i=0; i<3; i++) {
         if (quat[i] > 1.0001f) {
-            NSLog(@"Bad quaternion! %f, %f, %f, %f",quat[0],quat[1],quat[2],quat[3]);
+            DLog(@"Bad quaternion! %f, %f, %f, %f",quat[0],quat[1],quat[2],quat[3]);
             *quaternionData = nil;
             *rotationVectorData = nil;
 			return NO;
@@ -297,7 +308,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     
     for (int i=0; i<3; i++) {
         if (nCalQuat[i] > 1.0001f) {
-            NSLog(@"Bad quatquaternion after cal! %f, %f, %f, %f",nCalQuat[0],nCalQuat[1],nCalQuat[2],nCalQuat[3]);
+            DLog(@"Bad quatquaternion after cal! %f, %f, %f, %f",nCalQuat[0],nCalQuat[1],nCalQuat[2],nCalQuat[3]);
             *quaternionData = nil;
             *rotationVectorData = nil;
 			return NO;
@@ -337,7 +348,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
 - (void)packetRateTimer:(NSTimer *)theTimer
 {
 	float avg = ((float)self.packetRateCounter) / [[NSDate date] timeIntervalSinceDate:self.packetRateCounterDate];
-	NSLog(@"Headset packet receive rate: %.1f messages/sec",avg);
+	DLog(@"Headset packet receive rate: %.1f messages/sec",avg);
 	
 	self.packetRateCounter = 0;
 	self.packetRateCounterDate = [NSDate date];
@@ -378,7 +389,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
 	
 	//	NSMutableString *hexStr = [NSMutableString stringWithCapacity:[inPacket length]*2];
 	//	for (int i = 0; i < [inPacket length]; i++) [hexStr appendFormat:@"%02x", buf[i]];
-	//	NSLog(@"Calibrated packet:\t%@",hexStr);
+	//	DLog(@"Calibrated packet:\t%@",hexStr);
 	
 	return packetData;
 }

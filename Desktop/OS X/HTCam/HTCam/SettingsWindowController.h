@@ -21,7 +21,7 @@ extern NSString *const PLTHTCamNotificationCamLocationChanged;
 - (IBAction)calCam3Button:(id)sender;
 - (IBAction)csAutoConnectCheckbox:(id)sender;
 - (IBAction)switchAutoConnectCheckbox:(id)sender;
-- (IBAction)htFilterSlider:(id)sender;
+- (IBAction)camSwitchDelaySlider:(id)sender;
 
 @property (nonatomic, retain) IBOutlet NSTextField *cam1CalTextField;
 @property (nonatomic, retain) IBOutlet NSTextField *cam2CalTextField;
@@ -37,7 +37,7 @@ extern NSString *const PLTHTCamNotificationCamLocationChanged;
 @property (nonatomic, retain) IBOutlet NSTextField *csPortTextField;
 @property (nonatomic, retain) IBOutlet NSTextField *csUsernameTextField;
 @property (nonatomic, retain) IBOutlet NSTextField *csPasswordTextField;
-@property (nonatomic, retain) IBOutlet NSSlider *htFilterSlider;
-@property (nonatomic, retain) IBOutlet NSTextField *htFilterTextField;
+@property (nonatomic, retain) IBOutlet NSSlider *camSwitchDelaySlider;
+@property (nonatomic, retain) IBOutlet NSTextField *camSwitchDelayTextField;
 
 @end

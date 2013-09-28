@@ -42,9 +42,13 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 	va_start(list, text);
     NSString *message = [[NSString alloc] initWithFormat:text arguments:list];
 	va_end(list);
-	NSLog(@"%@", message);
-	self.logTextView.string = [NSString stringWithFormat:@"%@%@%@",
+	DLog(@"%@", message);
+	
+	//BOOL scroll = (NSMaxY(self.logTextView.visibleRect) == NSMaxY(self.logTextView.bounds));
+	BOOL scroll = YES;
+    self.logTextView.string = [NSString stringWithFormat:@"%@%@%@",
 							   self.logTextView.string, ([self.logTextView.string length] ? @"\n" : @""), message];
+    if (scroll) [self.logTextView scrollRangeToVisible:NSMakeRange(self.logTextView.string.length, 0)];
 }
 
 - (void)logMessageNotification:(NSNotification *)note
@@ -54,7 +58,7 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 
 - (void)setDemoStarted:(BOOL)started
 {
-	NSLog(@"setDemoStarted: %@", (started ? @"YES" : @"NO"));
+	DLog(@"setDemoStarted: %@", (started ? @"YES" : @"NO"));
 	
 	if (started) {
 		[self.startStopToolbarItem setLabel:@"Stop"];
@@ -68,7 +72,7 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 
 - (void)setActiveCam:(HTCam)cam
 {
-	//NSLog(@"setActiveCam: %d", cam);
+	//DLog(@"setActiveCam: %d", cam);
 	
 	self.cam1ImageView.image = self.inactiveCamFrame;
 	self.cam2ImageView.image = self.inactiveCamFrame;
@@ -97,12 +101,13 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 
 - (IBAction)startStopButton:(id)sender
 {
-	NSLog(@"startStopButton:");
+	DLog(@"startStopButton:");
 	
 	HTDemoController *dc = [HTDemoController sharedController];
 	BOOL isStarted = dc.isStarted;
 	if (isStarted) {
 		[dc stopDemo];
+		[self setActiveCam:HTCamNone];
 	}
 	else {
 		[dc startDemo];
@@ -112,7 +117,7 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 
 - (IBAction)settingsButton:(id)sender
 {
-	NSLog(@"settingsButton:");
+	DLog(@"settingsButton:");
 	[((AppDelegate *)[NSApp delegate]).settingsWindowController showWindow:self];
 }
 
@@ -120,18 +125,18 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 
 - (void)HTDemoControllerDidStart:(HTDemoController *)controller
 {
-	NSLog(@"HTDemoControllerDidStart:");
+	DLog(@"HTDemoControllerDidStart:");
 }
 
 - (void)HTDemoControllerDidStop:(HTDemoController *)controller
 {
-	NSLog(@"HTDemoControllerDidStop:");
+	DLog(@"HTDemoControllerDidStop:");
 	[self setActiveCam:HTCamNone];
 }
 
 - (void)HTDemoController:(HTDemoController *)controller changedActiveCam:(HTCam)cam
 {
-	NSLog(@"HTDemoController:changedActiveCam: %d", cam);
+	DLog(@"HTDemoController:changedActiveCam: %d", cam);
 	
 	[self setActiveCam:cam];
 }
@@ -141,7 +146,6 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 - (void)awakeFromNib
 {
 	[[self window] center];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logMessageNotification:) name:PLTHTCamNotificationLogMessage object:nil];
 }
 
 #pragma mark - NSWindowController
@@ -163,6 +167,7 @@ NSString *const PLTHTCamNotificationKeyLogMessage =		@"PLTHTCamNotificationKeyLo
 	self.inactiveCamFrame = [NSImage imageNamed:@"camstatus_inactive"];
 	self.activeCamFrame = [NSImage imageNamed:@"camstatus_active"];
 	[[HTDemoController sharedController] setDelegate:self];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logMessageNotification:) name:PLTHTCamNotificationLogMessage object:nil];
 	
 	return self;
 }

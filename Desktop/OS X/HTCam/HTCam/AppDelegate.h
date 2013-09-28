@@ -22,7 +22,7 @@ extern NSString *const PLTDefaultsKeyVideoSwitchAutoConnect;
 extern NSString *const PLTDefaultsKeyCam1Location;
 extern NSString *const PLTDefaultsKeyCam2Location;
 extern NSString *const PLTDefaultsKeyCam3Location;
-extern NSString *const PLTDefaultsKeyHeadTrackingDataFilter;
+extern NSString *const PLTDefaultsKeyCamSwitchDelay;
 
 
 @class MainWindowController;

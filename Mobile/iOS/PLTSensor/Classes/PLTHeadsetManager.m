@@ -310,6 +310,9 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     *majorVersion = @(buf[19]);
     *minorVersion = @(buf[20]);
 	*isDonned = @(buf[5]);
+	
+//	PLTDeviceProximity mobileProximity = buf[2] >> 4;
+//	PLTDeviceProximity pcProximity = (buf[2] << 4) >> 4;
     
     // process for use
     for (int i = 0; i < 4; i++) {
@@ -373,7 +376,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     if (!self.session) {
         NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
         NSLog(@"Connected accessories: %@",accessories);
-        NSString *protocolString = @"com.csr.datapath";
+        NSString *protocolString = @"com.plt.protocol1";
         EAAccessory *accessory = nil;
         
         // search for accessory supporting our protocol

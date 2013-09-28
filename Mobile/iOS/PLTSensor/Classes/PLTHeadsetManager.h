@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, PLTHeadTrackingCalibrationTrigger) {
 
 + (PLTHeadsetManager *)sharedManager;
 - (NSDictionary *)infoFromPacketData:(NSData *)packetData;
-
+	
 @property(nonatomic,readonly)   BOOL            isConnected;
 @property(nonatomic,readonly)   NSDictionary    *latestInfo;
 @property(nonatomic,assign)		NSUInteger		headTrackingCalibrationTriggers; // bitmask
