@@ -47,9 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Samples\wrappers\QuaternionProcessor.cs">
-      <Link>QuaternionProcessor.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\..\..\Samples\wrappers\SpokesWrapper3.0.cs">
       <Link>SpokesWrapper3.0.cs</Link>
     </Compile>
@@ -59,6 +56,7 @@
     <Compile Include="PLTInfo.cs" />
     <Compile Include="PLTLabsAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuaternionProcessor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
