@@ -1,0 +1,13 @@
+﻿<Window x:Class="HeadTrackDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Head Track Demo" Height="461" Width="842" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid>
+        <Label Content="Connection Open?" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+        <Label Content="-" Height="28" HorizontalAlignment="Left" Margin="114,0,0,0" Name="ConnStatusLbl" VerticalAlignment="Top" />
+        <Label Content="Device:" Height="28" HorizontalAlignment="Left" Margin="0,34,0,0" Name="label2" VerticalAlignment="Top" />
+        <Label Content="Label" Height="28" HorizontalAlignment="Left" Margin="114,34,0,0" Name="DeviceLbl" VerticalAlignment="Top" />
+        <TextBox Height="291" HorizontalAlignment="Left" Margin="12,119,0,0" Name="applogtextbox" VerticalAlignment="Top" Width="796" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <Label Content="App Log Info:" Height="28" HorizontalAlignment="Left" Margin="12,85,0,0" Name="label3" VerticalAlignment="Top" />
+    </Grid>
+</Window>
