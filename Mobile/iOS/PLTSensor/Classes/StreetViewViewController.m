@@ -1088,25 +1088,46 @@ NSInteger roundToNearestMultiple(NSInteger input, NSInteger round_multiple) {
 {
     [super viewDidLoad];
     
-    // setup PLT nav bar image
-    UIImage *pltImage = [UIImage imageNamed:@"plt_logo_nav.png"];
-    CGRect navFrame = self.navBar.frame;
-    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
-                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
-                                  pltImage.size.width + 2,
-                                  pltImage.size.height + 2);
-    
-    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
-    view.contentMode = UIViewContentModeCenter;
-    view.image = pltImage;
-    [self.navBar addSubview:view];
+//    // setup PLT nav bar image
+//    UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+//    CGRect navFrame = self.navBar.frame;
+//    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+//                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+//                                  pltImage.size.width + 2,
+//                                  pltImage.size.height + 2);
+//    
+//    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
+//    view.contentMode = UIViewContentModeCenter;
+//    view.image = pltImage;
+//    [self.navBar addSubview:view];
+//	
+//    // setup Settings cog nav button
+//    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
+//																   style:UIBarButtonItemStyleBordered
+//                                                                  target:[UIApplication sharedApplication].delegate
+//                                                                  action:@selector(settingsButton:)];
+//	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
 	
-    // setup Settings cog nav button
-    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
+	self.navigationController.navigationBarHidden = NO;
+	
+	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_ios7.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+	if (!IOS7) pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];
+	CGRect navFrame = self.navigationController.navigationBar.frame;
+	CGRect pltFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+								 (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+								 pltImage.size.width + 2,
+								 pltImage.size.height + 2);
+	
+	UIImageView *view = [[UIImageView alloc] initWithFrame:pltFrame];
+	view.contentMode = UIViewContentModeCenter;
+	view.image = pltImage;
+	self.navigationItem.titleView = view;
+	
+	UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
 																   style:UIBarButtonItemStyleBordered
-                                                                  target:[UIApplication sharedApplication].delegate
-                                                                  action:@selector(settingsButton:)];
-	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
+																  target:[UIApplication sharedApplication].delegate
+																  action:@selector(settingsButton:)];
+	self.navigationItem.rightBarButtonItem = actionItem;
     
     // setup precaching status view
 //    self.precachingView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
@@ -1124,7 +1145,8 @@ NSInteger roundToNearestMultiple(NSInteger input, NSInteger round_multiple) {
 {
     [super viewWillAppear:animated];
 	
-	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navBar animated:NO];
+#warning navBar
+	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     
     self.latestMessage = nil;
     [[PLTContextServer sharedContextServer] addDelegate:self];

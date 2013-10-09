@@ -13,7 +13,7 @@
 - (void)precache;
 
 @property(nonatomic,strong)     IBOutlet UIImageView        *imageView;
-@property(nonatomic,strong)     IBOutlet UINavigationBar    *navBar;
+//@property(nonatomic,strong)     IBOutlet UINavigationBar    *navBar;
 @property(nonatomic,strong)     IBOutlet UILabel            *geolocationLabel;
 @property(nonatomic,strong)     IBOutlet UILabel            *messageRateLabel;
 @property(nonatomic,strong)     IBOutlet UILabel            *frameRateLabel;

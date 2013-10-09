@@ -10,9 +10,9 @@
 #import "CC3GLMatrix.h"
 
 
-@interface SensorsViewController : UIViewController
+@interface SensorsViewController : UITableViewController
 
-@property(nonatomic,strong) IBOutlet UITableView        *tableView;
+//@property(nonatomic,strong) IBOutlet UITableView        *tableView;
 @property(nonatomic,strong) IBOutlet UITableViewCell    *rotationCell;
 @property(nonatomic,strong) IBOutlet UIProgressView     *headingProgressView;
 @property(nonatomic,strong) IBOutlet UIProgressView     *rollProgressView;
@@ -20,7 +20,7 @@
 @property(nonatomic,strong) IBOutlet UILabel            *headingLabel;
 @property(nonatomic,strong) IBOutlet UILabel            *rollLabel;
 @property(nonatomic,strong) IBOutlet UILabel            *pitchLabel;
-@property(nonatomic,strong) IBOutlet UINavigationBar    *navBar;
+//@property(nonatomic,strong) IBOutlet UINavigationBar    *navBar;
 
 @end
 

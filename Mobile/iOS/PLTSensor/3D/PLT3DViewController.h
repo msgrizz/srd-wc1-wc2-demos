@@ -14,6 +14,6 @@
 
 @interface PLT3DViewController : UIViewController
 
-@property(nonatomic,strong) IBOutlet UINavigationBar    *navBar;
+//@property(nonatomic,strong) IBOutlet UINavigationBar    *navBar;
 
 @end

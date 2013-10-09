@@ -135,7 +135,8 @@ typedef enum {
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        self = [super initWithNibName:@"PL3DViewController" bundle:nibBundleOrNil];
+        if (IPHONE5) self = [super initWithNibName:@"PL3DViewController_iPhone5" bundle:nibBundleOrNil];
+		else self = [super initWithNibName:@"PL3DViewController_iPhone4" bundle:nibBundleOrNil];
     else
         self = [super initWithNibName:@"PL3DViewController_iPad" bundle:nibBundleOrNil];
 
@@ -148,36 +149,76 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // set PLT nav bar image
-    UIImage *pltImage = [UIImage imageNamed:@"plt_logo_nav.png"];
-    CGRect navFrame = self.navBar.frame;
-    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
-                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
-                                  pltImage.size.width + 2,
-                                  pltImage.size.height + 2);
-    
-    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
-    view.contentMode = UIViewContentModeCenter;
-    view.image = pltImage;
-    [self.navBar addSubview:view];
 	
-    // set Settings cog nav button
-    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
+	// setup navigation item
+	
+	self.navigationController.navigationBarHidden = NO;
+	
+	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_ios7.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+	if (!IOS7) pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];
+	CGRect navFrame = self.navigationController.navigationBar.frame;
+	CGRect pltFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+								 (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+								 pltImage.size.width + 2,
+								 pltImage.size.height + 2);
+	
+	UIImageView *view = [[UIImageView alloc] initWithFrame:pltFrame];
+	view.contentMode = UIViewContentModeCenter;
+	view.image = pltImage;
+	self.navigationItem.titleView = view;
+	
+	UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
 																   style:UIBarButtonItemStyleBordered
-                                                                  target:[UIApplication sharedApplication].delegate
-                                                                  action:@selector(settingsButton:)];
-	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
+																  target:[UIApplication sharedApplication].delegate
+																  action:@selector(settingsButton:)];
+	self.navigationItem.rightBarButtonItem = actionItem;
+//	}
+//	else {
+//		self.navigationController.navigationBarHidden = YES;
+//		
+//		UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+//		CGRect navFrame = self.navBar.frame;
+//		CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+//									  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+//									  pltImage.size.width + 2,
+//									  pltImage.size.height + 2);
+//		
+//		UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
+//		view.contentMode = UIViewContentModeCenter;
+//		view.image = pltImage;
+//		[self.navBar addSubview:view];
+//		
+//		UIImage *barImage = [UIImage imageNamed:@"cogBarButton.png"];
+//		UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:barImage
+//																	   style:UIBarButtonItemStyleBordered
+//																	  target:[UIApplication sharedApplication].delegate
+//																	  action:@selector(settingsButton:)];
+//		((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
+//	}
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navBar animated:NO];
+#warning navBar
+	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
 }
+
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//	[super viewDidAppear:animated];
+//	
+//	if (!IPHONE5) {
+//		CGRect newFrame = CGRectMake(self.threeDeeView.frame.origin.x,
+//									 self.threeDeeView.frame.origin.y + 88,
+//									 self.threeDeeView.frame.size.width,
+//									 self.threeDeeView.frame.size.height - 88);
+//		[self.threeDeeView setFrame:newFrame];
+//	}
+//}
 
 - (void)viewDidDisappear:(BOOL)animated
 {

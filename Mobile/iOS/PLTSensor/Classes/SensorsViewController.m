@@ -109,7 +109,6 @@ typedef enum {
     self.headingLabel.text = [NSString stringWithFormat:@"%d°",heading];
     
     NSInteger roll = self.roll;
-	NSLog(@"roll: %d", roll);
     if (roll < -180) roll = (roll+360)%180;
     if (roll > 180) roll = (roll-360)%180;
     // turn the int into a float between 0.0 and 1.0 and update the roll scale
@@ -171,7 +170,7 @@ typedef enum {
         if (cell == nil) {
 			if (DEVICE_IPAD) {
 				cell = [[ExtendedLabelWidthTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
-				cell.font = [UIFont boldSystemFontOfSize:18];
+				cell.font = [UIFont boldSystemFontOfSize:21];
 			}
 			else {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
@@ -420,7 +419,7 @@ typedef enum {
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
         self = [super initWithNibName:@"SensorsViewController" bundle:nibBundleOrNil];
     else
         self = [super initWithNibName:@"SensorsViewController_iPad" bundle:nibBundleOrNil];
@@ -436,25 +435,46 @@ typedef enum {
 {
     [super viewDidLoad];
     
-    // set PLT nav bar image
-    UIImage *pltImage = [UIImage imageNamed:@"plt_logo_nav.png"];
-    CGRect navFrame = self.navBar.frame;
-    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
-                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
-                                  pltImage.size.width + 2,
-                                  pltImage.size.height + 2);
-    
-    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
-    view.contentMode = UIViewContentModeCenter;
-    view.image = pltImage;
-    [self.navBar addSubview:view];
+//    // set PLT nav bar image
+//    UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+//    CGRect navFrame = self.navBar.frame;
+//    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+//                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+//                                  pltImage.size.width + 2,
+//                                  pltImage.size.height + 2);
+//    
+//    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
+//    view.contentMode = UIViewContentModeCenter;
+//    view.image = pltImage;
+//    [self.navBar addSubview:view];
+//	
+//    // set Settings cog nav button
+//    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
+//																   style:UIBarButtonItemStyleBordered
+//                                                                  target:[UIApplication sharedApplication].delegate
+//                                                                  action:@selector(settingsButton:)];
+//	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
 	
-    // set Settings cog nav button
-    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
+	self.navigationController.navigationBarHidden = NO;
+	
+	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_ios7.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
+	if (!IOS7) pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];
+	CGRect navFrame = self.navigationController.navigationBar.frame;
+	CGRect pltFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
+								 (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
+								 pltImage.size.width + 2,
+								 pltImage.size.height + 2);
+	
+	UIImageView *view = [[UIImageView alloc] initWithFrame:pltFrame];
+	view.contentMode = UIViewContentModeCenter;
+	view.image = pltImage;
+	self.navigationItem.titleView = view;
+	
+	UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
 																   style:UIBarButtonItemStyleBordered
-                                                                  target:[UIApplication sharedApplication].delegate
-                                                                  action:@selector(settingsButton:)];
-	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
+																  target:[UIApplication sharedApplication].delegate
+																  action:@selector(settingsButton:)];
+	self.navigationItem.rightBarButtonItem = actionItem;
     
 //    self.celciusMetric = YES;
 //    self.celciusOffset = FLT_MIN;
@@ -465,7 +485,8 @@ typedef enum {
 {
     [super viewWillAppear:animated];
 	
-	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navBar animated:NO];
+#warning navBar
+	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     
     [[PLTContextServer sharedContextServer] addDelegate:self];
     
@@ -498,7 +519,7 @@ typedef enum {
 	[super layoutSubviews]; // lays out the cell as UITableViewCellStyleValue2 would normally look like
 
 	CGRect frame = self.textLabel.frame;
-	frame.size.width += 40;
+	frame.size.width += 80;
 	self.textLabel.frame = frame;
 	
 	CGFloat x = frame.origin.x + frame.size.width + 20;

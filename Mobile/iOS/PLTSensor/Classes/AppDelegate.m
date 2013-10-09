@@ -306,10 +306,17 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     self.settingsViewController.delegate = self;
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = @[self.threeDViewController, self.sensorsViewController, self.streetViewViewController];
+    //self.tabBarController.viewControllers = @[self.threeDViewController, self.sensorsViewController, self.streetViewViewController];
+	self.tabBarController.viewControllers = @[[[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
+											  [[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
+											  [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController]];
     self.window.rootViewController = self.tabBarController;
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0 green:(33.0/256.0) blue:(66.0/256.0) alpha:1.0]];
+	
+	if (OS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+	}
 
     [LocationMonitor sharedMonitor].delegate = self;
     [[LocationMonitor sharedMonitor] startUpdatingLocation];

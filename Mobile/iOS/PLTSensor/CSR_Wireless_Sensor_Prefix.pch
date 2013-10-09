@@ -1,7 +1,18 @@
 //
 // Prefix header for all source files of the 'CSR Wireless Sensor' target in the 'CSR Wireless Sensor' project
 //
+
 #import "WebSocketTest1-Defines.h"
+
+#define OS_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define OS_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define OS_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define OS_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define OS_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
+#define IPHONE5									(([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) && [UIDevice hasFourInchDisplay])
+#define IOS7									OS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")
+
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>

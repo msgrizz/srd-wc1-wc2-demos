@@ -72,7 +72,7 @@
 
 // A class extension to declare private methods
 @interface GLGravityView () {
-    BOOL iPhone5; // haaaaaccckkkkkk
+    //BOOL iPhone5; // haaaaaccckkkkkk
 }
 
 - (BOOL)createFramebuffer;
@@ -130,9 +130,9 @@
 		animationTimer = nil;
         
         // this little bit it a total hack to work-around some NIB UI layout weirdness with the iPhone 5's 4" screen...
-        if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) && [UIDevice hasFourInchDisplay]) {
-            iPhone5 = YES;
-        }
+//        if (([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) && [UIDevice hasFourInchDisplay]) {
+//            iPhone5 = YES;
+//        }
 	
 		// A system version of 3.1 or greater is required to use CADisplayLink. The NSTimer
 		// class is used as fallback when it isn't available.
@@ -259,12 +259,22 @@
         //Setup model view matrix
         glLoadIdentity();
         //glTranslatef(0.0, -0.1, -1.0);
-        if (iPhone5) {
-            glTranslatef(0.0, .052, -1.0);
+		
+		// yuck yuck yuck yuck!
+		
+        if (IPHONE5) {
+            //glTranslatef(0.0, .052, -1.0);
+			glTranslatef(0.0, 0.0, -.95);
         }
         else {
-            glTranslatef(0.0, -.05, -1.0);
+            glTranslatef(0.0, -.05, -.95);
         }
+		
+//		if (!IOS7 && !IPHONE5) {
+//			glTranslatef(0.0, -.4, 0.0);
+//		}
+		
+		//glTranslatef(0.0, .2, 0.0);
         
         glRotatef(-90.0, 0.0, 0.0, 0.0);
         

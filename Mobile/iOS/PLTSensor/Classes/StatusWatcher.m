@@ -329,10 +329,20 @@ typedef NS_ENUM(NSInteger, StatusWatcherState) {
 - (id)init
 {
 	if (self = [super init]) {
+		
+		UIImage *hsIcon = [UIImage imageNamed:@"hs_status_icon.png"];
+		UIImage *authIcon = [UIImage imageNamed:@"auth_status_icon.png"];
+		UIImage *regIcon = [UIImage imageNamed:@"reg_status_icon.png"];
+		if (IOS7) {
+			hsIcon = [UIImage imageNamed:@"hs_status_icon_ios7.png"];
+			authIcon = [UIImage imageNamed:@"auth_status_icon_ios7.png"];
+			regIcon = [UIImage imageNamed:@"reg_status_icon_ios7.png"];
+		}
+		
 		self.iconsImageViews = @{
-		@"hs" : [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hs_status_icon.png"]],
-		@"auth" : [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"auth_status_icon.png"]],
-		@"reg" : [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reg_status_icon.png"]]};
+								 @"hs" : [[UIImageView alloc] initWithImage:hsIcon],
+								 @"auth" : [[UIImageView alloc] initWithImage:authIcon],
+								 @"reg" : [[UIImageView alloc] initWithImage:regIcon]};
 		((UIImageView *)self.iconsImageViews[@"hs"]).tag = 0;
 		((UIImageView *)self.iconsImageViews[@"auth"]).tag = 1;
 		((UIImageView *)self.iconsImageViews[@"reg"]).tag = 2;

@@ -376,25 +376,34 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
     if (!self.session) {
         NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
         NSLog(@"Connected accessories: %@",accessories);
-        NSString *protocolString = @"com.plt.protocol1";
+        //NSString *protocolString = @"com.plt.protocol1";
+		NSArray *protocols = @[@"com.plt.protocol1", @"com.csr.datapath"];
+		NSString *protocol = nil;
         EAAccessory *accessory = nil;
         
         // search for accessory supporting our protocol
-        for (EAAccessory *obj in accessories) {
-            if ([[obj protocolStrings] containsObject:protocolString]) {
-                accessory = obj;
-                accessory.delegate = self;
-                self.accessory = accessory;
+        for (EAAccessory *a in accessories) {
+            if ([[a protocolStrings] containsObject:protocols[0]]) {
+				protocol = protocols[0];
+                accessory = a;
+                break;
+            }
+			else if ([[a protocolStrings] containsObject:protocols[1]]) {
+				protocol = protocols[1];
+                accessory = a;
                 break;
             }
         }
-        
-        // create data session if we found a matching accessory
+		
+		// create data session if we found a matching accessory
         if (accessory) {
-            NSLog(@"Found accessory '%@' attempting to create data session", [accessory name]);
+			accessory.delegate = self;
+			self.accessory = accessory;
+			
+            NSLog(@"Found accessory '%@'. Attempting to create data session with protocol '%@'...", [accessory name], protocol);
             //NSMutableString *sernum = [accessory serialNumber];
             
-            self.session = [[EASession alloc] initWithAccessory:accessory forProtocol:protocolString];
+            self.session = [[EASession alloc] initWithAccessory:accessory forProtocol:protocol];
             if (self.session) {
                 NSLog(@"Create EA session: %@", self.session);
                 
@@ -419,7 +428,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
             }
         }
         else {
-            NSLog(@"No accessory found for protocol %@", protocolString);
+            NSLog(@"No accessory found for protocols %@.", protocols);
             return FALSE;
         }
     }
