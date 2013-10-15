@@ -68,6 +68,7 @@ double r2d(double d)
 		[subview removeFromSuperview];
 	}
 	
+	self.scrollView.frame = self.view.frame;
 	self.scrollView.contentOffset = CGPointZero;
 	self.scrollView.contentSize = shelfImageview.frame.size;
 	[self.scrollView addSubview:shelfImageview];
@@ -298,6 +299,12 @@ double r2d(double d)
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newDeviceAvailableNotification:) name:PLTDeviceNewDeviceAvailableNotification object:nil];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	[self setupScrollView];
 }
 
 @end
