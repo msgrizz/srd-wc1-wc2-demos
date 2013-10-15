@@ -5,14 +5,14 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>0E0BC0A0-FCF8-4F5B-82F7-5B747A986423</string>
+	<string>A092BED7-F83C-43AE-81C2-B709E03C1F24</string>
 	<key>IDESourceControlProjectName</key>
 	<string>CSR Wireless Sensor</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>9A132C8F-57F0-48AC-B2E0-836A6ABBE3EF</key>
 		<string>git://github.com/AFNetworking/AFNetworking.git</string>
-		<key>E0BFB5A4-FBA3-42A6-909A-6218A54A5A25</key>
+		<key>FAB631E8-C99C-4498-9951-502086E4B1AD</key>
 		<string>https://github.com/plantronics-innovation/core-team.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
@@ -21,7 +21,7 @@
 	<dict>
 		<key>9A132C8F-57F0-48AC-B2E0-836A6ABBE3EF</key>
 		<string>../../AFNetworking</string>
-		<key>E0BFB5A4-FBA3-42A6-909A-6218A54A5A25</key>
+		<key>FAB631E8-C99C-4498-9951-502086E4B1AD</key>
 		<string>../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -29,7 +29,7 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>E0BFB5A4-FBA3-42A6-909A-6218A54A5A25</string>
+	<string>FAB631E8-C99C-4498-9951-502086E4B1AD</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -44,7 +44,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>E0BFB5A4-FBA3-42A6-909A-6218A54A5A25</string>
+			<string>FAB631E8-C99C-4498-9951-502086E4B1AD</string>
 			<key>IDESourceControlWCCName</key>
 			<string>core-team</string>
 		</dict>

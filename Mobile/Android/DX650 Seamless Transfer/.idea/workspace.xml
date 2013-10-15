@@ -32,72 +32,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08d9b7eb-6f79-4334-acbe-963571ee8a77" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/BluetoothReceiver.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/LockScreen.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$10.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$11.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$12.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$13.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$14.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$15.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$16.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$17.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$18.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$9.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$CommandTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$ReceiveEventTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity$SettingTask.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/MainActivity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub$Proxy.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener$Stub.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/bin/classes/com/plantronics/DX650ScreenLock/PlantronicsXEventMessage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../DX650 Screen Lock/gen/com/plantronics/DX650ScreenLock/PlantronicsXEventListener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice+Example.zip" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/pltlabs_nav_@2x.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/Images/plt_banner.png" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/Images/plt_banner.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppDelegate.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppSettings.plist" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/AppSettings.plist" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTCam-Prefix.pch" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTCam-Prefix.pch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTDemoController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/HTDemoController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" afterPath="$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/en.lproj/MainMenu.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/en.lproj/MainMenu.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/MainWindowController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.h" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.m" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/PLTHeadsetManager.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/PLTHeadsetManager.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindow.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindow.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/SettingsWindowController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/VideoSwitchController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam/VideoSwitchController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX/ViewController.m" afterPath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX/ViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.pbxproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DX650 Seamless Transfer.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="$PROJECT_DIR$/../BRTest/.idea/workspace.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367354331478" ignored="false" />
-    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1378238892001" ignored="false" />
+    <file path="/Dummy.txt" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1381443822741" ignored="false" />
     <file path="/main.xml" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372110715836" ignored="false" />
     <file path="/MainActivity.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1372114523160" ignored="false" />
     <file path="/HeadsetServiceResponseListener.java" changelist="08d9b7eb-6f79-4334-acbe-963571ee8a77" time="1367353918547" ignored="false" />
@@ -265,14 +212,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+      <file leaf-file-name="Definitions.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="236" column="17" selection-start="8877" selection-end="8877" vertical-scroll-proportion="0.8328313">
-              <folding>
-                <element signature="e#0#42812#0" expanded="true" />
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="35" column="9" selection-start="932" selection-end="932" vertical-scroll-proportion="0.42963752">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -318,7 +262,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
     <option name="width" value="1453" />
-    <option name="height" value="1054" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -346,6 +290,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -574,7 +519,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -591,13 +535,13 @@
     <property name="project.structure.side.proportion" value="0.17326732" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="restartRequiresConfirmation" value="true" />
     <property name="AndroidTargetDevices" value="FCH16368JNP" />
-    <property name="MemberChooser.showClasses" value="true" />
+    <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RunManager" selected="Android Application.DX650 Seamless Transfer">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -632,17 +576,20 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+    <configuration default="true" type="XSLT" factoryName="XSLT">
+      <option name="myOutputFile" />
+      <option name="myOpenOutputFile" value="false" />
+      <option name="myOpenInBrowser" value="false" />
+      <option name="mySmartErrorHandling" value="true" />
+      <option name="myRunnerPort" value="34873" />
+      <option name="myVmArguments" />
+      <option name="myWorkingDirectory" />
+      <option name="myModule" />
+      <option name="myJdk" />
+      <parameters />
+      <OutputType value="CONSOLE" save-to-file="false" />
+      <FileType name="XML" />
+      <JdkChoice value="FROM_MODULE" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -672,20 +619,17 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="XSLT" factoryName="XSLT">
-      <option name="myOutputFile" />
-      <option name="myOpenOutputFile" value="false" />
-      <option name="myOpenInBrowser" value="false" />
-      <option name="mySmartErrorHandling" value="true" />
-      <option name="myRunnerPort" value="34873" />
-      <option name="myVmArguments" />
-      <option name="myWorkingDirectory" />
-      <option name="myModule" />
-      <option name="myJdk" />
-      <parameters />
-      <OutputType value="CONSOLE" save-to-file="false" />
-      <FileType name="XML" />
-      <JdkChoice value="FROM_MODULE" />
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -791,8 +735,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1453" height="1054" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1453" height="1024" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -802,8 +746,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33706722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3228106" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32247898" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -816,6 +759,7 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41260925" sideWeight="0.45824847" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3368201" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33706722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -903,13 +847,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_settings.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="85" column="33" selection-start="2999" selection-end="2999" vertical-scroll-proportion="0.79581153">
           <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/Library/android-sdk-macosx/add-ons/addon_cisco_dx650_15/libs/telephony.jar!/com/cisco/telephony/CallStateEnum.class">
@@ -954,11 +898,6 @@
         <state line="6" column="13" selection-start="170" selection-end="170" vertical-scroll-proportion="0.2975815" />
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1072" column="19" selection-start="28986" selection-end="28986" vertical-scroll-proportion="0.39035088" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="13" selection-start="487" selection-end="487" vertical-scroll-proportion="0.45463812" />
@@ -980,11 +919,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="236" column="17" selection-start="8877" selection-end="8877" vertical-scroll-proportion="0.8328313">
+        <state line="326" column="66" selection-start="11986" selection-end="11986" vertical-scroll-proportion="0.48370138">
           <folding>
             <element signature="e#0#42812#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="9" selection-start="932" selection-end="932" vertical-scroll-proportion="0.42963752">
+          <folding />
         </state>
       </provider>
     </entry>

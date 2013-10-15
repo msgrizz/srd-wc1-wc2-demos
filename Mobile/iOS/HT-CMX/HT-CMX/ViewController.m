@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "PLTDevice.h"
+#import "SettingsViewController.h"
+#import "AppDelegate.h"
 
 
 double d2r(double d)
@@ -21,13 +23,19 @@ double r2d(double d)
 }
 
 
-@interface ViewController () <PLTDeviceConnectionDelegate, PLTDeviceInfoObserver>
+@interface ViewController () <UIPopoverControllerDelegate, PLTDeviceConnectionDelegate, PLTDeviceInfoObserver, SettingsViewControllerDelegate>
 
 - (void)newDeviceAvailableNotification:(NSNotification *)notification;
+- (void)setupScrollView;
+- (void)settingsButton:(id)sender;
 - (void)startButton:(id)sender;
+- (void)orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo;
+- (void)wearingStateInfoDidChange:(PLTWearingStateInfo *)theInfo;
 
 @property(nonatomic, strong)	PLTDevice				*device;
 @property(nonatomic, assign)	CGPoint					baseContentOffset;
+@property(nonatomic, assign)	BOOL					deviceDonned;
+@property(nonatomic, strong)	UIPopoverController		*settingsPopoverController;
 @property(nonatomic, strong)	IBOutlet UIScrollView	*scrollView;
 
 @end
@@ -48,8 +56,55 @@ double r2d(double d)
 	}
 }
 
+- (void)setupScrollView
+{
+	// setup scroll view
+	
+	NSString *imageName = [NSString stringWithFormat:@"%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage]];
+	UIImageView *shelfImageview = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+	shelfImageview.contentMode = UIViewContentModeScaleAspectFill;
+	
+	for (UIView *subview in self.scrollView.subviews) {
+		[subview removeFromSuperview];
+	}
+	
+	self.scrollView.contentOffset = CGPointZero;
+	self.scrollView.contentSize = shelfImageview.frame.size;
+	[self.scrollView addSubview:shelfImageview];
+	self.scrollView.backgroundColor = [UIColor blackColor];
+	
+	CGFloat widthDiff = self.scrollView.frame.size.width - self.scrollView.contentSize.width;
+	CGFloat heightDiff = self.scrollView.frame.size.height - self.scrollView.contentSize.height;
+	
+	self.baseContentOffset = CGPointMake(self.scrollView.contentOffset.x - (widthDiff/2.0),
+										 self.scrollView.contentOffset.y - (heightDiff/2.0));
+	self.scrollView.contentOffset = self.baseContentOffset;
+	
+	PLTOrientationTrackingInfo *cachedInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientationTracking];
+	if (cachedInfo) {
+		[self orientationTrackingInfoDidChange:cachedInfo];
+	}
+}
+
+- (void)settingsButton:(id)sender
+{
+	if (self.settingsPopoverController.popoverVisible) {
+		[self.settingsPopoverController dismissPopoverAnimated:YES];
+	}
+	else {
+		SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
+		UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+		settingsViewController.delegate = self;
+		self.settingsPopoverController = [[UIPopoverController alloc] initWithContentViewController:navController];
+		self.settingsPopoverController.delegate = self;
+		[self.settingsPopoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	}
+}
+
 - (void)startButton:(id)sender
 {
+	NSLog(@"starting headtracking");
+	
 	// subscribe to orientation tracking
 	NSError *err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
 	if (err) NSLog(@"Error: %@", err);
@@ -58,14 +113,108 @@ double r2d(double d)
 	[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
 }
 
+- (void)orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo
+{
+	if (self.deviceDonned) {
+		PLTEulerAngles eulerAngles = theInfo.eulerAngles;
+		
+		//const CGFloat DISTANCE = 400.0; // screen pixles
+		CGFloat DISTANCE = [DEFAULTS doubleForKey:PLTDefaultsKeyHTSensitivity];
+		NSLog(@"DISTANCE: %.1f", DISTANCE);
+		
+		// stop wrap-around, and extreme offset values
+		if (eulerAngles.x > 80) {
+			eulerAngles.x = 80;
+		}
+		else if (eulerAngles.x < -80) {
+			eulerAngles.x = -80;
+		}
+		if (eulerAngles.y > 80) {
+			eulerAngles.y = 80;
+		}
+		else if (eulerAngles.y < -80) {
+			eulerAngles.y = -80;
+		}
+		
+		CGFloat xOffset = DISTANCE * tan(d2r(-eulerAngles.x));
+		CGFloat yOffset = DISTANCE * tan(d2r(-eulerAngles.y));
+
+		// check that we don't scroll past the content's bounds
+//		if ((fabs(xOffset) > fabs(self.baseContentOffset.x)) || (fabs(yOffset) > fabs(self.baseContentOffset.y))) {
+//			NSLog(@"Offset too large, pinning to content edge.");
+//			return;
+//		}
+	
+		if ((xOffset > 0) && (xOffset > self.baseContentOffset.x)) {
+			xOffset = self.baseContentOffset.x;
+		}
+		else if ((xOffset <= 0) && (-xOffset > self.baseContentOffset.x)) {
+			xOffset = -self.baseContentOffset.x;
+		}
+		
+		if ((yOffset > 0) && (yOffset > self.baseContentOffset.y)) {
+			yOffset = self.baseContentOffset.y;
+		}
+		else if ((yOffset <= 0) && (-yOffset > self.baseContentOffset.y)) {
+			yOffset = -self.baseContentOffset.y;
+		}
+
+		CGPoint newOffset = CGPointMake(self.baseContentOffset.x + xOffset , self.baseContentOffset.y + yOffset);
+		NSLog(@"newOffset: { %.1f, %.1f }", newOffset.x, newOffset.y);
+		
+		//[self.scrollView setContentOffset:newOffset animated:YES];
+		self.scrollView.contentOffset = newOffset;
+	}
+}
+
+- (void)wearingStateInfoDidChange:(PLTWearingStateInfo *)theInfo
+{
+	if (theInfo.isBeingWorn && !self.deviceDonned) {
+		// user just donned the HS
+		[self startButton:self];
+	}
+	else if (!theInfo.isBeingWorn) {
+		// re-center content
+		NSLog(@"not donned -- centering content");
+		self.scrollView.contentOffset = self.baseContentOffset;
+	}
+	self.deviceDonned = theInfo.isBeingWorn;
+}
+	
+#pragma mark - UIPopoverControllerDelegate
+	
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+	[self setupScrollView];
+}
+	
+#pragma mark - SettingsViewControllerDelegate
+
+- (void)settingsViewControllerDidChangeValue:(SettingsViewController *)theController
+{
+	[self setupScrollView];
+}
+
+- (void)settingsViewControllerDidEnd:(SettingsViewController *)theController
+{
+	if (self.settingsPopoverController) {
+		[self.settingsPopoverController dismissPopoverAnimated:YES];
+	}
+}
+	
 #pragma mark - PLTDeviceConnectionDelegate
 
 - (void)PLTDeviceDidOpenConnection:(PLTDevice *)aDevice
 {
 	NSLog(@"PLTDeviceDidOpenConnection: %@", aDevice);
 	
-//	NSError *err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
+	NSError *err = nil;
+	
+//	err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
 //	if (err) NSLog(@"Error: %@", err);
+	
+	err = [self.device subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange minPeriod:0];
+	if (err) NSLog(@"Error: %@", err);
 }
 
 - (void)PLTDevice:(PLTDevice *)aDevice didFailToOpenConnection:(NSError *)error
@@ -87,37 +236,10 @@ double r2d(double d)
 	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
 	
 	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
-		PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
-		
-		const CGFloat DISTANCE = 400.0; // screen pixles
-		
-		// stop wrap-around, and extreme offset values
-		if (eulerAngles.x > 80) {
-			eulerAngles.x = 80;
-		}
-		else if (eulerAngles.x < -80) {
-			eulerAngles.x = -80;
-		}
-		if (eulerAngles.y > 80) {
-			eulerAngles.y = 80;
-		}
-		else if (eulerAngles.y < -80) {
-			eulerAngles.y = -80;
-		}
-		
-		CGFloat xOffset = DISTANCE * tan(d2r(-eulerAngles.x));
-		CGFloat yOffset = DISTANCE * tan(d2r(-eulerAngles.y));
-		
-		
-		NSLog(@"raw offsets: %.1f, %.1f", xOffset, yOffset);
-
-		CGPoint newOffset = CGPointMake(self.baseContentOffset.x + xOffset , self.baseContentOffset.y + yOffset);
-		
-		NSLog(@"newOffset: { %.1f, %.1f }", newOffset.x, newOffset.y);
-		
-		
-		//[self.scrollView setContentOffset:newOffset animated:YES];
-		self.scrollView.contentOffset = newOffset;
+		[self orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo];
+	}
+	else if ([theInfo isKindOfClass:[PLTWearingStateInfo class]]) {
+		[self wearingStateInfoDidChange:(PLTWearingStateInfo *)theInfo];
 	}
 }
 
@@ -126,12 +248,14 @@ double r2d(double d)
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
 	self = [super initWithNibName:@"ViewController" bundle:nil];
+	self.deviceDonned = NO; // avoid starting if the device is donned at launch
 	return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
 	
 	// setup navigation item
 	
@@ -150,25 +274,19 @@ double r2d(double d)
 	self.navigationItem.titleView = view;
 	
 	UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStyleBordered target:self action:@selector(startButton:)];
-	self.navigationItem.rightBarButtonItem = startItem;
+	self.navigationItem.leftBarButtonItem = startItem;
 	
-	// setup scroll view
-	UIImageView *shelfImageview = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shelf_plank.jpg"]];
-	shelfImageview.contentMode = UIViewContentModeScaleAspectFill;
+	UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings_icon.png"]  style:UIBarButtonItemStyleBordered target:self action:@selector(settingsButton:)];
+	self.navigationItem.rightBarButtonItem = settingsItem;
 	
-	self.scrollView.contentSize = shelfImageview.frame.size;
-	[self.scrollView addSubview:shelfImageview];
-	self.scrollView.backgroundColor = [UIColor blackColor];
 	
-	CGFloat widthDiff = self.scrollView.frame.size.width - self.scrollView.contentSize.width;
-	CGFloat heightDiff = self.scrollView.frame.size.height - self.scrollView.contentSize.height;
-	self.baseContentOffset = CGPointMake(self.scrollView.contentOffset.x - (widthDiff/2.0),
-										 self.scrollView.contentOffset.y - (heightDiff/2.0));
-	self.scrollView.contentOffset = self.baseContentOffset;
+	[self setupScrollView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	[super viewWillAppear:animated];
+	
 	NSArray *devices = [PLTDevice availableDevices];
 	if ([devices count]) {
 		self.device = devices[0];

@@ -9,6 +9,14 @@
 #import <UIKit/UIKit.h>
 
 
+#define DEFAULTS    [NSUserDefaults standardUserDefaults]
+
+
+extern NSString *const PLTDefaultsKeyDefaultsVersion;
+extern NSString *const PLTDefaultsKeyHTSensitivity;
+extern NSString *const PLTDefaultsKeyImage;
+
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
