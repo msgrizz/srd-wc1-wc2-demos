@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+ DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ Version 1, September 2013
+ 
+ Copyright (C) 2013 Morgan Davis <morgan.davis@plantronics.com>
+ 
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+ 
+ DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ 
+ 0. You just DO WHAT THE FUCK YOU WANT TO.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>PLT PhoneGap Head Tracking</h1>
+            <div id="deviceready" style="margin-top: 20px">
+                <!--<p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>-->
+				<button onclick="myPlugin.connect(startTimer);">Connect</button><br />
+				<button onclick="myPlugin.calibrate();">Calibrate</button><br />
+				<!--<button onclick="myPlugin.getEulerAngles();">Get Angles</button><br />-->
+				<div style="width: 100%; height: 400px; margin-top: 20px; margin-bottom: 40px">
+					<p id="info">-</p>
+				</div>
+            </div>
+        </div>
+        <script type="text/javascript" src="phonegap.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+			function setInfo(info) {
+				//document.getElementById('info').innerHTML = info.toString();
+				
+				var infoStr = "Wearing? " + info["wearState"] + "<br />" +
+				"Orientation: " + info["angles"] + "<br />" +
+				"Mobile Proximity: " + info["mobileProximity"] + "<br />" +
+				"PC Proximity: " + info["pcProximity"] + "<br />" +
+				"Pedometer Count: " + info["pedCount"] + "<br />" +
+				"Free Fall? " + info["freeFall"] + "<br />" +
+				"Taps: " + info["taps"] + "<br />" +
+				"Magnetometer Cal'd " + info["magCal"] + "<br />" +
+				"Gyro Cal'd? " + info["gyroCal"];
+				
+				document.getElementById('info').innerHTML = infoStr;
+			}
+			function gotLatestInfo(info) {
+				setInfo(info);
+			}
+			function updateInfoTimer() {
+				
+				myPlugin.getLatestInfo(gotLatestInfo);
+			}
+			function startTimer() {
+				var myTimer = setInterval(function(){updateInfoTimer()},100);
+			}
+        </script>
+    </body>
+</html>
+

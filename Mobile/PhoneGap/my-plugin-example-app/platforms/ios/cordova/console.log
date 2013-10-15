@@ -1,0 +1,27 @@
+2013-09-28 16:30:19.367 HelloWorld[41211:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:30:19.405 HelloWorld[41211:c07] Resetting plugins due to page load.
+2013-09-28 16:30:19.452 HelloWorld[41211:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:30:47.307 HelloWorld[41533:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:30:47.360 HelloWorld[41533:c07] Resetting plugins due to page load.
+2013-09-28 16:30:47.408 HelloWorld[41533:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:30:52.793 HelloWorld[41533:c07] THREAD WARNING: ['MyPlugin'] took '1191.724121' ms. Plugin should use a background thread.
+2013-09-28 16:30:55.837 HelloWorld[41533:c07] THREAD WARNING: ['MyPlugin'] took '788.147217' ms. Plugin should use a background thread.
+2013-09-28 16:31:32.250 HelloWorld[41858:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:31:32.290 HelloWorld[41858:c07] Resetting plugins due to page load.
+2013-09-28 16:31:32.335 HelloWorld[41858:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:31:38.289 HelloWorld[41858:c07] THREAD WARNING: ['MyPlugin'] took '1330.649902' ms. Plugin should use a background thread.
+2013-09-28 16:31:49.643 HelloWorld[42177:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:31:49.679 HelloWorld[42177:c07] Resetting plugins due to page load.
+2013-09-28 16:31:49.723 HelloWorld[42177:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:31:54.807 HelloWorld[42177:c07] THREAD WARNING: ['MyPlugin'] took '954.113037' ms. Plugin should use a background thread.
+2013-09-28 16:32:45.094 HelloWorld[42177:c07] THREAD WARNING: ['MyPlugin'] took '825.424316' ms. Plugin should use a background thread.
+2013-09-28 16:35:09.587 HelloWorld[42660:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:35:09.626 HelloWorld[42660:c07] Resetting plugins due to page load.
+2013-09-28 16:35:09.670 HelloWorld[42660:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:35:14.713 HelloWorld[42660:c07] THREAD WARNING: ['MyPlugin'] took '1170.531982' ms. Plugin should use a background thread.
+Terminating in response to SpringBoard's termination.
+2013-09-28 16:42:40.401 HelloWorld[43578:c07] Multi-tasking -> Device: YES, App: YES
+2013-09-28 16:42:40.507 HelloWorld[43578:c07] Resetting plugins due to page load.
+2013-09-28 16:42:40.636 HelloWorld[43578:c07] Finished load of: file:///Users/mdavis/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/9A4C8280-BFE3-41B0-9CD7-3E9914481653/HelloWorld.app/www/index.html
+2013-09-28 16:42:46.412 HelloWorld[43578:c07] THREAD WARNING: ['MyPlugin'] took '1075.897949' ms. Plugin should use a background thread.
+Terminating in response to SpringBoard's termination.
