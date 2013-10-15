@@ -113,6 +113,9 @@ double r2d(double d)
 {
 	NSLog(@"starting headtracking");
 	
+	self.scrollView.contentOffset = self.baseContentOffset;
+	[self setupScrollView];
+	
 	// subscribe to orientation tracking
 	NSError *err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
 	if (err) NSLog(@"Error: %@", err);
@@ -225,6 +228,8 @@ double r2d(double d)
 	
 	err = [self.device subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange minPeriod:0];
 	if (err) NSLog(@"Error: %@", err);
+	
+	[self.device queryInfo:self forService:PLTServiceWearingState];
 }
 
 - (void)PLTDevice:(PLTDevice *)aDevice didFailToOpenConnection:(NSError *)error
@@ -237,6 +242,8 @@ double r2d(double d)
 {
 	NSLog(@"PLTDeviceDidCloseConnection: %@", aDevice);
 	self.device = nil;
+	self.scrollView.contentOffset = self.baseContentOffset;
+	self.deviceDonned = NO;
 }
 
 #pragma mark - PLTDeviceInfoObserver
