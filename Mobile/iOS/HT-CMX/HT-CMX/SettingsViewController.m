@@ -13,6 +13,7 @@
 
 typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 	PLTTableViewRowSensitivity,
+	PLTTableViewRowScale,
     PLTTableViewRowImage
 };
 
@@ -21,8 +22,11 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 
 @property(nonatomic, retain)	IBOutlet UITableViewCell	*sensitivityTableViewItem;
 @property(nonatomic, strong)	IBOutlet UISlider			*sensitivitySlider;
+@property(nonatomic, retain)	IBOutlet UITableViewCell	*scaleTableViewItem;
+@property(nonatomic, strong)	IBOutlet UISlider			*scaleSlider;
 
 - (IBAction)sensitivitySlider:(id)sender;
+- (IBAction)scaleSlider:(UISlider *)sender;
 - (void)doneButton:(id)sender;
 
 @end
@@ -34,7 +38,14 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 
 - (IBAction)sensitivitySlider:(UISlider *)sender
 {
-	[DEFAULTS setFloat:sender.value forKey:PLTDefaultsKeyHTSensitivity];
+	[DEFAULTS setFloat:sender.value forKey:PLTDefaultsKeySensitivity];
+	[self.delegate settingsViewControllerDidChangeValue:self];
+}
+
+- (IBAction)scaleSlider:(UISlider *)sender
+{
+	[DEFAULTS setFloat:sender.value forKey:PLTDefaultsKeyScale];
+	[self.delegate settingsViewControllerDidChangeValue:self];
 }
 
 - (void)doneButton:(id)sender
@@ -50,7 +61,11 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 	switch (indexPath.row) {
 		case PLTTableViewRowSensitivity:
 			cell = self.sensitivityTableViewItem;
-			self.sensitivitySlider.value = [DEFAULTS floatForKey:PLTDefaultsKeyHTSensitivity];
+			self.sensitivitySlider.value = [DEFAULTS floatForKey:PLTDefaultsKeySensitivity];
+			break;
+		case PLTTableViewRowScale:
+			cell = self.scaleTableViewItem;
+			self.scaleSlider.value = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 			break;
 		case PLTTableViewRowImage: {
 			cell = [tableView dequeueReusableCellWithIdentifier:@"ImagesCell"];
@@ -68,7 +83,7 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 2;
+	return 3;
 }
 
 #pragma mark - UITableViewDelegate

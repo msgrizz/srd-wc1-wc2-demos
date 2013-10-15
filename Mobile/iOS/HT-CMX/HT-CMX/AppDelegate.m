@@ -11,7 +11,8 @@
 
 
 NSString *const PLTDefaultsKeyDefaultsVersion =			@"DefaultsVersion";
-NSString *const PLTDefaultsKeyHTSensitivity =			@"HTSensitivity";
+NSString *const PLTDefaultsKeySensitivity =				@"Sensitivity";
+NSString *const PLTDefaultsKeyScale =					@"Scale";
 NSString *const PLTDefaultsKeyImage =					@"Image";
 
 

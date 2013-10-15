@@ -60,9 +60,12 @@ double r2d(double d)
 {
 	// setup scroll view
 	
+	//const CGFloat SCALE = 1.0;
+	CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
+	
 	NSString *imageName = [NSString stringWithFormat:@"%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage]];
-	UIImageView *shelfImageview = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-	shelfImageview.contentMode = UIViewContentModeScaleAspectFill;
+	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+	imageView.contentMode = UIViewContentModeScaleAspectFill;
 	
 	for (UIView *subview in self.scrollView.subviews) {
 		[subview removeFromSuperview];
@@ -70,8 +73,12 @@ double r2d(double d)
 	
 	self.scrollView.frame = self.view.frame;
 	self.scrollView.contentOffset = CGPointZero;
-	self.scrollView.contentSize = shelfImageview.frame.size;
-	[self.scrollView addSubview:shelfImageview];
+	CGRect imageViewFrame = imageView.frame;
+	imageViewFrame.size = CGSizeMake(imageView.frame.size.width * SCALE, imageView.frame.size.height * SCALE);
+	imageView.frame = imageViewFrame;
+	self.scrollView.contentSize = imageView.frame.size;
+	//self.scrollView.contentSize = CGSizeMake(shelfImageview.frame.size.width * SCALE, shelfImageview.frame.size.height * SCALE);
+	[self.scrollView addSubview:imageView];
 	self.scrollView.backgroundColor = [UIColor blackColor];
 	
 	CGFloat widthDiff = self.scrollView.frame.size.width - self.scrollView.contentSize.width;
@@ -120,8 +127,10 @@ double r2d(double d)
 		PLTEulerAngles eulerAngles = theInfo.eulerAngles;
 		
 		//const CGFloat DISTANCE = 400.0; // screen pixles
-		CGFloat DISTANCE = [DEFAULTS doubleForKey:PLTDefaultsKeyHTSensitivity];
-		NSLog(@"DISTANCE: %.1f", DISTANCE);
+		CGFloat DISTANCE = [DEFAULTS doubleForKey:PLTDefaultsKeySensitivity];
+		
+		//const CGFloat SCALE = 1.0;
+		CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 		
 		// stop wrap-around, and extreme offset values
 		if (eulerAngles.x > 80) {
@@ -137,8 +146,8 @@ double r2d(double d)
 			eulerAngles.y = -80;
 		}
 		
-		CGFloat xOffset = DISTANCE * tan(d2r(-eulerAngles.x));
-		CGFloat yOffset = DISTANCE * tan(d2r(-eulerAngles.y));
+		CGFloat xOffset = (DISTANCE * tan(d2r(-eulerAngles.x))) * SCALE;
+		CGFloat yOffset = (DISTANCE * tan(d2r(-eulerAngles.y))) * SCALE;
 
 		// check that we don't scroll past the content's bounds
 //		if ((fabs(xOffset) > fabs(self.baseContentOffset.x)) || (fabs(yOffset) > fabs(self.baseContentOffset.y))) {
@@ -257,6 +266,8 @@ double r2d(double d)
 {
     [super viewDidLoad];
 	
+	//self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	self.view.backgroundColor = [UIColor blackColor];
 	
 	// setup navigation item
 	
@@ -279,14 +290,13 @@ double r2d(double d)
 	
 	UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings_icon.png"]  style:UIBarButtonItemStyleBordered target:self action:@selector(settingsButton:)];
 	self.navigationItem.rightBarButtonItem = settingsItem;
-	
-	
-	[self setupScrollView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
+	
+	//[self setupScrollView];
 	
 	NSArray *devices = [PLTDevice availableDevices];
 	if ([devices count]) {
@@ -299,6 +309,12 @@ double r2d(double d)
 	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newDeviceAvailableNotification:) name:PLTDeviceNewDeviceAvailableNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+	[super viewDidAppear:animated];
+	[self setupScrollView];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

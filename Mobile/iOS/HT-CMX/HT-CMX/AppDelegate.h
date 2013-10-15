@@ -13,7 +13,8 @@
 
 
 extern NSString *const PLTDefaultsKeyDefaultsVersion;
-extern NSString *const PLTDefaultsKeyHTSensitivity;
+extern NSString *const PLTDefaultsKeySensitivity;
+extern NSString *const PLTDefaultsKeyScale;
 extern NSString *const PLTDefaultsKeyImage;
 
 
