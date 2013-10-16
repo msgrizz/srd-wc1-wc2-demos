@@ -198,14 +198,26 @@ double r2d(double d)
 			[self.imageView addSubview:self.heatMapView];
 			
 			[UIView animateWithDuration:1.5 animations:^{
-				self.scrollView.contentSize = self.view.frame.size;
+				self.scrollView.contentSize = self.scrollView.frame.size;
+				self.scrollView.contentOffset = CGPointZero;
 				self.imageView.frame = self.scrollView.frame;
 				self.heatMapView.frame = self.scrollView.frame;
 				
+			} completion:^(BOOL finished){
+				NSLog(@"scrollView: %@", NSStringFromCGRect(self.scrollView.frame));
+				NSLog(@"contentSize: %@", NSStringFromCGSize(self.scrollView.contentSize));
+				NSLog(@"contentOffset: %@", NSStringFromCGPoint(self.scrollView.contentOffset));
+				NSLog(@"imageView: %@", NSStringFromCGRect(self.imageView.frame));
+				
+				// NO IDEA why this is needed. at the end of the previous animation, self.scrollView.contentOffset is usually close to 0,0 but not quite...
+				[UIView animateWithDuration:.5 animations:^{
+					self.scrollView.contentOffset = CGPointZero;
+					NSLog(@"contentOffset: %@", NSStringFromCGPoint(self.scrollView.contentOffset));
+				}];
 			}];
 			
 			[UIView animateWithDuration:1.0 delay:.5 options:0 animations:^{
-				self.heatMapView.alpha = 1;
+				self.heatMapView.alpha = 1.0;
 			} completion:nil];
 		}
 		else {
@@ -337,9 +349,10 @@ double r2d(double d)
 {
 	NSLog(@"PLTDeviceDidCloseConnection: %@", aDevice);
 	self.device = nil;
-	self.demoStarted = NO;
+//	self.demoStarted = NO;
 	self.deviceDonned = NO;
-	[self centerScrollView];
+//	[self centerScrollView];
+	[self stopDemo:self];
 }
 
 #pragma mark - PLTDeviceInfoObserver

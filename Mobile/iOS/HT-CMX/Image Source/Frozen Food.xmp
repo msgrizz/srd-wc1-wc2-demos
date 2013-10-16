@@ -42,13 +42,13 @@
    xmp:ModifyDate="2013-10-10T18:32:29.58"
    xmp:CreateDate="2013-10-10T18:32:29.58"
    xmp:Rating="0"
-   xmp:MetadataDate="2013-10-14T16:28:55-07:00"
+   xmp:MetadataDate="2013-10-16T16:17:50-07:00"
    photoshop:DateCreated="2013-10-10T18:32:29.58"
    photoshop:SidecarForExtension="CR2"
    photoshop:EmbeddedXMPDigest="00000000000000000000000000000000"
    xmpMM:DocumentID="A6BF6869B4623F4171A8D6E436C8F39D"
    xmpMM:OriginalDocumentID="A6BF6869B4623F4171A8D6E436C8F39D"
-   xmpMM:InstanceID="xmp.iid:70cc316e-a49c-49f4-b3b3-0459a73f787c"
+   xmpMM:InstanceID="xmp.iid:53b147df-cac2-4bab-9670-923a53881dbb"
    dc:format="image/x-canon-cr2"
    crs:RawFileName="Frozen Food.CR2"
    crs:Version="7.3"
@@ -156,6 +156,12 @@
       stEvt:action="saved"
       stEvt:instanceID="xmp.iid:70cc316e-a49c-49f4-b3b3-0459a73f787c"
       stEvt:when="2013-10-14T16:28:55-07:00"
+      stEvt:softwareAgent="Adobe Photoshop Camera Raw 7.3 (Macintosh)"
+      stEvt:changed="/metadata"/>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:53b147df-cac2-4bab-9670-923a53881dbb"
+      stEvt:when="2013-10-16T16:17:50-07:00"
       stEvt:softwareAgent="Adobe Photoshop Camera Raw 7.3 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>

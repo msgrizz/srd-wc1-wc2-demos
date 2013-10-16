@@ -42,13 +42,13 @@
    xmp:ModifyDate="2013-10-10T18:29:58.66"
    xmp:CreateDate="2013-10-10T18:29:58.66"
    xmp:Rating="0"
-   xmp:MetadataDate="2013-10-14T16:28:07-07:00"
+   xmp:MetadataDate="2013-10-16T16:25:58-07:00"
    photoshop:DateCreated="2013-10-10T18:29:58.66"
    photoshop:SidecarForExtension="CR2"
    photoshop:EmbeddedXMPDigest="00000000000000000000000000000000"
    xmpMM:DocumentID="142ACAE47279D194F45B2D21FA968B2F"
    xmpMM:OriginalDocumentID="142ACAE47279D194F45B2D21FA968B2F"
-   xmpMM:InstanceID="xmp.iid:9abaf82c-8bf7-4d87-ba43-fe4bcb49f4fb"
+   xmpMM:InstanceID="xmp.iid:1f5704d9-95bd-41cd-b500-4221c04aca66"
    dc:format="image/x-canon-cr2"
    crs:RawFileName="Deoderant.CR2"
    crs:Version="7.3"
@@ -156,6 +156,12 @@
       stEvt:action="saved"
       stEvt:instanceID="xmp.iid:9abaf82c-8bf7-4d87-ba43-fe4bcb49f4fb"
       stEvt:when="2013-10-14T16:28:07-07:00"
+      stEvt:softwareAgent="Adobe Photoshop Camera Raw 7.3 (Macintosh)"
+      stEvt:changed="/metadata"/>
+     <rdf:li
+      stEvt:action="saved"
+      stEvt:instanceID="xmp.iid:1f5704d9-95bd-41cd-b500-4221c04aca66"
+      stEvt:when="2013-10-16T16:25:58-07:00"
       stEvt:softwareAgent="Adobe Photoshop Camera Raw 7.3 (Macintosh)"
       stEvt:changed="/metadata"/>
     </rdf:Seq>
