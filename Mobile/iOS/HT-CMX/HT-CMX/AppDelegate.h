@@ -14,8 +14,10 @@
 
 extern NSString *const PLTDefaultsKeyDefaultsVersion;
 extern NSString *const PLTDefaultsKeySensitivity;
-extern NSString *const PLTDefaultsKeyScale;
+extern NSString *const PLTDefaultsKeySmoothing;
 extern NSString *const PLTDefaultsKeyImage;
+extern NSString *const PLTDefaultsKeyScale;
+extern NSString *const PLTDefaultsKeyHeatMap;
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

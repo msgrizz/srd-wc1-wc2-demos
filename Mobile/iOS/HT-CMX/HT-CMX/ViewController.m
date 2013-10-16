@@ -12,6 +12,12 @@
 #import "AppDelegate.h"
 
 
+#import "HeatMapView.h"
+
+
+#define HEAT_MAP_TIMER_RATE		100.0 // Hz
+
+
 double d2r(double d)
 {
 	return d * (M_PI/180.0);
@@ -26,17 +32,26 @@ double r2d(double d)
 @interface ViewController () <UIPopoverControllerDelegate, PLTDeviceConnectionDelegate, PLTDeviceInfoObserver, SettingsViewControllerDelegate>
 
 - (void)newDeviceAvailableNotification:(NSNotification *)notification;
-- (void)setupScrollView;
+- (void)rebuildStartStopButton:(BOOL)started;
+- (void)rebuildScrollView;
+- (void)centerScrollView;
 - (void)settingsButton:(id)sender;
-- (void)startButton:(id)sender;
+- (void)startDemo:(id)sender;
+- (void)stopDemo:(id)sender;
 - (void)orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo;
 - (void)wearingStateInfoDidChange:(PLTWearingStateInfo *)theInfo;
 
 @property(nonatomic, strong)	PLTDevice				*device;
 @property(nonatomic, assign)	CGPoint					baseContentOffset;
 @property(nonatomic, assign)	BOOL					deviceDonned;
+@property(nonatomic, assign)	BOOL					demoStarted;
 @property(nonatomic, strong)	UIPopoverController		*settingsPopoverController;
+@property(nonatomic, strong)	NSMutableDictionary		*heatMapPoints;
 @property(nonatomic, strong)	IBOutlet UIScrollView	*scrollView;
+
+
+@property(nonatomic, strong)	UIImageView				*imageView;
+@property(nonatomic, strong)	HeatMapView				*heatMapView;
 
 @end
 
@@ -56,16 +71,30 @@ double r2d(double d)
 	}
 }
 
-- (void)setupScrollView
+- (void)rebuildStartStopButton:(BOOL)started
 {
+	NSString *title = @"Start";
+	SEL action = @selector(startDemo:);
+	if (started) {
+		title = @"Stop";
+		action = @selector(stopDemo:);
+	}
+	
+	UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:action];
+	self.navigationItem.leftBarButtonItem = startItem;
+}
+
+- (void)rebuildScrollView
+{
+	NSLog(@"rebuildScrollView");
+	
 	// setup scroll view
 	
-	//const CGFloat SCALE = 1.0;
 	CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 	
 	NSString *imageName = [NSString stringWithFormat:@"%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage]];
-	UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-	imageView.contentMode = UIViewContentModeScaleAspectFill;
+	self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+	self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 	
 	for (UIView *subview in self.scrollView.subviews) {
 		[subview removeFromSuperview];
@@ -73,12 +102,11 @@ double r2d(double d)
 	
 	self.scrollView.frame = self.view.frame;
 	self.scrollView.contentOffset = CGPointZero;
-	CGRect imageViewFrame = imageView.frame;
-	imageViewFrame.size = CGSizeMake(imageView.frame.size.width * SCALE, imageView.frame.size.height * SCALE);
-	imageView.frame = imageViewFrame;
-	self.scrollView.contentSize = imageView.frame.size;
-	//self.scrollView.contentSize = CGSizeMake(shelfImageview.frame.size.width * SCALE, shelfImageview.frame.size.height * SCALE);
-	[self.scrollView addSubview:imageView];
+	CGRect imageViewFrame = self.imageView.frame;
+	imageViewFrame.size = CGSizeMake(self.imageView.frame.size.width * SCALE, self.imageView.frame.size.height * SCALE);
+	self.imageView.frame = imageViewFrame;
+	self.scrollView.contentSize = self.imageView.frame.size;
+	[self.scrollView addSubview:self.imageView];
 	self.scrollView.backgroundColor = [UIColor blackColor];
 	
 	CGFloat widthDiff = self.scrollView.frame.size.width - self.scrollView.contentSize.width;
@@ -86,12 +114,17 @@ double r2d(double d)
 	
 	self.baseContentOffset = CGPointMake(self.scrollView.contentOffset.x - (widthDiff/2.0),
 										 self.scrollView.contentOffset.y - (heightDiff/2.0));
-	self.scrollView.contentOffset = self.baseContentOffset;
+	[self centerScrollView];
 	
 	PLTOrientationTrackingInfo *cachedInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientationTracking];
 	if (cachedInfo) {
 		[self orientationTrackingInfoDidChange:cachedInfo];
 	}
+}
+
+- (void)centerScrollView
+{
+	self.scrollView.contentOffset = self.baseContentOffset;
 }
 
 - (void)settingsButton:(id)sender
@@ -109,55 +142,111 @@ double r2d(double d)
 	}
 }
 
-- (void)startButton:(id)sender
+- (void)startDemo:(id)sender
 {
-	NSLog(@"starting headtracking");
+	NSLog(@"startDemo:");
 	
-	self.scrollView.contentOffset = self.baseContentOffset;
-	[self setupScrollView];
+	if (!self.demoStarted) {
+		self.demoStarted = YES;
 	
-	// subscribe to orientation tracking
-	NSError *err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
-	if (err) NSLog(@"Error: %@", err);
+		[self rebuildStartStopButton:YES];
+		[self centerScrollView];
+		[self rebuildScrollView];
+		
+		self.heatMapPoints = [NSMutableDictionary dictionary];
+		
+		// subscribe to orientation tracking
+		NSError *err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
+		if (err) NSLog(@"Error: %@", err);
+		
+		// zero's orientation tracking
+		[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
+	}
+}
+
+- (void)stopDemo:(id)sender
+{
+	NSLog(@"stopDemo:");
 	
-	// zero's orientation tracking
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
+	if (self.demoStarted) {
+		self.demoStarted = NO;
+		
+		[self rebuildStartStopButton:NO];
+		
+		if ([DEFAULTS boolForKey:PLTDefaultsKeyHeatMap]) {
+			
+			// scale the heat map points down to the full image (on-screen) size
+			CGFloat heatScaleX = self.view.frame.size.width / self.imageView.frame.size.width;
+			CGFloat heatScaleY = self.view.frame.size.height / self.imageView.frame.size.height;
+			NSMutableDictionary *newHeatMapPoints = [NSMutableDictionary dictionary];
+			for (NSValue *v in self.heatMapPoints) {
+				CGPoint oldPoint;
+				[v getValue:&oldPoint];
+				
+				CGPoint newPoint = CGPointMake(oldPoint.x * heatScaleX,
+											   oldPoint.y * heatScaleY);
+				
+				NSValue *newValue = [NSValue value:&newPoint withObjCType:@encode(CGPoint)];
+				[newHeatMapPoints setObject:[NSNumber numberWithInt:1] forKey:newValue];
+			}
+			//self.heatMapPoints = newHeatMapPoints;
+			
+			// create heat map
+			self.heatMapView = [[HeatMapView alloc] initWithFrame:self.imageView.frame];
+			self.heatMapView.alpha = 0;
+			[self.heatMapView setData:newHeatMapPoints];
+			[self.imageView addSubview:self.heatMapView];
+			
+			[UIView animateWithDuration:1.5 animations:^{
+				self.scrollView.contentSize = self.view.frame.size;
+				self.imageView.frame = self.scrollView.frame;
+				self.heatMapView.frame = self.scrollView.frame;
+				
+			}];
+			
+			[UIView animateWithDuration:1.0 delay:.5 options:0 animations:^{
+				self.heatMapView.alpha = 1;
+			} completion:nil];
+		}
+		else {
+			[self centerScrollView];
+		}
+	}
 }
 
 - (void)orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo
 {
-	if (self.deviceDonned) {
+	if (self.demoStarted && self.deviceDonned) {
 		PLTEulerAngles eulerAngles = theInfo.eulerAngles;
 		
-		//const CGFloat DISTANCE = 400.0; // screen pixles
 		CGFloat DISTANCE = [DEFAULTS doubleForKey:PLTDefaultsKeySensitivity];
-		
-		//const CGFloat SCALE = 1.0;
 		CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 		
 		// stop wrap-around, and extreme offset values
-		if (eulerAngles.x > 80) {
-			eulerAngles.x = 80;
+		if (eulerAngles.x > 85) {
+			eulerAngles.x = 85;
 		}
-		else if (eulerAngles.x < -80) {
-			eulerAngles.x = -80;
+		else if (eulerAngles.x < -85) {
+			eulerAngles.x = -85;
 		}
-		if (eulerAngles.y > 80) {
-			eulerAngles.y = 80;
+		if (eulerAngles.y > 85) {
+			eulerAngles.y = 85;
 		}
-		else if (eulerAngles.y < -80) {
-			eulerAngles.y = -80;
+		else if (eulerAngles.y < -85) {
+			eulerAngles.y = -85;
 		}
 		
 		CGFloat xOffset = (DISTANCE * tan(d2r(-eulerAngles.x))) * SCALE;
 		CGFloat yOffset = (DISTANCE * tan(d2r(-eulerAngles.y))) * SCALE;
+		
+		
+		// save the heat map points -- notice they are saved before clipping based on base offset
+		CGPoint heatMapPoint = CGPointMake(xOffset + self.baseContentOffset.x + self.scrollView.frame.size.width/2.0,
+										   yOffset + self.baseContentOffset.y + self.scrollView.frame.size.height/2.0);
+		NSValue *pointValue = [NSValue value:&heatMapPoint withObjCType:@encode(CGPoint)];
+        [self.heatMapPoints setObject:[NSNumber numberWithInt:1] forKey:pointValue];
+		
 
-		// check that we don't scroll past the content's bounds
-//		if ((fabs(xOffset) > fabs(self.baseContentOffset.x)) || (fabs(yOffset) > fabs(self.baseContentOffset.y))) {
-//			NSLog(@"Offset too large, pinning to content edge.");
-//			return;
-//		}
-	
 		if ((xOffset > 0) && (xOffset > self.baseContentOffset.x)) {
 			xOffset = self.baseContentOffset.x;
 		}
@@ -171,25 +260,31 @@ double r2d(double d)
 		else if ((yOffset <= 0) && (-yOffset > self.baseContentOffset.y)) {
 			yOffset = -self.baseContentOffset.y;
 		}
+		
+//		NSLog(@"cententSize: %@", NSStringFromCGSize(self.scrollView.contentSize));
+//		NSLog(@"imageView.frame: %@", NSStringFromCGRect(self.imageView.frame));
+//		NSLog(@"baseContentOffset: %@", NSStringFromCGPoint(self.baseContentOffset));
+//		NSLog(@"angle.x: %.1f,\tangle.y: %.1f", eulerAngles.x, eulerAngles.y);
+//		NSLog(@"xOffset: %.1f,\tyOffset: %.1f", xOffset, yOffset);
 
 		CGPoint newOffset = CGPointMake(self.baseContentOffset.x + xOffset , self.baseContentOffset.y + yOffset);
-		NSLog(@"newOffset: { %.1f, %.1f }", newOffset.x, newOffset.y);
+		//NSLog(@"newOffset: { %.1f, %.1f }", newOffset.x, newOffset.y);
 		
-		//[self.scrollView setContentOffset:newOffset animated:YES];
-		self.scrollView.contentOffset = newOffset;
+		[self.scrollView setContentOffset:newOffset animated:[DEFAULTS boolForKey:PLTDefaultsKeySmoothing]];
 	}
 }
 
 - (void)wearingStateInfoDidChange:(PLTWearingStateInfo *)theInfo
 {
+	NSLog(@"**************** wearingStateInfoDidChange: %@ ****************", (theInfo.isBeingWorn ? @"YES" : @"NO"));
+	
 	if (theInfo.isBeingWorn && !self.deviceDonned) {
 		// user just donned the HS
-		[self startButton:self];
+		[self startDemo:self];
 	}
 	else if (!theInfo.isBeingWorn) {
-		// re-center content
-		NSLog(@"not donned -- centering content");
-		self.scrollView.contentOffset = self.baseContentOffset;
+		NSLog(@"Not donned -- Stopping demo.");
+		[self stopDemo:self];
 	}
 	self.deviceDonned = theInfo.isBeingWorn;
 }
@@ -198,14 +293,14 @@ double r2d(double d)
 	
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-	[self setupScrollView];
+	[self rebuildScrollView];
 }
 	
 #pragma mark - SettingsViewControllerDelegate
 
 - (void)settingsViewControllerDidChangeValue:(SettingsViewController *)theController
 {
-	[self setupScrollView];
+	[self rebuildScrollView];
 }
 
 - (void)settingsViewControllerDidEnd:(SettingsViewController *)theController
@@ -223,11 +318,11 @@ double r2d(double d)
 	
 	NSError *err = nil;
 	
-//	err = [self.device subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange minPeriod:0];
-//	if (err) NSLog(@"Error: %@", err);
-	
 	err = [self.device subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange minPeriod:0];
 	if (err) NSLog(@"Error: %@", err);
+//#warning FOR DEBUGGING
+//	err = [self.device subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModePeriodic minPeriod:1000];
+//	if (err) NSLog(@"Error: %@", err);
 	
 	[self.device queryInfo:self forService:PLTServiceWearingState];
 }
@@ -242,15 +337,16 @@ double r2d(double d)
 {
 	NSLog(@"PLTDeviceDidCloseConnection: %@", aDevice);
 	self.device = nil;
-	self.scrollView.contentOffset = self.baseContentOffset;
+	self.demoStarted = NO;
 	self.deviceDonned = NO;
+	[self centerScrollView];
 }
 
 #pragma mark - PLTDeviceInfoObserver
 
 - (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
 {
-	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	//NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
 	
 	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
 		[self orientationTrackingInfoDidChange:(PLTOrientationTrackingInfo *)theInfo];
@@ -292,8 +388,7 @@ double r2d(double d)
 	view.image = pltImage;
 	self.navigationItem.titleView = view;
 	
-	UIBarButtonItem *startItem = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStyleBordered target:self action:@selector(startButton:)];
-	self.navigationItem.leftBarButtonItem = startItem;
+	[self rebuildStartStopButton:NO];
 	
 	UIBarButtonItem *settingsItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings_icon.png"]  style:UIBarButtonItemStyleBordered target:self action:@selector(settingsButton:)];
 	self.navigationItem.rightBarButtonItem = settingsItem;
@@ -303,7 +398,7 @@ double r2d(double d)
 {
 	[super viewWillAppear:animated];
 	
-	//[self setupScrollView];
+	//[self rebuildScrollView];
 	
 	NSArray *devices = [PLTDevice availableDevices];
 	if ([devices count]) {
@@ -321,13 +416,13 @@ double r2d(double d)
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-	[self setupScrollView];
+	[self rebuildScrollView];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-	[self setupScrollView];
+	[self rebuildScrollView];
 }
 
 @end

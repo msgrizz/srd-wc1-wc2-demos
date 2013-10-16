@@ -5,10 +5,14 @@
 	<key>DefaultsVersion</key>
 	<string></string>
 	<key>Sensitivity</key>
-	<integer>500</integer>
+	<integer>600</integer>
 	<key>Image</key>
 	<string>Frozen Food</string>
 	<key>Scale</key>
 	<real>1</real>
+	<key>Smoothing</key>
+	<true/>
+	<key>Heat Map</key>
+	<false/>
 </dict>
 </plist>

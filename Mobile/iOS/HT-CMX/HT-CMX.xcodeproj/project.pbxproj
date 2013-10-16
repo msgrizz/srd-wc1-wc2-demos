@@ -32,6 +32,7 @@
 		42C134631804DD47007CE60A /* shelf_plank@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42C134621804DD47007CE60A /* shelf_plank@2x.jpg */; };
 		42C66970180CC3DC0097F981 /* Deodorant@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C6696F180CC3DC0097F981 /* Deodorant@2x.png */; };
 		42C66977180DD8E20097F981 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C66976180DD8E20097F981 /* Default-Portrait@2x~ipad.png */; };
+		42C669CA180E07040097F981 /* HeatMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C669C9180E07040097F981 /* HeatMapView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,8 @@
 		42C134621804DD47007CE60A /* shelf_plank@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "shelf_plank@2x.jpg"; path = "Images/shelf_plank@2x.jpg"; sourceTree = "<group>"; };
 		42C6696F180CC3DC0097F981 /* Deodorant@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Deodorant@2x.png"; path = "Images/Deodorant@2x.png"; sourceTree = "<group>"; };
 		42C66976180DD8E20097F981 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "Images/Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		42C669C8180E07040097F981 /* HeatMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapView.h; sourceTree = "<group>"; };
+		42C669C9180E07040097F981 /* HeatMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,8 @@
 				423BBF2E180CBF2A000B8008 /* ImageSelectViewController.h */,
 				423BBF2F180CBF2A000B8008 /* ImageSelectViewController.m */,
 				423BBF30180CBF2A000B8008 /* ImageSelectViewController.xib */,
+				42C669C8180E07040097F981 /* HeatMapView.h */,
+				42C669C9180E07040097F981 /* HeatMapView.m */,
 				42C1343D1804CEED007CE60A /* PLTDevice */,
 				42C1340F1803A810007CE60A /* Supporting Files */,
 			);
@@ -297,6 +302,7 @@
 				423BBF31180CBF2A000B8008 /* ImageSelectViewController.m in Sources */,
 				42C134151803A810007CE60A /* main.m in Sources */,
 				423BBF24180CB785000B8008 /* SettingsViewController.m in Sources */,
+				42C669CA180E07040097F981 /* HeatMapView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

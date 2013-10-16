@@ -13,8 +13,10 @@
 
 typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 	PLTTableViewRowSensitivity,
+	PLTTableViewRowSmoothing,
+    PLTTableViewRowImage,
 	PLTTableViewRowScale,
-    PLTTableViewRowImage
+	PLTTableViewRowHeatMap
 };
 
 
@@ -24,9 +26,15 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 @property(nonatomic, strong)	IBOutlet UISlider			*sensitivitySlider;
 @property(nonatomic, retain)	IBOutlet UITableViewCell	*scaleTableViewItem;
 @property(nonatomic, strong)	IBOutlet UISlider			*scaleSlider;
+@property(nonatomic, retain)	IBOutlet UITableViewCell	*smoothingTableViewItem;
+@property(nonatomic, strong)	IBOutlet UISwitch			*smoothingSwitch;
+@property(nonatomic, retain)	IBOutlet UITableViewCell	*heatMapTableViewItem;
+@property(nonatomic, strong)	IBOutlet UISwitch			*heatMapSwitch;
 
-- (IBAction)sensitivitySlider:(id)sender;
+- (IBAction)sensitivitySlider:(UISlider *)sender;
 - (IBAction)scaleSlider:(UISlider *)sender;
+- (IBAction)smoothingSwitch:(UISwitch *)sender;
+- (IBAction)heatMapSwitch:(UISwitch *)sender;
 - (void)doneButton:(id)sender;
 
 @end
@@ -48,6 +56,18 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 	[self.delegate settingsViewControllerDidChangeValue:self];
 }
 
+- (IBAction)smoothingSwitch:(UISwitch *)sender
+{
+	[DEFAULTS setFloat:sender.on forKey:PLTDefaultsKeySmoothing];
+	//[self.delegate settingsViewControllerDidChangeValue:self];
+}
+
+- (IBAction)heatMapSwitch:(UISwitch *)sender
+{
+	[DEFAULTS setFloat:sender.on forKey:PLTDefaultsKeyHeatMap];
+	//[self.delegate settingsViewControllerDidChangeValue:self];
+}
+
 - (void)doneButton:(id)sender
 {
 	[self.delegate settingsViewControllerDidEnd:self];
@@ -63,6 +83,10 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 			cell = self.sensitivityTableViewItem;
 			self.sensitivitySlider.value = [DEFAULTS floatForKey:PLTDefaultsKeySensitivity];
 			break;
+		case PLTTableViewRowSmoothing:
+			cell = self.smoothingTableViewItem;
+			self.smoothingSwitch.on = [DEFAULTS boolForKey:PLTDefaultsKeySmoothing];
+			break;
 		case PLTTableViewRowScale:
 			cell = self.scaleTableViewItem;
 			self.scaleSlider.value = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
@@ -77,13 +101,17 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 			}
 			cell.detailTextLabel.text = [DEFAULTS objectForKey:PLTDefaultsKeyImage];
 			break; }
+		case PLTTableViewRowHeatMap:
+			cell = self.heatMapTableViewItem;
+			self.heatMapSwitch.on = [DEFAULTS boolForKey:PLTDefaultsKeyHeatMap];
+			break;
 	}
 	return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 3;
+	return 5;
 }
 
 #pragma mark - UITableViewDelegate

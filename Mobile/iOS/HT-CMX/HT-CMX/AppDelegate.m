@@ -12,8 +12,11 @@
 
 NSString *const PLTDefaultsKeyDefaultsVersion =			@"DefaultsVersion";
 NSString *const PLTDefaultsKeySensitivity =				@"Sensitivity";
-NSString *const PLTDefaultsKeyScale =					@"Scale";
+NSString *const PLTDefaultsKeySmoothing =				@"Smoothing";
 NSString *const PLTDefaultsKeyImage =					@"Image";
+NSString *const PLTDefaultsKeyScale =					@"Scale";
+NSString *const PLTDefaultsKeyHeatMap =					@"Heat Map";
+
 
 
 @interface AppDelegate()

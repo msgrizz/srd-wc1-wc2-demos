@@ -422,6 +422,12 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
         [[self.session outputStream] close];
         [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [[self.session outputStream] setDelegate:nil];
+		
+		
+		// new in 1.0.1
+		self.subscribers = [NSMutableDictionary dictionary];
+		self.queryObservers = nil;
+		
         
         self.session = nil;
 		self.isConnectionOpen = NO;
