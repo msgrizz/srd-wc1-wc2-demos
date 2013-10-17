@@ -48,8 +48,6 @@ double r2d(double d)
 @property(nonatomic, strong)	UIPopoverController		*settingsPopoverController;
 @property(nonatomic, strong)	NSMutableDictionary		*heatMapPoints;
 @property(nonatomic, strong)	IBOutlet UIScrollView	*scrollView;
-
-
 @property(nonatomic, strong)	UIImageView				*imageView;
 @property(nonatomic, strong)	HeatMapView				*heatMapView;
 
@@ -92,7 +90,8 @@ double r2d(double d)
 	
 	CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 	
-	NSString *imageName = [NSString stringWithFormat:@"%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage]];
+	NSString *imageName = [NSString stringWithFormat:@"%@%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage], (IOS6 ? @"_iOS6" : @"")];
+	NSLog(@"imageName: %@", imageName);
 	self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
 	self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 	
@@ -199,7 +198,9 @@ double r2d(double d)
 			
 			[UIView animateWithDuration:1.5 animations:^{
 				self.scrollView.contentSize = self.scrollView.frame.size;
-				self.scrollView.contentOffset = CGPointZero;
+				//self.scrollView.contentOffset = CGPointZero;
+				// NO IDEA why animated:YES is needed, but if it's not used the offset doesn't always end up as 0,0 after the parent animation completes
+				[self.scrollView setContentOffset:CGPointZero animated:YES];
 				self.imageView.frame = self.scrollView.frame;
 				self.heatMapView.frame = self.scrollView.frame;
 				
@@ -210,10 +211,10 @@ double r2d(double d)
 				NSLog(@"imageView: %@", NSStringFromCGRect(self.imageView.frame));
 				
 				// NO IDEA why this is needed. at the end of the previous animation, self.scrollView.contentOffset is usually close to 0,0 but not quite...
-				[UIView animateWithDuration:.5 animations:^{
-					self.scrollView.contentOffset = CGPointZero;
-					NSLog(@"contentOffset: %@", NSStringFromCGPoint(self.scrollView.contentOffset));
-				}];
+//				[UIView animateWithDuration:.5 animations:^{
+//					self.scrollView.contentOffset = CGPointZero;
+//					NSLog(@"contentOffset: %@", NSStringFromCGPoint(self.scrollView.contentOffset));
+//				}];
 			}];
 			
 			[UIView animateWithDuration:1.0 delay:.5 options:0 animations:^{
@@ -251,14 +252,13 @@ double r2d(double d)
 		CGFloat xOffset = (DISTANCE * tan(d2r(-eulerAngles.x))) * SCALE;
 		CGFloat yOffset = (DISTANCE * tan(d2r(-eulerAngles.y))) * SCALE;
 		
-		
 		// save the heat map points -- notice they are saved before clipping based on base offset
 		CGPoint heatMapPoint = CGPointMake(xOffset + self.baseContentOffset.x + self.scrollView.frame.size.width/2.0,
 										   yOffset + self.baseContentOffset.y + self.scrollView.frame.size.height/2.0);
 		NSValue *pointValue = [NSValue value:&heatMapPoint withObjCType:@encode(CGPoint)];
         [self.heatMapPoints setObject:[NSNumber numberWithInt:1] forKey:pointValue];
 		
-
+		// pin view to image edges
 		if ((xOffset > 0) && (xOffset > self.baseContentOffset.x)) {
 			xOffset = self.baseContentOffset.x;
 		}
@@ -431,6 +431,12 @@ double r2d(double d)
 	[super viewDidAppear:animated];
 	[self rebuildScrollView];
 }
+
+//- (NSUInteger)supportedInterfaceOrientations
+//{
+//	NSLog(@"supportedInterfaceOrientations");
+//	return ([[DEFAULTS objectForKey:PLTDefaultsKeyImage] isEqualToString:@"Frozen Food"] ? UIInterfaceOrientationMaskLandscape : UIInterfaceOrientationMaskPortrait);
+//}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {

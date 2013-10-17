@@ -13,6 +13,6 @@
 	<key>Smoothing</key>
 	<true/>
 	<key>Heat Map</key>
-	<false/>
+	<true/>
 </dict>
 </plist>

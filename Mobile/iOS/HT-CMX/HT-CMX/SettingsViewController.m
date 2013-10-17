@@ -14,7 +14,7 @@
 typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 	PLTTableViewRowSensitivity,
 	PLTTableViewRowSmoothing,
-    PLTTableViewRowImage,
+    //PLTTableViewRowImage,
 	PLTTableViewRowScale,
 	PLTTableViewRowHeatMap
 };
@@ -91,16 +91,16 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 			cell = self.scaleTableViewItem;
 			self.scaleSlider.value = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 			break;
-		case PLTTableViewRowImage: {
-			cell = [tableView dequeueReusableCellWithIdentifier:@"ImagesCell"];
-			if (!cell) {
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"ImagesCell"];
-				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-				cell.textLabel.textAlignment = NSTextAlignmentLeft;
-				cell.textLabel.text = @"Image";
-			}
-			cell.detailTextLabel.text = [DEFAULTS objectForKey:PLTDefaultsKeyImage];
-			break; }
+//		case PLTTableViewRowImage: {
+//			cell = [tableView dequeueReusableCellWithIdentifier:@"ImagesCell"];
+//			if (!cell) {
+//				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"ImagesCell"];
+//				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//				cell.textLabel.textAlignment = NSTextAlignmentLeft;
+//				cell.textLabel.text = @"Image";
+//			}
+//			cell.detailTextLabel.text = [DEFAULTS objectForKey:PLTDefaultsKeyImage];
+//			break; }
 		case PLTTableViewRowHeatMap:
 			cell = self.heatMapTableViewItem;
 			self.heatMapSwitch.on = [DEFAULTS boolForKey:PLTDefaultsKeyHeatMap];
@@ -111,25 +111,26 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 5;
+	return 4;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return (indexPath.row == PLTTableViewRowImage);
+	//return (indexPath.row == PLTTableViewRowImage);
+	return NO;
 }
 
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	if (indexPath.row == PLTTableViewRowImage) {
-		ImageSelectViewController *viewController = [[ImageSelectViewController alloc] initWithNibName:nil bundle:nil];
-		viewController.delegate = self;
-		[self.navigationController pushViewController:viewController animated:YES];
-	}
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
+//- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//	if (indexPath.row == PLTTableViewRowImage) {
+//		ImageSelectViewController *viewController = [[ImageSelectViewController alloc] initWithNibName:nil bundle:nil];
+//		viewController.delegate = self;
+//		[self.navigationController pushViewController:viewController animated:YES];
+//	}
+//	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+//}
 
 #pragma mark - ImageViewControllerDelegate
 
@@ -143,7 +144,7 @@ typedef NS_ENUM(NSUInteger, PLTTableViewRow) {
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithNibName:@"SettingsViewController" bundle:nibBundleOrNil];
+    self = [super initWithNibName:(IOS6 ? @"SettingsViewController_iOS6" : @"SettingsViewController") bundle:nibBundleOrNil];
     if (self) {
 		
     }
