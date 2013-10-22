@@ -90,7 +90,7 @@ double r2d(double d)
 	
 	CGFloat SCALE = [DEFAULTS floatForKey:PLTDefaultsKeyScale];
 	
-	NSString *imageName = [NSString stringWithFormat:@"%@%@.png", [DEFAULTS objectForKey:PLTDefaultsKeyImage], (IOS6 ? @"_iOS6" : @"")];
+	NSString *imageName = [NSString stringWithFormat:@"%@%@.jpg", [DEFAULTS objectForKey:PLTDefaultsKeyImage], (IOS6 ? @"_iOS6" : @"")];
 	NSLog(@"imageName: %@", imageName);
 	self.imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
 	self.imageView.contentMode = UIViewContentModeScaleAspectFill;
