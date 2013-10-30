@@ -399,7 +399,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 			CLLocationDegrees lng = [location[PLTDefaultsKeyOverrideLocationLongitude] doubleValue];
 			return [[CLLocation alloc] initWithLatitude:lat longitude:lng];
 		}
-		else {
+		else { 
 			//NSLog(@"*** Error: no location \"%@\" found.",selectedLabel);
 		}
 	}
@@ -433,7 +433,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 - (void)settingsViewControllerDidClickStreetViewPrecache:(SettingsViewController *)theController
 {
     self.tabBarController.selectedIndex = 2;
-    StreetViewViewController *controller = self.tabBarController.viewControllers[2];
+    StreetViewViewController *controller = ((UINavigationController *)self.tabBarController.viewControllers[2]).viewControllers[0];
     
     if (self.settingsPopoverController) {
 		[self.settingsPopoverController dismissPopoverAnimated:YES];

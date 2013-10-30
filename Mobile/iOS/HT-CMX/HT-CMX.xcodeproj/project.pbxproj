@@ -402,6 +402,7 @@
 		42C134381803A810007CE60A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALTERNATE_GROUP = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (299DBCZFU2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -423,6 +424,7 @@
 		42C134391803A810007CE60A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALTERNATE_GROUP = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (299DBCZFU2)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

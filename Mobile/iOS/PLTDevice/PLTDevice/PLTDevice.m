@@ -815,7 +815,7 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 		}
 	}
 	else {
-		//NSLog(@"No periodic subscriptions found. Killing kicker.");
+		//NSLog(@"No periodic subscriptions found. Killing ticker.");
 		[self.ticker invalidate];
 		self.ticker = nil;
 	}

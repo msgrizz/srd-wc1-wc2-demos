@@ -1060,7 +1060,7 @@ NSInteger roundToNearestMultiple(NSInteger input, NSInteger round_multiple) {
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
 	// precache alert
-	if (buttonIndex != [alertView cancelButtonIndex]) [self precache];
+	if (buttonIndex != [alertView cancelButtonIndex]) [self _precache];
 }
 
 #pragma mark - UIViewController
