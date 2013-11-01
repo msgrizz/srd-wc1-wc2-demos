@@ -47,6 +47,13 @@ using Plantronics.Innovation.Util;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.3:
+ * Date: 1st November 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Adding Douglas Wong's suggested quatmult fix and address re-order of pitch and roll
+ *     angles in returned motion tracking data.
+ *
  * Version 1.0.0.2:
  * Date: 25th September 2013
  * Changed by: Lewis Collins

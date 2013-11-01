@@ -57,6 +57,14 @@ using Plantronics.Innovation.PLTLabsAPI;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.3:
+ * Date: 1st November 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Updated project to remove local copy of PLTLabsAPI.dll
+ *     (user should obtain and deploy the DLL from single location on PDC)
+ *   - Improved roll visualization (shrink/grow target)
+ *
  * Version 1.0.0.2:
  * Date: 30th September 2013
  * Changed by: Lewis Collins
@@ -111,7 +119,7 @@ namespace HeadTrackerTargetGame
         private double m_headingangle;
         private double m_pitchangle;
         private double m_rollangle;
-        private bool m_reversepitchroll = false;
+        //private bool m_reversepitchroll = false;
 
         public Game1()
         {
@@ -210,12 +218,12 @@ namespace HeadTrackerTargetGame
 
             }
 
-            // reverse pitch an roll with R
-            if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R)))
-            {
-                m_reversepitchroll = !m_reversepitchroll;
-                m_autoputoncalibratetimer.Start();
-            }
+            //// reverse pitch an roll with R
+            //if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R)))
+            //{
+            //    m_reversepitchroll = !m_reversepitchroll;
+            //    m_autoputoncalibratetimer.Start();
+            //}
 
             // calibrate with C
             if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C)))
@@ -237,14 +245,24 @@ namespace HeadTrackerTargetGame
             // TODO: Add your drawing code here
 
             // test adjust target scale factor based on roll angle
-            if (Math.Abs((int)m_rollangle) > 10)
+            //if (Math.Abs((int)m_rollangle) > 10)
+
+            if (m_rollangle > 0)
             {
                 m_scalefactor = (float)(m_rollangle / 5.0d);
+                if (m_scalefactor < 1.0f) m_scalefactor = 1.0f;
             }
             else
             {
-                m_scalefactor = 1.0f;
+                m_scalefactor = (float)(1.0d / Math.Abs(m_rollangle / 5.0d));
+                if (m_scalefactor > 1.0f) m_scalefactor = 1.0f;
+                if (m_scalefactor < 0.25f) m_scalefactor = 0.25f;
             }
+            //}
+            //else
+            //{
+            //    m_scalefactor = 1.0f;
+            //}
 
             // Draw the head tracker target on the screen offset from the center of the screen
             // by an amount on x/y axis which is based on the user's head movements
@@ -286,10 +304,11 @@ namespace HeadTrackerTargetGame
         // receives headtracking angles in degrees back from PLT Labs API
         public void HeadsetTrackingUpdate(PLTMotionTrackingData headsetData)
         {
-            // need to reverse heading and pitch sign?
-            headsetData.m_orientation[0] = -headsetData.m_orientation[0];
-            if (m_reversepitchroll)
-                headsetData.m_orientation[1] = -headsetData.m_orientation[1];
+            //// need to reverse heading and pitch sign?
+            //headsetData.m_orientation[0] = -headsetData.m_orientation[0];
+            ////if (m_reversepitchroll)
+            ////    headsetData.m_orientation[1] = -headsetData.m_orientation[1];
+            //headsetData.m_orientation[1] = -headsetData.m_orientation[1];
 
             // define some constants for maths calculation to convert head angles into pixel offsets for screen
             const double c_distanceToScreen = 850; // millimeters
@@ -301,9 +320,10 @@ namespace HeadTrackerTargetGame
             //{
                 // assume distance from screen is 1 meter and that pixel size is 0.25mm
             headtrack_offset_millimeters = c_distanceToScreen * Math.Tan(headsetData.m_orientation[0] * Math.PI / 180.0); // x = d * tan(theta)
-                headtrack_xoffset = (int) (headtrack_offset_millimeters / c_pixelPitch);
-                headtrack_offset_millimeters = c_distanceToScreen * Math.Tan((m_reversepitchroll ? headsetData.m_orientation[1] : headsetData.m_orientation[2]) * Math.PI / 180.0); // y = d * tan(theta)
-                headtrack_yoffset = (int)(headtrack_offset_millimeters / c_pixelPitch);
+                headtrack_xoffset = -(int) (headtrack_offset_millimeters / c_pixelPitch);
+                //headtrack_offset_millimeters = c_distanceToScreen * Math.Tan((m_reversepitchroll ? headsetData.m_orientation[1] : headsetData.m_orientation[2]) * Math.PI / 180.0); // y = d * tan(theta)
+                headtrack_offset_millimeters = c_distanceToScreen * Math.Tan(headsetData.m_orientation[1] * Math.PI / 180.0); // y = d * tan(theta)
+                headtrack_yoffset = -(int)(headtrack_offset_millimeters / c_pixelPitch);
             //}
             //else
             //{
@@ -312,8 +332,10 @@ namespace HeadTrackerTargetGame
             //}
 
             m_headingangle = headsetData.m_orientation[0];
-            m_pitchangle = m_reversepitchroll ? headsetData.m_orientation[1] : headsetData.m_orientation[2];
-            m_rollangle = m_reversepitchroll ? headsetData.m_orientation[2] : headsetData.m_orientation[1];
+            m_pitchangle = headsetData.m_orientation[1];
+            m_rollangle = headsetData.m_orientation[2];
+            //m_pitchangle = m_reversepitchroll ? headsetData.m_orientation[1] : headsetData.m_orientation[2];
+            //m_rollangle = m_reversepitchroll ? headsetData.m_orientation[2] : headsetData.m_orientation[1];
         }
 
         public void ConnectionClosed(PLTDevice pltDevice)

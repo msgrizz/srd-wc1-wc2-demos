@@ -57,6 +57,13 @@ using Plantronics.Innovation.PLTLabsAPI;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.3:
+ * Date: 1st November 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Updated project to remove local copy of PLTLabsAPI.dll
+ *     (user should obtain and deploy the DLL from single location on PDC)
+ *
  * Version 1.0.0.2:
  * Date: 7th October 2013
  * Changed by: Lewis Collins
