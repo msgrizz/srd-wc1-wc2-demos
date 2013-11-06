@@ -42,25 +42,24 @@
     
     
     // setup scatter plot space
-    NSTimeInterval oneMinute = 60.0;
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-    self.baseXRange = NSMakeRange(-oneMinute/4.0 * .05, oneMinute/4.0 * 1.1);
+    self.baseXRange = NSMakeRange(0.0, 10.0);
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(self.baseXRange.location) length:CPTDecimalFromFloat(self.baseXRange.length)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-185.0) length:CPTDecimalFromFloat(180.0 * 2 + 5.0)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(-185.0) length:CPTDecimalFromFloat(185.0 * 2 + 15.0)];
     
     
     // x axes
     CPTXYAxis *x = ((CPTXYAxisSet *)self.graph.axisSet).xAxis;
-    x.majorIntervalLength = CPTDecimalFromFloat(oneMinute);
-    x.minorTicksPerInterval = 60;
-    x.orthogonalCoordinateDecimal = CPTDecimalFromFloat(0);
+    x.majorIntervalLength = CPTDecimalFromFloat(1.0);
+    x.minorTicksPerInterval = 3;
+    x.orthogonalCoordinateDecimal = CPTDecimalFromFloat(0.0);
     
     
     // y axis
     CPTXYAxis *y = ((CPTXYAxisSet *)self.graph.axisSet).yAxis;
     y.majorIntervalLength = CPTDecimalFromFloat(10.0);
-    y.minorTicksPerInterval = 5;
-    y.orthogonalCoordinateDecimal = CPTDecimalFromFloat(0);
+    y.minorTicksPerInterval = 9;
+    y.orthogonalCoordinateDecimal = CPTDecimalFromFloat(0.0);
     
     
     // create the heading plot
@@ -90,33 +89,6 @@
     rollLinePlot.dataLineStyle = lineStyle;
     rollLinePlot.dataSource = self;
     [self.graph addPlot:rollLinePlot];
-
-    
-    
-    
-//    // add some data!
-//    NSMutableArray *newData = [NSMutableArray array];
-//    NSUInteger i;
-//    srand([[NSDate date] timeIntervalSinceReferenceDate]);
-//    for ( i = 0; i < (5 * oneMinute) / 10.0; i++ ) {
-//        //NSTimeInterval x = oneMinute * i;
-//        NSTimeInterval x = i * 10;
-//        
-//        float rand1 = rand() / (float)RAND_MAX;
-//        float rand2 = rand() / (float)RAND_MAX;
-//        NSLog(@"rand1: %.2f", rand1);
-//        NSLog(@"rand2: %.2f", rand2);
-//        id y = [NSDecimalNumber numberWithFloat:180 * rand1 * (rand2 > 0.5 ? 1.0 : -1.0)];
-//        
-//        NSDictionary *point = @{
-//                                [NSNumber numberWithInt:CPTScatterPlotFieldX] : [NSDecimalNumber numberWithFloat:x],
-//                                [NSNumber numberWithInt:CPTScatterPlotFieldY] : y
-//                                };
-//        
-//        NSLog(@"point: %@", point);
-//        [newData addObject:point];
-//    }
-//    self.plotData = newData;
 }
 
 - (void)computeNewXRange
@@ -224,7 +196,7 @@
         [self.headingPints addObject:headingPoint];
         [self.pitchPints addObject:pitchPoint];
         [self.rollPints addObject:rollPoint];
-        [self computeNewXRange];
+        //[self computeNewXRange];
         [self.graph reloadData];
     }
 }

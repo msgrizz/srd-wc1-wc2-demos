@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>60E7E804-93BB-4326-A6B4-30F807C4EA4A</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PLTDevice</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FAB631E8-C99C-4498-9951-502086E4B1AD</key>
+		<string>https://github.com/plantronics-innovation/core-team.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Mobile/iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FAB631E8-C99C-4498-9951-502086E4B1AD</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/plantronics-innovation/core-team.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FAB631E8-C99C-4498-9951-502086E4B1AD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FAB631E8-C99C-4498-9951-502086E4B1AD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>core-team</string>
+		</dict>
+	</array>
+</dict>
+</plist>

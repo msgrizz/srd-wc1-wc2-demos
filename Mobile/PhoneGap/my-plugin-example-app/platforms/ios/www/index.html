@@ -57,6 +57,7 @@
 			}
 			function gotLatestInfo(info) {
 				setInfo(info);
+                processInfo(info);
 			}
 			function updateInfoTimer() {
 				
@@ -65,6 +66,12 @@
 			function startTimer() {
 				var myTimer = setInterval(function(){updateInfoTimer()},100);
 			}
+        
+            function processInfo(info) {
+                var orientation = info["angles"];
+                var freeFall = info["freeFall"];
+            }
+        
         </script>
     </body>
 </html>

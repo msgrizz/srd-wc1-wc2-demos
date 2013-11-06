@@ -15,6 +15,7 @@
 		423BBF31180CBF2A000B8008 /* ImageSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 423BBF2F180CBF2A000B8008 /* ImageSelectViewController.m */; };
 		423BBF32180CBF2A000B8008 /* ImageSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 423BBF30180CBF2A000B8008 /* ImageSelectViewController.xib */; };
 		423D0889180F97050010FBA3 /* SettingsViewController_iOS6.xib in Resources */ = {isa = PBXBuildFile; fileRef = 423D0888180F97050010FBA3 /* SettingsViewController_iOS6.xib */; };
+		42788D341821D98500925550 /* libPLTDevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42788D331821D98500925550 /* libPLTDevice.a */; };
 		42C134091803A810007CE60A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C134081803A810007CE60A /* Foundation.framework */; };
 		42C1340B1803A810007CE60A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C1340A1803A810007CE60A /* CoreGraphics.framework */; };
 		42C1340D1803A810007CE60A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C1340C1803A810007CE60A /* UIKit.framework */; };
@@ -31,7 +32,6 @@
 		42C134631804DD47007CE60A /* shelf_plank@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42C134621804DD47007CE60A /* shelf_plank@2x.jpg */; };
 		42C66977180DD8E20097F981 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C66976180DD8E20097F981 /* Default-Portrait@2x~ipad.png */; };
 		42C669CA180E07040097F981 /* HeatMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C669C9180E07040097F981 /* HeatMapView.m */; };
-		42D01D35180F65A8000E5E03 /* libPLTDevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D01D34180F65A8000E5E03 /* libPLTDevice.a */; };
 		42F5DBD918170BED004A6AEB /* Frozen Food_iOS6@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42F5DBD718170BED004A6AEB /* Frozen Food_iOS6@2x.jpg */; };
 		42F5DBDA18170BED004A6AEB /* Frozen Food@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42F5DBD818170BED004A6AEB /* Frozen Food@2x.jpg */; };
 /* End PBXBuildFile section */
@@ -47,6 +47,7 @@
 		423BBF2F180CBF2A000B8008 /* ImageSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageSelectViewController.m; sourceTree = "<group>"; };
 		423BBF30180CBF2A000B8008 /* ImageSelectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageSelectViewController.xib; sourceTree = "<group>"; };
 		423D0888180F97050010FBA3 /* SettingsViewController_iOS6.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController_iOS6.xib; sourceTree = "<group>"; };
+		42788D331821D98500925550 /* libPLTDevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPLTDevice.a; sourceTree = "<group>"; };
 		42C134051803A810007CE60A /* HT-CMX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HT-CMX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C134081803A810007CE60A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		42C1340A1803A810007CE60A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -83,7 +84,6 @@
 		42C66976180DD8E20097F981 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "Images/Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		42C669C8180E07040097F981 /* HeatMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapView.h; sourceTree = "<group>"; };
 		42C669C9180E07040097F981 /* HeatMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeatMapView.m; sourceTree = "<group>"; };
-		42D01D34180F65A8000E5E03 /* libPLTDevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPLTDevice.a; sourceTree = "<group>"; };
 		42F5DBD718170BED004A6AEB /* Frozen Food_iOS6@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Frozen Food_iOS6@2x.jpg"; path = "Images/Frozen Food_iOS6@2x.jpg"; sourceTree = "<group>"; };
 		42F5DBD818170BED004A6AEB /* Frozen Food@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Frozen Food@2x.jpg"; path = "Images/Frozen Food@2x.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,7 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C134501804CEFE007CE60A /* ExternalAccessory.framework in Frameworks */,
-				42D01D35180F65A8000E5E03 /* libPLTDevice.a in Frameworks */,
+				42788D341821D98500925550 /* libPLTDevice.a in Frameworks */,
 				42C1340B1803A810007CE60A /* CoreGraphics.framework in Frameworks */,
 				42C1340D1803A810007CE60A /* UIKit.framework in Frameworks */,
 				42C134091803A810007CE60A /* Foundation.framework in Frameworks */,
@@ -201,7 +201,7 @@
 		42C1344C1804CEED007CE60A /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				42D01D34180F65A8000E5E03 /* libPLTDevice.a */,
+				42788D331821D98500925550 /* libPLTDevice.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -403,8 +403,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALTERNATE_GROUP = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (299DBCZFU2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HT-CMX/HT-CMX-Prefix.pch";
 				INFOPLIST_FILE = "HT-CMX/HT-CMX-Info.plist";
@@ -415,7 +415,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "48AFC74A-E84F-4C36-BA42-5ABAFCDC6004";
 				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};
@@ -425,8 +425,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALTERNATE_GROUP = "";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (299DBCZFU2)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HT-CMX/HT-CMX-Prefix.pch";
 				INFOPLIST_FILE = "HT-CMX/HT-CMX-Info.plist";
@@ -436,7 +436,7 @@
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/HT-CMX/PLTDevice/lib",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "48AFC74A-E84F-4C36-BA42-5ABAFCDC6004";
 				VALID_ARCHS = "arm64 armv7";
 				WRAPPER_EXTENSION = app;
 			};
