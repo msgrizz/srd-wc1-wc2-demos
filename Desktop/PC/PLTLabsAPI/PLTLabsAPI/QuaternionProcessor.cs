@@ -188,7 +188,8 @@ namespace Plantronics.Innovation.Util
                     //newquat = quatmult(newquat, quat);
 
                     //reapply current state to cal (fixed reverse parameters, thanks Doug)
-                    newquat = quatmult(quat, newquat);                
+                    //newquat = quatmult(quat, newquat);                
+                    newquat = quatmult(newquat, quat); // Douglas Wong proposed fix
                 }
                 else
                 {
@@ -207,13 +208,17 @@ namespace Plantronics.Innovation.Util
                     //retval.theta_pitch = -180.0 / 3.14159 * Math.Atan2((newquat[2] * newquat[3] + newquat[0] * newquat[1]), (newquat[0] * newquat[0] + newquat[3] * newquat[3] - (double)0.5));
 
                     // C# version, new and improved, thanks Doug:
+
                     //heading
                     retval.psi_heading = -180.0 / 3.14159 * Math.Atan2((newquat[2] * newquat[1] - newquat[0] * newquat[3]), (newquat[0] * newquat[0] + newquat[2] * newquat[2] - (double)0.5));
+
                     // elevation-pitch
                     retval.theta_pitch = 180.0 / 3.14159 * Math.Asin(2.0 * newquat[2] * newquat[3] + 2.0 * newquat[0] * newquat[1]);
+                    //retval.theta_pitch = -180.0 / 3.14159 * Math.Atan2((newquat[1] * newquat[3] - newquat[0] * newquat[2]), (newquat[0] * newquat[0] + newquat[3] * newquat[3] - (double)0.5));
 
                     // bank-roll 
                     retval.phi_roll = -180.0 / 3.14159 * Math.Atan2((newquat[1] * newquat[3] - newquat[0] * newquat[2]), (newquat[0] * newquat[0] + newquat[3] * newquat[3] - (double)0.5));
+                    //retval.phi_roll = 180.0 / 3.14159 * Math.Asin(2.0 * newquat[2] * newquat[3] + 2.0 * newquat[0] * newquat[1]);
                 }
 
                 //debug

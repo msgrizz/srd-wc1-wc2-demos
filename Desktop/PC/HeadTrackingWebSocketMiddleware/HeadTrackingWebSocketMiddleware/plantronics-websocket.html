@@ -1,0 +1,104 @@
+﻿<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>WebSocket Test</title>
+    
+  </head>
+  <script language="JavaScript">
+  	var ws;
+  	var heading;
+  	var pitch;
+  	var roll;
+  	
+  	var COMMAND_CAL_HEADSET = {
+	    type:"command",
+	    id:"cal"};
+	    
+        var MESSAGE_MOTION_TRACKING = {
+            type:"MOTION_TRACKING_SVC",
+            id: "heading"};
+    
+            
+       function processMessage(msg) {
+	//Process message from context server. If relevant to RTC server, call applicable methods.
+		var messageType = msg.type;
+		if (MESSAGE_MOTION_TRACKING.type == messageType) {
+			writeToConsole("PLT Labs motion tracking message received");
+			heading = 0;
+			pitch = 0;
+			roll = 0;
+			var coordinates = msg.payload.orientation;
+			if(coordinates){
+				var c = coordinates.split(",");
+				if(c){
+					heading = c[0];
+					pitch = c[1];
+					roll = c[2];
+				}
+			}
+			writeToConsole("Heading: " + heading + " Pitch: " + pitch + " Roll: " + roll);
+	        }
+	}
+	    
+  	function connectToHeadset(onOpenFcn){
+	//todo make this dyamic to adjust to SSL
+		var uri = 'ws://localhost:8888';
+		ws = new WebSocket(uri);
+		ws.onopen = function (evt) {
+		    writeToConsole("connected to Plantronics headset service");
+		    
+		};
+		ws.onclose = function (evt) {
+		    writeToConsole("Plantronics headset service connection closed");
+		};
+		ws.onmessage = function (evt) {
+		    var pltMessage = JSON.parse(evt.data);
+		    processMessage(pltMessage)
+		    
+		};
+		ws.onerror = function (evt) {
+		    writeToConsole("error connecting to headset service");
+		    plantronicsSocket = null;
+		};
+	}
+	
+	function headsetConnected(){
+		alert("headset connection made");	
+	}
+	
+	function cal(){
+	
+		  if(ws == null){
+		  	  return;
+		  }
+		  ws.send(JSON.stringify(COMMAND_CAL_HEADSET));
+	}
+	
+	function writeToConsole(message) {
+		var tn = document.createTextNode(message)
+		document.getElementById("console").appendChild(tn);
+    	}
+    	
+    	function doClear() {
+    		document.getElementById("console").innerHTML = '';
+    	}
+
+  
+  </script>
+
+  <body>
+  	<button onclick="connectToHeadset(headsetConnected);" >Connect</button>
+  	<button onclick="cal();" >Cal</button>
+  	
+  	<div id="log"
+         style="float:left;width:400px;border:solid 1px black;height:250px;padding: 10px">
+        <strong>Output:</strong>
+
+        <div id="console"
+             style="border:2px;border-color:black;padding: 5px;width: 90%; height: 172px; overflow-y: scroll;">
+        </div>
+        <button id="clearConsole" onclick="doClear()" style="position: relative; top: 3px;">Clear log</button>
+    </div>
+
+  </body>
+</html>

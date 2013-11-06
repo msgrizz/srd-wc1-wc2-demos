@@ -1,0 +1,10 @@
+﻿<Window x:Class="HeadTrackingDiagnostics.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Motion Tracking Sample - Debug Window" Height="587" Width="1006" Closing="Window_Closing" Icon="/HeadTrackingDiagnostics;component/app-icon.ico">
+    <Grid>
+        <TextBox x:Name="logtextbox" Margin="0,44,10,10" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <Label Content="App Log:" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
