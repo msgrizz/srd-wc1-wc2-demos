@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+	"name" : "PLTLabs BT Test",
+	"description" : "Test application for BT connectivity and data transmit",
+	"version" : "1.0",
+	"app": {
+		"background" : {
+			"scripts": ["background.js"]
+		}
+	},
+	"permissions" : [
+         {"bluetooth":[{"uuid": "82972387-294e-4d62-97b5-2668aa35f618"}]}
+    ]
+}
