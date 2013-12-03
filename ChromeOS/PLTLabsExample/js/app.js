@@ -13,8 +13,6 @@ function l(msg) {
 
 function init(){
   setButtonState(false);
-  $('#butDisconnect').click(disconnect);
-  $('#butConnect').click(findPLTDevices);
  // $('#butTI').click(sendEnableTestInterfaceCommand);
 //  $('#butButtonEvents').click(sendEnableButtonsCommand);
   
@@ -36,11 +34,14 @@ function connectionClosed(){
 }
 
 function setButtonState(connected){
-  $('#butConnect').attr("disabled", connected);
-  $('#butConnect').attr("readonly", connected);
-  
-  $('#butDisconnect').attr("readonly", !connected);
-  $('#butDisconnect').attr("disabled", !connected);
+  if (connected) {
+    $('#butConnect').click(disconnect);
+    $('#butDisconnect').attr("value", "Disconnect");
+  }
+  else{
+     $('#butConnect').click(findPLTDevices);
+    $('#butDisconnect').attr("value", "Connect");
+  }
 }
 
 function devicesFound(deviceList){
