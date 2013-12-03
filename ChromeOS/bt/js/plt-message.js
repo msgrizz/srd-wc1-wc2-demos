@@ -81,6 +81,8 @@ var createMessage = function(options){
 
 };
 
+
+
 //The packet looks like this in byte array form:
 //-0X10
 //-0X7
@@ -91,20 +93,7 @@ var createMessage = function(options){
 //-0X1
 //-0X1
 //-0X0
-var createHostNegotiateMessage = function(){
-  var options = new Object();
-  options.messageType = PROTOCOL_VERSION_TYPE;
-  var address = new ArrayBuffer(BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  options.address = address;
-  var data = new ArrayBuffer(3);
-  var data_view = new Uint8Array(data);
-  data_view[0] = 0X1;
-  data_view[1] = 0X1; 
-  options.messageData = data;  
-  return createMessage(options);
-  
-}
+
 
 //Enables button press events - note the create enable test inteface command must be sent fir
 var createEnableButtonsMessage = function(options){
@@ -124,6 +113,8 @@ var createEnableButtonsMessage = function(options){
   options.messageData = data;  
   return createMessage(options);  
 }
+
+/*
 
 //creates the command message needed to enable/disable the 
 //test interface features - which are a prerequisite for 
@@ -147,7 +138,7 @@ var createEnableTestInterfaceMessage = function(options){
   return createMessage(options);  
 }
 
-
+*/
 
 //expects byte array as parameter
 var parseDevicePrototol = function(message, callback){
