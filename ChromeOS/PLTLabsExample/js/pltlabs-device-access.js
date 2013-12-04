@@ -405,7 +405,7 @@ var connectedEvent = function(event){
       }
       return;
     }
-    else if(connectedAddress == address && event.id == PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT){
+    else if(connectionAddress == address && event.id == PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT){
       log('connectedEvent: device disconnected id = ' + address + ' resetting index at ' + index);
       //reset the address to 0
       PLTLabsAPI.connectedDevices[index] = 0;
