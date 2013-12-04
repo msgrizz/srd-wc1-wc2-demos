@@ -88,11 +88,22 @@
    
 #logHolder{
     height:360px;
-    width:350px;
-    margin-bottom:20px;
+    width:440px;
+   /* margin-bottom:20px; */
     outline:none;
+    background-color: #000000;
 } 
 
+.logEntry{
+    min-height:24px;
+    padding:6px;
+    border:1px solid #FFFFFF;
+    border-radius:25px;
+    background-color: #C0C0C0;
+    padding:8px 6px 4px 37px;
+    position:relative;
+    margin:0 10px 10px 0;
+}
 
 #options{
     background-color:#202020;
@@ -100,7 +111,7 @@
     height:360px;
     position:absolute;
     right:0;
-    top:90px;
+    top:95px;
     width:200px;
     color: #FFFFFF;    
 }
