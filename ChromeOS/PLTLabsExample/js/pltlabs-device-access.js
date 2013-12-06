@@ -17,7 +17,7 @@ var devices = [];
 var onDeviceAddedCallback = null;
 var onSocketConnectionCallback = null;
 var onEventCallback = null;
-var subscribedEvents = null;
+var subscribedEvents = [];
 
 var PLTLabsAPI = {};
 
@@ -177,12 +177,11 @@ var enableTestInterfaces = function(){
   }
   //simple test right now - test for the presence of either the test interface events, or the button events, if 
   //either exist then enable the test interface
-  var enableTestInterface = (PLTLabsAPI.subscribedEvents.indexOf(PLTLabsMessageHelper.TEST_INTERFACE_ENABLE_DISABLE_EVENT) > -1);
   var enableButtonEvents = (PLTLabsAPI.subscribedEvents.indexOf(PLTLabsMessageHelper.BUTTON_EVENT) > -1);
   //todo - this test will grow over time - so revisit in the future for optimizations
-  if((enableTestInterface || enableButtonEvents) && !PLTLabsAPI.testInterfaceEnabled){
+  if(enableButtonEvents && !PLTLabsAPI.testInterfaceEnabled){
     //disable/enable the interface so the states match 
-    var command = {"address": deviceRoute, "enabled" : (enableTestInterface || enableButtonEvents)};
+    var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
     var packet = PLTLabsMessageHelper.createEnableTestInterfaceCommand(command); 
     log('enableTestInterfaces: sending command '  + JSON.stringify(command));
     PLTLabsAPI.sendCommand(packet);
@@ -198,10 +197,12 @@ var enableButtons = function(){
     enableTestInterfaces();
   }
   
-  var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
-  var packet = PLTLabsMessageHelper.createEnableButtonEventsCommand(command); 
-  log('enableButtons: sending command ' + JSON.stringify(command));
-  PLTLabsAPI.sendCommand(packet);
+    window.setTimeout(function(){
+  
+    var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
+    var packet = PLTLabsMessageHelper.createEnableButtonEventsCommand(command); 
+    log('enableButtons: sending command ' + JSON.stringify(command));
+    PLTLabsAPI.sendCommand(packet)}, 100)
 };
   
 
@@ -480,8 +481,7 @@ PLTLabsMessageHelper.AUDIO_STATUS_EVENT = 0x0E1E;
 //commands
 PLTLabsMessageHelper.CREATE_ENABLE_TEST_INTERFACE_MESSAGE_ID = 0x1000;
 PLTLabsMessageHelper.RAW_BUTTONTEST_EVENT_ENABLE_DISABLE_MESSAGE_ID = 0x1007;
-
-  
+PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENTS = 0x0800; 
   
 //creates the message needed to kick off the sending and receiving of 
 //PLT device events, settings and commands  
@@ -516,26 +516,78 @@ PLTLabsMessageHelper.createEnableTestInterfaceCommand = function(options){
   options.messageId = this.CREATE_ENABLE_TEST_INTERFACE_MESSAGE_ID;
   var data = new ArrayBuffer(this.BR_MESSAGE_BOOL_SIZE);
   var data_view = new Uint8Array(data);
-  data_view[0] = options.enabled ? 0x1 : 0x0;
+  data_view[0] = this.boolToByte(options.enabled);
   options.messageData = data;  
   return this.createMessage(options);  
 }
 
+//Enables/disabled proximity
+/*
+Argument is options - which has one manditory field
+enabled - must be true or false - If true, this will enable the signal strength monitoring.
+
+other optional settings and thier defaults
+connectionId - 0 -  - The connection ID of the link being used to generate the signal strength event.
+reportOnDonnedOnly - false - If true, report near far events only when headset is donned.
+trendDetection - false - If true, Report rssi and trend events in headset audio
+audioRSSIReport - false - If true, report Near/Far events in headset Audio 
+audioReportNearFar -false - If true, report SignalStrength and Near Far events to base Ê
+reportNearFarToBase - true - This number multiplies the dead_band value (currently 5 dB) in the headset configuration.
+sensitivity - 5 - This result is added to an minimum dead-band, currently 5 dB to compute the total deadband - in the range 0 to 9
+nearThreshold - 50 - The near / far threshold in dB Êin the range -99 to +99; larger values mean a weaker signal 
+*/
+PLTLabsMessageHelper.createEnableProximityCommand = function(options){
+  if(!options.address || options.address.byteLength != this.BR_ADDRESS_SIZE){
+    options.address = deviceRoute;
+  }
+  options.messageType = this.PERFORM_COMMAND_TYPE;
+  options.messageId = this.CONFIGURE_SIGNAL_STRENGTH_EVENT;
+  //the array size is nine bytes + one short (2-bytes)
+  var data = new ArrayBuffer(11);
+  var data_view = new Uint8Array(data);
+  
+  //"connectionId" type="BYTE"
+  data_view[0] = 0;//options.connectionId ? options.connectionId : 0x0;   
+  //"enabled" type="BOOLEAN"
+  data_view[1] = this.boolToByte(options.enabled);
+  //"reportOnDonnedOnly" type="BOOLEAN"
+  data_view[2] = 0; //options.reportOnDonnedOnly ? this.boolToByte(options.reportOnDonnedOnly) : 0x0;
+  //"trendDetection" type="BOOLEAN"
+  data_view[3] = 0;//options.trendDetection ? this.boolToByte(options.trendDetection) : 0x0;
+  //"audioRSSIReport" type="BOOLEAN"
+  data_view[4] = 0;//options.audioRSSIReport ? this.boolToByte(options.audioRSSIReport) : 0x0;
+  //"audioReportNearFar" type="BOOLEAN"
+  data_view[5] = 0;//options.audioReportNearFar ? this.boolToByte(options.audioReportNearFar) : 0x0;
+  //"reportNearFarToBase" type="BOOLEAN"
+  data_view[6] = 1;//options.reportNearFarToBase ? this.boolToByte(options.reportNearFarToBase) : 0x1;
+  //"sensitivity" type="BYTE"
+  data_view[7] = 5;//options.sensitivity ? options.sensitivity : 0x5;
+  //"nearThreshold" type="BYTE"
+  data_view[8] = 50;//data_view[7] = options.nearThreshold ? options.nearThreshold : 0x28;
+ 
+  //"max timeout" type="SHORT"
+  data_view[9] = 0;
+  data_view[10] = 60; //default to 60 seconds - TODO - do we need to add this to the options?
+  
+  options.messageData = data;  
+  return this.createMessage(options);  
+  
+  
+};
+
 //Enables button press events - note the create enable test inteface command must be sent fir
 PLTLabsMessageHelper.createEnableButtonEventsCommand = function(options){
   if(!options.enabled){
-    console.log('options requires boolean field: enabled');
-    return null;
+    throw new PLTLabsException('options requires boolean field: enabled');
   }
   if(!options.address || options.address.byteLength != this.BR_ADDRESS_SIZE){
-    console.log('options requires byte[4] field: address');
-    return null;
+    throw new PLTLabsException('options requires byte[4] field: address');
   }
   options.messageType = this.PERFORM_COMMAND_TYPE;
   options.messageId = this.RAW_BUTTONTEST_EVENT_ENABLE_DISABLE_MESSAGE_ID;
   var data = new ArrayBuffer(this.BR_MESSAGE_BOOL_SIZE);
   var data_view = new Uint8Array(data);
-  data_view[0] = options.enabled ? 0x1 : 0x0;
+  data_view[0] = this.boolToByte(options.enabled);
   options.messageData = data;  
   return this.createMessage(options);  
 }
@@ -613,29 +665,29 @@ PLTLabsMessageHelper.parseEvent = function(message){
   event.properties = {};
   switch(event.id){
     case this.WEARING_STATE_CHANGED_EVENT:
-      event.name = "wearstatechanged";
-      event.properties['worn'] = data_view[2] == 0x1 ? true : false;
+      event.name = "Wear State Changed";
+      event.properties['worn'] = this.byteToBool(data_view[2]);
       break;
     case this.CONNECTED_DEVICE_EVENT:
-      event.name = "connecteddevice";
+      event.name = "Connected Device";
       event.properties['address'] = data_view[2];
       break;
     case this.DISCONNECTED_DEVICE_EVENT:
-      event.name = "disconnecteddevice";
+      event.name = "Disconnected Device";
       event.properties['address'] = data_view[2];
       break;
     case this.TEST_INTERFACE_ENABLE_DISABLE_EVENT:
-      event.name = "testinterfaceenabledisable";
-      event.properties['enabled'] = data_view[2] == 0x1 ? true : false;
+      event.name = "Test Interface Enabled/Disabled";
+      event.properties['enabled'] = this.byteToBool(data_view[2]);
       break;
     case this.BUTTON_EVENT:
-      event.name = "button";
+      event.name = "Button Press";
       event.properties['pressType'] = data_view[2];
       event.properties['buttonId'] = data_view[3];
       event.properties['buttonName'] = this.getButtonName(event.properties['buttonId']);
       break;
     case this.CALL_STATUS_CHANGE_EVENT:
-      event.name = "callstatuschange";
+      event.name = "Call Status Change";
       event.properties["callStateName"] = this.callStateStringLookup(data_view[2]);
       event.properties["state"] = data_view[2];
       var phoneNumberLength = this.parseShortArray(3, data_view, (3 + this.BR_MESSAGE_ID_SIZE));
@@ -643,7 +695,7 @@ PLTLabsMessageHelper.parseEvent = function(message){
       event.properties["phoneNumber"] = phoneNumber.join("");
       break;
     case this.AUDIO_STATUS_EVENT:
-      event.name = "audiostatus";
+      event.name = "Audio Status";
       event.properties["codec"] = data_view[2];
       event.properties["codecName"] = this.getCodecName(data_view[2]);
       event.properties["direction"] = data_view[3];
@@ -652,17 +704,22 @@ PLTLabsMessageHelper.parseEvent = function(message){
       event.properties["micGain"] = data_view[5];
       break;
     case this.BATTERY_STATUS_CHANGED_EVENT:
-      event.name = "batterystatuschanged";
+      event.name = "Battery Status Changed";
       event.properties["level"] = data_view[2];
       event.properties["numberOfLevels"] = data_view[3];
       event.properties["minutesOfTalkTime"] = this.parseShortArray(4, data_view, 6);
-      event.properties["talkTimeIsHighEstimate"] = data_view[6] == 0x1 ? true : false;
+      event.properties["talkTimeIsHighEstimate"] = this.byteToBool(data_view[6]);
       break;
     case this.SIGNAL_STRENGTH_EVENT:
-      event.name = "signalstrength";
+      event.name = "Signal Strength";
       event.properties["connectionId"] = data_view[2];
-      event.properties["strength"] = data_view[3];
+      event.properties["rssi"] = data_view[3];
       event.properties["nearFar"] = data_view[4];
+      event.properties["proximity"] = this.proximityStringLookup(data_view[4]);
+      break;
+    case this.RAW_BUTTON_TEST_ENABLE_DISABLE_EVENT:
+      event.name = "Button Events Enabled/Disabled"
+      event.properties["enabled"] = this.byteToBool(data_view[2]);
       break;
     default:
       event.name = "unknown";
@@ -728,6 +785,17 @@ PLTLabsMessageHelper.callStateStringLookup = function(callStateCode){
   }
 }
 
+PLTLabsMessageHelper.proximityStringLookup = function(proximityCode){
+  switch(proximityCode){
+    case 0:
+      return "Far";
+    case 1:
+      return "Near";
+    default:
+      return "Unknown";
+  }
+}
+
 PLTLabsMessageHelper.parseCharArray = function(index, buffer, bounds){
    var result = new Array();
    for(index; index < bounds; index++){
@@ -743,6 +811,13 @@ PLTLabsMessageHelper.parseByteArray = function(index, buffer, bounds){
     result.push(val);
   }
   return result;
+}
+PLTLabsMessageHelper.byteToBool = function(byte){
+  return byte == 0x1;
+}
+
+PLTLabsMessageHelper.boolToByte = function(bool){
+  return bool ? 0x1 : 0x0;
 }
 PLTLabsMessageHelper.parseShortArray = function(index, buffer, bounds){
    var result = new Array();

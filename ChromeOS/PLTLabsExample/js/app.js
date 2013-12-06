@@ -4,8 +4,27 @@
 
 
 var jScrollPaneAPI = null;
+var eventSubscriptions = [
+  PLTLabsMessageHelper.TEST_INTERFACE_ENABLE_DISABLE_EVENT,
+  PLTLabsMessageHelper.RAW_BUTTON_TEST_ENABLE_DISABLE_EVENT,
+  PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT,
+  PLTLabsMessageHelper.AUTO_ANSWER_ON_DON_CHANGED_EVENT,
+  PLTLabsMessageHelper.WEARING_SENSOR_ENABLE_DISABLE_EVENT,
+  PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENT,
+  PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT,
+  PLTLabsMessageHelper.BATTERY_STATUS_CHANGED_EVENT,
+  PLTLabsMessageHelper.PAIRING_MODE_EVENT,
+  PLTLabsMessageHelper.LOW_BATTERY_VOICE_PROMPT_EVENT,
+  PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT,
+  PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
+  PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
+  PLTLabsMessageHelper.AUDIO_STATUS_EVENT];
+
+
 function init(){
   setButtonState(false);
+  $('#cbButton').click(enableButtonPressEvents);
+  $('#cbProximity').click(enableProximity);
   jScrollPaneAPI =  $('#logHolder').jScrollPane({
             verticalDragMinHeight: 12,
             verticalDragMaxHeight: 12
@@ -23,6 +42,8 @@ function l(msg) {
 }
 
 function findPLTDevices(){
+   $('#butConnect').attr("value", "Connecting");
+   $('#butConnect').attr("disabled", true);
    PLTLabsAPI.findDevices(devicesFound);
 }
 
@@ -36,6 +57,7 @@ function connectionClosed(){
 }
 
 function setButtonState(connected){
+  $('#butConnect').attr("disabled", false);
   if (connected) {
     $('#butConnect').click(disconnect);
     $('#butConnect').attr("value", "Disconnect");
@@ -60,22 +82,51 @@ function devicesFound(deviceList){
 }
 
 function connectionOpened(address){
- 
   setButtonState(true);
-  
-  var events = [PLTLabsMessageHelper.BUTTON_EVENT];
   var options = new Object();
-  options.events = events;
-  
-  
+  options.events = eventSubscriptions;
   PLTLabsAPI.subscribeToEvents(options, onEvent);
   
 }
     
 function onEvent(info){
-   var event = 'Event: 0x'+info.id.toString(16);
+   var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
+    event += '<ul>';
+    for(prop in info.properties){
+     event += '<li>' + prop + ' = ' + info.properties[prop] + '</li>';
+    }
+    event += '</ul>';
    l(event); 
 }
 
+function enableButtonPressEvents(){
+  if (this.checked) {
+    eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
+  }
+  else{
+    eventSubscriptions.pop(PLTLabsMessageHelper.BUTTON_EVENT);
+  }
+  var options = new Object();
+  options.events = eventSubscriptions;
+  PLTLabsAPI.subscribeToEvents(options, onEvent);
+  
+}
+function enableProximity(){
+  var options = new Object();
+  if(this.checked){
+     options.enabled = true;
+  }
+  else{
+    options.enabled = false;
+  }
+  for(i = 0; i < PLTLabsAPI.connectedDevices.byteLength; i++){
+    if (PLTLabsAPI.connectedDevices[i] == 0x0) {
+      continue;
+    }
+    options.connectionId = PLTLabsAPI.connectedDevices[i];
+    var packet = PLTLabsMessageHelper.createEnableProximityCommand(options);
+    PLTLabsAPI.sendCommand(packet);
+  }
+}
 
 init();

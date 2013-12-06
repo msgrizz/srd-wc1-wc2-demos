@@ -74,17 +74,6 @@
     text-align:center;
     text-shadow:1px 1px 0px #1570cd;
 }
-#connectBar input[type="button"]:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #1e62d0), color-stop(1, #3d94f6) );
-	background:-moz-linear-gradient( center top, #1e62d0 5%, #3d94f6 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e62d0', endColorstr='#3d94f6');
-	background-color:#1e62d0;
-}
-
-#connectBar input[type="button"]:active {
-	position:relative;
-	top:1px;
-}
    
 #logHolder{
     height:360px;
