@@ -5,6 +5,8 @@
 var PLT_DEVICE_NAME = 'PLT_Legend';
 
 var BT_SOCKET_READ_INTERVAL = 10;
+var BR_MIN_PACKET_SIZE = 4;
+var BR_SEQUENCE_OFFSET = 2;
 
 
 var pltDevice;
@@ -36,64 +38,86 @@ function init(){
   findAndConnect();
 }
 
-
+//Responsible for the initial handshake with the Bladerunner device
+//sends a 9-byte U8 array to the device after the profile has been negotiated and the 
+//connection established.  The host negotiate packet is needed to start the flow of contextual data
+//to and from the device
+//
+//The packet looks like this in byte array form:
+//-0X10
+//-0X07
+//-0X00
+//-0X00
+//-0X00
+//-0X01
+//-0X01
+//-0X01
+//-0X00
 var hostNegotiate = function(){
-  if(!pltSocket){
-    return; 
-  }
-   /*Host Negotiate Command - 0X10
-                             -0X07
-                             -0X00
-                             -0X00
-                             -0X00
-                             -0X01
-                             -0X01
-                             -0X01
-                             -0X00
-                             
-                             */
     var buffer = new ArrayBuffer(9);
-    buffer[0] = 0X10;
-    buffer[1] = 0X07;
-    buffer[2] = 0X00;
-    buffer[3] = 0X00;
-    buffer[4] = 0X00;
-    buffer[5] = 0X01;
-    buffer[6] = 0X01;
-    buffer[7] = 0X00;
-    buffer[8] = 0X00;
-  
-  
-    chrome.bluetooth.write({socket:pltSocket, data:buffer},
-        function(bytes) {
-          if (chrome.runtime.lastError) {
-            log('Write error: ' + chrome.runtime.lastError.message);
-          } else {
-            log('wrote ' + bytes + ' bytes');
-             chrome.bluetooth.read({socket: pltSocket}, parseBladerunnerData);
-          }
-        });};
-
-//Handle the device connect
-var onConnectHandler = function(socket) {
-  log("onConnectHandler - socket = " + socket);
-   //if we get a socket then set up the read function to check for data every 500 milliseconds 
-  if (socket) {
-        pltSocket = socket;
-       hostNegotiate();
-       
-        
-  } else {
-        log("Failed to connect to socket");
-  }
+    var view = new Uint8Array(buffer);
+    view[0] = 0X10;
+    view[1] = 0X7;
+    view[5] = 0X1;
+    view[6] = 0X1;
+    view[7] = 0X1;
+    log('sending host negotiate');
+    sendBladerunnerPacket(buffer);   
 }
 
 var parseBladerunnerData = function(data){
-  if(!data){
+  if(!data||data.byteLength < BR_MIN_PACKET_SIZE){
+   return;
+  }
+  
+  var data_view = new Uint8Array(data, 0);
+  var packetType = data_view[0] >>4;
+  var messageType = data_view[5];
+  var length = data_view[1];
+  //todo document magic numbers
+ // var bladerunnerMessageLength = ((data_view[2] & 0x0f) << 8) + data_view[3] + 2;
+  var buffer = new ArrayBuffer(length);
+  var bladerunnerMessage = new Uint8Array(buffer);
+  
+   
+  //more magic numbers here
+  //for(var count = 0; count < (63 - BR_SEQUENCE_OFFSET) && count < length; count++){
+  //  bladerunnerMessage[count] = data_view[count +  BR_SEQUENCE_OFFSET];
+ // }
+  
+  log("Bladerunner data: packetType = " + packetType + ", length = " + length + " message type = " + messageType);
+ 
+};
+
+
+//Attempts to send a blade runner packet, if error occurs will log it out.
+function sendBladerunnerPacket(packet){
+  if(!pltSocket){
+    log('Packet send fail - socket is null');
     return; 
   }
-      log("gonna parse me some bladerunner data: " + data.byteLength);
+  
+  chrome.bluetooth.write({socket:pltSocket, data:packet},
+                         function(bytes) {
+                           if (chrome.runtime.lastError) {
+                             log('sendBladerunnerPacket write error: ' + chrome.runtime.lastError.message);
+                           }
+                         });
 }
+
+//Handle the device connect event and set up the bladerunner connection and the socket read interval
+var onConnectHandler = function(socket) {
+  if(socket){  
+    pltSocket = socket;
+    pltReadIntervalId = window.setInterval(function() {
+                               chrome.bluetooth.read({socket: pltSocket}, parseBladerunnerData); }, BT_SOCKET_READ_INTERVAL);
+    hostNegotiate();    
+  } 
+  else {
+    log("onConnectHandler: failed to connect to socket");
+  }
+}
+
 
 //kill the socket connection
 var disconnect = function(){
@@ -121,7 +145,7 @@ var getBladerunnerDevice = function(callback){
         log('No callback specified');
         return;
     }
-    log('Searching for BladeRunner Devices');
+    log('Searching for Bladeurnner Devices');
      
     chrome.bluetooth.getAdapterState(function(adapterState){
         if(!adapterState.available || !adapterState.powered){
@@ -147,7 +171,6 @@ var connectToDevice = function() {
        
   for(var i in devices){
     var d = devices[i];
-    log(' device found: ' + d.name + ' address: ' + d.address + ' connected: ' + d.connected );
     if(d.connected && d.name == PLT_DEVICE_NAME){
         log(' device found: ' + d.name + ' address: ' + d.address );
         pltDevice = d;
