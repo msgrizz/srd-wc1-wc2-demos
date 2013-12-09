@@ -57,6 +57,18 @@ using Plantronics.Innovation.PLTLabsAPI;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.4:
+ * Date: 9th December 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Change the sensitivity to allow for larger head movements 
+ *     (make head left/right more like using arrow keys left and right)
+ *     (still some increase in speed of bat movement based on head angle)
+ *   - Remove awaiting calibration and other messages from screen
+ *     (replace with small graphical status icon in lower left of screen
+ *      to show calibration status, red if not calibrated, and also show
+ *      basic heading indication of left, center, right)
+ *
  * Version 1.0.0.3:
  * Date: 1st November 2013
  * Changed by: Lewis Collins
@@ -94,7 +106,9 @@ namespace Breakout
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private Texture2D BatTexture, BallTexture, BrickTexture;
+        private Texture2D BatTexture, BallTexture, SuperBallTexture, BrickRedTexture, BrickGreenTexture, BrickBlueTexture;
+        private Texture2D HTNotCalib, HTCenter, HTLeft, HTLeftFast, HTRight, HTRightFast, HTNotConnected;
+        private Texture2D PLTTex;
 
         private int m_screenmax_x; // store a copy of max screen coordinate
         private int m_screenmax_y; // store a copy of max screen coordinate
@@ -120,6 +134,19 @@ namespace Breakout
                           currentKeyboardState;// Keyboard state variables
         private Wall m_wall;
         private List<Brick> m_brickkilllist;
+        private static bool m_usebasicmovements = true; // use larger headmovements, better for stage demos
+        private int m_batspeed = 0;
+        private Vector2 m_htorigin = new Vector2(44, 8);
+        private Vector2 m_htstatuspos;
+
+        private Vector2 m_pltpos, m_plthotspot, m_pltvel;
+
+        private HeadTrackState m_htstate = HeadTrackState.NotConnected;
+
+        private bool m_superball = false;
+        Timer m_superballtimer;
+        private bool m_triggersuperball = false;
+        private bool m_triggerslowdown = false;
 
         public Game1()
         {
@@ -160,12 +187,29 @@ namespace Breakout
             m_increasespeed.Interval = 10000;
             m_increasespeed.Elapsed += new ElapsedEventHandler(m_increasespeed_Elapsed);
 
-            m_player1bat = new Bat();
-            m_ball = new Ball();
+            m_superballtimer = new Timer();
+            m_superballtimer.Interval = 20000;
+            m_superballtimer.Elapsed += new ElapsedEventHandler(m_superballtimer_Elapsed);
 
             BatTexture = Content.Load<Texture2D>("bat");
             BallTexture = Content.Load<Texture2D>("ball");
-            BrickTexture = Content.Load<Texture2D>("brick");
+            SuperBallTexture = Content.Load<Texture2D>("superball");
+            BrickRedTexture = Content.Load<Texture2D>("brickred");
+            BrickGreenTexture = Content.Load<Texture2D>("brickgreen");
+            BrickBlueTexture = Content.Load<Texture2D>("brickblue");
+
+            HTNotCalib = Content.Load<Texture2D>("headtrack_indicator_notcalibrated");
+            HTCenter = Content.Load<Texture2D>("headtrack_indicator_center");
+            HTLeft = Content.Load<Texture2D>("headtrack_indicator_left");
+            HTLeftFast = Content.Load<Texture2D>("headtrack_indicator_leftfast");
+            HTRight = Content.Load<Texture2D>("headtrack_indicator_right");
+            HTRightFast = Content.Load<Texture2D>("headtrack_indicator_rightfast");
+            HTNotConnected = Content.Load<Texture2D>("headtrack_indicator_notconnected");
+
+            PLTTex = Content.Load<Texture2D>("Plantronics");
+
+            m_player1bat = new Bat(BatTexture);
+            m_ball = new Ball(BallTexture);
 
             ReconfigureScreen();
 
@@ -175,33 +219,66 @@ namespace Breakout
             m_pltlabsapi = new PLTLabsAPI(this);
         }
 
+        void m_superballtimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            m_superball = false;
+            m_superballtimer.Stop();
+        }
+
         void m_increasespeed_Elapsed(object sender, ElapsedEventArgs e)
         {
-            m_ball.xvel += (m_ball.xvel > 0 ? 1 : -1);
+            //m_ball.xvel += (m_ball.xvel > 0 ? 1 : -1); // only make y speed increase, x speed varies based on bat incidence angle!
             m_ball.yvel += (m_ball.yvel > 0 ? 1 : -1);
         }
 
         private void CreateWall()
         {
             m_wall = new Wall();
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 4; j++)
             {
                 for (int i = 0; i < (graphics.GraphicsDevice.Viewport.Width / 42); i++)
                 {
-                    Brick brick = new Brick();
+                    if (i > 2 && i < (graphics.GraphicsDevice.Viewport.Width / 42) - 3)
+                    {
+                        Brick brick = new Brick(ChooseColor(j));
 
-                    brick.xpos = (i * 42) + (BrickTexture.Width / 2) + (graphics.GraphicsDevice.Viewport.Width % 42);
-                    brick.ypos = 50 + (j * 16);
-                    brick.width = BrickTexture.Width;
-                    brick.height = BrickTexture.Height;
-                    brick.halfwidth = BrickTexture.Width / 2;
-                    brick.halfheight = BrickTexture.Height / 2;
-                    brick.hotspot.X = BrickTexture.Width / 2;
-                    brick.hotspot.Y = BrickTexture.Height / 2;
+                        brick.xpos = (i * 42) + (BrickRedTexture.Width / 2) + (graphics.GraphicsDevice.Viewport.Width % 42);
+                        brick.ypos = 50 + (j * 16) + 20;
+                        brick.width = BrickRedTexture.Width;
+                        brick.height = BrickRedTexture.Height;
+                        brick.halfwidth = BrickRedTexture.Width / 2;
+                        brick.halfheight = BrickRedTexture.Height / 2;
+                        brick.hotspot.X = BrickRedTexture.Width / 2;
+                        brick.hotspot.Y = BrickRedTexture.Height / 2;
 
-                    m_wall.m_bricks.Add(brick);
+                        m_wall.m_bricks.Add(brick);
+                    }
                 }
             }
+        }
+
+        private Texture2D ChooseColor(int j)
+        {
+            Texture2D tex = BrickGreenTexture;
+            switch (j)
+            {
+                case 0:
+                    tex = BrickGreenTexture;
+                    break;
+                case 1:
+                    tex = BrickBlueTexture;
+                    break;
+                case 2:
+                    tex = BrickRedTexture;
+                    break;
+                case 3:
+                    tex = BrickGreenTexture;
+                    break;
+                default:
+                    tex = BrickGreenTexture;
+                    break;
+            }
+            return tex;
         }
 
         private void ReconfigureScreen()
@@ -227,6 +304,13 @@ namespace Breakout
 
             // Wall
             CreateWall();
+        
+            m_htstatuspos = new Vector2(m_halfscreenmax_x, m_screenmax_y - 10);
+
+            m_pltpos = new Vector2(m_halfscreenmax_x, (PLTTex.Height / 2) + 38);
+            m_plthotspot = new Vector2(PLTTex.Width / 2, PLTTex.Height / 2);
+            m_pltvel = new Vector2(0, 0);
+            AnimatePLT(m_gameover);
         }
 
         /// <summary>
@@ -275,6 +359,8 @@ namespace Breakout
             if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C)))
             {
                 m_autoputoncalibratetimer.Start();
+                m_calibrated = false;
+                m_htstate = HeadTrackState.NotCalib;
             }
 
             // restart game:
@@ -294,6 +380,19 @@ namespace Breakout
                 headtrack_xoffset -= 5;
             }
 
+            if (m_batspeed != 0)
+            {
+                headtrack_xoffset += m_batspeed;
+                if (headtrack_xoffset > ( m_halfscreenmax_x - m_player1bat.halfwidth))
+                {
+                    headtrack_xoffset = ( m_halfscreenmax_x - m_player1bat.halfwidth);
+                }
+                if (headtrack_xoffset < - ( m_halfscreenmax_x - m_player1bat.halfwidth))
+                {
+                    headtrack_xoffset = - ( m_halfscreenmax_x - m_player1bat.halfwidth);
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -303,17 +402,47 @@ namespace Breakout
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(new Color(0,38,77)); //new Color(1, 82, 147));
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            if (m_gameover && graphics.IsFullScreen)
+            {
+                m_pltpos.X += m_pltvel.X;
+                m_pltpos.Y += m_pltvel.Y;
+                if (m_pltpos.X > m_screenmax_x - PLTTex.Width / 2)
+                {
+                    m_pltpos.X = (m_screenmax_x - PLTTex.Width / 2);
+                    m_pltvel.X = -m_pltvel.X;
+                }
+                if (m_pltpos.X < PLTTex.Width / 2)
+                {
+                    m_pltpos.X = PLTTex.Width / 2;
+                    m_pltvel.X = -m_pltvel.X;
+                }
+                if (m_pltpos.Y > m_screenmax_y - PLTTex.Height / 2)
+                {
+                    m_pltpos.Y = (m_screenmax_y - PLTTex.Height / 2);
+                    m_pltvel.Y = -m_pltvel.Y;
+                }
+                if (m_pltpos.Y < PLTTex.Height / 2)
+                {
+                    m_pltpos.Y = PLTTex.Height / 2;
+                    m_pltvel.Y = -m_pltvel.Y;
+                }
+            }
+
+            // new, draw plt log
+            spriteBatch.Draw(PLTTex, m_pltpos, null, Color.RoyalBlue, 0f, m_plthotspot, 1.0f, SpriteEffects.None, 0f);
+
             // Draw the head tracker target on the screen offset from the center of the screen
             // by an amount on x/y axis which is based on the user's head movements
             // (for calculation see HeadsetTrackingUpdate function below)
-            spriteBatch.Begin();
             Vector2 pos = new Vector2(m_halfscreenmax_x + headtrack_xoffset, m_player1bat.ypos);  //m_halfscreenmax_y + headtrack_yoffset);
             if (pos.X < m_player1bat.halfwidth) pos.X = m_player1bat.halfwidth;
             if (pos.X > (m_screenmax_x - m_player1bat.halfwidth)) pos.X = (m_screenmax_x - m_player1bat.halfwidth);
-            spriteBatch.Draw(BatTexture, pos, null, Color.White, 0f, m_player1bat.hotspot, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(m_player1bat.myTexture, pos, null, Color.White, 0f, m_player1bat.hotspot, 1.0f, SpriteEffects.None, 0f);
 
             // animate the ball and
             // bounce ball off bat
@@ -330,18 +459,116 @@ namespace Breakout
             if (batxpostemp > (m_screenmax_x - m_player1bat.halfwidth)) batxpostemp = (m_screenmax_x - m_player1bat.halfwidth);
 
             if (!m_gameover)
-                CollideDetectBallWithItem(batxpostemp, m_player1bat);
-
-            m_brickkilllist = new List<Brick>();
-            foreach (Brick brick in m_wall.m_bricks)
             {
-                CollideDetectBallWithItem(brick.xpos, brick, false);
+                // animate ball on x-axis
+                m_ball.xpos += m_ball.xvel;
+
+                // check if touching bat
+                if (CollideDetectBallWithItem(batxpostemp, m_player1bat, true))
+                {
+                    m_ball.xpos -= m_ball.xvel; // move back
+                    m_ball.xvel = -m_ball.xvel; // invert xvel
+                }
+
+                // check if touching bricks
+                bool doneinvert = false;
+                m_brickkilllist = new List<Brick>();
+                foreach (Brick brick in m_wall.m_bricks)
+                {
+                    if (CollideDetectBallWithItem(brick.xpos, brick, false))
+                    {
+                        if (!m_superball)
+                        {
+                            m_ball.xpos -= m_ball.xvel; // move back
+                            if (!doneinvert)
+                            {
+                                m_ball.xvel = -m_ball.xvel; // invert xvel
+                                doneinvert = true;
+                            }
+                        }
+                    }
+                }
+
+                // destroy bricks:
+                foreach (Sprite brick in m_brickkilllist)
+                {
+                    m_wall.m_bricks.Remove((Brick)brick);
+                }
+
+                // ---------------------------------------------------------
+                // animate ball on y-axis
+                m_ball.ypos += m_ball.yvel;
+
+                // check if touching bat
+                if (CollideDetectBallWithItem(batxpostemp, m_player1bat, true))
+                {
+                    m_ball.ypos -= m_ball.yvel; // move back
+                    m_ball.yvel = -Math.Abs(m_ball.yvel); // invert xvel (up only)
+                    // accelerate ball depending on position on bat
+                    int difference = (int)Math.Abs(m_ball.xpos - batxpostemp) / 10;
+                    if (batxpostemp > m_ball.xpos)
+                    {
+                        // bat is to right of ball
+                        m_ball.xvel -= difference;
+                        if (m_ball.xvel < -5) m_ball.xvel = -5;
+                    }
+                    else
+                    {
+                        // bat is to right of ball
+                        m_ball.xvel += difference;
+                        if (m_ball.xvel > 5) m_ball.xvel = 5;
+                    }
+                }
+
+                // check if touching bricks
+                doneinvert = false;
+                m_brickkilllist = new List<Brick>();
+                foreach (Brick brick in m_wall.m_bricks)
+                {
+                    if (CollideDetectBallWithItem(brick.xpos, brick, false))
+                    {
+                        if (!m_superball)
+                        {
+                            m_ball.ypos -= m_ball.yvel; // move back
+                            if (!doneinvert)
+                            {
+                                m_ball.yvel = -m_ball.yvel; // invert xvel
+                                doneinvert = true;
+                            }
+                        }
+                    }
+                }
+
+                // destroy bricks:
+                foreach (Sprite brick in m_brickkilllist)
+                {
+                    m_wall.m_bricks.Remove((Brick)brick);
+                }
+
+                if (m_ball.xvel < -5) m_ball.xvel = -5;
+                if (m_ball.xvel > 5) m_ball.xvel = 5;
+
+                if (m_triggersuperball)
+                {
+                    // super ball
+                    DoSuperBall();
+                }
+
+                if (m_triggerslowdown)
+                {
+                    // slow ball
+                    m_triggerslowdown = false;
+                    if (m_ball.xvel > 0 && m_ball.xvel > 2) m_ball.xvel = 2;
+                    if (m_ball.xvel < 0 && m_ball.xvel < -2) m_ball.xvel = -2;
+                    if (m_ball.yvel > 0 && m_ball.yvel > 2) m_ball.yvel = 2;
+                    if (m_ball.yvel < 0 && m_ball.yvel < -2) m_ball.yvel = -2;
+                }
             }
-
-            // destroy bricks:
-            foreach (Sprite brick in m_brickkilllist)
+            else
             {
-                m_wall.m_bricks.Remove((Brick)brick);
+                m_superball = false;
+                m_triggersuperball = false;
+                m_triggerslowdown = false;
             }
 
             pos.X = m_ball.xpos;
@@ -369,10 +596,15 @@ namespace Breakout
                 if (!m_gameover)
                 {
                     m_gamelives--;
+                    m_superball = false;
+                    m_superballtimer.Stop();
+                    m_triggersuperball = false;
+                    m_triggerslowdown = false;
                 }
                 if (m_gamelives == 0)
                 {
                     m_gameover = true;
+                    AnimatePLT(true);
                 }
             }
 
@@ -381,16 +613,16 @@ namespace Breakout
 
             // draw ball
             if (!m_gameover)
-                spriteBatch.Draw(BallTexture, pos, null, Color.White, 0f, m_ball.hotspot, 1.0f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(m_superball ? SuperBallTexture : m_ball.myTexture, pos, null, Color.White, 0f, m_ball.hotspot, 1.0f, SpriteEffects.None, 0f);
 
-            if (!m_calibrated)
-            {
-                spriteBatch.DrawString(font, "Awaiting calibration (turn on device, place headset on table)", new Vector2(20, 45), Color.White);
-            }
-            if (m_autoputoncalibratetimer.Enabled)
-            {
-                spriteBatch.DrawString(font, "Headset put on, about to calibrate (2 seconds) - Look at center of screen!", new Vector2(20, 25), Color.White);
-            }
+            //if (!m_calibrated)
+            //{
+            //    spriteBatch.DrawString(font, "Awaiting calibration (turn on device, place headset on table)", new Vector2(20, 45), Color.White);
+            //}
+            //if (m_autoputoncalibratetimer.Enabled)
+            //{
+            //    spriteBatch.DrawString(font, "Headset put on, about to calibrate (2 seconds) - Look at center of screen!", new Vector2(20, 25), Color.White);
+            //}
 
             spriteBatch.DrawString(font, "Lives = "+m_gamelives, new Vector2(3, 3), Color.White);
             if (m_gameover)
@@ -398,21 +630,57 @@ namespace Breakout
                 spriteBatch.DrawString(font, "GAME OVER!\r\nSpace to restart...", new Vector2(m_halfscreenmax_x-50, m_halfscreenmax_y), Color.White);
             }
 
+            // new, show the headtracking status            
+            Texture2D hticon = HTCenter;
+            switch (m_htstate)
+            {
+                case HeadTrackState.NotConnected:
+                    hticon = HTNotConnected;
+                    break;
+                case HeadTrackState.NotCalib:
+                    hticon = HTNotCalib;
+                    break;
+                case HeadTrackState.Center:
+                    hticon = HTCenter;
+                    break;
+                case HeadTrackState.Left:
+                    hticon = HTLeft;
+                    break;
+                case HeadTrackState.LeftFast:
+                    hticon = HTLeftFast;
+                    break;
+                case HeadTrackState.Right:
+                    hticon = HTRight;
+                    break;
+                case HeadTrackState.RightFast:
+                    hticon = HTRightFast;
+                    break;
+            }
+
+            spriteBatch.Draw(hticon, m_htstatuspos, null, Color.White, 0f, m_htorigin, 1.0f, SpriteEffects.None, 0f);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void CollideDetectBallWithItem(int itemxpos, Sprite item, bool isbat = true)
+        private void AnimatePLT(bool doanim)
         {
-            if (isbat)
-                m_ball.xpos += m_ball.xvel;
+            if (graphics.IsFullScreen)
+            {
+                m_pltvel.X = doanim ? 1 : 0;
+                m_pltvel.Y = doanim ? 1 : 0;
+            }
+        }
 
+        private bool CollideDetectBallWithItem(int itemxpos, Sprite item, bool isbat = true)
+        {
+            bool hitsomething = false;
             Rectangle itemrect = new Rectangle(
                 itemxpos - item.halfwidth,
                 item.ypos - item.halfheight,
                 item.width,
-                item.height);
+                !isbat ? item.height : 2); // only detect hit of top 2 pixels of bat!
             Rectangle ballrect = new Rectangle(
                 m_ball.xpos - m_ball.halfwidth,
                 m_ball.ypos - m_ball.halfheight,
@@ -420,49 +688,33 @@ namespace Breakout
                 m_ball.height);
             if (!Rectangle.Intersect(itemrect, ballrect).IsEmpty)
             {
+                // we've hit a brick or the bat
+                hitsomething = true;
                 if (!isbat)
-                    m_brickkilllist.Add((Brick)item);
-                else
                 {
-                    m_ball.xpos -= m_ball.xvel;
-                    m_ball.xvel = -m_ball.xvel;
+                    m_brickkilllist.Add((Brick)item);
+                    if (item.myTexture == BrickRedTexture)
+                    {
+                        // red brick triggers superball
+                        m_triggersuperball = true;
+                    }
+                    else if (item.myTexture == BrickBlueTexture && !m_superball)
+                    {
+                        // blue brick triggers slow down
+                        m_triggerslowdown = true;
+                    }
                 }
             }
 
-            if (isbat)
-                m_ball.ypos += m_ball.yvel;
-            // plan, check bat ball collisions here
-            // if there are in collision then move back one unit on y-axis
-            // and reverse yvel
+            return hitsomething;
+        }
 
-            ballrect = new Rectangle(
-                m_ball.xpos - m_ball.halfwidth,
-                m_ball.ypos - m_ball.halfheight,
-                m_ball.width,
-                m_ball.height);
-            if (!Rectangle.Intersect(itemrect, ballrect).IsEmpty)
-            {
-                if (!isbat)
-                    m_brickkilllist.Add((Brick)item);
-                else
-                {
-                    // accelerate ball depending on position on bat
-                    if (itemxpos > m_ball.xpos)
-                    {
-                        // bat is to right of ball
-                        m_ball.xvel -= 1;
-                    }
-                    else
-                    {
-                        // bat is to right of ball
-                        m_ball.xvel += 1;
-                    }
-
-                    m_ball.ypos -= m_ball.yvel;
-                    m_ball.yvel = -m_ball.yvel;
-                }
-            }
-
+        private void DoSuperBall()
+        {
+            m_triggersuperball = false;
+            m_superball = true;
+            // start timer to turn off again
+            m_superballtimer.Start();
         }
 
         private void DrawWall(SpriteBatch spriteBatch)
@@ -470,7 +722,7 @@ namespace Breakout
             foreach (Brick brick in m_wall.m_bricks)
             {
                 Vector2 pos = new Vector2(brick.xpos, brick.ypos);
-                spriteBatch.Draw(BrickTexture, pos, null, Color.White, 0f, brick.hotspot, 1.0f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(brick.myTexture, pos, null, Color.White, 0f, brick.hotspot, 1.0f, SpriteEffects.None, 0f);
             }
         }
 
@@ -495,6 +747,7 @@ namespace Breakout
             if (m_pltConnection != null)
             {
                 m_pltlabsapi.calibrateService(PLTService.MOTION_TRACKING_SVC);
+                headtrack_xoffset = 0;
             }
         }
 
@@ -503,45 +756,76 @@ namespace Breakout
         {
             // need to reverse heading and pitch sign?
             headsetData.m_orientation[0] = -headsetData.m_orientation[0];
-            //headsetData.m_orientation[1] = -headsetData.m_orientation[1];
 
-            // define some constants for maths calculation to convert head angles into pixel offsets for screen
-            const double c_distanceToScreen = 850; // millimeters
-            const double c_pixelPitch = 0.25; // millimeters
+            if (m_usebasicmovements)
+            {
+                // the default mode, allows for larger head movements
+                // based on head angle ranges mapping to bat speeds
+                // better for stage demos
 
-            double headtrack_offset_millimeters; // temporary variable to hold headset offset
+                m_batspeed = (int)headsetData.m_orientation[0] / 3;
 
-            //if (m_worn)
-            //{
-                // assume distance from screen is 1 meter and that pixel size is 0.25mm
+                // show head track state as icon on screen...
+                if (!m_autoputoncalibratetimer.Enabled)
+                {
+                    m_htstate = HeadTrackState.Center;
+                    if (headsetData.m_orientation[0] > 10)
+                    {
+                        m_htstate = HeadTrackState.RightFast;
+                    }
+                    else if (headsetData.m_orientation[0] > 2)
+                    {
+                        m_htstate = HeadTrackState.Right;
+                    }
+                    else if (headsetData.m_orientation[0] < -10)
+                    {
+                        m_htstate = HeadTrackState.LeftFast;
+                    }
+                    else if (headsetData.m_orientation[0] < -2)
+                    {
+                        m_htstate = HeadTrackState.Left;
+                    }
+                }
+            }
+            else
+            {
+                // this works using the "real" where the user is looking at screen
+                // this results in a jerky movements so is not so goot for stage demos.
+                // define some constants for maths calculation to convert head angles into pixel offsets for screen
+                const double c_distanceToScreen = 850; // millimeters
+                const double c_pixelPitch = 0.25; // millimeters
+
+                double headtrack_offset_millimeters; // temporary variable to hold headset offset
+
                 headtrack_offset_millimeters = c_distanceToScreen * Math.Tan(headsetData.m_orientation[0] * Math.PI / 180.0); // x = d * tan(theta)
-                headtrack_xoffset = (int) (headtrack_offset_millimeters / c_pixelPitch);
-                headtrack_offset_millimeters = c_distanceToScreen * Math.Tan(headsetData.m_orientation[1] * Math.PI / 180.0); // y = d * tan(theta)
-                headtrack_yoffset = (int)(headtrack_offset_millimeters / c_pixelPitch);
-            //}
-            //else
-            //{
-            //    headtrack_xoffset = 0;
-            //    headtrack_yoffset = 0;
-            //}
+                headtrack_xoffset = (int)(headtrack_offset_millimeters / c_pixelPitch);
+
+                // not using y axis for breakout
+                //headtrack_offset_millimeters = c_distanceToScreen * Math.Tan(headsetData.m_orientation[1] * Math.PI / 180.0); // y = d * tan(theta)
+                //headtrack_yoffset = (int)(headtrack_offset_millimeters / c_pixelPitch);
+            }
         }
 
         public void ConnectionClosed(PLTDevice pltDevice)
         {
             m_pltConnection = null;
             m_calibrated = false;
+            m_htstate = HeadTrackState.NotConnected;
         }
 
         public void ConnectionFailed(PLTDevice pltDevice)
         {
             m_pltConnection = null;
             m_calibrated = false;
+            m_htstate = HeadTrackState.NotConnected;
         }
 
         public void ConnectionOpen(PLTConnection pltConnection)
         {
             // lets register for some services
             m_pltConnection = pltConnection;
+
+            m_htstate = HeadTrackState.NotCalib;
 
             if (pltConnection != null)
             {
@@ -558,6 +842,7 @@ namespace Breakout
             if (!m_pltlabsapi.getIsConnected(pltDevice))
             {
                 m_pltlabsapi.openConnection(pltDevice);
+                m_htstate = HeadTrackState.NotCalib;
             }
         }
 
@@ -576,6 +861,15 @@ namespace Breakout
                             {
                                 m_increasespeed.Enabled = true;
                             }
+                            if (!m_autoputoncalibratetimer.Enabled)
+                            {
+                                if (m_htstate == HeadTrackState.NotCalib)
+                                    m_htstate = HeadTrackState.Center;
+                            }
+                        }
+                        else
+                        {
+                            m_htstate = HeadTrackState.NotCalib;
                         }
                         break;
                     case PLTService.MOTION_TRACKING_SVC:
@@ -590,6 +884,8 @@ namespace Breakout
                             // headset was put on
                             // lets auto calibrate
                             m_autoputoncalibratetimer.Start();
+                            m_calibrated = false;
+                            m_htstate = HeadTrackState.NotCalib;
                         }
                         break;
                 }
@@ -609,22 +905,51 @@ namespace Breakout
         public Vector2 hotspot = new Vector2();
         public int xvel;
         public int yvel;
+        public Texture2D myTexture;
+
+        public Sprite(Texture2D tex)
+        {
+            myTexture = tex;
+        }
     }
 
     public class Bat : Sprite
     {
+        public Bat(Texture2D tex)
+            : base(tex)
+        {
+        }
     }
 
     public class Ball : Sprite
     {
+        public Ball(Texture2D tex)
+            : base(tex)
+        {
+        }
     }
 
     public class Brick : Sprite
     {
+        public Brick(Texture2D tex)
+            : base(tex)
+        {
+        }
     }
 
     public class Wall
     {
         public List<Brick> m_bricks = new List<Brick>();
+    }
+
+    public enum HeadTrackState
+    {
+        NotConnected,
+        NotCalib,
+        Center,
+        Left,
+        LeftFast,
+        Right,
+        RightFast
     }
 }
