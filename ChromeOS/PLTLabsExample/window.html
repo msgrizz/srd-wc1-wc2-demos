@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>PLTLabs BT Test</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
+        <link rel="stylesheet" href="css/jquery.jscrollpane.css" />
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+       <div class="applicationContainer">
+        <div id="connectBar">
+            <span>
+            <img src="img/Voyager_Legend_C_print_Morini5.png" />
+            <span class="name">PLTLabs Bluetooth Integration</span>
+            <input type="button" id="butConnect" value="Connect"/>
+            </span>
+        </div>
+        <div id="logHolder">
+        </div>
+        <div id="options">
+           <span>
+            <fieldset>
+                <legend>Options:</legend>
+                <input type="checkbox" name="cbButton" id="cbButton" />
+                <label for="cbButton">Enable Button Events</label><br>
+                <input type="checkbox" name="cbProximity" id="cbProximity" />
+                <label for="cbProximity">Enable Proximity Events</label>
+           </fieldset>
+           </span>
+        </div>
+      
+       </div>
+      <script src="js/vendor/jquery-1.10.2.min.js"></script> 
+      <script src="js/vendor/jquery.jscrollpane.min.js"></script>
+      <script src="js/vendor/jquery.mousewheel.js"></script>
+      <script src="js/pltlabs-device-access.js"></script> 
+      <script src="js/app.js"></script>
+    </body>
+</html>

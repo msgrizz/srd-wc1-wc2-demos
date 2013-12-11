@@ -6,13 +6,13 @@ chrome.app.runtime.onLaunched.addListener(function () {
 	chrome.app.window.create("window.html", {
 		"id" : "mainWindow",
 		"bounds" : {
-			"width" : 400,
-			"height" : 500
+			"width" : 700,
+			"height" : 700
         }},
        function(win) {
     // Add the profile to the list of profiles we support
     chrome.bluetooth.addProfile(BR_PROFILE, function(r) {
-      console.log("Bladerunner profile added");
+      console.log("PLTLabs profile added");
     });
 
     // Make the profile available in the main content window.
