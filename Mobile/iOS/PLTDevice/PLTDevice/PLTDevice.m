@@ -22,22 +22,29 @@
 #import "PLTGyroscopeCalibrationInfo_Internal.h"
 
 
-#define TICKER_RATE											20.0 // Hz
+#define TICKER_RATE                                             20.0 // Hz
 
 
-NSString *const PLTDeviceNewDeviceAvailableNotification =	@"PLTDeviceNewDeviceAvailableNotification";
-NSString *const PLTDeviceNewDeviceNotificationKey =			@"PLTDeviceNewDeviceNotificationKey";
+NSString *const PLTNewDeviceAvailableNotification =             @"PLTNewDeviceAvailableNotification";
+NSString *const PLTDidOpenDeviceConnectionNotification =        @"PLTDidOpenDeviceConnectionNotification";
+NSString *const PLTDidFailToOpenDeviceConnectionNotification =  @"PLTDidFailToOpenDeviceConnectionNotification";
+NSString *const PLTDeviceDidDisconnectNotification =            @"PLTDeviceDidDisconnectNotification";
 
-NSString *const PLTDeviceErrorDomain =						@"com.plantronics.PLTDevice";
+NSString *const PLTDeviceNotificationKey =                      @"PLTDeviceDeviceNotificationKey";
+NSString *const PLTConnectionErrorNotificationKey =             @"PLTDeviceConnectionErrorNotificationKey";
 
-NSString *const PLTSubscriptionKeyService =					@"service";
-NSString *const PLTSubscriptionKeyMode =					@"mode";
-NSString *const PLTSubscriptionKeyPeriod =					@"period";
-NSString *const PLTSubscriptionKeyLastUpdateDate =			@"lastUpdateDate";
-NSString *const PLTSubscriptionKeyLastUpdateInfo =			@"lastUpdateInfo";
 
-NSString *const PLTQueryObserverKeyObserver =				@"observer";
-NSString *const PLTQueryObserverKeyService =				@"service";
+
+NSString *const PLTDeviceErrorDomain =                          @"com.plantronics.PLTDevice";
+
+NSString *const PLTSubscriptionKeyService =                     @"service";
+NSString *const PLTSubscriptionKeyMode =                        @"mode";
+NSString *const PLTSubscriptionKeyPeriod =                      @"period";
+NSString *const PLTSubscriptionKeyLastUpdateDate =              @"lastUpdateDate";
+NSString *const PLTSubscriptionKeyLastUpdateInfo =              @"lastUpdateInfo";
+
+NSString *const PLTQueryObserverKeyObserver =                   @"observer";
+NSString *const PLTQueryObserverKeyService =                    @"service";
 
 
 typedef NS_ENUM(NSInteger, PLTService_Internal) {
@@ -165,7 +172,10 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 				NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
 													 code:PLTDeviceErrorCodeFailedToCreateDataSession
 												 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
-				[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+				//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+                                           PLTConnectionErrorNotificationKey: error};
+                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 			}
 		}
 		else {
@@ -173,7 +183,10 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 			NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
 												 code:PLTDeviceErrorCodeNoAccessoryAssociated
 											 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
-			[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+			//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+                                       PLTConnectionErrorNotificationKey: error};
+            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 		}
 	}
 	else {
@@ -181,7 +194,10 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 		NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
 											 code:PLTDeviceErrorCodeConnectionAlreadyOpen
 										 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
-		[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+		//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+        NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+                                   PLTConnectionErrorNotificationKey: error};
+        [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 	}
 }
 
@@ -433,7 +449,9 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 		self.isConnectionOpen = NO;
 		
 		if (notifyClose) {
-			[self.connectionDelegate PLTDeviceDidCloseConnection:self];
+			//[self.connectionDelegate PLTDeviceDidCloseConnection:self];
+            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self};
+            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidDisconnectNotification object:nil userInfo:userInfo];
 		}
 	}
 }
@@ -480,14 +498,19 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 				[self closeConnection:NO];
 				self.isConnectionOpen = NO;
 				NSString *description = [NSString stringWithFormat:@"API version %.1f is incompatible with device version %u.%u", PLT_API_VERSION, self.fwMajorVersion, self.fwMinorVersion];
-				NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : description };
-				NSError *error = [[NSError alloc] initWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorIncompatibleVersions userInfo:userInfo];
-				[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+				NSDictionary *errorUserInfo = @{ NSLocalizedDescriptionKey : description };
+				NSError *error = [[NSError alloc] initWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorIncompatibleVersions userInfo:errorUserInfo];
+				//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+                                           PLTConnectionErrorNotificationKey: error};
+                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 			}
 			else {
 				self.isConnectionOpen = YES;
 				// notify delegate of connection open
-				[self.connectionDelegate PLTDeviceDidOpenConnection:self];
+				//[self.connectionDelegate PLTDeviceDidOpenConnection:self];
+                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self};
+                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 			}
 		}
 		
