@@ -63,6 +63,7 @@
 	<string>UIStatusBarStyleBlackOpaque</string>
 	<key>UISupportedExternalAccessoryProtocols</key>
 	<array>
+		<string>com.plantronics.headsetdataservice</string>
 		<string>com.csr.datapath</string>
 		<string>com.plt.protocol1</string>
 	</array>
