@@ -6,25 +6,28 @@
     position:relative;
 }
 
+#incoming-call{
+  display: none;
+}
 
 #local-video {
-  position:relative;
-  margin-top: 15px;
-  width: 280px;
-  height: auto;
-  background-color: #eee;
+    position:relative;
+    margin-top: 15px;
+    width: 280px;
+    height: auto;
+    background-color: #eee;
 }
 
 #remote-video {
-  position:relative;
-  width: 280px;
-  height: auto;
-  max-height: 480px;
-  background-color: #eee;
+    position:relative;
+    width: 280px;
+    height: auto;
+    background-color: #eee;
 }
 
 #video-container {
-  padding: 10px;
+    display: none;
+    padding: 10px;
   
 }
 

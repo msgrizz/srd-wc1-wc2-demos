@@ -17,8 +17,8 @@
         <div id="connectBar">
             <span>
             <img src="img/Voyager_Legend_C_print_Morini5.png" />
-            <span class="name">PLTLabs Bluetooth Integration</span>
-            <input type="button" id="butConnect" value="Connect"/>
+            <span class="name">PLTLabs Chrome App WebRTC Integration</span>
+            
             </span>
         </div>
         <div id="video-container">
@@ -51,7 +51,8 @@
                 <label for="txtUserHandle">Your Handle:</label>
                 <input name="txtUserHandle" id="txtUserHandle" type="text" max="15" maxlength="25" />
                 <br/>
-                <input type="button" id="butConnectWebRTC" value="Connect"/>
+                <input type="button" id="butConnectWebRTC" value="Connect"/> 
+                <input type="button" id="butConnect" value="Connect"/>
                 </span>
                 <span>
                 <label for="txtCallerId">Caller Handle:</label>
@@ -60,8 +61,12 @@
                 <input type="button" id="butCall" value="Call"/>
            </span>
         </div>
-      
        </div>
+      <div id="incoming-call">
+        <img src="img/incoming.png"/>
+        <h3></h3>
+        <input type="button" id="butAnswerCall" value="Answer"/>
+      </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script> 
       <script src="js/vendor/jquery.jscrollpane.min.js"></script>
       <script src="js/vendor/jquery.mousewheel.js"></script>

@@ -23,7 +23,9 @@ var eventSubscriptions = [
 
 var peer = null;
 var readyForCall = false;
-
+var ringing = false;
+var ringtone = new Audio('/media/ringtone.ogg');
+ringtone.addEventListener('ended', function() {this.currentTime = 0;this.play();}); //loop for the ringtone
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
@@ -34,7 +36,7 @@ function init(){
   //webrtc stuff
   $('#butCall').attr("disabled", true);
   $('#butCall').click(makeCall);
-  $('#butConnectWebRTC').click(connect)
+  $('#butConnectWebRTC').click(connectToServer);
   $('#txtCallerId').keyup(function() {
         if($(this).val() != '') {
            $('#butCall').attr("disabled", false);
@@ -53,10 +55,12 @@ function init(){
         }).data('jsp');
 
   PLTLabsAPI.debug = true;
+  
+  
 
 }
 
-function connect() {
+function connectToServer() {
   var handleId = $('#txtUserHandle').val();
   var server = $('#txtServer').val();
   var portNumber = $('#txtPort').val();
@@ -66,14 +70,31 @@ function connect() {
       $('#user-name').text(peer.id);
   });
   
-  peer.on('call', answerCall);
+  peer.on('call', ring);
+  $('#video-container').show();
     
   gum();
   
 }
 
+function ring(call){
+  ringing = true;
+  $('#incoming-call').find('h3').text('Incoming call from ' + call.peer);
+  $('#butAnswerCall').click(function(){
+    answerCall(call);
+  })
+  $('#incoming-call').show();
+  ringtone.play();
+  $('html, body').animate({scrollTop: $("#incoming-call").offset().top - 40}, 500);
+}
+
+
 function answerCall(call){
    l('answerCall: incoming call');
+   ringing = false;
+   ringtone.pause();
+   $('#incoming-call').hide();
+   
    call.answer(window.localStream);
    if (window.existingCall) {
     //close any existing calls
@@ -117,13 +138,16 @@ function makeCall() {
 
 function hangUp(){
   window.existingCall.close();
+  resetButtonsAfterWebRTCCall;
   
 }
 
 function resetButtonsAfterWebRTCCall(){
-   $('#butCall').attr("value", "Call");
-   $('#butCall').click(makeCall);
-   $('#txtCallerId').attr("disabled", false);
+  ringing = false;
+  ringtone.pause();
+  $('#butCall').attr("value", "Call");
+  $('#butCall').click(makeCall);
+  $('#txtCallerId').attr("disabled", false);
 }
 
 
@@ -199,13 +223,17 @@ function connectionOpened(address){
 }
     
 function onEvent(info){
-   var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
+    var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
     event += '<ul>';
     for(prop in info.properties){
      event += '<li>' + prop + ' = ' + info.properties[prop] + '</li>';
     }
     event += '</ul>';
-   l(event); 
+   l(event);
+   
+   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && ringing) {
+    $('#butAnswerCall').trigger("click");
+   }
 }
 
 function enableButtonPressEvents(){
