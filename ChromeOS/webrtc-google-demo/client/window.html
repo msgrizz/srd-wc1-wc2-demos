@@ -17,56 +17,52 @@
         <div id="connectBar">
             <span>
             <img src="img/Voyager_Legend_C_print_Morini5.png" />
-            <span class="name">PLTLabs Chrome App WebRTC Integration</span>
-            
+            <span class="name">PLTLabs Chrome App WebRTC Integration<br><span class="user-name" id="user-name"></span></span>
             </span>
         </div>
         <div id="video-container">
             <video id="remote-video" autoplay></video>
             <video id="local-video" muted="true" autoplay></video>
         </div>
-        <div id="logHolder">
+        <div id="incoming-call">
+            <img src="img/incoming.png"/>
+            <h3></h3>
+            <input type="button" id="butAnswerCall" value="Answer"/>
         </div>
-        <div id="options">
-            
-           <span>
-            <fieldset>
-                <legend>Options:</legend>
-                <input type="checkbox" name="cbButton" id="cbButton" />
-                <label for="cbButton">Enable Button Events</label><br>
-                <input type="checkbox" name="cbProximity" id="cbProximity" />
-                <label for="cbProximity">Enable Proximity Events</label>
-               <!-- <input type="checkbox" name="cbLED" id="cbLED" />
-                <label for="cbLED">Enable LED for 30 seconds</label><br> -->
-           </fieldset>
-          <fieldset>
-                <legend>WebRTC:</legend>
-                <span><span>Server: </span>
-                <input name="txtServer" id="txtServer" type="text" value="localhost" max="15" maxlength="25" />
-                </span>
-                <span><span>Port: </span>
-                <input name="txtPort" id="txtPort" type="text" value="9000" max="15" maxlength="25" />
-                </span>
-                <span>
-                <label for="txtUserHandle">Your Handle:</label>
-                <input name="txtUserHandle" id="txtUserHandle" type="text" max="15" maxlength="25" />
-                <br/>
-                <input type="button" id="butConnectWebRTC" value="Connect"/> 
-                <input type="button" id="butConnect" value="Connect"/>
-                </span>
-                <span>
-                <label for="txtCallerId">Caller Handle:</label>
-                <input name="txtCallerId" id="txtCallerId" type="text" max="15" maxlength="25" />
-                </span>
-                <input type="button" id="butCall" value="Call"/>
-           </span>
+        <div id="controlPanel">
+            <div id="logHolder"></div>
+            <div id="options">
+            <span>
+              <fieldset>
+                    <legend>WebRTC Connection Info:</legend>
+                    <input type="checkbox" name="chkPLTDevice" checked="checked" id="chkPLTDevice" />
+                    <label for="chkPLTDevice">Connect to device</label><br>
+                    <span>Server:
+                    <input name="txtServer" id="txtServer" type="text" value="10.0.1.51" max="15" maxlength="25" />
+                    <br>
+                    </span>
+                    <span>Port:
+                    <input name="txtPort" id="txtPort" type="text" value="9000" max="15" maxlength="25" />
+                    <br>
+                    </span>
+                    <span>Name:
+                    <input name="txtUserHandle" id="txtUserHandle" type="text" max="15" maxlength="25" />
+                    <br>
+                    </span>
+                    <input type="button" id="butConnect" value="Connect"/>  
+              </fieldset>
+              <fieldset>
+                    <legend>Call Someone:</legend>
+                    <span>
+                    <label for="txtCallerId">User name:</label>
+                    <input name="txtCallerId" id="txtCallerId" type="text" max="15" maxlength="25" />
+                    </span>
+                    <input type="button" id="butCall" value="Call"/>
+              </fieldset>
+              
+            </div>
         </div>
        </div>
-      <div id="incoming-call">
-        <img src="img/incoming.png"/>
-        <h3></h3>
-        <input type="button" id="butAnswerCall" value="Answer"/>
-      </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script> 
       <script src="js/vendor/jquery.jscrollpane.min.js"></script>
       <script src="js/vendor/jquery.mousewheel.js"></script>

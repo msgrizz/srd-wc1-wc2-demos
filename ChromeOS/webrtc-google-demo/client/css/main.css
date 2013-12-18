@@ -1,7 +1,7 @@
 
 
 .applicationContainer{
-    width:650px;
+    width:700px;
     margin:25px auto;
     position:relative;
 }
@@ -13,28 +13,43 @@
 #local-video {
     position:relative;
     margin-top: 15px;
-    width: 280px;
+    width: 175px;
     height: auto;
+    margin-left: 20px;
     background-color: #eee;
 }
 
 #remote-video {
     position:relative;
-    width: 280px;
+    width: 440px;
     height: auto;
     background-color: #eee;
 }
 
 #video-container {
     display: none;
-    padding: 10px;
-  
+    margin-bottom: 5px;
+}
+
+#options{
+    background-color:#202020;
+    border:1px solid #111111;
+    height:360px;
+    margin-left: 10px;
+    width:225px;
+    float: right;
+    color: #FFFFFF;    
+}
+
+#controlPanel{
+    margin-right:10px;
+    float:left;
 }
 
 #connectBar{
     height:80px;
     border:1px solid #fff;
-    margin-bottom:15px;
+    margin-bottom:5px;
     position:relative;
     border-radius:25px;
     color:#777;
@@ -50,6 +65,11 @@
     color: #000000;
     font-size: large;
 }
+
+#connectBar .user-name{
+    font-size: small;
+}
+
 
 #connectBar img{
     left:20px;
@@ -106,6 +126,7 @@
    /* margin-bottom:20px; */
     outline:none;
     background-color: #000000;
+    float: left;
 } 
 
 .logEntry{
@@ -119,13 +140,4 @@
     margin:0 10px 10px 0;
 }
 
-#options{
-    background-color:#202020;
-    border:1px solid #111111;
-    height:360px;
-    position:absolute;
-    right:0;
-    top:95px;
-    width:200px;
-    color: #FFFFFF;    
-}
+

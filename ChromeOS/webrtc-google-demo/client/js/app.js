@@ -21,22 +21,23 @@ var eventSubscriptions = [
   PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
   PLTLabsMessageHelper.AUDIO_STATUS_EVENT];
 
+var connectedToPlantronics = false;
+
 var peer = null;
 var readyForCall = false;
 var ringing = false;
 var ringtone = new Audio('/media/ringtone.ogg');
-ringtone.addEventListener('ended', function() {this.currentTime = 0;this.play();}); //loop for the ringtone
+ringtone.addEventListener('ended', function() {this.currentTime = 0;if(ringing){this.play();}}); //loop for the ringtone
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
 
 function init(){
   setButtonState(false);
   readyForCall = false;
   //webrtc stuff
   $('#butCall').attr("disabled", true);
+  $('#butConnect').attr("disabled", true);
   $('#butCall').click(makeCall);
-  $('#butConnectWebRTC').click(connectToServer);
   $('#txtCallerId').keyup(function() {
         if($(this).val() != '') {
            $('#butCall').attr("disabled", false);
@@ -45,10 +46,39 @@ function init(){
           $('#butCall').attr("disabled", true);
         }
      });
-  $('#cbButton').click(enableButtonPressEvents);
-  $('#cbProximity').click(enableProximity);
+  $('#txtUserHandle').keyup(function() {
+        var server = $('#txtServer').val();
+        var port = $('#txtPort').val();
+        if($(this).val() != '' && server != '' && port != '') {
+           $('#butConnect').attr("disabled", false);
+        }
+        else{
+          $('#butConnect').attr("disabled", true);
+        }
+     });
   
- // $('#cbLED').click(enableLED);
+   $('#txtServer').keyup(function() {
+        var userHandle = $('#txtUserHandle').val();
+        var port = $('#txtPort').val();
+        if($(this).val() != '' && userHandle != '' && port != '') {
+           $('#butConnect').attr("disabled", false);
+        }
+        else{
+          $('#butConnect').attr("disabled", true);
+        }
+     });
+   
+    $('#txtPort').keyup(function() {
+        var server =  $('#txtServer').val();
+        var userHandle = $('#txtUserHandle').val();
+        if($(this).val() != '' && server != '' && userHandle != '') {
+           $('#butConnect').attr("disabled", false);
+        }
+        else{
+          $('#butConnect').attr("disabled", true);
+        }
+     });
+ 
   jScrollPaneAPI =  $('#logHolder').jScrollPane({
             verticalDragMinHeight: 12,
             verticalDragMaxHeight: 12
@@ -61,20 +91,21 @@ function init(){
 }
 
 function connectToServer() {
+  l('Connecting to WebRTC server');
   var handleId = $('#txtUserHandle').val();
   var server = $('#txtServer').val();
   var portNumber = $('#txtPort').val();
   peer = new Peer(handleId, {host:server, port: portNumber, debug: 3, config: {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
-      $('#user-name').text(peer.id);
+      $('#user-name').text("Connected as " + peer.id);
+      gum();
   });
   
   peer.on('call', ring);
   $('#video-container').show();
-    
-  gum();
   
+  peer.on('error', function(err){l('Error connecting to server: ' + err.type);});
 }
 
 function ring(call){
@@ -82,6 +113,7 @@ function ring(call){
   $('#incoming-call').find('h3').text('Incoming call from ' + call.peer);
   $('#butAnswerCall').click(function(){
     answerCall(call);
+    $('#incoming-call').hide();
   })
   $('#incoming-call').show();
   ringtone.play();
@@ -90,9 +122,8 @@ function ring(call){
 
 
 function answerCall(call){
-   l('answerCall: incoming call');
+   l('Answering incoming call from ' + call.peer);
    ringing = false;
-   ringtone.pause();
    $('#incoming-call').hide();
    
    call.answer(window.localStream);
@@ -115,7 +146,7 @@ function makeCall() {
   // Initiate a call
   var userId = $('#txtCallerId').val();
   $('#txtUserId').attr("disabled", true);
-  
+  l('Calling ' + userId);
   var call = peer.call(userId, window.localStream);
   if (window.existingCall) {
       window.existingCall.close();
@@ -130,10 +161,8 @@ function makeCall() {
 
   // UI stuff
   window.existingCall = call;
-  //$('#their-id').text(call.peer);
   call.on('close', resetButtonsAfterWebRTCCall);
-//  $('#step1, #step2').hide();
- // $('#step3').show();
+
 }
 
 function hangUp(){
@@ -143,11 +172,12 @@ function hangUp(){
 }
 
 function resetButtonsAfterWebRTCCall(){
+  l('call has ended');
   ringing = false;
-  ringtone.pause();
   $('#butCall').attr("value", "Call");
   $('#butCall').click(makeCall);
   $('#txtCallerId').attr("disabled", false);
+  $('#remote-video').prop('src', "");
 }
 
 
@@ -156,12 +186,15 @@ function gum (initiator) {
             navigator.getUserMedia({audio: true, video: true},
                                    function(stream){
                                     // Set your video displays
-                                    l("setting up local video");
+                                    l("GUM returned successfuly");
                                     $('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
+                                    setButtonState(true);
+                                    $('#butConnect').attr("disabled", false);
                                     },
                                     function(error){ l(error); });
+            
 }
 
 
@@ -175,13 +208,15 @@ function l(msg) {
 }
 
 function findPLTDevices(){
-   $('#butConnect').attr("value", "Connecting");
-   $('#butConnect').attr("disabled", true);
    PLTLabsAPI.findDevices(devicesFound);
+   l("Searching for PLT Labs devices");
 }
 
 function disconnect(){
-   PLTLabsAPI.closeConnection(connectionClosed); 
+   PLTLabsAPI.closeConnection(connectionClosed);
+   peer.destroy();
+   peer = null;
+   resetButtonsAfterWebRTCCall();
 }
 
 function connectionClosed(){
@@ -190,36 +225,41 @@ function connectionClosed(){
 }
 
 function setButtonState(connected){
-  $('#butConnect').attr("disabled", false);
   if (connected) {
     $('#butConnect').click(disconnect);
     $('#butConnect').attr("value", "Disconnect");
   }
   else{
-    $('#butConnect').click(findPLTDevices);
+    $('#butConnect').click(prepareForWebRTCCall);
     $('#butConnect').attr("value", "Connect");
   }
 }
 
+function prepareForWebRTCCall(){
+   $('#butConnect').attr("value", "Connecting");
+   $('#butConnect').attr("disabled", true);
+   
+  if ($("#chkPLTDevice").prop("checked")) {
+      findPLTDevices();
+  }
+  else{
+    connectToServer();
+  }
+  
+}
+
 function devicesFound(deviceList){
-  
   devices = JSON.parse(JSON.stringify(deviceList));
-  for(i = 0; i < devices.length; i ++ ){
-    l('PLTLabs device found ' + JSON.stringify(devices[i]));
-  } 
-  
   var d = deviceList[0];
-  l('Opening connection to device ' +  JSON.stringify(d));
- 
   PLTLabsAPI.openConnection(d, connectionOpened) 
 }
 
 function connectionOpened(address){
-  setButtonState(true);
+  l('Data connection opened to PLTLabs device');
   var options = new Object();
   options.events = eventSubscriptions;
   PLTLabsAPI.subscribeToEvents(options, onEvent);
-  
+  connectToServer();
 }
     
 function onEvent(info){
