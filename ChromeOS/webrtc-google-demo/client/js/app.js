@@ -102,11 +102,28 @@ function connectToServer() {
       gum();
   });
   
+  peer.on('connection', handleDataConnection);
   peer.on('call', ring);
   $('#video-container').show();
   
+  
   peer.on('error', function(err){l('Error connecting to server: ' + err.type);});
 }
+
+function handleDataConnection(dataConnection){
+  l("got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
+  if (window.existingDataConnection) {
+    //close any existing calls
+    window.existingDataConnection.close();
+  }
+  dataConnection.on("data", function(data){
+    var event = '<span class="remote-data">Data from :'+ dataConnection.peer + '<br>' + data + '</span>'; 
+    l(event);
+  });
+   
+  window.existingDataConnection = dataConnection;
+}
+
 
 function ring(call){
   ringing = true;
@@ -133,7 +150,9 @@ function answerCall(call){
    }
    
    call.on('stream', function(stream){
-      $('#remote-video').prop('src', URL.createObjectURL(stream));
+      $('#butCall').attr("value", "Hang Up");
+      $('#butCall').click(hangUp);
+      $('#remote-video').prop('src', URL.createObjectURL(stream));    
    });
    window.existingCall = call;
    call.on('close', resetButtonsAfterWebRTCCall);
@@ -157,6 +176,12 @@ function makeCall() {
     $('#butCall').attr("value", "Hang Up");
     $('#butCall').click(hangUp);
     $('#remote-video').prop('src', URL.createObjectURL(stream));
+    //set up the data channel
+    var dataConnection = peer.connect(call.peer, { label: 'device-events' });
+    dataConnection.on('open', function() {
+        handleDataConnection(dataConnection);
+      });
+    dataConnection.on('error', function(err) { l(err); });
   });
 
   // UI stuff
@@ -214,8 +239,10 @@ function findPLTDevices(){
 
 function disconnect(){
    PLTLabsAPI.closeConnection(connectionClosed);
-   peer.destroy();
-   peer = null;
+   if (peer) {
+    peer.destroy();
+    peer = null;
+   }
    resetButtonsAfterWebRTCCall();
 }
 
@@ -259,52 +286,48 @@ function connectionOpened(address){
   var options = new Object();
   options.events = eventSubscriptions;
   PLTLabsAPI.subscribeToEvents(options, onEvent);
+  enableButtonPressEvents();
+ // enableProximity();
   connectToServer();
 }
     
 function onEvent(info){
-    var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
+   var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
     event += '<ul>';
     for(prop in info.properties){
      event += '<li>' + prop + ' = ' + info.properties[prop] + '</li>';
     }
     event += '</ul>';
+    
    l(event);
+   if (window.existingDataConnection) {
+    window.existingDataConnection.send(event);
+   }
    
-   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && ringing) {
-    $('#butAnswerCall').trigger("click");
+   //hook flash button
+   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
+      if(ringing){
+        $('#butAnswerCall').trigger("click");
+      }
+      else if (window.existingCall) {
+        //hang up the call
+        $('#butCall').trigger("click");
+      }
    }
 }
 
 function enableButtonPressEvents(){
-  if (this.checked) {
-    eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
-  }
-  else{
-    eventSubscriptions.pop(PLTLabsMessageHelper.BUTTON_EVENT);
-  }
+  eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
   var options = new Object();
   options.events = eventSubscriptions;
   PLTLabsAPI.subscribeToEvents(options, onEvent);
   
 }
 
-function enableLED(){
-  var options = new Object();
-  options.timeout = 1;
-  options.enabled = this.checked;
-  var packet = PLTLabsMessageHelper.createEnableLEDCommand(options);
-  PLTLabsAPI.sendCommand(packet);
-}
-
 function enableProximity(){
   var options = new Object();
-  if(this.checked){
-     options.enabled = true;
-  }
-  else{
-    options.enabled = false;
-  }
+  options.enabled = true;
+  
   for(i = 0; i < PLTLabsAPI.connectedDevices.byteLength; i++){
     if (PLTLabsAPI.connectedDevices[i] == 0x0) {
       continue;

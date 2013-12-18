@@ -6,6 +6,10 @@
     position:relative;
 }
 
+.remote-data{
+    color: #0000FF;
+}
+
 #incoming-call{
   display: none;
 }
@@ -30,6 +34,7 @@
     display: none;
     margin-bottom: 5px;
 }
+
 
 #options{
     background-color:#202020;
