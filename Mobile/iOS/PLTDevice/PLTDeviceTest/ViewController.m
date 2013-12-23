@@ -10,11 +10,21 @@
 #import "PLTDevice.h"
 
 
-@interface ViewController () <PLTDeviceConnectionDelegate, PLTDeviceInfoObserver>
+@interface ViewController () <PLTDeviceInfoObserver>
 
+- (IBAction)calButton:(id)sender;
+- (IBAction)queryButton:(id)sender;
+- (IBAction)subscribeButton:(id)sender;
+- (IBAction)unsubscribeButton:(id)sender;
+- (IBAction)resetButton:(id)sender;
+- (void)registerForDeviceNotifications;
 - (void)newDeviceAvailableNotification:(NSNotification *)notification;
+- (void)didOpenDeviceConnectionNotification:(NSNotification *)notification;
+- (void)didFailToOpenDeviceConnectionNotification:(NSNotification *)notification;
+- (void)deviceDidDisconnectNotification:(NSNotification *)notification;
 
-@property(nonatomic, strong)	PLTDevice		*device;
+@property(nonatomic, strong)	PLTDevice           *device;
+@property(nonatomic, strong)	IBOutlet UILabel	*orientationLabel;
 
 @end
 
@@ -67,34 +77,70 @@
 	[self.device setCalibration:nil forService:PLTServicePedometer];
 }
 
+- (void)registerForDeviceNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newDeviceAvailableNotification:)
+                                                 name:PLTNewDeviceAvailableNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didOpenDeviceConnectionNotification:)
+                                                 name:PLTDidOpenDeviceConnectionNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didFailToOpenDeviceConnectionNotification:)
+                                                 name:PLTDidFailToOpenDeviceConnectionNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceDidDisconnectNotification:)
+                                                 name:PLTDeviceDidDisconnectNotification object:nil];
+}
+
 - (void)newDeviceAvailableNotification:(NSNotification *)notification
 {
 	NSLog(@"newDeviceAvailableNotification: %@", notification);
 	if (!self.device) {
-		self.device = notification.userInfo[PLTDeviceNewDeviceNotificationKey];
-		self.device.connectionDelegate = self;
+		self.device = notification.userInfo[PLTDeviceNotificationKey];
+        //self.device.connectionDelegate;
 		[self.device openConnection];
 	}
 }
 
-#pragma mark - PLTDeviceConnectionDelegate
-
-- (void)PLTDeviceDidOpenConnection:(PLTDevice *)aDevice
+- (void)didOpenDeviceConnectionNotification:(NSNotification *)notification
 {
-	NSLog(@"PLTDeviceDidOpenConnection: %@", aDevice);
+    NSLog(@"didOpenDeviceConnectionNotification: %@", notification.userInfo[PLTDeviceNotificationKey]);
 }
 
-- (void)PLTDevice:(PLTDevice *)aDevice didFailToOpenConnection:(NSError *)error
+- (void)didFailToOpenDeviceConnectionNotification:(NSNotification *)notification
 {
-	NSLog(@"PLTDevice: %@ didFailToOpenConnection: %@", aDevice, error);
+    NSLog(@"didFailToOpenDeviceConnectionNotification: %@ error: %@", notification.userInfo[PLTDeviceNotificationKey], notification.userInfo[PLTConnectionErrorNotificationKey]);
 	self.device = nil;
 }
 
-- (void)PLTDeviceDidCloseConnection:(PLTDevice *)aDevice
+- (void)deviceDidDisconnectNotification:(NSNotification *)notification
 {
-	NSLog(@"PLTDeviceDidCloseConnection: %@", aDevice);
+    NSLog(@"deviceDidDisconnectNotification: %@", notification.userInfo[PLTDeviceNotificationKey]);
 	self.device = nil;
 }
+
+//#pragma mark - PLTDeviceConnectionDelegate
+//
+//- (void)PLTDeviceDidOpenConnection:(PLTDevice *)aDevice
+//{
+//	NSLog(@"PLTDeviceDidOpenConnection: %@", aDevice);
+//}
+//
+//- (void)PLTDevice:(PLTDevice *)aDevice didFailToOpenConnection:(NSError *)error
+//{
+//	NSLog(@"PLTDevice: %@ didFailToOpenConnection: %@", aDevice, error);
+//	self.device = nil;
+//}
+//
+//- (void)PLTDeviceDidCloseConnection:(PLTDevice *)aDevice
+//{
+//	NSLog(@"PLTDeviceDidCloseConnection: %@", aDevice);
+//	self.device = nil;
+//}
 
 #pragma mark - PLTDeviceInfoObserver
 
@@ -127,19 +173,17 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self registerForDeviceNotifications];
+    
 	NSArray *devices = [PLTDevice availableDevices];
 	if ([devices count]) {
 		self.device = devices[0];
-		self.device.connectionDelegate = self;
+		//self.device.connectionDelegate = self;
 		[self.device openConnection];
 	}
 	else {
 		NSLog(@"No available devices.");
 	}
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(newDeviceAvailableNotification:)
-												 name:PLTDeviceNewDeviceAvailableNotification object:nil];
 }
 
 @end

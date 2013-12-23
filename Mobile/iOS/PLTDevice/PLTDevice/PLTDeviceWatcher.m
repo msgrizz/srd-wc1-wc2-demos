@@ -99,8 +99,8 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 {
 	NSLog(@"postNewAccessoryNotification: %@", device);
 	
-	NSDictionary *userInfo = @{ PLTDeviceNewDeviceNotificationKey : device };
-	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceNewDeviceAvailableNotification object:nil userInfo:userInfo];
+	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTNewDeviceAvailableNotification object:nil userInfo:userInfo];
 }
 
 @end

@@ -377,7 +377,7 @@ magnetometerCalibrationStatus:(NSNumber **)magnetometerCalibrationStatus gyrosco
         NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
         NSLog(@"Connected accessories: %@",accessories);
         //NSString *protocolString = @"com.plt.protocol1";
-		NSArray *protocols = @[@"com.plt.protocol1", @"com.csr.datapath"];
+		NSArray *protocols = @[@"com.plt.protocol1", @"com.csr.datapath", @"com.plantronics.headsetdataservice"];
 		NSString *protocol = nil;
         EAAccessory *accessory = nil;
         

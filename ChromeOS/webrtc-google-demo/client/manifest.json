@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2,
+	"name" : "PLTLabs Chrome WebRTC Demo",
+	"description" : "Test application WebRTC, BT connectivity and data transmit testing",
+	"version" : "1.0",
+	"app": {
+		"background" : {
+			"scripts": ["background.js"]
+		}
+	},
+	"permissions" : ["http://*/",
+			 "videoCapture",
+			 "audioCapture", 
+			 {"bluetooth":[{"uuid": "82972387-294e-4d62-97b5-2668aa35f618"}]}
+			 ]
+
+}

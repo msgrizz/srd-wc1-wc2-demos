@@ -14,6 +14,7 @@ var eventSubscriptions = [
   PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT,
   PLTLabsMessageHelper.BATTERY_STATUS_CHANGED_EVENT,
   PLTLabsMessageHelper.PAIRING_MODE_EVENT,
+  PLTLabsMessageHelper.LED_ALERT_STATUS_CHANGED,
   PLTLabsMessageHelper.LOW_BATTERY_VOICE_PROMPT_EVENT,
   PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT,
   PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
@@ -25,6 +26,7 @@ function init(){
   setButtonState(false);
   $('#cbButton').click(enableButtonPressEvents);
   $('#cbProximity').click(enableProximity);
+ // $('#cbLED').click(enableLED);
   jScrollPaneAPI =  $('#logHolder').jScrollPane({
             verticalDragMinHeight: 12,
             verticalDragMaxHeight: 12
@@ -111,6 +113,15 @@ function enableButtonPressEvents(){
   PLTLabsAPI.subscribeToEvents(options, onEvent);
   
 }
+
+function enableLED(){
+  var options = new Object();
+  options.timeout = 1;
+  options.enabled = this.checked;
+  var packet = PLTLabsMessageHelper.createEnableLEDCommand(options);
+  PLTLabsAPI.sendCommand(packet);
+}
+
 function enableProximity(){
   var options = new Object();
   if(this.checked){
