@@ -10,10 +10,11 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Timers;
 using Plantronics.Innovation.PLTLabsAPI;
+using System.Windows;
 
 /*******
  * 
- * Head Tracking Target Demo
+ * Breakout Head Tracking Game Demo
  * 
  * A demo sample project created for Plantronics PLTLabs innovation blog.
  * 
@@ -21,7 +22,9 @@ using Plantronics.Innovation.PLTLabsAPI;
  * 
  *   - A game program that integrates support for Plantronics innovation head tracking
  *     
- *   - Uses headtracking angles to guide a target sight (reticle) on the game screen
+ *   - This demo was created to illustrate interaction with PC app using the Wearable 
+ *     Concept 1 device. It is the retro "Breakout" block-breaking game with your head to 
+ *     control the movement of the bat.
  *   
  * PRE-REQUISITES for building this demo app:
  *  - Plantronics Spokes 3.0 SDK - install PlantronicsSpokesSDKInstaller.exe
@@ -32,31 +35,47 @@ using Plantronics.Innovation.PLTLabsAPI;
  * PRE-REQUISITES for testing this demo app: 
  *  - Current pre-release head-tracking headset with appropriate firmware pre-loaded
  * 
- * ADDITIONAL INTERIM PRE-REQUISITE
- *  - At the time of writing there is also an additional pre-requisite to access headtracking
- *  data on a PC app, this is as follows:
- *    - Head-tracking headset also requires pairing with iPhone running iOS6 as  well as the PC 
- *    via BT300 Dongle.
- *    - The iPhone must also be running the "PLT Sensor" application (If this is still a pre-requisite
- *    as this blog goes to press then please request PLTLabs to join the "TestFlight" program for 
- *    "PLT Sensor" app). This app is needed to "reflect" the headtracking data back to your app on the PC.
- *   
  * INSTRUCTIONS FOR USE
  * 
  *   - If you put headset on and look at center of the screen, after 2 second delay the
  *     head tracking and target sight will "auto-calibrate" to center of screen.
  *     
- *   - From that point on the target sight will track your head movements
+ *   - From that point on the movement of the bat will be based on your head movements
  *   
- *   - If you take your headset off the target sight will stop tracking your movements
- *   and place itself back in center of screen
+ *   - Keyboard summary:
+ *      F – toggle FULLSCREEN mode (note, will also restart the game when toggling screen mode)
+ *      C – recalibrate headset (look at center of screen)
+ *      ESC – quit 
  *   
- *   - Note: F will toggle fullscreen. Escape to quit.
+ *   - The headset battery seems to drain fast, so keep it charged!
+ *   
+ *   - The game no longer displays large warnings about calibration, but has a new head tracking 
+ *     status display at bottom of screen. This shows the status of the head-tracking detection,
+ *     using icons.
  * 
  * Lewis Collins, http://developer.plantronics.com/people/lcollins/
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.6:
+ * Date: 10th December 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Adding high score table
+ *   - Added sound effects to default audio device
+ *   - Added music to default audio device (press M to play, PgUp/PgDwn to adjust music volume)
+ *
+ * Version 1.0.0.5:
+ * Date: 10th December 2013
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Added a delay before ball launch
+ *   - Added score (but not yet high-score table)
+ *   - Added level up
+ *   - Start in fullscreen
+ *   - Prefer 1280 x 720 resolution
+ *   - Press space to start game
+ *
  * Version 1.0.0.4:
  * Date: 9th December 2013
  * Changed by: Lewis Collins
@@ -118,8 +137,10 @@ namespace Breakout
         Bat m_player1bat;
         Ball m_ball;
         Timer m_increasespeed;
-        bool m_gameover = false;
-        int m_gamelives = 5;
+        bool m_gameover = true; // initial game over
+        int m_gamelives = 0; // initial no lives, game over
+        int m_gamescore = 0; // initial no score, game over
+        int m_gamelevel = 1; // initially level 1
 
         // Plantronics innovation head tracking...
         Timer m_autoputoncalibratetimer;  // timer to initiate headtracking calibration after short time delay
@@ -148,9 +169,32 @@ namespace Breakout
         private bool m_triggersuperball = false;
         private bool m_triggerslowdown = false;
 
+        private Timer m_balldelay;
+        private bool m_hideball = true; // initially hide ball until in play
+        private HighScores m_highScores;
+        private string m_nameinput;
+        private bool m_getname = false;
+        private SoundEffect SoundLevelUp;
+        private SoundEffect SoundBounce1;
+        private SoundEffect SoundBounce2;
+        private SoundEffect SoundDing;
+        private Song Song1;
+        private float m_musicvolume = 0.5f;
+        private bool m_playingmusic = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            int prefferedwidth = (int)SystemParameters.PrimaryScreenWidth;
+            int prefferedheight = (int)SystemParameters.PrimaryScreenHeight;
+            if (prefferedwidth > 1280)
+            {
+                prefferedwidth = 1280;
+                prefferedheight = 720;
+            }
+            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = prefferedwidth;
+            graphics.PreferredBackBufferHeight = prefferedheight;
             Content.RootDirectory = "Content";
         }
 
@@ -170,7 +214,18 @@ namespace Breakout
             m_autoputoncalibratetimer.AutoReset = false;
             m_autoputoncalibratetimer.Elapsed += autoputoncalibratetimer_Elapsed;
 
+            m_balldelay = new Timer();
+            m_balldelay.Interval = 2000;
+            m_balldelay.AutoReset = false;
+            m_balldelay.Elapsed += new ElapsedEventHandler(m_balldelay_Elapsed);
+
             base.Initialize();
+        }
+
+        void m_balldelay_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            // launch ball...            
+            m_hideball = false;
         }
 
         /// <summary>
@@ -208,6 +263,13 @@ namespace Breakout
 
             PLTTex = Content.Load<Texture2D>("Plantronics");
 
+            SoundLevelUp = Content.Load<SoundEffect>("applause");
+            SoundBounce1 = Content.Load<SoundEffect>("boing");
+            SoundBounce2 = Content.Load<SoundEffect>("boing2");
+            SoundDing = Content.Load<SoundEffect>("ding");
+
+            Song1 = Content.Load<Song>("DJ Logikk - Random Stuff That Happens - EP - 02 Zirco");
+
             m_player1bat = new Bat(BatTexture);
             m_ball = new Ball(BallTexture);
 
@@ -217,6 +279,11 @@ namespace Breakout
 
             // Initialise Plantronics head tracking...
             m_pltlabsapi = new PLTLabsAPI(this);
+
+            DoHighScoreTable();
+
+            m_musicvolume = 0.5f;
+            MediaPlayer.Volume = m_musicvolume; // 50% vol
         }
 
         void m_superballtimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -234,9 +301,9 @@ namespace Breakout
         private void CreateWall()
         {
             m_wall = new Wall();
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 3 + m_gamelevel; j++)
             {
-                for (int i = 0; i < (graphics.GraphicsDevice.Viewport.Width / 42); i++)
+                for (int i = 0; i < (graphics.GraphicsDevice.Viewport.Width / 42); i++)  // i < 4; i++) //
                 {
                     if (i > 2 && i < (graphics.GraphicsDevice.Viewport.Width / 42) - 3)
                     {
@@ -274,6 +341,27 @@ namespace Breakout
                 case 3:
                     tex = BrickGreenTexture;
                     break;
+                case 4:
+                    tex = BrickGreenTexture;
+                    break;
+                case 5:
+                    tex = BrickBlueTexture;
+                    break;
+                case 6:
+                    tex = BrickRedTexture;
+                    break;
+                case 7:
+                    tex = BrickGreenTexture;
+                    break;
+                case 8:
+                    tex = BrickGreenTexture;
+                    break;
+                case 9:
+                    tex = BrickBlueTexture;
+                    break;
+                case 10:
+                    tex = BrickRedTexture;
+                    break;
                 default:
                     tex = BrickGreenTexture;
                     break;
@@ -301,6 +389,7 @@ namespace Breakout
 
             // Ball
             ResetBall();
+            m_balldelay.Start();
 
             // Wall
             CreateWall();
@@ -352,7 +441,7 @@ namespace Breakout
             if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F)))
             {
                 graphics.ToggleFullScreen();
-                ReconfigureScreen();
+                RestartGame();
             }
 
             // recalibrate with C key:
@@ -363,37 +452,115 @@ namespace Breakout
                 m_htstate = HeadTrackState.NotCalib;
             }
 
-            // restart game:
-            if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+            if ((currentKeyboardState.IsKeyUp(Keys.PageUp)) && (oldKeyboardState.IsKeyDown(Keys.PageUp)))
             {
-                m_gameover = false;
-                m_gamelives = 5;
-                ReconfigureScreen();
+                m_musicvolume -= 0.1f;
+                if (m_musicvolume<0.0f) m_musicvolume = 0.0f;
+                MediaPlayer.Volume = m_musicvolume;
+            }
+            if ((currentKeyboardState.IsKeyUp(Keys.PageDown)) && (oldKeyboardState.IsKeyDown(Keys.PageDown)))
+            {
+                m_musicvolume += 0.1f;
+                if (m_musicvolume > 1.0f) m_musicvolume = 1.0f;
+                MediaPlayer.Volume = m_musicvolume;
+            }            
+            if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M)))
+            {
+                m_playingmusic = !m_playingmusic;
+                if (m_playingmusic) MediaPlayer.Play(Song1);
+                else MediaPlayer.Stop();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
+            if (m_getname)
             {
-                headtrack_xoffset += 5;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
-                headtrack_xoffset -= 5;
-            }
-
-            if (m_batspeed != 0)
-            {
-                headtrack_xoffset += m_batspeed;
-                if (headtrack_xoffset > ( m_halfscreenmax_x - m_player1bat.halfwidth))
+                // in highscore name entry mode:
+                if ((currentKeyboardState.IsKeyUp(Keys.Enter)) && (oldKeyboardState.IsKeyDown(Keys.Enter)))
                 {
-                    headtrack_xoffset = ( m_halfscreenmax_x - m_player1bat.halfwidth);
+                    if (m_nameinput.Length < 1) m_nameinput = "noname";
+                    if (m_nameinput.Length > 30) m_nameinput = m_nameinput.Substring(0, 30);
+                    m_highScores.AddHighScore(m_nameinput, m_gamescore);
+                    m_nameinput = "";
+                    m_getname = false;
                 }
-                if (headtrack_xoffset < - ( m_halfscreenmax_x - m_player1bat.halfwidth))
+                if ((currentKeyboardState.IsKeyUp(Keys.Back)) && (oldKeyboardState.IsKeyDown(Keys.Back)))
                 {
-                    headtrack_xoffset = - ( m_halfscreenmax_x - m_player1bat.halfwidth);
+                    m_nameinput = m_nameinput.Substring(0, m_nameinput.Length - 1);
+                }
+                if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+                {
+                    m_nameinput += " ";
+                }
+                if ((currentKeyboardState.IsKeyUp(Keys.A)) && (oldKeyboardState.IsKeyDown(Keys.A))) m_nameinput += "A";
+                if ((currentKeyboardState.IsKeyUp(Keys.B)) && (oldKeyboardState.IsKeyDown(Keys.B))) m_nameinput += "B";
+                if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C))) m_nameinput += "C";
+                if ((currentKeyboardState.IsKeyUp(Keys.D)) && (oldKeyboardState.IsKeyDown(Keys.D))) m_nameinput += "D";
+                if ((currentKeyboardState.IsKeyUp(Keys.E)) && (oldKeyboardState.IsKeyDown(Keys.E))) m_nameinput += "E";
+                if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F))) m_nameinput += "F";
+                if ((currentKeyboardState.IsKeyUp(Keys.G)) && (oldKeyboardState.IsKeyDown(Keys.G))) m_nameinput += "G";
+                if ((currentKeyboardState.IsKeyUp(Keys.H)) && (oldKeyboardState.IsKeyDown(Keys.H))) m_nameinput += "H";
+                if ((currentKeyboardState.IsKeyUp(Keys.I)) && (oldKeyboardState.IsKeyDown(Keys.I))) m_nameinput += "I";
+                if ((currentKeyboardState.IsKeyUp(Keys.J)) && (oldKeyboardState.IsKeyDown(Keys.J))) m_nameinput += "J";
+                if ((currentKeyboardState.IsKeyUp(Keys.K)) && (oldKeyboardState.IsKeyDown(Keys.K))) m_nameinput += "K";
+                if ((currentKeyboardState.IsKeyUp(Keys.L)) && (oldKeyboardState.IsKeyDown(Keys.L))) m_nameinput += "L";
+                if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M))) m_nameinput += "M";
+                if ((currentKeyboardState.IsKeyUp(Keys.N)) && (oldKeyboardState.IsKeyDown(Keys.N))) m_nameinput += "N";
+                if ((currentKeyboardState.IsKeyUp(Keys.O)) && (oldKeyboardState.IsKeyDown(Keys.O))) m_nameinput += "O";
+                if ((currentKeyboardState.IsKeyUp(Keys.P)) && (oldKeyboardState.IsKeyDown(Keys.P))) m_nameinput += "P";
+                if ((currentKeyboardState.IsKeyUp(Keys.Q)) && (oldKeyboardState.IsKeyDown(Keys.Q))) m_nameinput += "Q";
+                if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R))) m_nameinput += "R";
+                if ((currentKeyboardState.IsKeyUp(Keys.S)) && (oldKeyboardState.IsKeyDown(Keys.S))) m_nameinput += "S";
+                if ((currentKeyboardState.IsKeyUp(Keys.T)) && (oldKeyboardState.IsKeyDown(Keys.T))) m_nameinput += "T";
+                if ((currentKeyboardState.IsKeyUp(Keys.U)) && (oldKeyboardState.IsKeyDown(Keys.U))) m_nameinput += "U";
+                if ((currentKeyboardState.IsKeyUp(Keys.V)) && (oldKeyboardState.IsKeyDown(Keys.V))) m_nameinput += "V";
+                if ((currentKeyboardState.IsKeyUp(Keys.W)) && (oldKeyboardState.IsKeyDown(Keys.W))) m_nameinput += "W";
+                if ((currentKeyboardState.IsKeyUp(Keys.X)) && (oldKeyboardState.IsKeyDown(Keys.X))) m_nameinput += "X";
+                if ((currentKeyboardState.IsKeyUp(Keys.Y)) && (oldKeyboardState.IsKeyDown(Keys.Y))) m_nameinput += "Y";
+                if ((currentKeyboardState.IsKeyUp(Keys.Z)) && (oldKeyboardState.IsKeyDown(Keys.Z))) m_nameinput += "Z";
+            }
+            else
+            {
+                // restart game:
+                if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+                {
+                    if (m_gameover)
+                    {
+                        RestartGame();
+                    }
+                }
+
+                if (currentKeyboardState.IsKeyDown(Keys.Right))
+                {
+                    headtrack_xoffset += 5;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.Left))
+                {
+                    headtrack_xoffset -= 5;
+                }
+
+                if (m_batspeed != 0)
+                {
+                    headtrack_xoffset += m_batspeed;
+                    if (headtrack_xoffset > (m_halfscreenmax_x - m_player1bat.halfwidth))
+                    {
+                        headtrack_xoffset = (m_halfscreenmax_x - m_player1bat.halfwidth);
+                    }
+                    if (headtrack_xoffset < -(m_halfscreenmax_x - m_player1bat.halfwidth))
+                    {
+                        headtrack_xoffset = -(m_halfscreenmax_x - m_player1bat.halfwidth);
+                    }
                 }
             }
 
             base.Update(gameTime);
+        }
+
+        private void RestartGame()
+        {
+            m_gameover = false;
+            m_gamelives = 5;
+            m_gamescore = 0;
+            m_gamelevel = 1;
+            ReconfigureScreen();
         }
 
         /// <summary>
@@ -458,7 +625,7 @@ namespace Breakout
             if (batxpostemp < m_player1bat.halfwidth) batxpostemp = m_player1bat.halfwidth;
             if (batxpostemp > (m_screenmax_x - m_player1bat.halfwidth)) batxpostemp = (m_screenmax_x - m_player1bat.halfwidth);
 
-            if (!m_gameover)
+            if (!m_gameover && !m_hideball)
             {
                 // animate ball on x-axis
                 m_ball.xpos += m_ball.xvel;
@@ -468,6 +635,7 @@ namespace Breakout
                 {
                     m_ball.xpos -= m_ball.xvel; // move back
                     m_ball.xvel = -m_ball.xvel; // invert xvel
+                    SoundBounce1.Play();
                 }
 
                 // check if touching bricks
@@ -493,6 +661,8 @@ namespace Breakout
                 foreach (Sprite brick in m_brickkilllist)
                 {
                     m_wall.m_bricks.Remove((Brick)brick);
+                    m_gamescore += 100;
+                    SoundDing.Play();
                 }
 
                 // ---------------------------------------------------------
@@ -502,6 +672,7 @@ namespace Breakout
                 // check if touching bat
                 if (CollideDetectBallWithItem(batxpostemp, m_player1bat, true))
                 {
+                    SoundBounce1.Play();
                     m_ball.ypos -= m_ball.yvel; // move back
                     m_ball.yvel = -Math.Abs(m_ball.yvel); // invert xvel (up only)
                     // accelerate ball depending on position on bat
@@ -543,6 +714,8 @@ namespace Breakout
                 foreach (Sprite brick in m_brickkilllist)
                 {
                     m_wall.m_bricks.Remove((Brick)brick);
+                    m_gamescore += 100;
+                    SoundDing.Play();
                 }
 
                 if (m_ball.xvel < -5) m_ball.xvel = -5;
@@ -552,6 +725,7 @@ namespace Breakout
                 {
                     // super ball
                     DoSuperBall();
+                    m_gamescore += 200;
                 }
 
                 if (m_triggerslowdown)
@@ -562,6 +736,8 @@ namespace Breakout
                     if (m_ball.xvel < 0 && m_ball.xvel < -2) m_ball.xvel = -2;
                     if (m_ball.yvel > 0 && m_ball.yvel > 2) m_ball.yvel = 2;
                     if (m_ball.yvel < 0 && m_ball.yvel < -2) m_ball.yvel = -2;
+
+                    m_gamescore += 150;
                 }
             }
             else
@@ -579,16 +755,19 @@ namespace Breakout
             {
                 pos.X = m_ball.halfwidth;
                 m_ball.xvel = Math.Abs(m_ball.xvel);
+                SoundBounce2.Play();
             }
             if (pos.X > (m_screenmax_x - m_ball.halfwidth))
             {
                 pos.X = (m_screenmax_x - m_ball.halfwidth);
                 m_ball.xvel = -Math.Abs(m_ball.xvel);
+                SoundBounce2.Play();
             }
             if (pos.Y < m_ball.halfheight)
             {
                 pos.Y = m_ball.halfheight;
                 m_ball.yvel = Math.Abs(m_ball.yvel);
+                SoundBounce2.Play();
             }
             if (pos.Y > (m_screenmax_y + m_ball.halfheight))
             {
@@ -600,19 +779,37 @@ namespace Breakout
                     m_superballtimer.Stop();
                     m_triggersuperball = false;
                     m_triggerslowdown = false;
+                    m_balldelay.Start();
                 }
                 if (m_gamelives == 0)
                 {
                     m_gameover = true;
                     AnimatePLT(true);
+                    DoHighScoreTable();
                 }
             }
 
             // draw wall
             DrawWall(spriteBatch);
 
+            // has level finished?
+            if (m_wall.m_bricks.Count() < 1)
+            {
+                // level up, get faster quicker and more bricks...
+                m_gamelevel++;
+                SoundLevelUp.Play();
+                int tempinterval = 10000 - (m_gamelevel * 1000);
+                if (tempinterval < 500) tempinterval = 500;
+                m_increasespeed.Interval = tempinterval;
+                if (m_calibrated)
+                    m_increasespeed.Enabled = true;
+                ResetBall();
+                m_hideball = true;
+                ReconfigureScreen();
+            }
+
             // draw ball
-            if (!m_gameover)
+            if (!m_gameover && !m_hideball)
                 spriteBatch.Draw(m_superball ? SuperBallTexture : m_ball.myTexture, pos, null, Color.White, 0f, m_ball.hotspot, 1.0f, SpriteEffects.None, 0f);
 
             //if (!m_calibrated)
@@ -625,9 +822,43 @@ namespace Breakout
             //}
 
             spriteBatch.DrawString(font, "Lives = "+m_gamelives, new Vector2(3, 3), Color.White);
+            spriteBatch.DrawString(font, "Level = " + m_gamelevel, new Vector2(m_halfscreenmax_x - 50, 3), Color.White);
+            spriteBatch.DrawString(font, "Score = " + m_gamescore, new Vector2(m_screenmax_x - 200, 3), Color.White);
             if (m_gameover)
             {
-                spriteBatch.DrawString(font, "GAME OVER!\r\nSpace to restart...", new Vector2(m_halfscreenmax_x-50, m_halfscreenmax_y), Color.White);
+                spriteBatch.DrawString(font, 
+                    !m_getname ?
+                    "GAME OVER! Space to restart..." : "GAME OVER!", new Vector2(m_halfscreenmax_x-120, m_halfscreenmax_y - 80), Color.White);
+
+                spriteBatch.DrawString(font, "HIGH SCORES:", new Vector2(m_halfscreenmax_x - 50, m_halfscreenmax_y - 50), Color.White);
+
+                int ypos = m_halfscreenmax_y - 25;
+                foreach (ScoreRecord rec in m_highScores.scores)
+                {
+                    spriteBatch.DrawString(font, rec.name + ": " + rec.score, new Vector2(m_halfscreenmax_x - 250, ypos), Color.White);
+                    ypos += 20;
+                }
+
+                // key guide:
+                spriteBatch.DrawString(font, "KEY GUIDE:", new Vector2(m_screenmax_x - 250, m_halfscreenmax_y - 50), Color.White);
+                spriteBatch.DrawString(font, 
+                    "Space = start\r\n"+
+                    "F = toggle fullscreen\r\n" +
+                    "C = calibrate headset\r\n"+
+                    "   (look at center!)\r\n" +
+                    "M - Play music\r\n" +
+                    "PgUp/PgDown - \r\n" +
+                    "   Music Volume\r\n" +
+                    "Esc = exit game"
+                    , new Vector2(m_screenmax_x - 200, m_halfscreenmax_y - 25), Color.White);
+            }
+
+            // prompt for high score name?
+            if (m_getname)
+            {
+                spriteBatch.DrawString(font, "You got a HIGH SCORE!!!", new Vector2(30, m_halfscreenmax_y - 50), Color.LightGreen);
+                spriteBatch.DrawString(font, "Type your name: ", new Vector2(30, m_halfscreenmax_y - 5), Color.LightGreen);
+                spriteBatch.DrawString(font, "> " + m_nameinput, new Vector2(30, m_halfscreenmax_y + 15), Color.LightGreen);
             }
 
             // new, show the headtracking status            
@@ -662,6 +893,23 @@ namespace Breakout
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void DoHighScoreTable()
+        {
+            m_highScores = new HighScores();
+
+            if (m_highScores.IsHighScore(m_gamescore))
+            {
+                SoundLevelUp.Play();
+                PromptForName();
+            }
+        }
+
+        private void PromptForName()
+        {
+            m_nameinput = "";
+            m_getname = true;
         }
 
         private void AnimatePLT(bool doanim)
@@ -739,6 +987,7 @@ namespace Breakout
             m_ball.hotspot.Y = BallTexture.Height / 2;
             m_ball.xvel = 2;
             m_ball.yvel = 2;
+            m_hideball = true;
         }
 
         void autoputoncalibratetimer_Elapsed(object sender, ElapsedEventArgs e)
