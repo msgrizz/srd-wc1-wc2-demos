@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using System.Timers;
 using Plantronics.Innovation.PLTLabsAPI;
 using System.Windows;
+using TweetSharp;
 
 /*******
  * 
@@ -57,6 +58,14 @@ using System.Windows;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.7:
+ * Date: 9th January 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Added game config screen to select different screen resolutions and toggle full screen
+ *   - Added email address capture to high score table xml file (for notifying prize giving)
+ *   - Added optional tweet to dedicated Twitter account: @Pltciscolive, with optional extra hashtag(s)
+ *
  * Version 1.0.0.6:
  * Date: 10th December 2013
  * Changed by: Lewis Collins
@@ -181,6 +190,26 @@ namespace Breakout
         private Song Song1;
         private float m_musicvolume = 0.5f;
         private bool m_playingmusic = false;
+        private GameConfig m_gameconfig;
+        private int m_prefwidth;
+        private int m_prefheight;
+        private List<DisplayMode> m_displaymodes;
+        private bool m_gameinitted = false;
+        private bool m_fullscreen = false;
+
+        //twitter integration stuff
+        String twitterConsumerKey = "7d5ifZE8trItdaIhuFYKRQ";
+        String twitterConsumerSecret = "JWxdYovm8W8QRPwu7IBk3GwSb4uAUfnuCbaulno6684";
+        String twitterAccessToken = "2283564823-t8uS3ldh5ILaOG7TVN4Rft0Mr2iFtVinSQmqLxV";
+        String twitterAccessTokenSecret = "aH7X1PgI9EwvdenpBZ3ltsBkRqKCmpRENbesuPg7kxguc";
+        String twitterUserHandle = "@Pltciscolive";
+
+        TwitterService twitter = null;
+        private bool m_twitter_initted = false;
+        private bool m_getemail = false;  // TODO set back to false!!
+        private string m_emailinput = "";
+        private string m_keyspressed;
+        private bool m_suppressgamekeys;
 
         public Game1()
         {
@@ -190,9 +219,9 @@ namespace Breakout
             if (prefferedwidth > 1280)
             {
                 prefferedwidth = 1280;
-                prefferedheight = 720;
+                prefferedheight = 800;
             }
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false; // new, start in window
             graphics.PreferredBackBufferWidth = prefferedwidth;
             graphics.PreferredBackBufferHeight = prefferedheight;
             Content.RootDirectory = "Content";
@@ -218,8 +247,57 @@ namespace Breakout
             m_balldelay.Interval = 2000;
             m_balldelay.AutoReset = false;
             m_balldelay.Elapsed += new ElapsedEventHandler(m_balldelay_Elapsed);
+            
+            // new, game config form
+            m_gameconfig = new GameConfig(this);
+            m_gameconfig.Show();
+            m_gameconfig.BringToFront();
+
+            DiscoverScreenModes();
+
+            InitializeTwitter();
 
             base.Initialize();
+        }
+
+        private int DiscoverScreenModes()
+        {
+            int num = 0;
+            int prefnum = 0;
+            m_prefwidth = 800;
+            m_prefheight = 600;
+
+            m_displaymodes = new List<DisplayMode>();
+
+            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+            {
+                //mode.whatever (and use any of avaliable information)
+                if (num == 0)
+                {
+                    // take first res as preferred
+                    m_prefwidth = mode.Width;
+                    m_prefheight = mode.Height;
+                    prefnum = 0;
+                }
+                //unless we have first res with 1280 width, then take that:
+                if (mode.Width == 1280 && prefnum == 0)
+                {
+                    m_prefwidth = mode.Width;
+                    m_prefheight = mode.Height;
+                    prefnum = num;
+                }
+                num++;
+                string res = num.ToString() + ": " + mode.ToString();
+                m_gameconfig.resCombo.Items.Add(res);
+
+                m_displaymodes.Add(mode);
+            }
+            m_gameconfig.resCombo.SelectedIndex = prefnum;
+
+            graphics.PreferredBackBufferWidth = m_prefwidth;
+            graphics.PreferredBackBufferHeight = m_prefheight;
+            graphics.ApplyChanges();
+            return num;
         }
 
         void m_balldelay_Elapsed(object sender, ElapsedEventArgs e)
@@ -284,6 +362,40 @@ namespace Breakout
 
             m_musicvolume = 0.5f;
             MediaPlayer.Volume = m_musicvolume; // 50% vol
+
+            IsMouseVisible = true;
+            m_gameinitted = true;
+        }
+
+        //twitter initialization
+        private void InitializeTwitter()
+        {
+            try
+            {
+                //initialize twitter
+                twitter = new TwitterService(twitterConsumerKey, twitterConsumerSecret);
+                twitter.AuthenticateWith(twitterAccessToken, twitterAccessTokenSecret);
+                m_twitter_initted = true;
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show("Error: " + e.ToString(), "Breakout game error");
+            }
+        }
+
+        private void SendTweet(string tweet)
+        {
+            try
+            {
+                if (m_twitter_initted && m_gameconfig.tweetCheckBox.Checked)
+                {
+                    twitter.SendTweet(new SendTweetOptions { Status = tweet });
+                }
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show("Error: " + e.ToString(), "Breakout game error");
+            }
         }
 
         void m_superballtimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -437,118 +549,203 @@ namespace Breakout
                 this.Exit();
             }
 
-            // allow toggle fullscreen with F key:
-            if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F)))
+            if (!m_suppressgamekeys)
             {
-                graphics.ToggleFullScreen();
-                RestartGame();
-            }
 
-            // recalibrate with C key:
-            if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C)))
-            {
-                m_autoputoncalibratetimer.Start();
-                m_calibrated = false;
-                m_htstate = HeadTrackState.NotCalib;
-            }
-
-            if ((currentKeyboardState.IsKeyUp(Keys.PageUp)) && (oldKeyboardState.IsKeyDown(Keys.PageUp)))
-            {
-                m_musicvolume -= 0.1f;
-                if (m_musicvolume<0.0f) m_musicvolume = 0.0f;
-                MediaPlayer.Volume = m_musicvolume;
-            }
-            if ((currentKeyboardState.IsKeyUp(Keys.PageDown)) && (oldKeyboardState.IsKeyDown(Keys.PageDown)))
-            {
-                m_musicvolume += 0.1f;
-                if (m_musicvolume > 1.0f) m_musicvolume = 1.0f;
-                MediaPlayer.Volume = m_musicvolume;
-            }            
-            if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M)))
-            {
-                m_playingmusic = !m_playingmusic;
-                if (m_playingmusic) MediaPlayer.Play(Song1);
-                else MediaPlayer.Stop();
-            }
-
-            if (m_getname)
-            {
-                // in highscore name entry mode:
-                if ((currentKeyboardState.IsKeyUp(Keys.Enter)) && (oldKeyboardState.IsKeyDown(Keys.Enter)))
+                if (!m_getname && !m_getemail)
                 {
-                    if (m_nameinput.Length < 1) m_nameinput = "noname";
-                    if (m_nameinput.Length > 30) m_nameinput = m_nameinput.Substring(0, 30);
-                    m_highScores.AddHighScore(m_nameinput, m_gamescore);
-                    m_nameinput = "";
-                    m_getname = false;
-                }
-                if ((currentKeyboardState.IsKeyUp(Keys.Back)) && (oldKeyboardState.IsKeyDown(Keys.Back)))
-                {
-                    m_nameinput = m_nameinput.Substring(0, m_nameinput.Length - 1);
-                }
-                if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
-                {
-                    m_nameinput += " ";
-                }
-                if ((currentKeyboardState.IsKeyUp(Keys.A)) && (oldKeyboardState.IsKeyDown(Keys.A))) m_nameinput += "A";
-                if ((currentKeyboardState.IsKeyUp(Keys.B)) && (oldKeyboardState.IsKeyDown(Keys.B))) m_nameinput += "B";
-                if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C))) m_nameinput += "C";
-                if ((currentKeyboardState.IsKeyUp(Keys.D)) && (oldKeyboardState.IsKeyDown(Keys.D))) m_nameinput += "D";
-                if ((currentKeyboardState.IsKeyUp(Keys.E)) && (oldKeyboardState.IsKeyDown(Keys.E))) m_nameinput += "E";
-                if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F))) m_nameinput += "F";
-                if ((currentKeyboardState.IsKeyUp(Keys.G)) && (oldKeyboardState.IsKeyDown(Keys.G))) m_nameinput += "G";
-                if ((currentKeyboardState.IsKeyUp(Keys.H)) && (oldKeyboardState.IsKeyDown(Keys.H))) m_nameinput += "H";
-                if ((currentKeyboardState.IsKeyUp(Keys.I)) && (oldKeyboardState.IsKeyDown(Keys.I))) m_nameinput += "I";
-                if ((currentKeyboardState.IsKeyUp(Keys.J)) && (oldKeyboardState.IsKeyDown(Keys.J))) m_nameinput += "J";
-                if ((currentKeyboardState.IsKeyUp(Keys.K)) && (oldKeyboardState.IsKeyDown(Keys.K))) m_nameinput += "K";
-                if ((currentKeyboardState.IsKeyUp(Keys.L)) && (oldKeyboardState.IsKeyDown(Keys.L))) m_nameinput += "L";
-                if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M))) m_nameinput += "M";
-                if ((currentKeyboardState.IsKeyUp(Keys.N)) && (oldKeyboardState.IsKeyDown(Keys.N))) m_nameinput += "N";
-                if ((currentKeyboardState.IsKeyUp(Keys.O)) && (oldKeyboardState.IsKeyDown(Keys.O))) m_nameinput += "O";
-                if ((currentKeyboardState.IsKeyUp(Keys.P)) && (oldKeyboardState.IsKeyDown(Keys.P))) m_nameinput += "P";
-                if ((currentKeyboardState.IsKeyUp(Keys.Q)) && (oldKeyboardState.IsKeyDown(Keys.Q))) m_nameinput += "Q";
-                if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R))) m_nameinput += "R";
-                if ((currentKeyboardState.IsKeyUp(Keys.S)) && (oldKeyboardState.IsKeyDown(Keys.S))) m_nameinput += "S";
-                if ((currentKeyboardState.IsKeyUp(Keys.T)) && (oldKeyboardState.IsKeyDown(Keys.T))) m_nameinput += "T";
-                if ((currentKeyboardState.IsKeyUp(Keys.U)) && (oldKeyboardState.IsKeyDown(Keys.U))) m_nameinput += "U";
-                if ((currentKeyboardState.IsKeyUp(Keys.V)) && (oldKeyboardState.IsKeyDown(Keys.V))) m_nameinput += "V";
-                if ((currentKeyboardState.IsKeyUp(Keys.W)) && (oldKeyboardState.IsKeyDown(Keys.W))) m_nameinput += "W";
-                if ((currentKeyboardState.IsKeyUp(Keys.X)) && (oldKeyboardState.IsKeyDown(Keys.X))) m_nameinput += "X";
-                if ((currentKeyboardState.IsKeyUp(Keys.Y)) && (oldKeyboardState.IsKeyDown(Keys.Y))) m_nameinput += "Y";
-                if ((currentKeyboardState.IsKeyUp(Keys.Z)) && (oldKeyboardState.IsKeyDown(Keys.Z))) m_nameinput += "Z";
-            }
-            else
-            {
-                // restart game:
-                if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
-                {
-                    if (m_gameover)
+                    // allow toggle fullscreen with F key:
+                    if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F)))
                     {
-                        RestartGame();
+                        SetFullScreen(!m_fullscreen);
+                        //RestartGame();
+                    }
+
+                    // recalibrate with C key:
+                    if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C)))
+                    {
+                        m_autoputoncalibratetimer.Start();
+                        m_calibrated = false;
+                        m_htstate = HeadTrackState.NotCalib;
+                    }
+
+                    if ((currentKeyboardState.IsKeyUp(Keys.PageUp)) && (oldKeyboardState.IsKeyDown(Keys.PageUp)))
+                    {
+                        m_musicvolume -= 0.1f;
+                        if (m_musicvolume < 0.0f) m_musicvolume = 0.0f;
+                        MediaPlayer.Volume = m_musicvolume;
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.PageDown)) && (oldKeyboardState.IsKeyDown(Keys.PageDown)))
+                    {
+                        m_musicvolume += 0.1f;
+                        if (m_musicvolume > 1.0f) m_musicvolume = 1.0f;
+                        MediaPlayer.Volume = m_musicvolume;
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M)))
+                    {
+                        m_playingmusic = !m_playingmusic;
+                        if (m_playingmusic) MediaPlayer.Play(Song1);
+                        else MediaPlayer.Stop();
+                    }
+
+                    // restart game:
+                    if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+                    {
+                        if (m_gameover)
+                        {
+                            RestartGame();
+                        }
+                    }
+
+                    if (currentKeyboardState.IsKeyDown(Keys.Right))
+                    {
+                        headtrack_xoffset += 5;
+                        if (headtrack_xoffset > (m_halfscreenmax_x - m_player1bat.halfwidth))
+                        {
+                            headtrack_xoffset = (m_halfscreenmax_x - m_player1bat.halfwidth);
+                        }
+                    }
+                    if (currentKeyboardState.IsKeyDown(Keys.Left))
+                    {
+                        headtrack_xoffset -= 5;
+                        if (headtrack_xoffset < -(m_halfscreenmax_x - m_player1bat.halfwidth))
+                        {
+                            headtrack_xoffset = -(m_halfscreenmax_x - m_player1bat.halfwidth);
+                        }
+                    }
+
+                    if (m_batspeed != 0)
+                    {
+                        headtrack_xoffset += m_batspeed;
+                        if (headtrack_xoffset > (m_halfscreenmax_x - m_player1bat.halfwidth))
+                        {
+                            headtrack_xoffset = (m_halfscreenmax_x - m_player1bat.halfwidth);
+                        }
+                        if (headtrack_xoffset < -(m_halfscreenmax_x - m_player1bat.halfwidth))
+                        {
+                            headtrack_xoffset = -(m_halfscreenmax_x - m_player1bat.halfwidth);
+                        }
                     }
                 }
-
-                if (currentKeyboardState.IsKeyDown(Keys.Right))
+                else if (m_getname)
                 {
-                    headtrack_xoffset += 5;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.Left))
-                {
-                    headtrack_xoffset -= 5;
-                }
-
-                if (m_batspeed != 0)
-                {
-                    headtrack_xoffset += m_batspeed;
-                    if (headtrack_xoffset > (m_halfscreenmax_x - m_player1bat.halfwidth))
+                    // in highscore name entry mode:
+                    if ((currentKeyboardState.IsKeyUp(Keys.Enter)) && (oldKeyboardState.IsKeyDown(Keys.Enter)))
                     {
-                        headtrack_xoffset = (m_halfscreenmax_x - m_player1bat.halfwidth);
+                        if (m_nameinput.Length < 1) m_nameinput = "noname";
+                        if (m_nameinput.Length > 30) m_nameinput = m_nameinput.Substring(0, 30);
+
+                        m_getname = false;
+
+                        PromptForEmail();
                     }
-                    if (headtrack_xoffset < -(m_halfscreenmax_x - m_player1bat.halfwidth))
+                    if ((currentKeyboardState.IsKeyUp(Keys.Back)) && (oldKeyboardState.IsKeyDown(Keys.Back)))
                     {
-                        headtrack_xoffset = -(m_halfscreenmax_x - m_player1bat.halfwidth);
+                        if (m_nameinput.Length > 0)
+                            m_nameinput = m_nameinput.Substring(0, m_nameinput.Length - 1);
                     }
+                    if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+                    {
+                        m_nameinput += " ";
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.A)) && (oldKeyboardState.IsKeyDown(Keys.A))) m_nameinput += "A";
+                    if ((currentKeyboardState.IsKeyUp(Keys.B)) && (oldKeyboardState.IsKeyDown(Keys.B))) m_nameinput += "B";
+                    if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C))) m_nameinput += "C";
+                    if ((currentKeyboardState.IsKeyUp(Keys.D)) && (oldKeyboardState.IsKeyDown(Keys.D))) m_nameinput += "D";
+                    if ((currentKeyboardState.IsKeyUp(Keys.E)) && (oldKeyboardState.IsKeyDown(Keys.E))) m_nameinput += "E";
+                    if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F))) m_nameinput += "F";
+                    if ((currentKeyboardState.IsKeyUp(Keys.G)) && (oldKeyboardState.IsKeyDown(Keys.G))) m_nameinput += "G";
+                    if ((currentKeyboardState.IsKeyUp(Keys.H)) && (oldKeyboardState.IsKeyDown(Keys.H))) m_nameinput += "H";
+                    if ((currentKeyboardState.IsKeyUp(Keys.I)) && (oldKeyboardState.IsKeyDown(Keys.I))) m_nameinput += "I";
+                    if ((currentKeyboardState.IsKeyUp(Keys.J)) && (oldKeyboardState.IsKeyDown(Keys.J))) m_nameinput += "J";
+                    if ((currentKeyboardState.IsKeyUp(Keys.K)) && (oldKeyboardState.IsKeyDown(Keys.K))) m_nameinput += "K";
+                    if ((currentKeyboardState.IsKeyUp(Keys.L)) && (oldKeyboardState.IsKeyDown(Keys.L))) m_nameinput += "L";
+                    if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M))) m_nameinput += "M";
+                    if ((currentKeyboardState.IsKeyUp(Keys.N)) && (oldKeyboardState.IsKeyDown(Keys.N))) m_nameinput += "N";
+                    if ((currentKeyboardState.IsKeyUp(Keys.O)) && (oldKeyboardState.IsKeyDown(Keys.O))) m_nameinput += "O";
+                    if ((currentKeyboardState.IsKeyUp(Keys.P)) && (oldKeyboardState.IsKeyDown(Keys.P))) m_nameinput += "P";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Q)) && (oldKeyboardState.IsKeyDown(Keys.Q))) m_nameinput += "Q";
+                    if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R))) m_nameinput += "R";
+                    if ((currentKeyboardState.IsKeyUp(Keys.S)) && (oldKeyboardState.IsKeyDown(Keys.S))) m_nameinput += "S";
+                    if ((currentKeyboardState.IsKeyUp(Keys.T)) && (oldKeyboardState.IsKeyDown(Keys.T))) m_nameinput += "T";
+                    if ((currentKeyboardState.IsKeyUp(Keys.U)) && (oldKeyboardState.IsKeyDown(Keys.U))) m_nameinput += "U";
+                    if ((currentKeyboardState.IsKeyUp(Keys.V)) && (oldKeyboardState.IsKeyDown(Keys.V))) m_nameinput += "V";
+                    if ((currentKeyboardState.IsKeyUp(Keys.W)) && (oldKeyboardState.IsKeyDown(Keys.W))) m_nameinput += "W";
+                    if ((currentKeyboardState.IsKeyUp(Keys.X)) && (oldKeyboardState.IsKeyDown(Keys.X))) m_nameinput += "X";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Y)) && (oldKeyboardState.IsKeyDown(Keys.Y))) m_nameinput += "Y";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Z)) && (oldKeyboardState.IsKeyDown(Keys.Z))) m_nameinput += "Z";
                 }
+                else if (m_getemail)
+                {
+                    // in highscore name entry mode:
+                    if ((currentKeyboardState.IsKeyUp(Keys.Enter)) && (oldKeyboardState.IsKeyDown(Keys.Enter)))
+                    {
+                        if (m_emailinput.Length < 1) m_emailinput = "no email given";
+                        if (m_emailinput.Length > 300) m_emailinput = m_emailinput.Substring(0, 300);
+                        m_highScores.AddHighScore(m_nameinput, m_emailinput, m_gamescore);
+
+                        SendTweet("Congrats " + m_nameinput + " who scored " +
+                            m_gamescore + " points on Breakout with http://pltlabs.com/ Wearable Concept 1!"
+                                + (m_gameconfig.extraHashtagsCheckbox.Checked ? " " + m_gameconfig.extraHashtagsTextBox.Text : ""));
+
+                        m_emailinput = "";
+                        m_getemail = false;
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.Back)) && (oldKeyboardState.IsKeyDown(Keys.Back)))
+                    {
+                        if (m_emailinput.Length > 0)
+                            m_emailinput = m_emailinput.Substring(0, m_emailinput.Length - 1);
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
+                    {
+                        m_emailinput += " ";
+                    }
+                    if ((currentKeyboardState.IsKeyUp(Keys.A)) && (oldKeyboardState.IsKeyDown(Keys.A))) m_emailinput += "A";
+                    if ((currentKeyboardState.IsKeyUp(Keys.B)) && (oldKeyboardState.IsKeyDown(Keys.B))) m_emailinput += "B";
+                    if ((currentKeyboardState.IsKeyUp(Keys.C)) && (oldKeyboardState.IsKeyDown(Keys.C))) m_emailinput += "C";
+                    if ((currentKeyboardState.IsKeyUp(Keys.D)) && (oldKeyboardState.IsKeyDown(Keys.D))) m_emailinput += "D";
+                    if ((currentKeyboardState.IsKeyUp(Keys.E)) && (oldKeyboardState.IsKeyDown(Keys.E))) m_emailinput += "E";
+                    if ((currentKeyboardState.IsKeyUp(Keys.F)) && (oldKeyboardState.IsKeyDown(Keys.F))) m_emailinput += "F";
+                    if ((currentKeyboardState.IsKeyUp(Keys.G)) && (oldKeyboardState.IsKeyDown(Keys.G))) m_emailinput += "G";
+                    if ((currentKeyboardState.IsKeyUp(Keys.H)) && (oldKeyboardState.IsKeyDown(Keys.H))) m_emailinput += "H";
+                    if ((currentKeyboardState.IsKeyUp(Keys.I)) && (oldKeyboardState.IsKeyDown(Keys.I))) m_emailinput += "I";
+                    if ((currentKeyboardState.IsKeyUp(Keys.J)) && (oldKeyboardState.IsKeyDown(Keys.J))) m_emailinput += "J";
+                    if ((currentKeyboardState.IsKeyUp(Keys.K)) && (oldKeyboardState.IsKeyDown(Keys.K))) m_emailinput += "K";
+                    if ((currentKeyboardState.IsKeyUp(Keys.L)) && (oldKeyboardState.IsKeyDown(Keys.L))) m_emailinput += "L";
+                    if ((currentKeyboardState.IsKeyUp(Keys.M)) && (oldKeyboardState.IsKeyDown(Keys.M))) m_emailinput += "M";
+                    if ((currentKeyboardState.IsKeyUp(Keys.N)) && (oldKeyboardState.IsKeyDown(Keys.N))) m_emailinput += "N";
+                    if ((currentKeyboardState.IsKeyUp(Keys.O)) && (oldKeyboardState.IsKeyDown(Keys.O))) m_emailinput += "O";
+                    if ((currentKeyboardState.IsKeyUp(Keys.P)) && (oldKeyboardState.IsKeyDown(Keys.P))) m_emailinput += "P";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Q)) && (oldKeyboardState.IsKeyDown(Keys.Q))) m_emailinput += "Q";
+                    if ((currentKeyboardState.IsKeyUp(Keys.R)) && (oldKeyboardState.IsKeyDown(Keys.R))) m_emailinput += "R";
+                    if ((currentKeyboardState.IsKeyUp(Keys.S)) && (oldKeyboardState.IsKeyDown(Keys.S))) m_emailinput += "S";
+                    if ((currentKeyboardState.IsKeyUp(Keys.T)) && (oldKeyboardState.IsKeyDown(Keys.T))) m_emailinput += "T";
+                    if ((currentKeyboardState.IsKeyUp(Keys.U)) && (oldKeyboardState.IsKeyDown(Keys.U))) m_emailinput += "U";
+                    if ((currentKeyboardState.IsKeyUp(Keys.V)) && (oldKeyboardState.IsKeyDown(Keys.V))) m_emailinput += "V";
+                    if ((currentKeyboardState.IsKeyUp(Keys.W)) && (oldKeyboardState.IsKeyDown(Keys.W))) m_emailinput += "W";
+                    if ((currentKeyboardState.IsKeyUp(Keys.X)) && (oldKeyboardState.IsKeyDown(Keys.X))) m_emailinput += "X";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Y)) && (oldKeyboardState.IsKeyDown(Keys.Y))) m_emailinput += "Y";
+                    if ((currentKeyboardState.IsKeyUp(Keys.Z)) && (oldKeyboardState.IsKeyDown(Keys.Z))) m_emailinput += "Z";
+                    if ((currentKeyboardState.IsKeyUp(Keys.OemTilde)) && (oldKeyboardState.IsKeyDown(Keys.OemTilde))
+                        && (currentKeyboardState.IsKeyDown(Keys.LeftShift) || currentKeyboardState.IsKeyDown(Keys.RightShift))
+                        ) m_emailinput += "@";
+                    if ((currentKeyboardState.IsKeyUp(Keys.OemPeriod)) && (oldKeyboardState.IsKeyDown(Keys.OemPeriod))) m_emailinput += ".";
+                    if ((currentKeyboardState.IsKeyUp(Keys.OemMinus)) && (oldKeyboardState.IsKeyDown(Keys.OemMinus))
+                        && (currentKeyboardState.IsKeyDown(Keys.LeftShift) || currentKeyboardState.IsKeyDown(Keys.RightShift))
+                        ) m_emailinput += "_";
+                    if ((currentKeyboardState.IsKeyUp(Keys.OemMinus)) && (oldKeyboardState.IsKeyDown(Keys.OemMinus))
+                        && (!currentKeyboardState.IsKeyDown(Keys.LeftShift) && !currentKeyboardState.IsKeyDown(Keys.RightShift))
+                        ) m_emailinput += "-";
+                }
+
+                // for key debug
+                //Keys[] keys = currentKeyboardState.GetPressedKeys();
+                //m_keyspressed = "";
+                //foreach (Keys key in keys)
+                //{
+                //    m_keyspressed += (key.ToString()+",");
+                //}
+
             }
 
             base.Update(gameTime);
@@ -574,7 +771,7 @@ namespace Breakout
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            if (m_gameover && graphics.IsFullScreen)
+            if (m_gameover)// && graphics.IsFullScreen)
             {
                 m_pltpos.X += m_pltvel.X;
                 m_pltpos.Y += m_pltvel.Y;
@@ -828,19 +1025,26 @@ namespace Breakout
             {
                 spriteBatch.DrawString(font, 
                     !m_getname ?
-                    "GAME OVER! Space to restart..." : "GAME OVER!", new Vector2(m_halfscreenmax_x-120, m_halfscreenmax_y - 80), Color.White);
+                    "GAME OVER! Space to restart..." : "GAME OVER!", new Vector2(m_halfscreenmax_x-120, m_halfscreenmax_y - 120), Color.LightPink);
 
                 spriteBatch.DrawString(font, "HIGH SCORES:", new Vector2(m_halfscreenmax_x - 50, m_halfscreenmax_y - 50), Color.White);
 
                 int ypos = m_halfscreenmax_y - 25;
                 foreach (ScoreRecord rec in m_highScores.scores)
                 {
-                    spriteBatch.DrawString(font, rec.name + ": " + rec.score, new Vector2(m_halfscreenmax_x - 250, ypos), Color.White);
+                    if (rec.name.Length < 1) rec.name = "noname";
+                    spriteBatch.DrawString(font, rec.name, new Vector2(m_halfscreenmax_x - 100, ypos), Color.LightBlue);
+                    ypos += 20;
+                }
+                ypos = m_halfscreenmax_y - 25;
+                foreach (ScoreRecord rec in m_highScores.scores)
+                {
+                    spriteBatch.DrawString(font, rec.score.ToString(), new Vector2(m_halfscreenmax_x + 50, ypos), Color.LightBlue);
                     ypos += 20;
                 }
 
                 // key guide:
-                spriteBatch.DrawString(font, "KEY GUIDE:", new Vector2(m_screenmax_x - 250, m_halfscreenmax_y - 50), Color.White);
+                spriteBatch.DrawString(font, "KEY GUIDE:", new Vector2(m_screenmax_x - 200, m_halfscreenmax_y - 50), Color.White);
                 spriteBatch.DrawString(font, 
                     "Space = start\r\n"+
                     "F = toggle fullscreen\r\n" +
@@ -850,16 +1054,29 @@ namespace Breakout
                     "PgUp/PgDown - \r\n" +
                     "   Music Volume\r\n" +
                     "Esc = exit game"
-                    , new Vector2(m_screenmax_x - 200, m_halfscreenmax_y - 25), Color.White);
+                    , new Vector2(m_screenmax_x - 200, m_halfscreenmax_y - 25), Color.LightBlue);
             }
 
             // prompt for high score name?
             if (m_getname)
             {
                 spriteBatch.DrawString(font, "You got a HIGH SCORE!!!", new Vector2(30, m_halfscreenmax_y - 50), Color.LightGreen);
-                spriteBatch.DrawString(font, "Type your name: ", new Vector2(30, m_halfscreenmax_y - 5), Color.LightGreen);
+                spriteBatch.DrawString(font, "Type your name"+(m_gameconfig.tweetCheckBox.Checked ? " (will be tweeted)":"")+": ", new Vector2(30, m_halfscreenmax_y - 5), Color.LightGreen);
                 spriteBatch.DrawString(font, "> " + m_nameinput, new Vector2(30, m_halfscreenmax_y + 15), Color.LightGreen);
             }
+            // prompt for email address?
+            if (m_getemail)
+            {
+                spriteBatch.DrawString(font, "You may be a PRIZE WINNER!!", new Vector2(30, m_halfscreenmax_y - 50), Color.LightGreen);
+                spriteBatch.DrawString(font, "Type your email (to be notified): ", new Vector2(30, m_halfscreenmax_y - 5), Color.LightGreen);
+                spriteBatch.DrawString(font, "> " + m_emailinput, new Vector2(30, m_halfscreenmax_y + 15), Color.LightGreen);
+            }
+
+            //// for key debug
+            //if (m_keyspressed.Length > 0)
+            //{
+            //    spriteBatch.DrawString(font, "KEYS: " + m_keyspressed, new Vector2(30, m_halfscreenmax_y + 50), Color.LightGreen);
+            //}
 
             // new, show the headtracking status            
             Texture2D hticon = HTCenter;
@@ -912,13 +1129,19 @@ namespace Breakout
             m_getname = true;
         }
 
+        private void PromptForEmail()
+        {
+            m_emailinput = "";
+            m_getemail = true;
+        }
+
         private void AnimatePLT(bool doanim)
         {
-            if (graphics.IsFullScreen)
-            {
+            //if (graphics.IsFullScreen)
+            //{
                 m_pltvel.X = doanim ? 1 : 0;
                 m_pltvel.Y = doanim ? 1 : 0;
-            }
+            //}
         }
 
         private bool CollideDetectBallWithItem(int itemxpos, Sprite item, bool isbat = true)
@@ -1139,6 +1362,47 @@ namespace Breakout
                         break;
                 }
             }
+        }
+
+        internal void ChangeResolution(int newres)
+        {
+            if (m_gameinitted)
+            {
+                try
+                {
+                    m_prefwidth = m_displaymodes[newres].Width;
+                    m_prefheight = m_displaymodes[newres].Height;
+                    graphics.PreferredBackBufferWidth = m_prefwidth;
+                    graphics.PreferredBackBufferHeight = m_prefheight;
+                    graphics.ApplyChanges();
+                    ReconfigureScreen();
+                }
+                catch (Exception)
+                {
+                    DiscoverScreenModes(); // rediscover screen modes
+                }
+            }
+        }
+
+        internal void SetFullScreen(bool fullscreen)
+        {
+            m_fullscreen = fullscreen;
+            graphics.IsFullScreen = m_fullscreen;
+            IsMouseVisible = !m_fullscreen;
+            graphics.ApplyChanges();
+            m_gameconfig.checkBox1.Checked = fullscreen;
+            if (!m_fullscreen)
+            {
+                if (m_gameconfig.WindowState == System.Windows.Forms.FormWindowState.Minimized)
+                {
+                    m_gameconfig.WindowState = System.Windows.Forms.FormWindowState.Normal;
+                }
+            }
+        }
+
+        internal void SupressGameKeys(bool suppress)
+        {
+            m_suppressgamekeys = suppress;
         }
     }
 

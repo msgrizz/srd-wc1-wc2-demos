@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Breakout - Plantronics Innovation 2013, http://pltlabs.com/")]
+[assembly: AssemblyTitle("Breakout - Plantronics Innovation 2014, http://pltlabs.com/")]
 [assembly: AssemblyProduct("Breakout")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("Plantronics")]
-[assembly: AssemblyCopyright("Copyright © Plantronics 2013")]
+[assembly: AssemblyCopyright("Copyright © Plantronics 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,4 +31,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.6")]
+[assembly: AssemblyVersion("1.0.0.7")]

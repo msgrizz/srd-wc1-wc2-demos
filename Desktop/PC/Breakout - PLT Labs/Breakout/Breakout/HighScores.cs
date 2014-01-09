@@ -35,9 +35,9 @@ namespace Breakout
             return ishighscore;
         }
 
-        public void AddHighScore(string name, int score)
+        public void AddHighScore(string name, string email, int score)
         {
-            scores.Add(new ScoreRecord(name, score));
+            scores.Add(new ScoreRecord(name, email, score));
             WriteScores();
         }
 
@@ -57,6 +57,7 @@ namespace Breakout
                     {
                         ScoreRecord rec = new ScoreRecord();
                         rec.name = (string)item.XPathSelectElement("./name");
+                        rec.email = (string)item.XPathSelectElement("./email");
                         rec.score = (int)item.XPathSelectElement("./score");
                         scores.Add(rec);
                     }
@@ -65,6 +66,9 @@ namespace Breakout
             catch (Exception)
             {
                 // uh-oh, maybe there's no file yet!
+                // or it could be a corrupt file
+
+                scores = new List<ScoreRecord>();
             }
 
             // fill up with blanks
@@ -72,7 +76,7 @@ namespace Breakout
             if (n < 0) n = 0;
             for (int i = n; i < 10; i++)
             {
-                ScoreRecord rec = new ScoreRecord("AAAAA", 0);
+                ScoreRecord rec = new ScoreRecord("AAAAA", "", 0);
                 scores.Add(rec);
             }
         }
@@ -105,6 +109,7 @@ namespace Breakout
                         ScoreRecord rec = scores[i];
                         highScores.Add(new XElement("HighScore",
                             new XElement("name", rec.name),
+                            new XElement("email", rec.email),
                             new XElement("score", rec.score)));
                     }
                 }
@@ -122,18 +127,20 @@ namespace Breakout
 
     public class ScoreRecord
     {
-        public string name;
+        public string name, email;
         public int score;
 
-        public ScoreRecord(string name, int score)
+        public ScoreRecord(string name, string email, int score)
         {
             this.name = name;
+            this.email = email;
             this.score = score;
         }
 
         public ScoreRecord()
         {
             this.name = "";
+            this.email = "";
             this.score = 0;
         }
     }
