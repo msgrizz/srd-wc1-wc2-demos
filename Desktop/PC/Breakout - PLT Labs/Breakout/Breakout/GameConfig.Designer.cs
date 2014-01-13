@@ -102,7 +102,6 @@
             this.extraHashtagsTextBox.Name = "extraHashtagsTextBox";
             this.extraHashtagsTextBox.Size = new System.Drawing.Size(220, 20);
             this.extraHashtagsTextBox.TabIndex = 3;
-            this.extraHashtagsTextBox.Text = "#CLEUR";
             // 
             // label2
             // 
@@ -130,9 +129,9 @@
             this.tweetCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tweetCheckBox.Location = new System.Drawing.Point(17, 28);
             this.tweetCheckBox.Name = "tweetCheckBox";
-            this.tweetCheckBox.Size = new System.Drawing.Size(241, 17);
+            this.tweetCheckBox.Size = new System.Drawing.Size(162, 17);
             this.tweetCheckBox.TabIndex = 0;
-            this.tweetCheckBox.Text = "Auto-Tweet New Highscores to @Pltciscolive";
+            this.tweetCheckBox.Text = "Auto-Tweet New Highscores";
             this.tweetCheckBox.UseVisualStyleBackColor = true;
             // 
             // GameConfig

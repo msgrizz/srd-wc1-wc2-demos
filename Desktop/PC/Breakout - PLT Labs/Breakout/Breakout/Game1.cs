@@ -58,6 +58,16 @@ using TweetSharp;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.8:
+ * Date: 13th January 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Fixed the getting harder feature to speed up gameplay over time
+ *   - Added some smoothing logic to try to avoid occasional glitch in heading from
+ *     suddenly moving bat
+ *   - Adding another build option in solution to build for Lync Conference 2014 (different
+ *     twitter handle and hashtag)
+ *
  * Version 1.0.0.7:
  * Date: 9th January 2014
  * Changed by: Lewis Collins
@@ -188,7 +198,7 @@ namespace Breakout
         private SoundEffect SoundBounce2;
         private SoundEffect SoundDing;
         private Song Song1;
-        private float m_musicvolume = 0.5f;
+        private float m_musicvolume = 0.2f;
         private bool m_playingmusic = false;
         private GameConfig m_gameconfig;
         private int m_prefwidth;
@@ -198,18 +208,26 @@ namespace Breakout
         private bool m_fullscreen = false;
 
         //twitter integration stuff
+#if LYNCCONF
+        String twitterConsumerKey = "xLKUgigpeztMxrXGcgn0MQ";
+        String twitterConsumerSecret = "21wabrIymVTLYeOpLGpZH0YuJBkWV7Ho3ADmIL9Aho";
+        String twitterAccessToken = "2289636720-1YFtwTI5OX1WQQy1UP3knsMjXl2y1UZ0GwT24PM";
+        String twitterAccessTokenSecret = "6R8OTqN3lfeMxxaV2CitdobxWLcjqOHgSm2BGLhipgDEC";
+        String twitterUserHandle = "@Pltlyncconf";
+#else
         String twitterConsumerKey = "7d5ifZE8trItdaIhuFYKRQ";
         String twitterConsumerSecret = "JWxdYovm8W8QRPwu7IBk3GwSb4uAUfnuCbaulno6684";
         String twitterAccessToken = "2283564823-t8uS3ldh5ILaOG7TVN4Rft0Mr2iFtVinSQmqLxV";
         String twitterAccessTokenSecret = "aH7X1PgI9EwvdenpBZ3ltsBkRqKCmpRENbesuPg7kxguc";
         String twitterUserHandle = "@Pltciscolive";
-
+#endif
         TwitterService twitter = null;
         private bool m_twitter_initted = false;
         private bool m_getemail = false;  // TODO set back to false!!
         private string m_emailinput = "";
         private string m_keyspressed;
         private bool m_suppressgamekeys;
+        private int m_lastorientation = 0;
 
         public Game1()
         {
@@ -254,6 +272,16 @@ namespace Breakout
             m_gameconfig.BringToFront();
 
             DiscoverScreenModes();
+
+            if (m_gameconfig!=null)
+            {
+                m_gameconfig.tweetCheckBox.Text = "Auto-Tweet New Highscores to " + twitterUserHandle;
+#if LYNCCONF
+                m_gameconfig.extraHashtagsTextBox.Text = "#lyncconf14";
+#else
+                m_gameconfig.extraHashtagsTextBox.Text = "#CLEUR";
+#endif
+            }
 
             InitializeTwitter();
 
@@ -317,7 +345,7 @@ namespace Breakout
 
             // TODO: use this.Content to load your game content here
             m_increasespeed = new Timer();
-            m_increasespeed.Interval = 10000;
+            m_increasespeed.Interval = 10000; // 10000;
             m_increasespeed.Elapsed += new ElapsedEventHandler(m_increasespeed_Elapsed);
 
             m_superballtimer = new Timer();
@@ -360,8 +388,8 @@ namespace Breakout
 
             DoHighScoreTable();
 
-            m_musicvolume = 0.5f;
-            MediaPlayer.Volume = m_musicvolume; // 50% vol
+            m_musicvolume = 0.20f;
+            MediaPlayer.Volume = m_musicvolume; // 20% vol
 
             IsMouseVisible = true;
             m_gameinitted = true;
@@ -588,6 +616,13 @@ namespace Breakout
                         else MediaPlayer.Stop();
                     }
 
+                    // Shift-H to change to old game mode (where you look), undocumented feature
+                    if ((currentKeyboardState.IsKeyUp(Keys.H)) && (oldKeyboardState.IsKeyDown(Keys.H))
+                            && (currentKeyboardState.IsKeyDown(Keys.LeftShift) || currentKeyboardState.IsKeyDown(Keys.RightShift)))
+                    {
+                        m_usebasicmovements = !m_usebasicmovements;
+                    }
+
                     // restart game:
                     if ((currentKeyboardState.IsKeyUp(Keys.Space)) && (oldKeyboardState.IsKeyDown(Keys.Space)))
                     {
@@ -758,6 +793,8 @@ namespace Breakout
             m_gamescore = 0;
             m_gamelevel = 1;
             ReconfigureScreen();
+            m_increasespeed.Interval = 10000;
+            m_increasespeed.Enabled = true;
         }
 
         /// <summary>
@@ -995,10 +1032,10 @@ namespace Breakout
                 // level up, get faster quicker and more bricks...
                 m_gamelevel++;
                 SoundLevelUp.Play();
-                int tempinterval = 10000 - (m_gamelevel * 1000);
+                int tempinterval = 10000 - (m_gamelevel * 2000);
                 if (tempinterval < 500) tempinterval = 500;
                 m_increasespeed.Interval = tempinterval;
-                if (m_calibrated)
+                //if (m_calibrated)
                     m_increasespeed.Enabled = true;
                 ResetBall();
                 m_hideball = true;
@@ -1027,7 +1064,7 @@ namespace Breakout
                     !m_getname ?
                     "GAME OVER! Space to restart..." : "GAME OVER!", new Vector2(m_halfscreenmax_x-120, m_halfscreenmax_y - 120), Color.LightPink);
 
-                spriteBatch.DrawString(font, "HIGH SCORES:", new Vector2(m_halfscreenmax_x - 50, m_halfscreenmax_y - 50), Color.White);
+                spriteBatch.DrawString(font, "HIGH SCORES:", new Vector2(m_halfscreenmax_x - 100, m_halfscreenmax_y - 50), Color.White);
 
                 int ypos = m_halfscreenmax_y - 25;
                 foreach (ScoreRecord rec in m_highScores.scores)
@@ -1078,34 +1115,41 @@ namespace Breakout
             //    spriteBatch.DrawString(font, "KEYS: " + m_keyspressed, new Vector2(30, m_halfscreenmax_y + 50), Color.LightGreen);
             //}
 
-            // new, show the headtracking status            
-            Texture2D hticon = HTCenter;
-            switch (m_htstate)
+            if (m_usebasicmovements)
             {
-                case HeadTrackState.NotConnected:
-                    hticon = HTNotConnected;
-                    break;
-                case HeadTrackState.NotCalib:
-                    hticon = HTNotCalib;
-                    break;
-                case HeadTrackState.Center:
-                    hticon = HTCenter;
-                    break;
-                case HeadTrackState.Left:
-                    hticon = HTLeft;
-                    break;
-                case HeadTrackState.LeftFast:
-                    hticon = HTLeftFast;
-                    break;
-                case HeadTrackState.Right:
-                    hticon = HTRight;
-                    break;
-                case HeadTrackState.RightFast:
-                    hticon = HTRightFast;
-                    break;
-            }
+                // new, show the headtracking status            
+                Texture2D hticon = HTCenter;
+                switch (m_htstate)
+                {
+                    case HeadTrackState.NotConnected:
+                        hticon = HTNotConnected;
+                        break;
+                    case HeadTrackState.NotCalib:
+                        hticon = HTNotCalib;
+                        break;
+                    case HeadTrackState.Center:
+                        hticon = HTCenter;
+                        break;
+                    case HeadTrackState.Left:
+                        hticon = HTLeft;
+                        break;
+                    case HeadTrackState.LeftFast:
+                        hticon = HTLeftFast;
+                        break;
+                    case HeadTrackState.Right:
+                        hticon = HTRight;
+                        break;
+                    case HeadTrackState.RightFast:
+                        hticon = HTRightFast;
+                        break;
+                }
 
-            spriteBatch.Draw(hticon, m_htstatuspos, null, Color.White, 0f, m_htorigin, 1.0f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(hticon, m_htstatuspos, null, Color.White, 0f, m_htorigin, 1.0f, SpriteEffects.None, 0f);
+            }
+            else
+            {
+                spriteBatch.DrawString(font, "Heading: " + m_lastorientation, new Vector2(m_halfscreenmax_x - 45, m_screenmax_y - 25), new Color(0,255,0));
+            }
 
             spriteBatch.End();
 
@@ -1151,7 +1195,7 @@ namespace Breakout
                 itemxpos - item.halfwidth,
                 item.ypos - item.halfheight,
                 item.width,
-                !isbat ? item.height : 2); // only detect hit of top 2 pixels of bat!
+                !isbat ? item.height : 2 + m_ball.yvel); // only detect hit of top 2 pixels of bat + bat y velocity!
             Rectangle ballrect = new Rectangle(
                 m_ball.xpos - m_ball.halfwidth,
                 m_ball.ypos - m_ball.halfheight,
@@ -1220,6 +1264,7 @@ namespace Breakout
             {
                 m_pltlabsapi.calibrateService(PLTService.MOTION_TRACKING_SVC);
                 headtrack_xoffset = 0;
+                m_lastorientation = 0;
             }
         }
 
@@ -1234,6 +1279,17 @@ namespace Breakout
                 // the default mode, allows for larger head movements
                 // based on head angle ranges mapping to bat speeds
                 // better for stage demos
+
+                int diff = Math.Abs((int)headsetData.m_orientation[0] - m_lastorientation);
+                if (diff > 100)
+                {
+                    headsetData.m_orientation[0] = 0.0d;
+                    // ignore glitches! (smooth them out be ignoring sudden changes of > 20 degrees
+                }
+                else
+                {
+                    m_lastorientation = (int)headsetData.m_orientation[0];
+                }
 
                 m_batspeed = (int)headsetData.m_orientation[0] / 3;
 
@@ -1261,6 +1317,8 @@ namespace Breakout
             }
             else
             {
+                m_lastorientation = (int)headsetData.m_orientation[0];
+
                 // this works using the "real" where the user is looking at screen
                 // this results in a jerky movements so is not so goot for stage demos.
                 // define some constants for maths calculation to convert head angles into pixel offsets for screen
