@@ -58,6 +58,14 @@ using TweetSharp;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.9:
+ * Date: 20th January 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Added Volume Global's twitter feed for the high scores
+ *   - Updated text of tweets as per Volume's request
+ *   - Made extra hashtag output on by default
+ *
  * Version 1.0.0.8:
  * Date: 13th January 2014
  * Changed by: Lewis Collins
@@ -215,11 +223,11 @@ namespace Breakout
         String twitterAccessTokenSecret = "6R8OTqN3lfeMxxaV2CitdobxWLcjqOHgSm2BGLhipgDEC";
         String twitterUserHandle = "@Pltlyncconf";
 #else
-        String twitterConsumerKey = "7d5ifZE8trItdaIhuFYKRQ";
-        String twitterConsumerSecret = "JWxdYovm8W8QRPwu7IBk3GwSb4uAUfnuCbaulno6684";
-        String twitterAccessToken = "2283564823-t8uS3ldh5ILaOG7TVN4Rft0Mr2iFtVinSQmqLxV";
-        String twitterAccessTokenSecret = "aH7X1PgI9EwvdenpBZ3ltsBkRqKCmpRENbesuPg7kxguc";
-        String twitterUserHandle = "@Pltciscolive";
+        String twitterConsumerKey = "EOui3z1mtflROavwQXOQ";
+        String twitterConsumerSecret = "KnKJOFJUYoGUKjP6WZB3z9EMgtvSmbR4euKtCsXdjZA";
+        String twitterAccessToken = "804255408-Eb6ZbyJO4JGHsYGcHs7W1qgUZ5hPDTPQ7x4JWXjz";
+        String twitterAccessTokenSecret = "FaUDu104oc47wGIC6rAlKMHb9ARbknGyhtwkWnFtga2BA";
+        String twitterUserHandle = "@Connect2PLT";
 #endif
         TwitterService twitter = null;
         private bool m_twitter_initted = false;
@@ -719,8 +727,13 @@ namespace Breakout
                         if (m_emailinput.Length > 300) m_emailinput = m_emailinput.Substring(0, 300);
                         m_highScores.AddHighScore(m_nameinput, m_emailinput, m_gamescore);
 
-                        SendTweet("Congrats " + m_nameinput + " who scored " +
-                            m_gamescore + " points on Breakout with http://pltlabs.com/ Wearable Concept 1!"
+                        //SendTweet("Congrats " + m_nameinput + " who scored " +
+                        //    m_gamescore + " points on Breakout with http://pltlabs.com/ Wearable Concept 1!"
+                        //        + (m_gameconfig.extraHashtagsCheckbox.Checked ? " " + m_gameconfig.extraHashtagsTextBox.Text : ""));
+
+                        // A shout-out to xxxxxx who scored 11700 on our #BREAKOUT game here at @CiscoLiveEurope stand E87. Think you can beat it?
+                        SendTweet("A shout-out to " + m_nameinput + " who scored " +
+                            m_gamescore + " on our #BREAKOUT game here at @CiscoLiveEurope stand E87. Think you can beat it?"
                                 + (m_gameconfig.extraHashtagsCheckbox.Checked ? " " + m_gameconfig.extraHashtagsTextBox.Text : ""));
 
                         m_emailinput = "";

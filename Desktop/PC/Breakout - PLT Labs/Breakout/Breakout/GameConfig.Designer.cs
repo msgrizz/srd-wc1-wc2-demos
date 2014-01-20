@@ -115,6 +115,8 @@
             // extraHashtagsCheckbox
             // 
             this.extraHashtagsCheckbox.AutoSize = true;
+            this.extraHashtagsCheckbox.Checked = true;
+            this.extraHashtagsCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.extraHashtagsCheckbox.Location = new System.Drawing.Point(17, 51);
             this.extraHashtagsCheckbox.Name = "extraHashtagsCheckbox";
             this.extraHashtagsCheckbox.Size = new System.Drawing.Size(146, 17);
