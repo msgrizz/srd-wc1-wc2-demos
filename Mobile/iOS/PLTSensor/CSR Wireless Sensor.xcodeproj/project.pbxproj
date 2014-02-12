@@ -27,6 +27,17 @@
 		4217B0ED16FC0DBC005FDA9C /* house_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4217B0EA16FC0DBC005FDA9C /* house_icon@2x.png */; };
 		4217B12E16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4217B12D16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png */; };
 		4217B13216FCEAFA005FDA9C /* UIDevice+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */; };
+		4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */; };
+		4226343318A254C700FFA4F5 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343218A254C700FFA4F5 /* GoogleMaps.framework */; };
+		4226343618A254ED00FFA4F5 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */; };
+		4226343A18A25BB500FFA4F5 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343918A25BB500FFA4F5 /* libobjc.dylib */; };
+		4226343C18A25BBA00FFA4F5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343B18A25BBA00FFA4F5 /* libz.dylib */; };
+		4226343E18A25D4F00FFA4F5 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343D18A25D4F00FFA4F5 /* libc++.dylib */; };
+		4226344018A25D6000FFA4F5 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343F18A25D6000FFA4F5 /* CoreText.framework */; };
+		4226344218A25D6700FFA4F5 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226344118A25D6700FFA4F5 /* ImageIO.framework */; };
+		4226344418A25D9600FFA4F5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226344318A25D9600FFA4F5 /* CoreData.framework */; };
+		4226344618A25DAD00FFA4F5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226344518A25DAD00FFA4F5 /* GLKit.framework */; };
+		4226344818A27B4100FFA4F5 /* locationIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4226344718A27B4100FFA4F5 /* locationIcon@2x.png */; };
 		422A2FFE17FCD7140040C7F1 /* SensorsViewController_iOS7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422A2FFD17FCD7140040C7F1 /* SensorsViewController_iOS7.xib */; };
 		422A300217FCDA840040C7F1 /* pltlabs_nav@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 422A300117FCDA840040C7F1 /* pltlabs_nav@2x.png */; };
 		422A300517FE16250040C7F1 /* settings_ios7.png in Resources */ = {isa = PBXBuildFile; fileRef = 422A300317FE16250040C7F1 /* settings_ios7.png */; };
@@ -162,6 +173,19 @@
 		4217B12D16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plt_logo_nav_2@2x.png"; sourceTree = "<group>"; };
 		4217B13016FCEAFA005FDA9C /* UIDevice+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+ScreenSize.h"; sourceTree = "<group>"; };
 		4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+ScreenSize.m"; sourceTree = "<group>"; };
+		4226342C18A2510B00FFA4F5 /* StreetView2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetView2ViewController.h; sourceTree = "<group>"; };
+		4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreetView2ViewController.m; sourceTree = "<group>"; };
+		4226343218A254C700FFA4F5 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = "../../../../../Desktop/GoogleMaps-iOS-1.6.2/GoogleMaps.framework"; sourceTree = "<group>"; };
+		4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMaps.bundle; sourceTree = "<group>"; };
+		4226343718A25A5800FFA4F5 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		4226343918A25BB500FFA4F5 /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
+		4226343B18A25BBA00FFA4F5 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4226343D18A25D4F00FFA4F5 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		4226343F18A25D6000FFA4F5 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4226344118A25D6700FFA4F5 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		4226344318A25D9600FFA4F5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4226344518A25DAD00FFA4F5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		4226344718A27B4100FFA4F5 /* locationIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationIcon@2x.png"; sourceTree = "<group>"; };
 		422A2FFD17FCD7140040C7F1 /* SensorsViewController_iOS7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensorsViewController_iOS7.xib; sourceTree = "<group>"; };
 		422A300117FCDA840040C7F1 /* pltlabs_nav@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pltlabs_nav@2x.png"; sourceTree = "<group>"; };
 		422A300317FE16250040C7F1 /* settings_ios7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_ios7.png; sourceTree = "<group>"; };
@@ -332,12 +356,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4226344618A25DAD00FFA4F5 /* GLKit.framework in Frameworks */,
+				42EC7B7416487ADA00A782BD /* OpenGLES.framework in Frameworks */,
+				4226344418A25D9600FFA4F5 /* CoreData.framework in Frameworks */,
+				4226344218A25D6700FFA4F5 /* ImageIO.framework in Frameworks */,
+				4226344018A25D6000FFA4F5 /* CoreText.framework in Frameworks */,
+				4226343E18A25D4F00FFA4F5 /* libc++.dylib in Frameworks */,
+				4226343C18A25BBA00FFA4F5 /* libz.dylib in Frameworks */,
+				4226343A18A25BB500FFA4F5 /* libobjc.dylib in Frameworks */,
+				C300638615BF73E700068870 /* libicucore.dylib in Frameworks */,
 				42B36A53182C36940017F943 /* SystemConfiguration.framework in Frameworks */,
 				42EC7B7616487B0200A782BD /* QuartzCore.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
-				42EC7B7416487ADA00A782BD /* OpenGLES.framework in Frameworks */,
-				C300638615BF73E700068870 /* libicucore.dylib in Frameworks */,
 				C300638115BF6D5C00068870 /* CFNetwork.framework in Frameworks */,
+				4226343318A254C700FFA4F5 /* GoogleMaps.framework in Frameworks */,
 				C300637F15BF6D4100068870 /* CoreLocation.framework in Frameworks */,
 				C300637D15BF6D3000068870 /* Security.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -360,6 +392,7 @@
 				4274992B170D0BB900C8DD37 /* StatusWatcher.m */,
 				422F75BE16FBAD2E000DF717 /* 3D */,
 				422F75C116FBAD70000DF717 /* Sensors */,
+				4226343118A2511000FFA4F5 /* Street View 2 */,
 				422F75C216FBAD76000DF717 /* Street View */,
 				422F75BF16FBAD46000DF717 /* Settings */,
 			);
@@ -412,6 +445,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4226343418A254ED00FFA4F5 /* Resources */,
 				C3E602B915C5B4D70057ADD7 /* PLTAppSettings.plist */,
 				426FAB93170E774B0054D216 /* Images */,
 				8D1107310486CEB800E47090 /* CSR_Wireless_Sensor-Info.plist */,
@@ -425,6 +459,15 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4226344518A25DAD00FFA4F5 /* GLKit.framework */,
+				4226344318A25D9600FFA4F5 /* CoreData.framework */,
+				4226344118A25D6700FFA4F5 /* ImageIO.framework */,
+				4226343F18A25D6000FFA4F5 /* CoreText.framework */,
+				4226343D18A25D4F00FFA4F5 /* libc++.dylib */,
+				4226343B18A25BBA00FFA4F5 /* libz.dylib */,
+				4226343918A25BB500FFA4F5 /* libobjc.dylib */,
+				4226343718A25A5800FFA4F5 /* libstdc++.dylib */,
+				4226343218A254C700FFA4F5 /* GoogleMaps.framework */,
 				42B36A52182C36940017F943 /* SystemConfiguration.framework */,
 				42EC7B7516487B0200A782BD /* QuartzCore.framework */,
 				42EC7B7316487ADA00A782BD /* OpenGLES.framework */,
@@ -467,6 +510,24 @@
 				42335DC8171F8916009AE9D5 /* NSData+ShortDescription.m */,
 			);
 			name = Categories;
+			sourceTree = "<group>";
+		};
+		4226343118A2511000FFA4F5 /* Street View 2 */ = {
+			isa = PBXGroup;
+			children = (
+				4226342C18A2510B00FFA4F5 /* StreetView2ViewController.h */,
+				4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */,
+			);
+			name = "Street View 2";
+			sourceTree = "<group>";
+		};
+		4226343418A254ED00FFA4F5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */,
+			);
+			name = Resources;
+			path = "../../../../../Desktop/GoogleMaps-iOS-1.6.2/GoogleMaps.framework/Resources";
 			sourceTree = "<group>";
 		};
 		422F75BE16FBAD2E000DF717 /* 3D */ = {
@@ -559,6 +620,7 @@
 		426FAB93170E774B0054D216 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4226344718A27B4100FFA4F5 /* locationIcon@2x.png */,
 				42C76A9F17FE392E00E6415D /* pltlabs_nav_ios7.png */,
 				42C76AA017FE392E00E6415D /* pltlabs_nav.png */,
 				422A300717FE1DF60040C7F1 /* pltlabs_nav_ios7@2x.png */,
@@ -754,6 +816,7 @@
 			files = (
 				2899E5220DE3E06400AC0155 /* SettingsViewController_old.xib in Resources */,
 				C3E602BA15C5B4D70057ADD7 /* PLTAppSettings.plist in Resources */,
+				4226344818A27B4100FFA4F5 /* locationIcon@2x.png in Resources */,
 				C3F97B6A1607CFDB00BC0B84 /* InfoView.xib in Resources */,
 				42EC7B621648779A00A782BD /* SimpleFragment.glsl in Resources */,
 				42EC7B631648779A00A782BD /* SimpleVertex.glsl in Resources */,
@@ -787,6 +850,7 @@
 				42A236441702688C00329EC1 /* SettingsViewController.xib in Resources */,
 				422A300517FE16250040C7F1 /* settings_ios7.png in Resources */,
 				42082D661703F7170057F63B /* SensorsViewController_iPad.xib in Resources */,
+				4226343618A254ED00FFA4F5 /* GoogleMaps.bundle in Resources */,
 				42082D6B1703FB800057F63B /* SelectionListViewController.xib in Resources */,
 				4272370D17062EDA00101B91 /* signal_icon@2x.png in Resources */,
 				4272371317064DCC00101B91 /* LocationOverrideViewController.xib in Resources */,
@@ -842,6 +906,7 @@
 				42B36A4A182C36770017F943 /* AFHTTPRequestOperationManager.m in Sources */,
 				42EC7B5C1648779A00A782BD /* CC3Foundation.m in Sources */,
 				42EC7B5D1648779A00A782BD /* CC3GLMatrix.m in Sources */,
+				4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */,
 				42B36A4C182C36770017F943 /* AFNetworkReachabilityManager.m in Sources */,
 				42EC7B5E1648779A00A782BD /* CC3Kazmath.c in Sources */,
 				42B36A49182C36770017F943 /* AFHTTPRequestOperation.m in Sources */,
@@ -887,9 +952,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -905,9 +974,13 @@
 				INSTALL_GROUP = "";
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "CSR Wireless Sensor";
-				PROVISIONING_PROFILE = "8B8AAAF3-4501-4FC7-98B2-864DC37239B6";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8B8AAAF3-4501-4FC7-98B2-864DC37239B6";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F67CE612-C4AF-4094-B585-F4219D68E2C1";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -917,9 +990,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CSR_Wireless_Sensor_Prefix.pch;
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "IGNORE_CERTIFICATE_ERRORS=1";
@@ -928,9 +1005,13 @@
 				INSTALL_GROUP = "";
 				INSTALL_OWNER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "CSR Wireless Sensor";
-				PROVISIONING_PROFILE = "48AFC74A-E84F-4C36-BA42-5ABAFCDC6004";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "48AFC74A-E84F-4C36-BA42-5ABAFCDC6004";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7413B602-91E0-4118-9D44-B7476314C69F";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -140,7 +140,7 @@ typedef enum {
     else
         self = [super initWithNibName:@"PL3DViewController_iPad" bundle:nibBundleOrNil];
 
-    self.title = @"Head";
+    self.tabBarItem.title = @"Head";
     self.tabBarItem.image = [UIImage imageNamed:@"head_icon.png"];
     
     return self;

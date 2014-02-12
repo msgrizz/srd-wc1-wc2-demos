@@ -21,9 +21,6 @@
 #import "HTCalibrationTriggersViewController.h"
 
 
-#define DEVICE_IPAD		([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
-
-
 NSString *const PLTSettingsPopoverDidDismissNotification =		@"PLTSettingsPopoverDidDismissNotification";
 
 

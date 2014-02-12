@@ -7,122 +7,20 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SensorsViewController">
             <connections>
-                <outlet property="headingLabel" destination="426" id="439"/>
-                <outlet property="headingProgressView" destination="424" id="436"/>
-                <outlet property="pitchLabel" destination="428" id="440"/>
-                <outlet property="pitchProgressView" destination="425" id="437"/>
-                <outlet property="rollLabel" destination="427" id="441"/>
-                <outlet property="rollProgressView" destination="423" id="438"/>
-                <outlet property="rotationCell" destination="395" id="435"/>
+                <outlet property="headingProgressView" destination="dAc-nw-53L" id="5nR-6d-AHr"/>
+                <outlet property="headingTitleLabel" destination="NxZ-FX-Z9p" id="O9o-f4-o8X"/>
+                <outlet property="headingValueLabel" destination="LNV-al-JTg" id="mFp-rT-SnP"/>
+                <outlet property="pitchProgressView" destination="FDX-2t-LXa" id="BG1-qz-ogk"/>
+                <outlet property="pitchTitleLabel" destination="IAd-FY-fQe" id="ysg-RY-qB6"/>
+                <outlet property="pitchValueLabel" destination="hce-Yj-mz3" id="mRf-Lv-fzq"/>
+                <outlet property="rollProgressView" destination="H88-8h-ziA" id="daJ-TL-laM"/>
+                <outlet property="rollTitleLabel" destination="OOa-eZ-d6Q" id="mjz-FW-Me1"/>
+                <outlet property="rollValueLabel" destination="qfE-TK-085" id="zUp-30-f9l"/>
+                <outlet property="rotationCell" destination="zMl-lA-68z" id="ucZ-oU-3Rb"/>
+                <outlet property="view" destination="123-yr-LCP" id="H4E-Ib-ZtG"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" rowHeight="76" id="395">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="395" id="WEU-lR-Oul">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="heading" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="420">
-                        <rect key="frame" x="21" y="10" width="80" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="433"/>
-                            <constraint firstAttribute="width" constant="80" id="434"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                        <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="roll" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="421">
-                        <rect key="frame" x="21" y="50" width="80" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="432"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                        <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="pitch" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="422">
-                        <rect key="frame" x="21" y="30" width="80" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="431"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                        <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                    <progressView opaque="NO" contentMode="scaleToFill" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="424">
-                        <rect key="frame" x="108" y="17" width="160" height="3"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="160" id="430"/>
-                        </constraints>
-                    </progressView>
-                    <progressView opaque="NO" contentMode="scaleToFill" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="423">
-                        <rect key="frame" x="108" y="57" width="160" height="3"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </progressView>
-                    <progressView opaque="NO" contentMode="scaleToFill" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="425">
-                        <rect key="frame" x="108" y="37" width="160" height="3"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </progressView>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="426">
-                        <rect key="frame" x="272" y="12" width="34" height="12"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="34" id="429"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="12"/>
-                        <color key="textColor" red="0.49873063229999998" green="0.49873063229999998" blue="0.49873063229999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="427">
-                        <rect key="frame" x="272" y="52" width="34" height="12"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="12"/>
-                        <color key="textColor" red="0.49873063229999998" green="0.49873063229999998" blue="0.49873063229999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="428">
-                        <rect key="frame" x="272" y="32" width="34" height="12"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="12"/>
-                        <color key="textColor" red="0.49873063229999998" green="0.49873063229999998" blue="0.49873063229999998" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
-                </subviews>
-            </tableViewCellContentView>
-            <constraints>
-                <constraint firstItem="420" firstAttribute="top" secondItem="395" secondAttribute="top" constant="10" id="0WT-Ri-NLG"/>
-                <constraint firstItem="425" firstAttribute="centerY" secondItem="428" secondAttribute="centerY" id="0a3-aP-csr"/>
-                <constraint firstItem="423" firstAttribute="centerY" secondItem="427" secondAttribute="centerY" id="0fm-Jd-QGY"/>
-                <constraint firstItem="422" firstAttribute="trailing" secondItem="420" secondAttribute="trailing" id="5Rx-gL-J2a"/>
-                <constraint firstItem="428" firstAttribute="trailing" secondItem="427" secondAttribute="trailing" id="6vI-cI-hs1"/>
-                <constraint firstItem="422" firstAttribute="leading" secondItem="420" secondAttribute="leading" id="AaA-i8-8gW"/>
-                <constraint firstItem="425" firstAttribute="leading" secondItem="423" secondAttribute="leading" id="GSY-ku-9mn"/>
-                <constraint firstItem="428" firstAttribute="leading" secondItem="426" secondAttribute="leading" id="H4c-RD-mNZ"/>
-                <constraint firstItem="428" firstAttribute="leading" secondItem="427" secondAttribute="leading" id="HnG-PE-Dyn"/>
-                <constraint firstItem="426" firstAttribute="centerY" secondItem="424" secondAttribute="centerY" id="Lgp-Ew-l1z"/>
-                <constraint firstAttribute="trailing" secondItem="426" secondAttribute="trailing" constant="14" id="Mmv-8P-PUA"/>
-                <constraint firstItem="425" firstAttribute="trailing" secondItem="424" secondAttribute="trailing" id="NAh-sI-xb1"/>
-                <constraint firstItem="424" firstAttribute="leading" secondItem="395" secondAttribute="leading" constant="108" id="Tps-sh-Cge"/>
-                <constraint firstItem="420" firstAttribute="leading" secondItem="395" secondAttribute="leading" constant="21" id="Z3D-EP-2bQ"/>
-                <constraint firstItem="422" firstAttribute="centerY" secondItem="425" secondAttribute="centerY" id="btg-je-JIv"/>
-                <constraint firstItem="424" firstAttribute="centerY" secondItem="420" secondAttribute="centerY" id="e3c-eq-fh7"/>
-                <constraint firstItem="421" firstAttribute="leading" secondItem="422" secondAttribute="leading" id="hwd-XK-xL6"/>
-                <constraint firstItem="425" firstAttribute="trailing" secondItem="423" secondAttribute="trailing" id="jkv-57-Cof"/>
-                <constraint firstItem="425" firstAttribute="centerY" secondItem="395" secondAttribute="centerY" id="sX4-UY-4vF"/>
-                <constraint firstItem="421" firstAttribute="trailing" secondItem="422" secondAttribute="trailing" id="t4I-8f-Csk"/>
-                <constraint firstItem="428" firstAttribute="trailing" secondItem="426" secondAttribute="trailing" id="tLV-yL-fvn"/>
-                <constraint firstItem="421" firstAttribute="centerY" secondItem="423" secondAttribute="centerY" id="wVu-U0-rVh"/>
-                <constraint firstItem="425" firstAttribute="leading" secondItem="424" secondAttribute="leading" id="z2R-0C-sc8"/>
-                <constraint firstAttribute="bottom" secondItem="421" secondAttribute="bottom" constant="10" id="zQ2-2o-WSu"/>
-            </constraints>
-        </tableViewCell>
         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="123-yr-LCP">
             <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -133,5 +31,66 @@
                 <outlet property="delegate" destination="-1" id="70Z-OQ-1X0"/>
             </connections>
         </tableView>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="76" id="zMl-lA-68z">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zMl-lA-68z" id="yw5-JC-nZJ">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="heading" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NxZ-FX-Z9p">
+                        <rect key="frame" x="52" y="10" width="55" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="roll" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOa-eZ-d6Q">
+                        <rect key="frame" x="52" y="44" width="55" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="pitch" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAd-FY-fQe">
+                        <rect key="frame" x="52" y="27" width="55" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LNV-al-JTg">
+                        <rect key="frame" x="272" y="10" width="34" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hce-Yj-mz3">
+                        <rect key="frame" x="272" y="27" width="34" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qfE-TK-085">
+                        <rect key="frame" x="272" y="44" width="34" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="dAc-nw-53L">
+                        <rect key="frame" x="115" y="20" width="149" height="3"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressView>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="FDX-2t-LXa">
+                        <rect key="frame" x="115" y="37" width="149" height="3"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressView>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H88-8h-ziA">
+                        <rect key="frame" x="115" y="53" width="149" height="3"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </progressView>
+                </subviews>
+            </tableViewCellContentView>
+        </tableViewCell>
     </objects>
 </document>

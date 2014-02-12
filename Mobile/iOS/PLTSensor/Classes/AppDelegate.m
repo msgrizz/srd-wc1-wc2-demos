@@ -6,11 +6,13 @@
 //
 
 #import "AppDelegate.h"
+#import <GoogleMaps/GoogleMaps.h>
 #import "SettingsViewController.h"
 #import <Foundation/Foundation.h>
 #import "PLT3DViewController.h"
 #import "SensorsViewController.h"
 #import "StreetViewViewController.h"
+#import "StreetView2ViewController.h"
 #import "LocationMonitor.h"
 #import "PLTHeadsetManager.h"
 #import "PLTContextServer.h"
@@ -18,7 +20,8 @@
 #import "SettingsNavigationController.h"
 
 
-#define MAX_PACKET_ROADCAST_RATE      20.0 // Hz
+#define MAX_PACKET_ROADCAST_RATE        20.0 // Hz
+#define GOOGLE_API_KEY                  @"AIzaSyDbFPnLMLK5S5nwl9L6gD6gyNi3XhVmkr4"
 
 NSString *const PLTDefaultsKeyDefaultsVersion =								@"DefaultsVersion";
 NSString *const PLTDefaultsKeyContextServerAddress =                        @"ContextServerAddress";
@@ -65,6 +68,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 @property(nonatomic,retain) PLT3DViewController         *threeDViewController;
 @property(nonatomic,retain) SensorsViewController       *sensorsViewController;
 @property(nonatomic,retain) StreetViewViewController    *streetViewViewController;
+@property(nonatomic,retain) StreetView2ViewController    *streetView2ViewController;
 @property(strong,nonatomic) UITabBarController          *tabBarController;
 @property(nonatomic,strong) NSDate                      *lastPacketBroadcastDate;
 @property(nonatomic,strong) UIPopoverController         *settingsPopoverController;
@@ -297,11 +301,14 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 {
     [self registerDefaults];
     
+    [GMSServices provideAPIKey:GOOGLE_API_KEY];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.threeDViewController = [[PLT3DViewController alloc] initWithNibName:nil bundle:nil];
 	self.sensorsViewController = [[SensorsViewController alloc] initWithNibName:nil bundle:nil];
-    self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
+    //self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
+    self.streetView2ViewController = [[StreetView2ViewController alloc] initWithNibName:nil bundle:nil];
     self.settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
     self.settingsViewController.delegate = self;
     
@@ -309,7 +316,8 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     //self.tabBarController.viewControllers = @[self.threeDViewController, self.sensorsViewController, self.streetViewViewController];
 	self.tabBarController.viewControllers = @[[[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
 											  [[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
-											  [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController]];
+											  //[[UINavigationController alloc] initWithRootViewController:self.streetViewViewController],
+                                              [[UINavigationController alloc] initWithRootViewController:self.streetView2ViewController]];
     self.window.rootViewController = self.tabBarController;
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0 green:(33.0/256.0) blue:(66.0/256.0) alpha:1.0]];
