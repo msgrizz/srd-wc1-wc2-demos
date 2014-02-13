@@ -42,21 +42,21 @@
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="heading" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wX7-hd-Xra">
                         <rect key="frame" x="126" y="10" width="109" height="34"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
                         <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="pitch" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OT0-Uh-3T6">
                         <rect key="frame" x="126" y="46" width="109" height="34"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
                         <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="roll" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1fo-vH-ZEa">
                         <rect key="frame" x="126" y="82" width="109" height="34"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="28"/>
                         <color key="textColor" red="0.31764705879999999" green="0.40000000000000002" blue="0.56862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>

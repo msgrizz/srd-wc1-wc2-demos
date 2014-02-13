@@ -31,7 +31,8 @@
     if((self = [super init])){
         maxHealth = (arc4random()%kBlockMaxHealth)+1; //No Zero health Blocks
         currentHealth = maxHealth;
-        blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"block_%d.png", maxHealth]]];
+        //blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"block_%d.png", maxHealth]]];
+        blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"block.png"]];
         self.frame = CGRectMake(position.x, position.y, blockView.frame.size.width, blockView.frame.size.height);
         [self addSubview:blockView];
         //NSLog(@"%@", [NSString stringWithFormat:@"block_%d.png", maxHealth]);
@@ -92,7 +93,8 @@
     
     currentHealth--;
     //Add the cracks.
-    blockView.image = [self addImage:blockView.image toImage:[UIImage imageNamed:@"cracks.png"] withAlpha:(1-(1/maxHealth)*currentHealth)];
+    float alpha = (1-(1/maxHealth)*currentHealth);
+    blockView.image = [self addImage:blockView.image toImage:[UIImage imageNamed:@"cracks.png"] withAlpha:alpha];
 
     return currentHealth; 
 

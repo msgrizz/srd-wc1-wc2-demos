@@ -436,26 +436,6 @@ typedef enum {
 {
     [super viewDidLoad];
     
-//    // set PLT nav bar image
-//    UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
-//    CGRect navFrame = self.navBar.frame;
-//    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
-//                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
-//                                  pltImage.size.width + 2,
-//                                  pltImage.size.height + 2);
-//    
-//    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
-//    view.contentMode = UIViewContentModeCenter;
-//    view.image = pltImage;
-//    [self.navBar addSubview:view];
-//	
-//    // set Settings cog nav button
-//    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
-//																   style:UIBarButtonItemStyleBordered
-//                                                                  target:[UIApplication sharedApplication].delegate
-//                                                                  action:@selector(settingsButton:)];
-//	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
-	
 	self.navigationController.navigationBarHidden = NO;
 	
 	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_ios7.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
@@ -477,8 +457,6 @@ typedef enum {
 																  action:@selector(settingsButton:)];
 	self.navigationItem.rightBarButtonItem = actionItem;
     
-//    self.celciusMetric = YES;
-//    self.celciusOffset = FLT_MIN;
     [self resetPed:self];
 }
 

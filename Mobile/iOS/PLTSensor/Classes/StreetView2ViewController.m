@@ -13,29 +13,19 @@
 #import "PLTContextServer.h"
 #import "PLTHeadsetManager.h"
 #import "LocationMonitor.h"
+#import "NSData+Base64.h"
 
 
 #define CAMERA_FOV						80.0
 
 
-//BOOL CoordinateNearCoordinate(CLLocationCoordinate2D a, CLLocationCoordinate2D b)
-//{
-//    double thr = .000025; // .00003 is pretty close...
-//    double diffLat = fabs(a.latitude - b.latitude);
-//    double diffLong = fabs(a.longitude - b.longitude);
-//    NSLog(@"diffLat: %f, diffLong: %f", diffLat, diffLong);
-//    if (diffLat<thr && diffLong<thr) return YES;
-//    return NO;
-//}
-
-
 @interface StreetView2ViewController () <PLTContextServerDelegate, GMSPanoramaViewDelegate>
 
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
+- (void)headsetInfoDidUpdate:(NSDictionary *)info;
 
 @property(nonatomic,strong) GMSPanoramaView     *panoramaView;
 @property(nonatomic,assign) BOOL                panoramaConfigured;
-@property(nonatomic,strong) NSDictionary        *latestHeadsetInfo;
 
 @end
 
@@ -52,18 +42,12 @@
 
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note
 {
-    self.latestHeadsetInfo = note.userInfo;
-    
-//    CLLocationCoordinate2D newLocation = [LocationMonitor sharedMonitor].location.coordinate;
-//    CLLocationCoordinate2D oldLocation = self.panoramaView.panorama.coordinate;
-//    //NSLog(@"new: %f, %f old: %f, %f", newLocation.latitude, newLocation.longitude, oldLocation.latitude, oldLocation.longitude);
-//                                          
-//    if (!CoordinateNearCoordinate(newLocation, oldLocation)) {
-//        NSLog(@"+");
-//        [self.panoramaView moveNearCoordinate:newLocation];
-//    }
-    
-    NSData *rotationVectorData = self.latestHeadsetInfo[PLTHeadsetInfoKeyRotationVectorData];
+    [self headsetInfoDidUpdate:note.userInfo];
+}
+
+- (void)headsetInfoDidUpdate:(NSDictionary *)info
+{
+    NSData *rotationVectorData = info[PLTHeadsetInfoKeyRotationVectorData];
     Vec3 rotationVector;
     [rotationVectorData getBytes:&rotationVector length:[rotationVectorData length]];
     GMSPanoramaCamera *camera = [GMSPanoramaCamera cameraWithHeading:rotationVector.x pitch:rotationVector.y zoom:1.0 FOV:CAMERA_FOV];
@@ -73,18 +57,9 @@
 
 #pragma mark - GMSPanoramaViewDelegate
 
-//- (void)panoramaView:(GMSPanoramaView *)panoramaView didMoveCamera:(GMSPanoramaCamera *)camera
-//{
-//    NSLog(@"Camera: (%.2f, %.2f, %.2f)", camera.orientation.heading, camera.orientation.pitch, camera.zoom);
-//}
-
 - (void)panoramaView:(GMSPanoramaView *)view didMoveToPanorama:(GMSPanorama *)panorama
 {
     if (!self.panoramaConfigured) {
-//        GMSMarker *marker = [GMSMarker markerWithPosition:kMarkerAt];
-//        marker.icon = [GMSMarker markerImageWithColor:[UIColor purpleColor]];
-//        marker.panoramaView = self.panoramaView;
-        
         self.panoramaView.camera = [GMSPanoramaCamera cameraWithHeading:0 pitch:0 zoom:1.0];
         self.panoramaConfigured = YES;
     }
@@ -92,7 +67,6 @@
 
 - (BOOL)panoramaView:(GMSPanoramaView *)panoramaView didTapMarker:(GMSMarker *)marker
 {
-    NSLog(@"panoramaView: %@ didTapMarker: %@", panoramaView, marker);
     return YES;
 }
 
@@ -100,11 +74,13 @@
 
 - (void)server:(PLTContextServer *)sender didReceiveMessage:(PLTContextServerMessage *)message
 {
-    if (!HEADSET_CONNECTED && self.latestHeadsetInfo) {
+    if (!HEADSET_CONNECTED) {
         if ([message hasType:@"event"]) {
 			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
-#warning do something
-                //self.latestMessage = message;
+                NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
+				if (info) {
+					[self headsetInfoDidUpdate:info];
+				}
             }
         }
     }
@@ -115,10 +91,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//    if (!DEVICE_IPAD)
-//		self = [super initWithNibName:@"StreetView2ViewController_iPhone" bundle:nibBundleOrNil];
-//	else
-//		self = [super initWithNibName:@"StreetView2ViewController_iPad" bundle:nibBundleOrNil];
     
     self.title = @"Street View";
     self.tabBarItem.title = @"Street View";

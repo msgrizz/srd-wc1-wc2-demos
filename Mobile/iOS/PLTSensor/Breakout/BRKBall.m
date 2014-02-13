@@ -23,6 +23,8 @@
 //
 
 #import "BRKBall.h"
+#import "UIImage+Rotate.h"
+
 
 @implementation BRKBall
 
@@ -31,18 +33,38 @@
     if((self = [super init])){
         
         bouncyness = 1.0;
-        speed = CGPointMake(5.0, 5.0);
+        speed = CGPointMake(3.0, 3.0);
         accelleration = 0.0;
         direction = CGPointMake(1.0, 1.0);
         
-        
-        ballView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ball.png"]];
+        ballView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ball_f1.png"]];
         self.frame = CGRectMake(position.x, position.y, ballView.frame.size.width, ballView.frame.size.height);
         [self addSubview:ballView];
+        
+        NSMutableArray *frames = [NSMutableArray arrayWithCapacity:6];
+        for (int f=1; f<=6; f++) {
+            [frames addObject:[UIImage imageNamed:[NSString stringWithFormat:@"ball_f%d.png", f]]];
+            ballView.animationImages = frames;
+            ballView.animationDuration = .15; // default is 1/30 * numFrames
+            [ballView startAnimating];
+        }
+        
+//        [self createBallImages];
+//        timer = [NSTimer scheduledTimerWithTimeInterval:.01 target:self selector:@selector(timer:) userInfo:nil repeats:YES];
     }
     
     return self;
+}
 
+- (void) createBallImages
+{
+    ballImages = [NSMutableArray array];
+    for (int n = 0; n<360; n++) [ballImages addObject:[NSNull null]];
+    for (int d=0; d<360; d+=10) {
+        UIImage *ball = [[UIImage imageNamed:@"ball.png"] imageRotatedByDegrees:(double)d clip:NO]; // clipping doesn't work correctly
+        //[ballImages addObject:ball];
+        ballImages[d] = ball;
+    }
 }
 
 - (void) update{
@@ -110,9 +132,30 @@
 
     self.frame = CGRectMake(position.x, position.y, ballView.frame.size.width, ballView.frame.size.height);
     direction.x=1;
-    direction.y=-1;
+    direction.y = -1;
+    //srand([NSDate timeIntervalSinceReferenceDate]);
+    //direction.x = (rand() % 2) + 1;
     bouncyness = 1.0;
     accelleration = 0.0;
+}
+
+- (void) timer:(NSTimer *)theTimer
+{
+    static int b = 0;
+    ballView.image = ballImages[b];
+    b += 10;
+    if (b>=360) b = 0;
+//    static int degrees = 0;
+//    UIImage *ball = balls[[NSNumber numberWithInt:degrees]];
+//    if (!ball) {
+//        NSLog(@"create ball");
+//        //ballView.image = rotate([UIImage imageNamed:@"ball.png"], degrees);
+//        ball = [[UIImage imageNamed:@"ball.png"] imageRotatedByDegrees:(double)degrees clip:YES];
+//        balls[[NSNumber numberWithInt:degrees]] = ball;
+//    }
+//    ballView.image = ball;
+//    degrees += 10;
+//    if (degrees>360) degrees = 0;
 }
 
 @end
