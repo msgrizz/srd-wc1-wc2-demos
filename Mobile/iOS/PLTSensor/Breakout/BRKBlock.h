@@ -24,11 +24,13 @@
 
 #import <Foundation/Foundation.h>
 
+
 #define HIT YES
 #define NO_HIT NO
 #define kBlockMaxHealth 4
-#define kBlockHeight 20
-#define kBlockWidth 60
+#define BLOCK_SIZE_IPHONE   CGSizeMake(60, 29)
+#define BLOCK_SIZE_IPAD     CGSizeMake(125, 60)
+
 
 @interface BRKBlock : UIView
 {

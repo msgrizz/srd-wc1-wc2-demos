@@ -16,6 +16,7 @@
 #import "NSData+Base64.h"
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
+//#import "TestFlight.h"
 
 
 typedef enum {
@@ -205,6 +206,8 @@ typedef enum {
 	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
+    
+    //[TestFlight passCheckpoint:@"SKARLET_TAB"];
 }
 
 //- (void)viewDidAppear:(BOOL)animated

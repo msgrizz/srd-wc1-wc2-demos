@@ -12,7 +12,7 @@
 #import "PLTHeadsetManager.h"
 
 
-#define DEVICE_IPAD		([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+#define IPAD		([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 
 
 typedef NS_ENUM(NSUInteger, HTCalibrationTriggersTableRow) {
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSUInteger, HTCalibrationTriggersTableRow) {
             
         case HTCalibrationTriggersTableRowShake:
 			
-			if (DEVICE_IPAD) cell.textLabel.text = @"Shake iPad";
+			if (IPAD) cell.textLabel.text = @"Shake iPad";
 			else cell.textLabel.text = @"Shake iPhone";
 			
 			if (triggers & PLTHeadTrackingCalibrationTriggerShake) cell.accessoryType = UITableViewCellAccessoryCheckmark;

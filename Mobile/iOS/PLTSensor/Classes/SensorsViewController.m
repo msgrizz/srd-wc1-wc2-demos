@@ -13,6 +13,7 @@
 #import "NSData+Base64.h"
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
+//#import "TestFlight.h"
 
 
 #define MAX_TABLE_UPDATE_RATE	40.0 // Hz
@@ -173,7 +174,7 @@ typedef enum {
     else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"plain_auxcell"];
         if (cell == nil) {
-			if (DEVICE_IPAD) {
+			if (IPAD) {
 				cell = [[ExtendedLabelWidthTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
 				cell.textLabel.font = [UIFont systemFontOfSize:28];
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:20];
@@ -337,7 +338,7 @@ typedef enum {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == PLTSensorTableRowRotation) {
-		if (DEVICE_IPAD) {
+		if (IPAD) {
 			return 126;
 		}
 		else {
@@ -345,7 +346,7 @@ typedef enum {
 		}
     }
     else {
-		if (DEVICE_IPAD) {
+		if (IPAD) {
 			return 56;
 		}
 		else {
@@ -471,6 +472,8 @@ typedef enum {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
     //self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0/UPDATE_RATE) target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+    
+    //[TestFlight passCheckpoint:@"SENSORS_TAB"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -501,7 +504,7 @@ typedef enum {
 	frame.size.width += 128;
 	self.textLabel.frame = frame;
     
-    CGFloat xSpace = (DEVICE_IPAD ? 32 : 20);
+    CGFloat xSpace = (IPAD ? 32 : 20);
 	
 	CGFloat x = frame.origin.x + frame.size.width + xSpace;
 	frame = CGRectMake(x, 17, 256, 22);

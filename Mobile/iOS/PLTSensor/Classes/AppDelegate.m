@@ -19,6 +19,7 @@
 #import "SettingsNavigationController.h"
 #import "BRKStageViewController.h"
 #import "UIDevice+ScreenSize.h"
+#import "TestFlight.h"
 
 
 #define MAX_PACKET_ROADCAST_RATE        20.0 // Hz
@@ -303,6 +304,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     [self registerDefaults];
     
     [GMSServices provideAPIKey:GOOGLE_API_KEY];
+    [TestFlight takeOff:@"3b9e359c-4aa7-4f77-aefd-8d2ee925475e"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -319,7 +321,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
                                         [[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
                                         //[[UINavigationController alloc] initWithRootViewController:self.streetViewViewController],
                                         [[UINavigationController alloc] initWithRootViewController:self.streetView2ViewController]] mutableCopy];
-    if (IPHONE5 && IOS7) {
+    if ((IPHONE5 || IPAD) && IOS7) {
         [viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.gameViewController]];
     }
 	self.tabBarController.viewControllers = viewControllers;

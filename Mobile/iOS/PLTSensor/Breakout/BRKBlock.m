@@ -31,8 +31,12 @@
     if((self = [super init])){
         maxHealth = (arc4random()%kBlockMaxHealth)+1; //No Zero health Blocks
         currentHealth = maxHealth;
-        //blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"block_%d.png", maxHealth]]];
-        blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"block.png"]];
+        if (IPAD) {
+            blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"block_ipad.png"]];
+        }
+        else {
+            blockView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"block_iphone.png"]];
+        }
         self.frame = CGRectMake(position.x, position.y, blockView.frame.size.width, blockView.frame.size.height);
         [self addSubview:blockView];
         //NSLog(@"%@", [NSString stringWithFormat:@"block_%d.png", maxHealth]);

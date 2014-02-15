@@ -23,7 +23,7 @@
 
 #define RENDER_RATE						30.0 // Hz
 #define API_KEY							@"AIzaSyDbFPnLMLK5S5nwl9L6gD6gyNi3XhVmkr4"
-#define FRAME_SIZE						(DEVICE_IPAD ? CGSizeMake(540, 640) : ( [UIDevice hasFourInchDisplay] ? CGSizeMake(450, 640) : CGSizeMake(558, 640) ) )
+#define FRAME_SIZE						(IPAD ? CGSizeMake(540, 640) : ( [UIDevice hasFourInchDisplay] ? CGSizeMake(450, 640) : CGSizeMake(558, 640) ) )
 #define FRAME_FOV						90.0
 #define FRAME_CACHE_PATH				[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"streetViewFrameCache.plist"]
 #define MAX_LOADING_FRAMES_LIVE			3
@@ -1065,7 +1065,7 @@ NSInteger roundToNearestMultiple(NSInteger input, NSInteger round_multiple) {
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-	if (!DEVICE_IPAD)
+	if (!IPAD)
 		self = [super initWithNibName:@"StreetViewViewController" bundle:nibBundleOrNil];
 	else
 		self = [super initWithNibName:@"StreetViewViewController_iPad" bundle:nibBundleOrNil];

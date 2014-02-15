@@ -29,15 +29,14 @@
 #import "PLTContextServer.h"
 #import "PLTHeadsetManager.h"
 #import "NSData+Base64.h"
+//#import "TestFlight.h"
 
 
-#define kBlocksMax 30 //The maximum number of blocks in the game
-#define kBlockLine 300 //Y below witch allow block respawn
-
-//#define PADDLE_LOCATION     CGPointMake(110, 400)
-//#define BALL_LOCATION       CGPointMake(150, 380)
-#define PADDLE_LOCATION     CGPointMake(110, 480)
-#define BALL_LOCATION       CGPointMake(150, 460)
+typedef enum {
+    PLTGameStateNotStarted,
+    PLTGameStateStarted,
+    PLTGameStateEnded
+} PLTGameState;
 
 
 double d2r(double d)
@@ -56,19 +55,17 @@ double r2d(double d)
     NSMutableArray *blocks;
     BRKPaddle *paddle;
     BRKBall *ball;
-    CADisplayLink *displayLink; //A timer called each time the display needs redrawing, 60 times a seconds
-    //NSTimer *gameTimer;
+    CADisplayLink *displayLink;
     float paddleOffset;
     BOOL tapsDown;
-    BOOL dead;
-    UILabel *deadLabel;
+    UILabel *label;
+    PLTGameState gameState;
+    BOOL paused;
 }
 
-- (void)gameLoop:(CADisplayLink *)sender; // The main loop
+- (void)gameLoop:(CADisplayLink *)sender;
 - (void)startOver;
-- (void)spawnBlocks; //Used to spawn the blocks
-//- (void)startGameTimer;
-//- (void)stopGameTimer;
+- (void)spawnBlocks;
 
 @end
 
@@ -77,17 +74,6 @@ double r2d(double d)
 
 #pragma mark - Private
 
-//- (void)startGameTimer
-//{
-//    gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(gameLoop:) userInfo:nil repeats:YES];
-//}
-//
-//- (void)stopGameTimer
-//{
-//    if (gameTimer) [gameTimer invalidate];
-//    gameTimer = nil;
-//}
-
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note
 {
     [self headsetInfoDidUpdate:note.userInfo];
@@ -95,23 +81,55 @@ double r2d(double d)
 
 - (void)headsetInfoDidUpdate:(NSDictionary *)info
 {
+    BOOL donned = [(NSNumber *)info[PLTHeadsetInfoKeyIsDonned] boolValue];
+    paused = !donned;
     BOOL taps = [info[PLTHeadsetInfoKeyTapCount] boolValue];
-//	self.isDonned = [(NSNumber *)info[PLTHeadsetInfoKeyIsDonned] boolValue];
-    
     BOOL newTaps = taps && tapsDown;
     tapsDown = !taps;
-    if (newTaps) {
+    
+    
+    static int prevState = -1;
+    
+    if (gameState == PLTGameStateNotStarted && paused) {
+        label.text = @"Put headset on and tap to begin!";
+        label.alpha = 1.0;
+    }
+    else if (gameState == PLTGameStateNotStarted && !paused && !newTaps) {
+        label.text = @"Tap headset to begin!";
+        label.alpha = 1.0;
+    }
+    else if (gameState == PLTGameStateNotStarted && !paused && newTaps) {
         [self startOver];
     }
+    else if (gameState == PLTGameStateEnded && !paused && newTaps) {
+        [self startOver];
+        gameState = PLTGameStateStarted;
+    }
+    else if (gameState == PLTGameStateEnded && paused) {
+        label.text = @"Put headset on and tap to try again!";
+        label.alpha = 1.0;
+    }
+    else if (gameState == PLTGameStateEnded && !paused) {
+        label.text = @"Bahhh! Tap headset to try again!";
+        label.alpha = 1.0;
+    }
+    else if (gameState == PLTGameStateStarted && paused) {
+        label.text = @"Game paused. Put headset on to resume!";
+        label.alpha = 1.0;
+    }
+    else if (gameState == PLTGameStateStarted && !paused) {
+        label.alpha = 0.0;
+    }
     
-    //if (!dead) {
+    if (gameState == PLTGameStateStarted && !paused) {
         Vec3 eulerAngles;
         NSData *rotationData = [info objectForKey:PLTHeadsetInfoKeyRotationVectorData];
         [rotationData getBytes:&eulerAngles.x length:[rotationData length]];
         
-        static const CGFloat DISTANCE = 250.0;
+        CGFloat DISTANCE;
+        if (IPAD) DISTANCE = 425.0;
+        else DISTANCE = 420.0;
         
-        // stop wrap-around, and extreme offset values
         if (eulerAngles.x > 85) {
             eulerAngles.x = 85;
         }
@@ -144,7 +162,7 @@ double r2d(double d)
         [UIView animateWithDuration:.1 animations:^{
             paddle.center = CGPointMake(newXOffset, paddle.center.y);
         }];
-    //}
+    }
 }
 
 - (void)spawnBlocks
@@ -156,13 +174,40 @@ double r2d(double d)
     
     [blocks makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [blocks removeAllObjects];
+    
+    int maxBlocks;
+    if (IPAD) maxBlocks = 24; // 6 blocks * 4 lines
+    else maxBlocks = 30; // 5 blocks * 6 lines
 
-    int y = 55;
-    for (int i = 0; i < kBlocksMax; i++) {
+    int y;
+    if (IPAD) y = 10;
+    else y = 40;
+    int x = 0;
+    for (int i = 0; i < maxBlocks; i++) {
         
-        if (i%5 == 0) y+=kBlockHeight;
+        if (IPAD) {
+            if (i%6 == 0) {
+                y += BLOCK_SIZE_IPAD.height;
+                x = 0;
+            }
+        }
+        else {
+            if (i%5 == 0) {
+                y += BLOCK_SIZE_IPHONE.height;
+                x = 0;
+            }
+        }
         
-        BRKBlock *aBlock = [BRKBlock blockAtPosition:CGPointMake((10+i*kBlockWidth)%300,y)];
+        BRKBlock *aBlock = [BRKBlock blockAtPosition:CGPointMake(x, y)];
+        
+        int blockSpacee;
+        if (IPAD) {
+            blockSpacee = BLOCK_SIZE_IPAD.width + 3;
+        }
+        else {
+            blockSpacee = BLOCK_SIZE_IPHONE.width + 5;
+        }
+        x += blockSpacee;
         
         aBlock.tag = i;
         [self.view addSubview:aBlock];
@@ -172,95 +217,80 @@ double r2d(double d)
 
 - (void)gameLoop:(CADisplayLink *)sender
 {
-//    static BOOL skip = NO;
-//    if (skip) {
-//        skip = NO;
-//        return;
-//    }
-//    skip = YES;
-    
-    if ([ball isAboveLifeLine]) { //Check if the ball isn't below the paddles.
-        dead = NO;
-        deadLabel.alpha = 0.0;
-        
-        CGPoint nextPosition =  [ball nextPosition]; //Get the ball's next position.
-        
-        //If the are no blocks left and the ball is below the spawn line then spawn new blocks.
-        if ([blocks count] == 0 && nextPosition.y > kBlockLine) {
-            [self spawnBlocks];
-        }
-        
-        if ([paddle isImpactWithBallAtPosition:nextPosition]) {
-            [ball bounce];
-        }
-        
-        for (BRKBlock *block in blocks) {
+    if (gameState == PLTGameStateStarted && !paused) {
+        if ([ball isAboveLifeLine]) {
+            [ball startAnimating];
+            label.alpha = 0.0;
+            ball.alpha = 1.0;
             
-            //Check is the ball will hit a block
-            if ([block isImpactWithBallAtPosition:nextPosition]) {
+            CGPoint nextPosition =  [ball nextPosition];
+            
+            //If the are no blocks left and the ball is below the spawn line then spawn new blocks.
+            static const float BLOCK_LINE = 300.0;
+            if ([blocks count] == 0 && nextPosition.y > BLOCK_LINE) {
+                [self spawnBlocks];
+            }
+            
+            if ([paddle isImpactWithBallAtPosition:nextPosition]) {
+                [ball bounce];
+            }
+            
+            for (BRKBlock *block in blocks) {
                 
-                //If the block has zero health remove it.
-                //if([block update] == 0 ){
+                //Check is the ball will hit a block
+                if ([block isImpactWithBallAtPosition:nextPosition]) {
+                    
+                    //If the block has zero health remove it.
+                    //if([block update] == 0 ){
                     [blocks removeObject:block];
                     [block removeFromSuperview];
                     //[self updateScore];
-                //}
-                [ball bounce];
-                break; //Jump out of the for loop on impact.
+                    //}
+                    [ball bounce];
+                    break; //Jump out of the for loop on impact.
+                }
             }
+            
+            [ball update]; //Move the ball.
         }
-        
-        [ball update]; //Move the ball.
+        else {
+            //The ball is below the paddle.
+            
+            gameState = PLTGameStateEnded;
+            label.text = @"Bahhh! Tap headset to try again!";
+            label.alpha = 1.0;
+            ball.alpha = 0.0;
+            [ball stopAnimating];
+        }
     }
     else {
-        //The ball is below the paddle.
-//        if([self updateLives] == 0){ //if no lives left game over
-//        
-//            [self gameOver];
-//            
-//        } else {
-//        
-//            //Puse the game and reset the ball
-//            [self playPause];
-//            [ball resetAtPosition:CGPointMake(150, 380)];
-//            [paddle resetAtPosition:CGPointMake(110, 400)];
-//        
-//        }
-    
-        dead = YES;
-        deadLabel.alpha = 1.0;
-        //[self stopGameTimer];
+        [ball stopAnimating];
     }
 }
 
 - (void)startOver
 {
-    [ball resetAtPosition:BALL_LOCATION];
-    [paddle resetAtPosition:PADDLE_LOCATION];
+    gameState = PLTGameStateStarted;
+    
+    float yOffset = 80.0;
+    CGPoint midBottom = CGPointMake(self.view.frame.size.width/2.0,
+                                    self.view.frame.size.height - yOffset);
+    CGFloat ballYOffset;
+    if (IPAD) ballYOffset = 8.0;
+    else ballYOffset = 12.0;
+    CGPoint ballPoint = CGPointMake(midBottom.x - ball.frame.size.width/2.0,
+                                    midBottom.y - ball.frame.size.height/2.0 - paddle.frame.size.height + ballYOffset);
+    CGFloat paddleYOffset;
+    if (IPAD) paddleYOffset = 0;
+    else paddleYOffset = 12.0;
+    CGPoint paddlePoint = CGPointMake(midBottom.x - paddle.frame.size.width/2.0,
+                                      midBottom.y - paddle.frame.size.height/2.0 + paddleYOffset);
+    [ball resetAtPosition:ballPoint];
+    [paddle resetAtPosition:paddlePoint];
+
     [self spawnBlocks];
     displayLink.paused = NO;
-    //[self startGameTimer];
 }
-
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    /*
-//    Called for each touch on the stage's view
-//    move the paddle a the touch's position
-//    unless the game is paused.
-//     */
-//    
-//    if(!displayLink.isPaused) {
-//        UITouch *touch = [[event allTouches] anyObject];
-//        CGPoint location = [touch locationInView:self.view];
-//        paddle.center = CGPointMake(location.x, paddle.center.y);
-//    }
-//}
-//
-//- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//	[self touchesBegan:touches withEvent:event];
-//}
 
 #pragma mark - PLTContextServerDelegate
 
@@ -290,28 +320,35 @@ double r2d(double d)
     
     displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(gameLoop:)];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    displayLink.paused = YES;
     
     if (self) {
-        deadLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        deadLabel.text = @"Bahhh! Tap headset to try again!";
-        deadLabel.textAlignment = NSTextAlignmentCenter;
-        deadLabel.font = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:20.0];
-        deadLabel.textColor = [UIColor whiteColor];
-        deadLabel.shadowColor = [UIColor blackColor];
-        deadLabel.shadowOffset = CGSizeMake(1, 2);
-        [self.view addSubview:deadLabel];
+        float yOffset;
+        if (IPAD) yOffset = 0;
+        else yOffset = 20.0;
+        float padding;
+        if (IPAD) padding = 20.0;
+        else padding = 10.0;
+        label = [[UILabel alloc] initWithFrame:CGRectMake(padding, 0, self.view.frame.size.width - padding*2.0, self.view.frame.size.height + yOffset)];
+        label.textAlignment = NSTextAlignmentCenter;
+        float fontSize;
+        if (IPAD) fontSize = 24.0;
+        else fontSize = 20.0;
+        label.font = [UIFont fontWithName:@"Futura-CondensedExtraBold" size:fontSize];
+        label.adjustsFontSizeToFitWidth = YES;
+        label.minimumScaleFactor = .5;
+        label.textColor = [UIColor whiteColor];
+        label.shadowColor = [UIColor blackColor];
+        label.shadowOffset = CGSizeMake(1, 2);
+        [self.view addSubview:label];
         
-        // Custom initialization
-        blocks = [NSMutableArray arrayWithCapacity:kBlocksMax];
-        
-        //[self spawnBlocks];
-        
-        paddle = (BRKPaddle *)[BRKPaddle blockAtPosition:PADDLE_LOCATION withImageNamed:@"paddle.png"];
+        blocks = [NSMutableArray array];
+
+        if (IPAD) paddle = (BRKPaddle *)[BRKPaddle blockAtPosition:CGPointZero withImageNamed:@"paddle_ipad.png"];
+        else paddle = (BRKPaddle *)[BRKPaddle blockAtPosition:CGPointZero withImageNamed:@"paddle_iphone.png"];
         [self.view addSubview:paddle];
-        ball = [[BRKBall alloc ] initWithPosition:BALL_LOCATION];
+        ball = [[BRKBall alloc] initWithPosition:CGPointZero];
         [self.view addSubview:ball];
-        
-        //[self startGameTimer];
     }
     return self;
 }
@@ -352,11 +389,25 @@ double r2d(double d)
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
-	[self startOver];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[PLTContextServer sharedContextServer] addDelegate:self];
+    
+    [super viewWillAppear:animated];
+    
+    [self startOver];
+    gameState = PLTGameStateNotStarted;
+    paused = ![(NSNumber *)[PLTHeadsetManager sharedManager].latestInfo[PLTHeadsetInfoKeyIsDonned] boolValue];
+    if (!paused) {
+        label.text = @"Tap headset to begin!";
+    }
+    else {
+        label.text = @"Put headset on and tap to begin!";
+    }
+    label.alpha = 1.0;
+    
+    displayLink.paused = NO;
+    
+    //[TestFlight passCheckpoint:@"GAME_TAB"];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

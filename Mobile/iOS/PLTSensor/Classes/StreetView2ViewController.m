@@ -14,6 +14,7 @@
 #import "PLTHeadsetManager.h"
 #import "LocationMonitor.h"
 #import "NSData+Base64.h"
+//#import "TestFlight.h"
 
 
 #define CAMERA_FOV						80.0
@@ -144,6 +145,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[PLTContextServer sharedContextServer] addDelegate:self];
+    
+    //[TestFlight passCheckpoint:@"STREETVIEW_TAB"];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

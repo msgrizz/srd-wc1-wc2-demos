@@ -24,8 +24,6 @@
 
 #import "BRKBlock.h"
 
-#define kLifeLineY (440 + 95)
-
 @interface BRKBall : UIView
 {
     UIImageView *ballView;
@@ -33,8 +31,8 @@
     CGPoint speed;
     CGFloat accelleration; //Not used.
     CGPoint direction;
-    NSTimer *timer;
-    NSMutableArray *ballImages;
+    //NSTimer *timer;
+    //NSMutableArray *ballImages;
 }
 
 - (BRKBall *) initWithPosition:(CGPoint) position; //Initiates the ball at a given position.
@@ -45,7 +43,9 @@
 - (CGPoint) nextPosition; //Returns the ball's next position.
 - (void) bounce; //Changes the direction of the ball.
 - (void) resetAtPosition:(CGPoint) position; //Resets the ball at a given position. 
-- (void) timer:(NSTimer *)theTimer;
-- (void) createBallImages;
+//- (void) timer:(NSTimer *)theTimer;
+//- (void) createBallImages;
+- (void)startAnimating;
+- (void)stopAnimating;
 
 @end

@@ -19,6 +19,7 @@
 #import "ConfigTempViewController.h"
 #import "PLTHeadsetManager.h"
 #import "HTCalibrationTriggersViewController.h"
+#import "TestFlight.h"
 
 
 NSString *const PLTSettingsPopoverDidDismissNotification =		@"PLTSettingsPopoverDidDismissNotification";
@@ -369,7 +370,7 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 					}
 					else if (triggers & PLTHeadTrackingCalibrationTriggerShake) {
 						
-						if (DEVICE_IPAD) detailText = @"Shake iPad";
+						if (IPAD) detailText = @"Shake iPad";
 						else detailText = @"Shake iPhone";
 					}
 					else if (triggers & PLTHeadTrackingCalibrationTriggerDon) {
@@ -863,6 +864,8 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 												 name:PLTContextServerDidChangeStateNotification object:nil];
     [self.tableView reloadData];
     [self startConnectionTimer];
+    
+    [TestFlight passCheckpoint:@"SETTINGS"];
 }
 
 - (void)viewDidAppear:(BOOL)animated
