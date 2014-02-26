@@ -13,24 +13,24 @@
 #import "NSData+Base64.h"
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
+//#import "TestFlight.h"
 
 
 #define MAX_TABLE_UPDATE_RATE	40.0 // Hz
-#define DEVICE_IPAD				([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
 
 
 typedef enum {
     PLTSensorTableRowRotation,
 	PLTSensorTableRowWearingState,
-    PLTSensorTableRowTemperature,
+    //PLTSensorTableRowTemperature,
     PLTSensorTableRowFreeFall,
     PLTSensorTableRowPedometer,
     PLTSensorTableRowTaps,
-    PLTSensorTableRowMagCal,
+    //PLTSensorTableRowMagCal,
     PLTSensorTableRowGyroCal,
-	PLTSensorTableRowPacketData,
 	PLTSensorTableRowAppVersion,
-	PLTSensorTableRowHeadsetVersion
+	PLTSensorTableRowHeadsetVersion,
+	PLTSensorTableRowPacketData
 } PLTSensorTableRow;
 
 
@@ -106,7 +106,7 @@ typedef enum {
     // turn the int into a float between 0.0 and 1.0 and update the heading scale
     float fl_head = (heading+180) / 360.0;
     [self.headingProgressView setProgress:fl_head animated:animateProgressIndicators];
-    self.headingLabel.text = [NSString stringWithFormat:@"%d°",heading];
+    self.headingValueLabel.text = [NSString stringWithFormat:@"%d°",heading];
     
     NSInteger roll = self.roll;
     if (roll < -180) roll = (roll+360)%180;
@@ -114,7 +114,7 @@ typedef enum {
     // turn the int into a float between 0.0 and 1.0 and update the roll scale
     float fl_roll = ((roll) +180)/ 360.0;
     [self.rollProgressView setProgress:fl_roll animated:animateProgressIndicators];
-    self.rollLabel.text = [NSString stringWithFormat:@"%d°",roll];
+    self.rollValueLabel.text = [NSString stringWithFormat:@"%d°",roll];
 	
     NSInteger pitch = self.pitch;
     if (pitch < -180) pitch = (pitch+360)%180;
@@ -122,7 +122,7 @@ typedef enum {
     // turn the int into a float between 0.0 and 1.0 and update the pitch scale
     float fl_pitch = ((pitch) +90)/ 180.0;
     [self.pitchProgressView setProgress:fl_pitch animated:animateProgressIndicators];
-    self.pitchLabel.text = [NSString stringWithFormat:@"%d°",pitch];
+    self.pitchValueLabel.text = [NSString stringWithFormat:@"%d°",pitch];
 	
 	NSTimeInterval gap = [[NSDate date] timeIntervalSinceDate:self.lastTableUpdateDate];
 	if (!self.lastTableUpdateDate || (gap > (1.0/MAX_TABLE_UPDATE_RATE))) {
@@ -155,7 +155,7 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return PLTSensorTableRowHeadsetVersion + 1;
+    return PLTSensorTableRowPacketData + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -164,20 +164,30 @@ typedef enum {
     
     if (indexPath.row == PLTSensorTableRowRotation) {
         cell = self.rotationCell;
+        if (IOS7) {
+            UIColor *color = [UIColor colorWithRed:0.0/255.0 green:127.0/255.0 blue:255.0/248.0 alpha:1.0];
+            self.headingTitleLabel.textColor = color;
+            self.pitchTitleLabel.textColor = color;
+            self.rollTitleLabel.textColor = color;
+        }
     }
     else {
         cell = [tableView dequeueReusableCellWithIdentifier:@"plain_auxcell"];
         if (cell == nil) {
-			if (DEVICE_IPAD) {
+			if (IPAD) {
 				cell = [[ExtendedLabelWidthTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
-				cell.font = [UIFont boldSystemFontOfSize:21];
+				cell.textLabel.font = [UIFont systemFontOfSize:28];
+                cell.detailTextLabel.font = [UIFont systemFontOfSize:20];
+//                CGRect frame = cell.detailTextLabel.frame;
+//                frame.size.height += 8;
+//                frame.origin.y -= 4;
+//                cell.detailTextLabel.frame = frame;
 			}
 			else {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
 			}
         }
         
-        // use enum
         switch (indexPath.row) {
 			case PLTSensorTableRowWearingState: {
 				cell.textLabel.text = @"wearing state";
@@ -186,27 +196,18 @@ typedef enum {
 				else state = @"Not Wearing";
                 cell.detailTextLabel.text = state;
 				break; }
-            case PLTSensorTableRowTemperature:
-                cell.textLabel.text = @"temperature";
-				float celciusOffset = [DEFAULTS floatForKey:PLTDefaultsKeyTemperatureOffsetCelcius];
-                float temp_c_calibrated = self.temp;
-                if (celciusOffset != FLT_MIN) {
-                    temp_c_calibrated += celciusOffset;
-                }
-				BOOL celciusMetric = [DEFAULTS boolForKey:PLTDefaultsKeyMetricUnits];
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld° %@",
-                                             (celciusMetric ? lroundf(temp_c_calibrated) : lroundf((temp_c_calibrated)*9.0/5.0+32.0)),
-											 (celciusMetric ? @"C" : @"F")];
-                
-//                static UIButton *configButton = nil;
-//                if (!configButton) configButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)configButton.frame = CGRectMake(241, 5, 64, 34);
-//				else configButton.frame = CGRectMake(tableView.frame.size.width - 64 - 14, 5, 64, 34);
-//                [configButton setTitle:@"Config" forState:UIControlStateNormal];
-//                configButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-//                [configButton addTarget:self action:@selector(configTemp:) forControlEvents:UIControlEventTouchUpInside];
-//                [cell.contentView addSubview:configButton];
-                break;
+//            case PLTSensorTableRowTemperature:
+//                cell.textLabel.text = @"temperature";
+//				float celciusOffset = [DEFAULTS floatForKey:PLTDefaultsKeyTemperatureOffsetCelcius];
+//                float temp_c_calibrated = self.temp;
+//                if (celciusOffset != FLT_MIN) {
+//                    temp_c_calibrated += celciusOffset;
+//                }
+//				BOOL celciusMetric = [DEFAULTS boolForKey:PLTDefaultsKeyMetricUnits];
+//                cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld° %@",
+//                                             (celciusMetric ? lroundf(temp_c_calibrated) : lroundf((temp_c_calibrated)*9.0/5.0+32.0)),
+//											 (celciusMetric ? @"C" : @"F")];
+//                break;
             case PLTSensorTableRowFreeFall:
                 cell.textLabel.text = @"free fall?";
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",(self.freeFall?@"Yes":@"No")];
@@ -260,31 +261,31 @@ typedef enum {
                     cell.detailTextLabel.textColor = [UIColor grayColor];
                 }
                 break; }
-            case PLTSensorTableRowMagCal: {
-                cell.textLabel.text = @"magnetometer";
-				cell.textLabel.adjustsFontSizeToFitWidth = YES;
-                NSString *magCalStr = nil;
-                UIColor *color = [UIColor blackColor];
-                switch (self.magCal) {
-                    case PLTMagnetometerCalibrationStatusNotCalibrated:
-                        magCalStr = @"Not Calibrated";
-                        color = [UIColor redColor];
-                        break;
-                    case PLTMagnetometerCalibrationStatusCalibrating1:
-                    case PLTMagnetometerCalibrationStatusCalibrating2:
-                        magCalStr = [NSString stringWithFormat:@"%d",self.magCal];
-                        color = [UIColor orangeColor];
-                        break;
-                    case PLTMagnetometerCalibrationStatusCalibrated:
-                        magCalStr = @"Calibrated";
-                        color = [UIColor colorWithRed:0 green:(127.0/256.0) blue:0 alpha:1.0];
-                        break;
-                    default:
-                        break;
-                }
-                cell.detailTextLabel.text = magCalStr;
-                cell.detailTextLabel.textColor = color;
-                break; }
+//            case PLTSensorTableRowMagCal: {
+//                cell.textLabel.text = @"magnetometer";
+//				cell.textLabel.adjustsFontSizeToFitWidth = YES;
+//                NSString *magCalStr = nil;
+//                UIColor *color = [UIColor blackColor];
+//                switch (self.magCal) {
+//                    case PLTMagnetometerCalibrationStatusNotCalibrated:
+//                        magCalStr = @"Not Calibrated";
+//                        color = [UIColor redColor];
+//                        break;
+//                    case PLTMagnetometerCalibrationStatusCalibrating1:
+//                    case PLTMagnetometerCalibrationStatusCalibrating2:
+//                        magCalStr = [NSString stringWithFormat:@"%d",self.magCal];
+//                        color = [UIColor orangeColor];
+//                        break;
+//                    case PLTMagnetometerCalibrationStatusCalibrated:
+//                        magCalStr = @"Calibrated";
+//                        color = [UIColor colorWithRed:0 green:(127.0/256.0) blue:0 alpha:1.0];
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                cell.detailTextLabel.text = magCalStr;
+//                cell.detailTextLabel.textColor = color;
+//                break; }
             case PLTSensorTableRowGyroCal: {
                 cell.textLabel.text = @"gyroscope";
                 NSString *gyroCalStr = nil;
@@ -301,7 +302,7 @@ typedef enum {
                         break;
                     case PLTGyroscopeCalibrationStatusCalibrated:
                         gyroCalStr = @"Calibrated";
-                        color = [UIColor colorWithRed:0 green:(127.0/256.0) blue:0 alpha:1.0];
+                        color = [UIColor colorWithRed:0 green:(150.0/256.0) blue:0 alpha:1.0];
                         break;
                     default:
                         break;
@@ -309,14 +310,6 @@ typedef enum {
                 cell.detailTextLabel.text = gyroCalStr;
                 cell.detailTextLabel.textColor = color;
                 break; }
-            case PLTSensorTableRowPacketData: {
-				cell.textLabel.text = @"packet data";
-				NSMutableString *hexStr = [NSMutableString string];
-				for (int i = 0; i < [self.packetData length]; i++) [hexStr appendFormat:@"%02x", ((uint8_t*)[self.packetData bytes])[i]];
-				cell.detailTextLabel.font = [UIFont fontWithName:@"CourierNewPS-BoldMT" size:12];
-				cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-				cell.detailTextLabel.text = hexStr;
-				break; }
 			case PLTSensorTableRowAppVersion:
                 cell.textLabel.text = @"app version";
                 cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -326,6 +319,14 @@ typedef enum {
 				cell.textLabel.adjustsFontSizeToFitWidth = YES;
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%d.%d",self.majVers,self.minVers];
                 break;
+            case PLTSensorTableRowPacketData: {
+				cell.textLabel.text = @"packet data";
+				NSMutableString *hexStr = [NSMutableString string];
+				for (int i = 0; i < [self.packetData length]; i++) [hexStr appendFormat:@"%02x", ((uint8_t*)[self.packetData bytes])[i]];
+				cell.detailTextLabel.font = [UIFont fontWithName:@"CourierNewPS-BoldMT" size:12];
+				cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+				cell.detailTextLabel.text = hexStr;
+				break; }
         }
     }
     
@@ -337,15 +338,15 @@ typedef enum {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == PLTSensorTableRowRotation) {
-		if (DEVICE_IPAD) {
-			return 108;
+		if (IPAD) {
+			return 126;
 		}
 		else {
-			return 74;
+			return 76;
 		}
     }
     else {
-		if (DEVICE_IPAD) {
+		if (IPAD) {
 			return 56;
 		}
 		else {
@@ -420,7 +421,8 @@ typedef enum {
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        self = [super initWithNibName:@"SensorsViewController" bundle:nibBundleOrNil];
+        if (IOS7) self = [super initWithNibName:@"SensorsViewController_iOS7" bundle:nibBundleOrNil];
+        else self = [super initWithNibName:@"SensorsViewController" bundle:nibBundleOrNil];
     else
         self = [super initWithNibName:@"SensorsViewController_iPad" bundle:nibBundleOrNil];
     
@@ -435,26 +437,6 @@ typedef enum {
 {
     [super viewDidLoad];
     
-//    // set PLT nav bar image
-//    UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
-//    CGRect navFrame = self.navBar.frame;
-//    CGRect viewFrame = CGRectMake((navFrame.size.width/2.0) - (pltImage.size.width/2.0) - 1,
-//                                  (navFrame.size.height/2.0) - (pltImage.size.height/2.0) - 1,
-//                                  pltImage.size.width + 2,
-//                                  pltImage.size.height + 2);
-//    
-//    UIImageView *view = [[UIImageView alloc] initWithFrame:viewFrame];
-//    view.contentMode = UIViewContentModeCenter;
-//    view.image = pltImage;
-//    [self.navBar addSubview:view];
-//	
-//    // set Settings cog nav button
-//    UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cogBarButton.png"]
-//																   style:UIBarButtonItemStyleBordered
-//                                                                  target:[UIApplication sharedApplication].delegate
-//                                                                  action:@selector(settingsButton:)];
-//	((UINavigationItem *)self.navBar.items[0]).rightBarButtonItem = actionItem;
-	
 	self.navigationController.navigationBarHidden = NO;
 	
 	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_ios7.png"];//[UIImage imageNamed:@"plt_logo_nav.png"];
@@ -476,8 +458,6 @@ typedef enum {
 																  action:@selector(settingsButton:)];
 	self.navigationItem.rightBarButtonItem = actionItem;
     
-//    self.celciusMetric = YES;
-//    self.celciusOffset = FLT_MIN;
     [self resetPed:self];
 }
 
@@ -492,6 +472,8 @@ typedef enum {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
     //self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0/UPDATE_RATE) target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+    
+    //[TestFlight passCheckpoint:@"SENSORS_TAB"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -519,10 +501,12 @@ typedef enum {
 	[super layoutSubviews]; // lays out the cell as UITableViewCellStyleValue2 would normally look like
 
 	CGRect frame = self.textLabel.frame;
-	frame.size.width += 80;
+	frame.size.width += 128;
 	self.textLabel.frame = frame;
+    
+    CGFloat xSpace = (IPAD ? 32 : 20);
 	
-	CGFloat x = frame.origin.x + frame.size.width + 20;
+	CGFloat x = frame.origin.x + frame.size.width + xSpace;
 	frame = CGRectMake(x, 17, 256, 22);
 	self.detailTextLabel.frame = frame;
 }

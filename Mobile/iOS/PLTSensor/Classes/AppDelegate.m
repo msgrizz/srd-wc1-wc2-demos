@@ -6,19 +6,24 @@
 //
 
 #import "AppDelegate.h"
+#import <GoogleMaps/GoogleMaps.h>
 #import "SettingsViewController.h"
 #import <Foundation/Foundation.h>
 #import "PLT3DViewController.h"
 #import "SensorsViewController.h"
-#import "StreetViewViewController.h"
+#import "StreetView2ViewController.h"
 #import "LocationMonitor.h"
 #import "PLTHeadsetManager.h"
 #import "PLTContextServer.h"
 #import "NSData+Base64.h"
 #import "SettingsNavigationController.h"
+#import "BRKStageViewController.h"
+#import "UIDevice+ScreenSize.h"
+#import "TestFlight.h"
 
 
-#define MAX_PACKET_ROADCAST_RATE      20.0 // Hz
+#define MAX_PACKET_ROADCAST_RATE        20.0 // Hz
+#define GOOGLE_API_KEY                  @"AIzaSyDbFPnLMLK5S5nwl9L6gD6gyNi3XhVmkr4"
 
 NSString *const PLTDefaultsKeyDefaultsVersion =								@"DefaultsVersion";
 NSString *const PLTDefaultsKeyContextServerAddress =                        @"ContextServerAddress";
@@ -64,7 +69,8 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 @property(nonatomic,retain) SettingsViewController      *settingsViewController;
 @property(nonatomic,retain) PLT3DViewController         *threeDViewController;
 @property(nonatomic,retain) SensorsViewController       *sensorsViewController;
-@property(nonatomic,retain) StreetViewViewController    *streetViewViewController;
+@property(nonatomic,retain) StreetView2ViewController   *streetView2ViewController;
+@property(nonatomic,retain) BRKStageViewController      *gameViewController;
 @property(strong,nonatomic) UITabBarController          *tabBarController;
 @property(nonatomic,strong) NSDate                      *lastPacketBroadcastDate;
 @property(nonatomic,strong) UIPopoverController         *settingsPopoverController;
@@ -155,7 +161,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 	// do version upgrade stuff here in the future
 	NSString *previousVersion = [DEFAULTS objectForKey:PLTDefaultsKeyDefaultsVersion];
 	NSLog(@"Previously used version: %@",previousVersion);
-	[DEFAULTS setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:PLTDefaultsKeyDefaultsVersion];
+	[DEFAULTS setObject:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"] forKey:PLTDefaultsKeyDefaultsVersion];
 	[DEFAULTS synchronize];
 }
 
@@ -297,19 +303,28 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 {
     [self registerDefaults];
     
+    [GMSServices provideAPIKey:GOOGLE_API_KEY];
+    [TestFlight takeOff:@"3b9e359c-4aa7-4f77-aefd-8d2ee925475e"];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.threeDViewController = [[PLT3DViewController alloc] initWithNibName:nil bundle:nil];
 	self.sensorsViewController = [[SensorsViewController alloc] initWithNibName:nil bundle:nil];
-    self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
+    //self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
+    self.streetView2ViewController = [[StreetView2ViewController alloc] initWithNibName:nil bundle:nil];
+    self.gameViewController = [[BRKStageViewController alloc] initWithNibName:nil bundle:nil];
     self.settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
     self.settingsViewController.delegate = self;
     
     self.tabBarController = [[UITabBarController alloc] init];
-    //self.tabBarController.viewControllers = @[self.threeDViewController, self.sensorsViewController, self.streetViewViewController];
-	self.tabBarController.viewControllers = @[[[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
-											  [[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
-											  [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController]];
+    NSMutableArray *viewControllers = [@[[[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
+                                        [[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
+                                        //[[UINavigationController alloc] initWithRootViewController:self.streetViewViewController],
+                                        [[UINavigationController alloc] initWithRootViewController:self.streetView2ViewController]] mutableCopy];
+    if ((IPHONE5 || IPAD) && IOS7) {
+        [viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.gameViewController]];
+    }
+	self.tabBarController.viewControllers = viewControllers;
     self.window.rootViewController = self.tabBarController;
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0 green:(33.0/256.0) blue:(66.0/256.0) alpha:1.0]];
@@ -430,20 +445,20 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 	}
 }
 
-- (void)settingsViewControllerDidClickStreetViewPrecache:(SettingsViewController *)theController
-{
-    self.tabBarController.selectedIndex = 2;
-    StreetViewViewController *controller = ((UINavigationController *)self.tabBarController.viewControllers[2]).viewControllers[0];
-    
-    if (self.settingsPopoverController) {
-		[self.settingsPopoverController dismissPopoverAnimated:YES];
-	}
-	else {
-		[self.tabBarController.selectedViewController dismissViewControllerAnimated:YES completion:nil];
-	}
-	
-    [controller precache];
-}
+//- (void)settingsViewControllerDidClickStreetViewPrecache:(SettingsViewController *)theController
+//{
+//    self.tabBarController.selectedIndex = 2;
+//    StreetViewViewController *controller = ((UINavigationController *)self.tabBarController.viewControllers[2]).viewControllers[0];
+//    
+//    if (self.settingsPopoverController) {
+//		[self.settingsPopoverController dismissPopoverAnimated:YES];
+//	}
+//	else {
+//		[self.tabBarController.selectedViewController dismissViewControllerAnimated:YES completion:nil];
+//	}
+//	
+//    [controller precache];
+//}
 
 - (UIPopoverController *)popoverControllerForSettingsViewController:(SettingsViewController *)theController
 {

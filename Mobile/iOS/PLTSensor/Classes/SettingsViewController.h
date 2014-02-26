@@ -29,7 +29,7 @@ extern NSString *const PLTSettingsPopoverDidDismissNotification;
 @protocol SettingsViewControllerDelegate <NSObject>
 
 - (void)settingsViewControllerDidEnd:(SettingsViewController *)theController;
-- (void)settingsViewControllerDidClickStreetViewPrecache:(SettingsViewController *)theController;
+//- (void)settingsViewControllerDidClickStreetViewPrecache:(SettingsViewController *)theController;
 - (UIPopoverController *)popoverControllerForSettingsViewController:(SettingsViewController *)theController;
 
 @end

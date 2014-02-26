@@ -16,6 +16,7 @@
 #import "NSData+Base64.h"
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
+//#import "TestFlight.h"
 
 
 typedef enum {
@@ -140,7 +141,7 @@ typedef enum {
     else
         self = [super initWithNibName:@"PL3DViewController_iPad" bundle:nibBundleOrNil];
 
-    self.title = @"Head";
+    self.tabBarItem.title = @"Head";
     self.tabBarItem.image = [UIImage imageNamed:@"head_icon.png"];
     
     return self;
@@ -205,6 +206,8 @@ typedef enum {
 	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
+    
+    //[TestFlight passCheckpoint:@"SKARLET_TAB"];
 }
 
 //- (void)viewDidAppear:(BOOL)animated

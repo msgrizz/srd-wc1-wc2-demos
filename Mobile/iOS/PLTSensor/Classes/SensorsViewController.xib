@@ -7,12 +7,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SensorsViewController">
             <connections>
-                <outlet property="headingLabel" destination="426" id="439"/>
                 <outlet property="headingProgressView" destination="424" id="436"/>
-                <outlet property="pitchLabel" destination="428" id="440"/>
+                <outlet property="headingTitleLabel" destination="420" id="0t3-vF-xe1"/>
+                <outlet property="headingValueLabel" destination="426" id="DKc-cP-ytb"/>
                 <outlet property="pitchProgressView" destination="425" id="437"/>
-                <outlet property="rollLabel" destination="427" id="441"/>
+                <outlet property="pitchTitleLabel" destination="422" id="CZc-D8-Gnk"/>
+                <outlet property="pitchValueLabel" destination="428" id="Vd9-MJ-Xj8"/>
                 <outlet property="rollProgressView" destination="423" id="438"/>
+                <outlet property="rollTitleLabel" destination="421" id="uq0-TZ-jGk"/>
+                <outlet property="rollValueLabel" destination="427" id="P7M-da-AYf"/>
                 <outlet property="rotationCell" destination="395" id="435"/>
                 <outlet property="view" destination="N3f-2v-StK" id="JV2-da-nJK"/>
             </connections>

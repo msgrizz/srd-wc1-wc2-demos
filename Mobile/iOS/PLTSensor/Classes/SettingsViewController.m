@@ -19,9 +19,7 @@
 #import "ConfigTempViewController.h"
 #import "PLTHeadsetManager.h"
 #import "HTCalibrationTriggersViewController.h"
-
-
-#define DEVICE_IPAD		([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+#import "TestFlight.h"
 
 
 NSString *const PLTSettingsPopoverDidDismissNotification =		@"PLTSettingsPopoverDidDismissNotification";
@@ -33,8 +31,8 @@ typedef NS_ENUM(NSUInteger, PLTTableViewSection) {
 	PLTTableViewSectionGeneral,
     PLTTableViewSection3DHead,
     //PLTTableViewSectionSensors,
-    PLTTableViewSectionStreetViewFirst,
-    PLTTableViewSectionStreetViewPrecache
+    //PLTTableViewSectionStreetViewFirst,
+    //PLTTableViewSectionStreetViewPrecache
 };
 
 typedef NS_ENUM(NSUInteger, PLTTableViewContextServerConfigurationRow) {
@@ -58,11 +56,11 @@ typedef NS_ENUM(NSUInteger, PLTTableView3DHeadOverlaysRow) {
 //    PLTTableViewSensorsRowTemperatureCalibration
 //};
 
-typedef NS_ENUM(NSUInteger, PLTTableViewStreetViewOverlaysRow) {
-	PLTTableViewStreetViewOverlaysRowAngularResolution,
-    PLTTableViewStreetViewOverlaysRowInfoOverlay,
-    PLTTableViewStreetViewOverlaysRowDebugOverlay
-};
+//typedef NS_ENUM(NSUInteger, PLTTableViewStreetViewOverlaysRow) {
+//	PLTTableViewStreetViewOverlaysRowAngularResolution,
+//    PLTTableViewStreetViewOverlaysRowInfoOverlay,
+//    PLTTableViewStreetViewOverlaysRowDebugOverlay
+//};
 
 typedef NS_ENUM(NSUInteger, PLTSelectionListViewTag) {
     PLTSelectionListViewTagAngularResolution
@@ -287,8 +285,8 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 		case PLTTableViewSectionGeneral: return 3;
         case PLTTableViewSection3DHead: return 2;
         //case PLTTableViewSectionSensors: return 1;
-        case PLTTableViewSectionStreetViewFirst: return 3;
-        case PLTTableViewSectionStreetViewPrecache: return 1;
+        //case PLTTableViewSectionStreetViewFirst: return 3;
+        //case PLTTableViewSectionStreetViewPrecache: return 1;
     }
     return 0;
 }
@@ -372,7 +370,7 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 					}
 					else if (triggers & PLTHeadTrackingCalibrationTriggerShake) {
 						
-						if (DEVICE_IPAD) detailText = @"Shake iPad";
+						if (IPAD) detailText = @"Shake iPad";
 						else detailText = @"Shake iPhone";
 					}
 					else if (triggers & PLTHeadTrackingCalibrationTriggerDon) {
@@ -442,50 +440,50 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 //                    break;
 //            }
 //            break;
-        case PLTTableViewSectionStreetViewFirst:
-            switch (indexPath.row) {
-                case PLTTableViewStreetViewOverlaysRowInfoOverlay: {
-                    SwitchTableViewCell *cell = [tableView switchCell];
-                    cell.textLabel.text = @"Address Overlay";
-					cell.target = self;
-                    cell.action = @selector(streetViewOverlayInfoSwitchChanged:);
-                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewInfoOverlay];
-                    return cell;
-                    break; }
-                case PLTTableViewStreetViewOverlaysRowDebugOverlay: {
-                    SwitchTableViewCell *cell = [tableView switchCell];
-                    cell.textLabel.text = @"Debug Overlay";
-					cell.target = self;
-                    cell.action = @selector(streetViewOverlayDebugSwitchChanged:);
-                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewDebugOverlay];
-                    return cell;
-                    break; }
-                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
-                    cell = [tableView value1Cell];
-                    cell.textLabel.text = @"Angular Resolution";
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-                    NSString *detailString;
-                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
-                        case 2:
-                            detailString = @"High";
-                            break;
-                        case 5:
-                            detailString = @"Medium";
-                            break;
-                        case 10:
-                            detailString = @"Low";
-                            break;
-                    }
-                    cell.detailTextLabel.text = detailString;
-                    break; }
-            }
-            break;
-        case PLTTableViewSectionStreetViewPrecache:
-            cell.textLabel.text = @"Precache Current Location";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            break;
+//        case PLTTableViewSectionStreetViewFirst:
+//            switch (indexPath.row) {
+//                case PLTTableViewStreetViewOverlaysRowInfoOverlay: {
+//                    SwitchTableViewCell *cell = [tableView switchCell];
+//                    cell.textLabel.text = @"Address Overlay";
+//					cell.target = self;
+//                    cell.action = @selector(streetViewOverlayInfoSwitchChanged:);
+//                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewInfoOverlay];
+//                    return cell;
+//                    break; }
+//                case PLTTableViewStreetViewOverlaysRowDebugOverlay: {
+//                    SwitchTableViewCell *cell = [tableView switchCell];
+//                    cell.textLabel.text = @"Debug Overlay";
+//					cell.target = self;
+//                    cell.action = @selector(streetViewOverlayDebugSwitchChanged:);
+//                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewDebugOverlay];
+//                    return cell;
+//                    break; }
+//                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
+//                    cell = [tableView value1Cell];
+//                    cell.textLabel.text = @"Angular Resolution";
+//                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
+//                    NSString *detailString;
+//                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
+//                        case 2:
+//                            detailString = @"High";
+//                            break;
+//                        case 5:
+//                            detailString = @"Medium";
+//                            break;
+//                        case 10:
+//                            detailString = @"Low";
+//                            break;
+//                    }
+//                    cell.detailTextLabel.text = detailString;
+//                    break; }
+//            }
+//            break;
+//        case PLTTableViewSectionStreetViewPrecache:
+//            cell.textLabel.text = @"Precache Current Location";
+//            cell.accessoryType = UITableViewCellAccessoryNone;
+//            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+//            break;
     }
     
     return cell;
@@ -511,12 +509,12 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 //        case PLTTableViewSectionSensors:
 //            return @"Sensors";
 //            break;
-        case PLTTableViewSectionStreetViewFirst:
-            return @"Street View";
-            break;
-        case PLTTableViewSectionStreetViewPrecache:
-            return nil;
-            break;
+//        case PLTTableViewSectionStreetViewFirst:
+//            return @"Street View";
+//            break;
+//        case PLTTableViewSectionStreetViewPrecache:
+//            return nil;
+//            break;
     }
     return nil;
 }
@@ -533,14 +531,14 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 			return NO;
 //		case PLTTableViewSectionSensors:
 //			return YES;
-        case PLTTableViewSectionStreetViewFirst: {
-            switch (indexPath.row) {
-                case PLTTableViewStreetViewOverlaysRowAngularResolution:
-					return YES;
-            }
-            break; }
-        case PLTTableViewSectionStreetViewPrecache:
-			return YES;
+//        case PLTTableViewSectionStreetViewFirst: {
+//            switch (indexPath.row) {
+//                case PLTTableViewStreetViewOverlaysRowAngularResolution:
+//					return YES;
+//            }
+//            break; }
+//        case PLTTableViewSectionStreetViewPrecache:
+//			return YES;
     }
     return NO;
 }
@@ -593,38 +591,38 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 				[self.navigationController pushViewController:vc animated:YES];
 			}
 			break;
-        case PLTTableViewSectionStreetViewFirst: {
-            switch (indexPath.row) {
-                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
-                    SelectionListViewController *listController = [[SelectionListViewController alloc] initWithNibName:nil bundle:nil];
-                    listController.delegate = self;
-                    listController.tag = PLTSelectionListViewTagAngularResolution;
-                    listController.title = @"Angular Resolution";
-                    listController.listItems = @[
-												 @{@"label" : @"High", @"context" : @2, @"enabled" : @NO},
-			 @{@"label" : @"Medium", @"context" : @5, @"enabled" : @YES},
-			 @{@"label" : @"Low", @"context" : @10, @"enabled" : @YES}];
-                    // this is kind of a crappy way to do this... how to improve it?
-                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
-                        case 2:
-                            listController.selectedIndex = 0;
-                            break;
-                        case 5:
-                            listController.selectedIndex = 1;
-                            break;
-                        case 10:
-                            listController.selectedIndex = 2;
-                            break;
-                        default:
-                            break;
-                    }
-                    [self.navigationController pushViewController:listController animated:YES];
-                    break; }
-            }
-            break; }
-        case PLTTableViewSectionStreetViewPrecache:
-            [self.delegate settingsViewControllerDidClickStreetViewPrecache:self];
-            break;
+//        case PLTTableViewSectionStreetViewFirst: {
+//            switch (indexPath.row) {
+//                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
+//                    SelectionListViewController *listController = [[SelectionListViewController alloc] initWithNibName:nil bundle:nil];
+//                    listController.delegate = self;
+//                    listController.tag = PLTSelectionListViewTagAngularResolution;
+//                    listController.title = @"Angular Resolution";
+//                    listController.listItems = @[
+//												 @{@"label" : @"High", @"context" : @2, @"enabled" : @NO},
+//			 @{@"label" : @"Medium", @"context" : @5, @"enabled" : @YES},
+//			 @{@"label" : @"Low", @"context" : @10, @"enabled" : @YES}];
+//                    // this is kind of a crappy way to do this... how to improve it?
+//                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
+//                        case 2:
+//                            listController.selectedIndex = 0;
+//                            break;
+//                        case 5:
+//                            listController.selectedIndex = 1;
+//                            break;
+//                        case 10:
+//                            listController.selectedIndex = 2;
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                    [self.navigationController pushViewController:listController animated:YES];
+//                    break; }
+//            }
+//            break; }
+//        case PLTTableViewSectionStreetViewPrecache:
+//            [self.delegate settingsViewControllerDidClickStreetViewPrecache:self];
+//            break;
     }
 }
 
@@ -866,6 +864,8 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 												 name:PLTContextServerDidChangeStateNotification object:nil];
     [self.tableView reloadData];
     [self startConnectionTimer];
+    
+    [TestFlight passCheckpoint:@"SETTINGS"];
 }
 
 - (void)viewDidAppear:(BOOL)animated
