@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <Button
+        android:id="@+id/connectToDeviceButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Connection" />
+
+    <Button
+        android:id="@+id/getWearingStateButton"
+        android:layout_marginTop="10pt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Wearing State" />
+
+    <Button
+        android:id="@+id/getSignalStrengthButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Signal Strength" />
+
+    <Button
+        android:id="@+id/getDeviceInfoButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Device Info" />
+
+    <Button
+        android:id="@+id/subscribeToServicesButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Subscribe to Services" />
+
+    <Button
+        android:id="@+id/unsubscribeFromServicesButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Unsubscribe from Services" />
+
+    <Button
+        android:id="@+id/queryServicesButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Query Services" />
+
+</LinearLayout>
+

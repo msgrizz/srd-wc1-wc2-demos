@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.plantronics.BRPlayground"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15"/>
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher">
+
+        <activity
+            android:name="MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--====================================================================
+        Bluetooth service
+        =====================================================================-->
+        <service
+            android:name="com.plantronics.appcore.service.bluetooth.BluetoothManagerService"
+            android:process="com.plantronics.headsetdataservice">
+            <intent-filter>
+                <action android:name="com.plantronics.BRPlayground.service.bluetooth.EVENT_FROM_RECEIVER_ACTION"/>
+                <action android:name="com.plantronics.BRPlayground.service.bluetooth.PROCESSED_EVENT_ACTION"/>
+                <action android:name="com.plantronics.BRPlayground.service.bluetooth.REQUEST_ACTION"/>
+                <action android:name="com.plantronics.BRPlayground.service.bluetooth.RESPONSE_ACTION"/>
+
+                <!-- These two are there just to wake the service up -->
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+            </intent-filter>
+        </service>
+
+        <!--===============================================================================
+            Receiver of Android's native Bluetooth Intents that belongs to the BladeRunner
+        ===================================================================================-->
+        <receiver
+            android:name="com.plantronics.appcore.service.bluetooth.plugins.nativebluetooth.NativeBluetoothBroadcastReceiver"
+            android:process="com.plantronics.headsetdataservice">
+            <intent-filter>
+
+                <!-- These two are there only as triggers for the Service to wake up. They do not correspond to connect/disconnect events -->
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
+
+                <!-- We only log this one. The BMS creates a broadcast receiver for this one dynamically during runtime -->
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/>
+
+                <!-- TODO We do not have any responding to this one implemented -->
+                <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED"/>
+
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
