@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Deckard Feature Registry v2.1 -->
+<registry service="82972387-294E-4D62-97B5-2668AA35F618">
+
+    <section title="BaDangle messages">
+        
+        <comment>
+            Messages intended to be used for communicating with the BaDangle device.
+        </comment>
+        
+        <!-- ***********************************************************************************************
+         Exceptions
+         *********************************************************************************************** -->
+        
+        <exception name="Invalid service IDs" id="0xFF90">
+            <payload_out>
+                <item type="SHORT_ARRAY" name="ids">
+                    <comment>
+                        An array of valid service IDs.
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                The device throws this exception when it receives a invalid service ID
+            </comment>
+        </exception>
+        
+        <exception name="Invalid characteristics or opcodes" id="0xFF91">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="characteristics or opcodes">
+                    <comment>
+                        An array of service IDs followed by invalid supplied characteristics [serviceID,characteristic,serviceID,characteristic].
+                    </comment>
+                </item>
+            </payload_out>
+        </exception>
+        
+        <exception name="Invalid service modes" id="0xFF92">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="modes">
+                    <comment>
+                        An array of service IDs for which an invalid mode was supplied.
+                    </comment>
+                </item>
+            </payload_out>
+        </exception>
+        
+        <exception name="Invalid payload data" id="0xFF93">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="modes">
+                    <comment>
+                        An array of service IDs for which invalid or malformed
+                        data was supplied.
+                    </comment>
+                </item>
+            </payload_out>
+        </exception>
+        
+        <!-- ***********************************************************************************************
+         Commands
+         *********************************************************************************************** -->
+        
+        <command name="Configure services" id="0xFF00">
+            <comment>
+                Configure one or more service characteristics.
+            </comment>
+            
+            <payload_in>
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Valid service IDs:
+                        
+                         UI                                  0x0020
+                         RTC                                 0x0021
+                         NFC                                 0x0022
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Valid service characteristics (prefixed with "-"):
+                        
+                        UI                
+                            - scroll display message        0x0000
+                            - marquee display message       0x0001
+                            - flip display                  0x0002
+                            - rotate display                0x0003
+                            - display message               0x0004
+                            - toggle display                0x0005
+                            - invert display                0x0006
+                            - clear display                 0x0007
+                            - display punctuation state     0x0008
+                            - display icon state            0x0009
+                         RTC          
+                            - configure                     0x0000
+                         NFC          
+                            - write data                    0x0000
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Characteristic-specific configuration data with the following format and constants:
+
+                         UI              
+                            - scroll display message    
+                                n bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing scroll direction.
+                                Unsigned byte containing a flag to "use both" display for a total of 12 characters.
+                                Unsigned byte containing the offset to shift the characters on the display.
+                                Unsigned short (2 bytes) containing the length of the message to follow.
+                                Byte[] array of message ASCII data.
+                            - marquee display message    
+                                n bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing scroll direction.
+                                Unsigned byte containing a flag to "use both" display for a total of 12 characters.
+                                Unsigned byte containing the offset to shift the characters on the display.
+                            - flip display           
+                                2 bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing flip axis.
+                            - rotate display          
+                                1 byte
+                                Unsigned byte containing display ID
+                            - display message         
+                                n bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing a flag to "use both" display for a total of 12 characters.
+                                Unsigned short (2 bytes) containing the length of the message to follow.
+                                Byte[] array of message ASCII data.
+                            - toggle display          
+                                2 bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing a flag indicating ON or OFF.
+                            - invert display         
+                                2 bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing a flag indicating inverted or not inverted.
+                            - clear display           
+                                1 byte
+                                Unsigned byte containing display ID.
+                            - display punctuation state   
+                                2 bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing punctuation state.
+                            - display icon state       
+                                3 bytes
+                                Unsigned byte containing display ID.
+                                Unsigned byte containing icon ID.
+                                Unsigned byte containing icon state.
+                         RTC                           
+                            - config                   
+                                8 bytes
+                                Byte 0 = seconds
+                                Byte 1 = minutes
+                                Byte 2 = hours
+                                Byte 3 = day of week (sunday == 0)
+                                Byte 4 = day
+                                Byte 5 = month
+                                Byte 6 = year1
+                                Byte 7 = year2
+                                (Derived from RTC_setCalendarTime() in //plantronics/NPD/programs/badangle/TI/RTC/rtc.c)
+                         NFC                           
+                            - write data
+                                n bytes
+                                Unsigned short (2 bytes) containing NDEF application selector.
+                                Unsigned short (2 bytes) containing file selector.
+                                Unsigned long (4 bytes) containing length of data to follow.
+                                Byte[] array containing data to write.
+                                
+                                
+                        Constants:
+                        
+                        Display IDs:
+                            Top display                     0x00
+                            Bottom display                  0x01
+                        Scroll/marquee directions:
+                            Left                            0x00
+                            Right                           0x01
+                        Display axis:
+                            Horizontal                      0x00
+                            Vertical                        0x01
+                        Punctuation states:
+                            Off                             0x00
+                            Decimal point                   0x01
+                            Colon                           0x02
+                            High dot (?)                    0x03
+                            High colon (?)                  0x04
+                            All on                          0x05
+                        Icons:
+                            Battery                         0x00
+                            Heart                           0x01
+                            Altitude                        0x02
+                            Humidity                        0x03
+                            Temperature                     0x04
+                            Compass                         0x05
+                            Clock                           0x06
+                            Pedometer                       0x07
+                            Connec                          0x08
+                            Lock                            0x09
+                        Icon states:
+                            Off                             0x00
+                            On                              0x01
+                            Empty                           0x02
+                            1/4                             0x03
+                            1/2                             0x04
+                            3/4                             0x05
+                            Full                            0x06
+                        NFC file selectors:
+                            CC                              0x01
+                            NDEF                            0x02
+                            System                          0x03
+                    </comment>
+                </item>
+                <!-- Zero or more following triplets -->
+            </payload_in>
+            <payload_out>
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+            <throws>
+                0xFF93
+            </throws>
+        </command>
+        
+        <command name="Calibrate services" id="0xFF01">
+            <comment>
+                Calibrate one or more service characteristics.
+            </comment>
+            
+            <payload_in>
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Valid service IDs:
+                        
+                        Head orientation                    0x0001
+                        Pedometer                           0x0002
+                        Free Fall                           0x0003
+                        Taps                                0x0004
+                        Ambient Temp 1                      0x0011
+                        Ambient Temp 2                      0x0012
+                        Skin Temp                           0x0013
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Valid service characteristics (prefixed with "-"):
+                        
+                        Head orientation             
+                            - calibration                   0x0000
+                        Pedometer                  
+                            - calibration                   0x0000
+                        Free Fall                    
+                            - calibration                   0x0000
+                        Taps                        
+                            - calibration                   0x0000
+                        Ambient Temp 1          
+                            - calibration                   0x0000
+                        Ambient Temp 2          
+                            - calibration                   0x0000
+                        Skin Temp                    
+                            - calibration                   0x0000
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="calibration data">
+                    <comment>
+                        Characteristic-specific calibration data with the following format:
+                        
+                        Head orientation              
+                            - calibration               
+                                16 bytes
+                                4 sets of 4 bytes describing the head orientation reference quaternion components, x,y,z,w
+                        Pedometer                      
+                            - calibration               
+                                1 byte
+                                If >0, reset the pedometer counter to 0.
+                        Free Fall                    
+                            - calibration               
+                                1 byte
+                                If >0, reset free fall status to 'false'.
+                                NOTE: Free fall is "sticky." Once a free fall is sensed, the free fall queries/events reports 'true' until 
+                                reset with this command.
+                        Taps                            
+                            - calibration               
+                                1 byte
+                                If >0, reset the tap count to 0.
+                                NOTE: Tasp count is "sticky." Once a taps are sensed, taps queries/events report the same value until 
+                                reset with this command.
+                        Ambient Temp 1                
+                            - calibration                
+                                2 bytes
+                                Signed integer containing a calibration temperature offset is degrees Celsius.
+                        Ambient Temp 2                
+                            - calibration                 
+                                2 bytes
+                                Signed integer containing a calibration temperature offset is degrees Celsius.
+                        Skin Temp                    
+                            - calibration                
+                                2 bytes
+                                Signed integer containing a calibration temperature offset is degrees Celsius.
+                    </comment>
+                </item>
+                <!-- Zero or more following triplets -->
+            </payload_in>
+            <payload_out>
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+            <throws>
+                0xFF93
+            </throws>
+        </command>
+        
+        <command name="Configure application" id="0xFF02">
+            <comment>
+                Configure one or more application characteristics.
+            </comment>
+            
+            <payload_in>
+                <item type="UNSIGNED_SHORT" name="feature ID">
+                    <comment>
+                        Valid application IDs:
+                        
+                        Display Readout                    0x0000
+                        Units                              0x0001
+                        Lock on powerup                    0x0002
+                        Lock on doff                       0x0003
+                        Enable button lock                 0x0004
+                        Enable panic sequence              0x0005
+                        Date and time                      0x0006
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Valid application characteristics (prefixed with "-"):
+
+                        Display Readout               
+                            - display heartrate             0x0000
+                            - display pedometer             0x0001
+                            - display compass               0x0002
+                            - display altitude              0x0003
+                            - display ambient temp          0x0004
+                            - display ambient humidity      0x0005
+                            - display skin temp             0x0006
+                            - display skin humidity         0x0007
+                            - display light                 0x0008
+                        Units                         
+                            - configuration                 0x0000
+                        Lock on powerup               
+                            - configuration                 0x0000
+                        Lock on doff                
+                            - configuration                 0x0000
+                        Enable button lock          
+                            - configuration                 0x0000
+                        Enable panic sequence       
+                            - configuration                 0x0000
+                        Date and time                  
+                            - format                        0x0000
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Characteristic-specific configuration data with the following format and constants:
+                        
+                        Display Readout                 
+                            - display heartrate         
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display pedometer           
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display compass             
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display altitude             
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display ambient temp        
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display ambient humidity   
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display skin temp           
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display skin humidity      
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                            - display light               
+                                1 byte
+                                Signed byte, readout label display ID. -1 == disabled.
+                        Units                           
+                            - config                       
+                                1 byte
+                                Flag. 0==Metric, 1==Imperial.
+                        Lock on powerup                  
+                            - config                      
+                                1 byte
+                                Flag. 0==don't lock on powerup, 1==lock on powerup.
+                        Lock on doff                     
+                            - config                      
+                                1 byte
+                                Flag. 0=don't lock on doff, 1==lock on doff.
+                        Enable button lock              
+                            - config                      
+                                1 byte
+                                Flag. 0==button lock disabled, 1==button lock enabled.
+                        Enable panic sequence            
+                            - config                      
+                                1 byte
+                                Flag. 0==don't enable panic sqeuence, 1==enable don't sequence.
+                        Date and time                   
+                            - format                      
+                                n bytes
+                                T.B.D. will specify display format.
+                                For the time being, ASCII "12" indicates using 12-hour time, and ASCII "24" indicates using 24-hour time.
+                    </comment>
+                </item>
+                <!-- Zero or more following triplets -->
+            </payload_in>
+            <payload_out>
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+            <throws>
+                0xFF93
+            </throws>
+        </command>
+        
+        <command name="Perform application action" id="0xFF03">
+            <comment>
+                Performs an application action.
+            </comment>
+            
+            <payload_in>
+                <item type="UNSIGNED_SHORT" name="application ID">
+                    <comment>
+                        Valid application IDs:
+                        
+                        Audio prompt                        0x0000
+                        Vibration prompt                    0x0002
+                        Dialog interaction                  0x0003
+                        Lock state                          0x0005
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="action">
+                    <comment>
+                        Valid application actions (prefixed with "-"):
+                        
+                        Audio prompt                     
+                            - canned                        0x0000
+                            - tts                           0x0001
+                            - wav                           0x0002
+                        Vibration prompt                  
+                            - canned                        0x0000
+                            - custom format                 0x0001
+                        Dialog interaction               
+                            - text alert                    0x0000
+                            - yes/no                        0x0001
+                            - enter one number              0x0002
+                            - choose one                    0x0003
+                            - choose multiple               0x0004
+                        Lock state                        
+                            - config                        0x0000
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="operating data">
+                    <comment>
+                        Action-specific operating data with the following format and constants:
+                        
+                        Audio prompt                    
+                            - canned                     
+                                1 byte
+                                Unsigned byte indicating canned prompt ID.
+                            - tts                         
+                                n bytes
+                                Unsigned long containing length of ASCII data to follow.
+                                Unsigned byte array containing ASCII data of specified length.
+                            - wav                          
+                                n bytes
+                                Unsigned long containing length of WAV data to follow.
+                                Unsigned byte array containing WAV data of specified length.
+                                
+                                Vibration prompt                
+                            - canned                    
+                                1 byte
+                                Unsigned byte indicating canned prompt ID.
+                            - custom format             
+                                n bytes
+                                Unsigned long containing length of custom format data to follow.
+                                Unsigned byte array containing custom format data of specified length.
+                        Dialog interaction             
+                            - text alert                  
+                                n bytes
+                                Unsigned long containing length of top display ASCII prompt data to follow.
+                                Unsigned byte array containing top display ASCII data of specified length.
+                                Unsigned long containing length of bottom display ASCII prompt data to follow.
+                                Unsigned byte array containing bottom display ASCII data of specified length.
+                                Unsigned byte containing prompt attention type.
+                                * if attention type==Canned audio or canned vibration:
+                                    Unsigned byte indicating canned prompt ID.
+                                * if attention type==wav or custom format vibration:
+                                    Unsigned long containing length of wav/custom format data to follow.
+                                    Unsigned byte array containing wav/custom format data of specified length.
+                                * if attention type==tts
+                                    Unsigned long containing length of ASCII data to follow.
+                                    Unsigned byte array containing ASCII data of specified length.
+                            - yes/no                     
+                                n bytes
+                                Unsigned long containing length of bottom display ASCII prompt data to follow.
+                                Unsigned byte array containing bottom display ASCII data of specified length.
+                            - enter one number             
+                                n bytes
+                                Unsigned long containing length of bottom display ASCII prompt data to follow.
+                                Unsigned byte array containing bottom display ASCII data of specified length.
+                            - choose one                  
+                                n bytes
+                                Unsigned long containing length of bottom display ASCII prompt data to follow.
+                                Unsigned byte array containing bottom display ASCII data of specified length.
+                                Unsigned short array containing ending array indexes for the following packed array of ASCII characters.
+                                Unsigned byte array containing ASCII data of length equal to the previous unsigned short plus one.
+                                
+                                Example:
+                                If the choices are, "cheeseburgers", "french fries" or "mayonaise", ASCII data would look like this:
+                                "cheeseburgersfrench friesmayonaise"
+                                And the index array would look like this:
+                                0x000C, 0x0018, 0x0021 
+                            - choose multiple              
+                                n bytes
+                                Unsigned long containing length of bottom display ASCII prompt data to follow.
+                                Unsigned byte array containing bottom display ASCII data of specified length.
+                                Unsigned short array containing ending array indexes for the following packed array of ASCII characters.
+                                Unsigned byte array containing ASCII data of length equal to the previous unsigned short plus one.
+                                
+                                See example under "Choose one" opcode.
+                        Lock state                       
+                            - config                       
+                                1 byte
+                                Flag. 0==unlock device, 1==lock device.
+                                
+                                
+                        Constants:
+                        
+                        Prompt attention types:
+                            Canned audio                    0x00
+                            TTS audio                       0x01
+                            WAV audio                       0x02
+                            Canned vibration                0x10
+                            Formatted vibration             0x11
+                    </comment>
+                </item>
+            </payload_in>
+            <payload_out>
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+            <throws>
+                0xFF93
+            </throws>
+        </command>
+        
+        <command name="Subscribe to services" id="0xFF0A">
+            <payload_in>
+                <comment>
+                    Subscrtibes to one or more services.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Valid service IDs:
+                        
+                        Head orientation                   0x0000
+                        Pedometer                          0x0002
+                        Free Fall                          0x0003
+                        Taps                               0x0004
+                        Magnetometer Calibration Status    0x0005
+                        Gyroscope Calibration Status       0x0006
+                        Versions                           0x0007
+                        Humidity                           0x0008
+                        Light                              0x0009
+                        Optical proximity                  0x0010
+                        Ambient Temp 1                     0x0011
+                        Ambient Temp 2                     0x0012
+                        Skin Temp                          0x0013
+                        Skin Conductivity                  0x0014
+                        Ambient Pressure                   0x0015
+                        Heart Rate                         0x0016
+                        UI                                 0x00A0
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Valid service characteristics (prefixed with "-"):
+                        
+                        Head orientation               
+                            - service data                  0x0000
+                        Pedometer                     
+                            - service data                  0x0000
+                        Free Fall                    
+                            - service data                  0x0000
+                        Taps                         
+                            - service data                  0x0000
+                        Magnetometer Calibration Status  
+                            - service data                  0x0000
+                        Gyroscope Calibration Status   
+                            - service data                  0x0000
+                        Versions                      
+                            - service data                  0x0000
+                        Humidity                      
+                            - service data                  0x0000
+                        Light                        
+                            - service data                  0x0000
+                        Optical proximity                   
+                            - service data                  0x0000
+                        Ambient Temp 1           
+                            - service data                  0x0000
+                        Ambient Temp 2              
+                            - service data                  0x0000
+                        Skin Temp                  
+                            - service data                  0x0000
+                        Skin Conductivity       
+                            - service data                  0x0000
+                        Ambient Pressure            
+                            - service data                  0x0000
+                        Heart Rate                    
+                            - service data                  0x0000
+                        UI                    
+                            - button press                  0x0000
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="mode">
+                    <comment>
+                        The update mode for the service.
+                            0 = off,
+                            1 = on-change,
+                            2 = periodic
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="period">
+                    <comment>
+                        The minimum update period for the service in milliseconds.
+                        If mode == 0, this value may be arbitrary.
+                    </comment>
+                </item>
+                <!-- Zero or more following quadruplets -->
+            </payload_in>
+            <payload_out>
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+            <throws>
+                0xFF92
+            </throws>
+            <throws>
+                0xFF93
+            </throws>
+        </command>
+        
+        <!-- ***********************************************************************************************
+         Settings
+         *********************************************************************************************** -->
+        
+        <setting name="Query services configuration data" id="0xFF10">
+            <payload_in>
+                <comment>
+                    Queries service configuration data in one or more successive pairs.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Configure services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure services" command for valid characteristics.
+                    </comment>
+                </item>
+                <!-- One or more following pairs-->
+            </payload_in>
+            <payload_out>
+                <comment>
+                    Service configuration query response data in one or more successive triplets.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Configure services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Reference "Configure services" command for valid byte array formats.
+                    </comment>
+                </item>
+                <!-- One or more following triplets-->
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+        </setting>
+        
+        <setting name="Query services calibration data" id="0xFF11">
+            <payload_in>
+                <comment>
+                    Queries service calibration data in one or more successive pairs.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Calibrate services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Calibrate services" command for valid characteristics.
+                    </comment>
+                </item>
+                <!-- One or more following pairs-->
+            </payload_in>
+            <payload_out>
+                <comment>
+                    Service calibration query response data in one or more successive triplets.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Calibrate services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Calibrate services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="calibration data">
+                    <comment>
+                        Reference "Calibrate services" command for byte array formats.
+                    </comment>
+                </item>
+                <!-- One or more following triplets-->
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+        </setting>
+        
+        <setting name="Query application configuration data" id="0xFF12">
+            <payload_in>
+                <comment>
+                    Queries application configuration data in one or more successive pairs.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Configure applciation" command for valid feature IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure applciation" command for valid characteristics.
+                    </comment>
+                </item>
+                <!-- One or more following pairs-->
+            </payload_in>
+            <payload_out>
+                <comment>
+                    Application configuration query response data in one or more successive triplets.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Configure applciation" command for valid feature IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure applciation" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Reference "Configure applciation" command for valid byte array formats.
+                    </comment>
+                </item>
+                <!-- One or more following triplets-->
+            </payload_out>
+            <throws>
+                0xFF90
+            </throws>
+            <throws>
+                0xFF91
+            </throws>
+        </setting>
+        
+        <setting name="Query services data" id="0xFF13">
+            <payload_in>
+                <comment>
+                    Queries service data in one or more successive pairs.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Subscribe to services" command for valid feature IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Subscribe to services" command for valid characteristics.
+                    </comment>
+                </item>
+            </payload_in>
+            
+            <payload_out>
+                <comment>
+                    Service data query response in one or more successive triplets.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Subscribe to services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Subscribe to services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="service data">
+                    <comment>
+                        A byte array containing the characteristic-specific data in the following format and constants:
+                        
+                        Head orientation            
+                            - service data             
+                                16 bytes
+                                4 sets of 4 bytes describing the head orientation reference quaternion components, x,y,z,w0x0001
+                        Pedometer                  
+                            - service data            
+                                4 bytes
+                                Unsigned integer containing the number of steps recorded since last reset.
+                        Free Fall                   
+                            - service data             
+                                1 byte
+                                Flag indicating if the device is in free-fall. Only once event is sent with flag == true
+                                during the duration of a free fall.
+                        Taps                         
+                            - service data             
+                                2 bytes
+                                Unsigned byte containing the tap directions.
+                                Unisnged byte containing the number of taps.
+                        Magnetometer Calibration Status   
+                            - service data           
+                                1 byte
+                                Unsigned byte containing the calibration status.
+                        Gyroscope Calibration Status     
+                            - service data              
+                                1 byte
+                                Unsigned byte containing the calibration status.
+                        Versions                     
+                            - service data               
+                                Not yet defined. To contain an array of various software and hardware component versions.
+                        Humidity                     
+                            - service data               
+                                2 bytes
+                                Unsigned integer containing percentage humidity with scale factor 100.
+                        Light                        
+                            - service data             
+                                2 bytes
+                                Unsigned integer containing light intensity in lux.
+                        Optical proximity                   
+                            - service data             
+                                2 bytes
+                                Unsigned integer containing distance in mm.
+                        Ambient Temp 1                
+                            - service data              
+                                2 bytes
+                                Signed integer containing temperature in degrees Celsius with scale factor 100.
+                        Ambient Temp 2                 
+                            - service data               
+                                2 bytes
+                                Signed integer containing temperature in degrees Celsius with scale factor 100.
+                        Skin Temp                   
+                            - service data              
+                                2 bytes¡
+                                Signed integer containing temperature in degrees Celsius with scale factor 100.
+                        Skin Conductivity             
+                            - service data               
+                                2 bytes
+                                Unsigned integer containing conductivity in Ohms with scale factor 100.
+                        Ambient Pressure             
+                            - service data               
+                                2 bytes
+                                Unsigned integer containing pressure in mb.
+                        Heart Rate                   
+                            - service data              
+                                1 byte
+                                Unsigned integer containing heart rate in bpm.
+                        UI
+                            - button press
+                                5 bytes
+                                Unsigned long indicating buttons pressed (bitmask).
+                                Unsigned byte indicating press state.
+                                
+                                
+                        Constants:
+                        
+                        Wearning state:
+                            Not being worn                  0x00
+                            Being worn                      0x01
+                        Tap directions:
+                            X up                            0x01
+                            X down                          0x02
+                            Y up                            0x03
+                            Y down                          0x04
+                            Z up                            0x05
+                            Z down                          0x06
+                        Calibration status:
+                            No calibrated                   0x00
+                            Calibrating step 1              0x01
+                            Calibrating step 2              0x02
+                            Calibrated                      0x03
+                            
+                        Buttons:
+                            Legend vol up                   0x00000001 shift left 0
+                            Legend vol down                 0x00000001 shift left 1
+                            Legend answser/end              0x00000001 shift left 2
+                            Legend mute                     0x00000001 shift left 3
+                            Bangle plus                     0x00000001 shift left 10
+                            Bangle minus                    0x00000001 shift left 11
+                            Bangle enter                    0x00000001 shift left 12
+                            Bangle exit                     0x00000001 shift left 13
+                            
+                        Button states:
+                            Down                            0x00
+                            Up                              0x01
+                                
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+            </comment>
+        </setting>
+        
+        <setting name="Get device info" id="0xFF18">
+            <payload_in>
+            </payload_in>
+            <payload_out>
+                <comment>
+                    Returns information about the device and its capabilities.
+                </comment>
+                
+                <item type="BYTE_ARRAY" name="major hardware version">
+                    <comment>
+                        Unsigned byte indicating hardware version number.
+                        e.g. major: 2, minor: 7 == "2.7"
+                        Sub-components (IT, etc) can indlude version info in subsequent array indicies.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="minor hardware version">
+                    <comment>
+                        Unsigned byte indicating hardware version number.
+                        e.g. major: 2, minor: 7 == "2.7"
+                        Sub-components (IT, etc) can indlude version info in subsequent array indicies.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="major firmware version">
+                    <comment>
+                        Unsigned byte indicating firmware version number.
+                        e.g. major: 2, minor: 7 == "2.7"
+                        Sub-components (IT, etc) can indlude version info in subsequent array indicies.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="minor firmware version">
+                    <comment>
+                        Unsigned byte indicating firmware version number.
+                        e.g. major: 2, minor: 7 == "2.7"
+                        Sub-components (IT, etc) can indlude version info in subsequent array indicies.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="supported services">
+                    <comment>
+                        Array of unsigned shorts identifying supported service IDs.
+                    </comment>
+                </item>
+            </payload_out>
+        </setting>
+        
+        <!-- ***********************************************************************************************
+         Events
+         *********************************************************************************************** -->
+        
+        <event name="Subscribed service data" id="0xFF1A">
+            <payload_out>
+                <comment>
+                    Sent when subscribed service data changes.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Subscribe to services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Subscribe to services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="service data">
+                    <comment>
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="previous service data">
+                    <comment>
+                        Reference "Query services data" for byte array formats.
+                    </comment>
+                </item>
+            </payload_out>
+        </event>
+        
+        <event name="Service configuration changed" id="0xFF1B">
+            <payload_out>
+                <comment>
+                    Sent when service configuration data changes.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Configure services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Reference "Configure services" command for valid byte array formats.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="previous configuration data">
+                    <comment>
+                        Reference "Configure services" command for valid byte array formats.
+                    </comment>
+                </item>
+            </payload_out>
+        </event>
+        
+        <event name="Service calibration changed" id="0xFF1C">
+            <payload_out>
+                <comment>
+                    Sent when service calibration data changes.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="service ID">
+                    <comment>
+                        Reference "Calibrate services" command for valid service IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Calibrate services" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="calibration data">
+                    <comment>
+                        Reference "Calibrate services" command for valid byte array formats.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="previous calibration data">
+                    <comment>
+                        Reference "Calibrate services" command for valid byte array formats.
+                    </comment>
+                </item>
+            </payload_out>
+        </event>
+        
+        <event name="Application configuration data" id="0xFF1D">
+            <payload_out>
+                <comment>
+                    Sent when application configuration data changes.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="feature ID">
+                    <comment>
+                        Reference "Configure application" command for valid feature IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="characteristic">
+                    <comment>
+                        Reference "Configure application" command for valid characteristics.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="configuration data">
+                    <comment>
+                        Reference "Configure application" command for valid byte array formats.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="previous configuration data">
+                    <comment>
+                        Reference "Configure application" command for valid byte array formats.
+                    </comment>
+                </item>
+            </payload_out>
+        </event>
+        
+        <event name="Application action result" id="0xFF1E">
+            <payload_out>
+                <comment>
+                    Sent when an application action provides a result.
+                    e.g. A dialog action ends.
+                </comment>
+                
+                <item type="UNSIGNED_SHORT" name="feature ID">
+                    <comment>
+                        Reference "Perform application action" command for valid feature IDs.
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="action">
+                    <comment>
+                        Reference "Perform application action" command for valid actions.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="operating data">
+                    <comment>
+                        Reference "Perform application action" command for valid byte array formats.
+                    </comment>
+                </item>
+                <item type="BYTE_ARRAY" name="result data">
+                    <comment>
+                        Application-action specific result data with the following format:
+                        
+                        Audio prompt                    
+                            - result                   
+                                1 byte
+                                Unsigned byte indicating result. 0==completed, 2==interrupted.
+                        Vibration prompt               
+                            - result                     
+                                1 byte
+                                Unsigned byte indicating result. 0==completed, 2==interrupted.
+                        Dialog interaction              
+                            - text alert                 
+                                1 byte
+                                Unsigned byte indicating dialog result. 0==acknowledged, 2==interrupted.
+                            - yes/no                      
+                                2 bytes
+                                Unsigned byte indicating dialog result. 0==completed, 1==canceled, 2==interrupted.
+                                Unsigned byte flag. 1==yes, 0==no.  
+                            - enter one number             
+                                2 bytes
+                                Unsigned byte indicating dialog result. 0==completed, 1==canceled, 2==interrupted.
+                                Signed byte indicating the number selected.
+                            - choose one                  
+                                2 bytes
+                                Unsigned byte indicating dialog result. 0==completed, 1==canceled, 2==interrupted.
+                                Unsigned byte indicating the index of the choice that was selected.
+                            - choose multiple              
+                                n bytes
+                                Unsigned byte indicating dialog result. 0==completed, 1==canceled, 2==interrupted.
+                                Unsigned byte array where each sequencial byte specifies the index of an input choice that was selected.
+                    </comment>
+                </item>
+            </payload_out>
+        </event>
+        
+    </section>
+    
+</registry>
