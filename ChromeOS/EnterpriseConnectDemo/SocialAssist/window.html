@@ -15,8 +15,8 @@
        <div class="applicationContainer">
         <div id="connectBar">
             <span>
-            <img src="img/Voyager_Legend_C_print_Morini5.png" />
-            <span class="name">PLTLabs Chrome App WebRTC Integration<br><span class="user-name" id="user-name"></span></span>
+            <img src="img/pltlabslogo.jpg" />
+            <span class="name">Wearables + WebRTC Concept<br><span class="user-name" id="user-name"></span></span>
             </span>
         </div>
         <div id="video-container">
@@ -29,9 +29,31 @@
             <input type="button" id="butAnswerCall" value="Answer"/>
         </div>
         <div id="controlPanel">
-            <div id="logHolder"></div>
+            <div id="sensorpane">
+            <div id="sensortable">
+                <table>
+                    <thead>Wearable Concept Sensors</thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="img/pedometer.jpg"/></td>
+                            <td><textarea cols="32" rows="1"></textarea></td>
+                        </tr>
+                         <tr>
+                            <td><img src="img/freefall.jpg"/></td>
+                            <td><textarea cols="32" rows="1"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/tap.jpg"/></td>
+                            <td><textarea cols="32" rows="1"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/headtracking.jpg"/></td>
+                            <td><textarea cols="32" rows="1"></textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div id="options">
-           
             <span>
               <fieldset>
                     <legend>WebRTC Connection Info:</legend>
@@ -39,6 +61,12 @@
                     <label for="chkPLTDevice">Connect to device</label><br>
                     <input type="checkbox" name="chkHT" id="chkHT" />
                     <label for="chkHT">Enable HT</label><br>
+                    <input type="checkbox" name="chkTap" id="chkTap" />
+                    <label for="chkTap">Enable Taps</label><br>
+                     <input type="checkbox" name="chkFF" id="chkFF" />
+                    <label for="chkFF">Enable Free Fall</label><br>
+                     <input type="checkbox" name="chkPedo" id="chkPedo" />
+                    <label for="chkPedo">Enable Pedometer</label><br>
                     <span>Server:
                     <input name="txtServer" id="txtServer" type="text" value="localhost" max="15" maxlength="25" />
                     <br>
@@ -62,6 +90,8 @@
                     <input type="button" id="butCall" value="Call"/>
               </fieldset>      
             </div>
+            </div>
+            <div id="logHolder"></div>
         </div>   
        </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script>    

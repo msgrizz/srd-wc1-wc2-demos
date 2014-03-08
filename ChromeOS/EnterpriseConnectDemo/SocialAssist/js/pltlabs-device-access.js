@@ -512,6 +512,15 @@ PLTLabsMessageHelper.MODE_OFF = 0;
 PLTLabsMessageHelper.MODE_ON_CHANGE = 1;
 PLTLabsMessageHelper.MODE_PERIODIC = 2;
 
+//Service IDs for wearable concepts
+PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID = 0x00;
+PLTLabsMessageHelper.PEDOMETER_SERVICE_ID = 0x02;
+PLTLabsMessageHelper.FREE_FALL_SERVICE_ID = 0x03;
+PLTLabsMessageHelper.TAPS_SERVICE_ID = 0x04;
+PLTLabsMessageHelper.MAGNETOMETER_CAL_STATUS_SERVICE_ID = 0x05;
+PLTLabsMessageHelper.GYROSCOPE_CAL_STATUS_SERVICE_ID = 0x06;
+PLTLabsMessageHelper.VERSIONS_SERVICE_ID = 0x07;
+
 //creates the message needed to kick off the sending and receiving of 
 //PLT device events, settings and commands  
 PLTLabsMessageHelper.createHostNegotiateMessage = function(address){
@@ -673,62 +682,22 @@ The update mode for the service.
 */
 //Enable head tracking
 PLTLabsMessageHelper.createHeadTrackingOnChangeCommand = function(options, address){
-  
- // options.messageType = this.PERFORM_COMMAND_TYPE;
- // options.messageId = this.SUBSCRIBE_TO_SERVICES;
-  options.serviceId = 0; // head tracking
-  /* var address_view = new Uint8Array(address);
-  options.address = address;
-  
-  //this message has 4 unsigned shorts so 8-bytes
-  var data = new ArrayBuffer(8);
-  var data_view = new Uint8Array(data);
-  //service ID - bytes 1 and 2 are 0x0000
-  data_view[1] = 1;//head tracking
-  //characteristic bytes 3 and 4 are 0x0000
-  //mode
-  data_view[4] = 0;
-  var mode = this.MODE_OFF;
-  if (options.mode == this.MODE_ON_CHANGE) {
-    data_view[5] = 0x1;
-  }
-  else if (options.mode == this.MODE_PERIODIC) {
-    data_view[5] = 0x2;
-  }
-  
-  //add a frequency of packets - going for 50ms
-  data_view[7] = 0x32;
-  options.messageData = data;*/
-  
+  options.serviceId = this.HEAD_ORIENTATION_SERVICE_ID; // head tracking
   return this.createWC1Command(options, address); 
 }
 
 PLTLabsMessageHelper.createPedometerOnChangeCommand = function(options, address){
-  //options.messageType = this.PERFORM_COMMAND_TYPE;
-  //options.messageId = this.SUBSCRIBE_TO_SERVICES;
-  options.serviceId = 1; //pedometer
-  /*var address_view = new Uint8Array(address);
-  options.address = address;
-  
-  //this message has 4 unsigned shorts so 8-bytes
-  var data = new ArrayBuffer(8);
-  var data_view = new Uint8Array(data);
-  //service ID - bytes 1 and 2 are 0x0000
-  data_view[1] = 2;//
-  //characteristic bytes 3 and 4 are 0x0000
-  //mode
-  data_view[4] = 0;
-  var mode = this.MODE_OFF;
-  if (options.mode == this.MODE_ON_CHANGE) {
-    data_view[5] = 0x1;
-  }
-  else if (options.mode == this.MODE_PERIODIC) {
-    data_view[5] = 0x2;
-  }
-  
-  //add a frequency of packets - going for 50ms
-  data_view[7] = 0x32;
-  options.messageData = data;*/
+  options.serviceId = this.PEDOMETER_SERVICE_ID; //pedometer
+  return this.createWC1Command(options, address); 
+}
+
+PLTLabsMessageHelper.createTapOnChangeCommand = function(options, address){
+  options.serviceId = this.TAPS_SERVICE_ID; //taps
+  return this.createWC1Command(options, address); 
+}
+
+PLTLabsMessageHelper.createFreeFallOnChangeCommand = function(options, address){
+  options.serviceId = this.FREE_FALL_SERVICE_ID; //pedometer
   return this.createWC1Command(options, address); 
 }
 
@@ -967,6 +936,7 @@ PLTLabsMessageHelper.parseEvent = function(message){
        event.name  = "Sensor Data Change Event";
        var serviceId = this.parseShortArray(2, data_view, 4);
        event.properties["serviceId"] = serviceId[0];
+       //TODO - make this characteristic specific
        var characteristic = this.parseShortArray(4, data_view, 6);
        event.properties["characteristic"] = characteristic[0];
        var serviceDataLength = this.parseShortArray(6, data_view, 8);

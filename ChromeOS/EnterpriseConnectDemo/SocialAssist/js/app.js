@@ -19,7 +19,8 @@ var eventSubscriptions = [
   PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT,
   PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
   PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
-  PLTLabsMessageHelper.AUDIO_STATUS_EVENT];
+  PLTLabsMessageHelper.AUDIO_STATUS_EVENT,
+  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT];
 
 var connectedToDevice = false;
 var connectedToSensorPort = false;
@@ -44,6 +45,15 @@ function init(){
   );
   $('#chkHT').change(function(){
       enableHeadtracking(this.checked);
+  });
+  $('#chkTap').change(function(){
+      enableTapDetection(this.checked);
+  });
+  $('#chkFF').change(function(){
+      enableFreeFallDetection(this.checked);
+  });
+  $('#chkPedo').change(function(){
+      enablePedometer(this.checked);
   });
   $('#butCall').attr("disabled", true);
   $('#butConnect').attr("disabled", true);
@@ -319,6 +329,7 @@ function connectionOpened(address){
 }
 
 
+//Todo - Cliean up and use extract pattern to make less duplicate code
 function enableHeadtracking(on) {
   var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
   var address_view = new Uint8Array(address);
@@ -331,6 +342,41 @@ function enableHeadtracking(on) {
   PLTLabsAPI.sendCommand(packet);
 }
 
+function enableFreeFallDetection(on) {
+  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
+  var address_view = new Uint8Array(address);
+  address_view[0] = 0x50;
+  
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode}; 
+  var packet = PLTLabsMessageHelper.createFreeFallOnChangeCommand(options, address);
+  log("enableFreeFallDetection: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function enableTapDetection(on) {
+  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
+  var address_view = new Uint8Array(address);
+  address_view[0] = 0x50;
+  
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode}; 
+  var packet = PLTLabsMessageHelper.createTapOnChangeCommand(options, address);
+  log("enableTapDetection: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function enablePedometer(on) {
+  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
+  var address_view = new Uint8Array(address);
+  address_view[0] = 0x50;
+  
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode}; 
+  var packet = PLTLabsMessageHelper.createPedometerOnChangeCommand(options, address);
+  log("enablePedometer: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
+  PLTLabsAPI.sendCommand(packet);
+}
 
 function enableWearableConceptEvents(){
   if (!deviceMetadata) {
