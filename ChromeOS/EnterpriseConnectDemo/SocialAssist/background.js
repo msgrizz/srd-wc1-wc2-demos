@@ -19,6 +19,7 @@ chrome.app.runtime.onLaunched.addListener(
 	       // Add the profile to the list of profiles we support
 	       chrome.bluetooth.addProfile(BR_PROFILE, function(r) {
 		console.log("PLTLabs profile added");
+		//win.fullscreen();
 	       });
     
 	      // Make the profile available in the main content window.

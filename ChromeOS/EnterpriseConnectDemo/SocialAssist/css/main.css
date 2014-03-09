@@ -41,7 +41,7 @@
     border:1px solid #111111;
     height:360px;
     margin-left: 10px;
-    width:225px;
+    width:200px;
     float: right;
     color: #FFFFFF;    
 }
@@ -95,6 +95,7 @@
 #sensortable{
     margin-right:10px;
     float:left;
+    font-size: large;
 }
 
 #sensortable img{
@@ -107,7 +108,12 @@
 #sensortable tr, td{
     background-color: #ffffff;
 }
-   
+
+#sensortable td{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 #logHolder{
     height:360px;
     width:440px;

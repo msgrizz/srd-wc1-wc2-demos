@@ -131,7 +131,7 @@ PLTLabsAPI.sendCommand = function(command){
   PLTLabsAPI.lastCommandSent = command;
   
   PLTLabsAPI.sendBladerunnerPacket(command);
-  log('sendCommand: command packet has been sent to device');
+  //log('sendCommand: command packet has been sent to device');
 };
 
 //Attempts to send a blade runner packet over the bluetooth socket connection, if error occurs will log it out.
@@ -333,33 +333,33 @@ var parseBladerunnerData = function(data){
 
   //The message type always in the 6th byte, per the bladerunner/deckard spec
   var messageType = data_view[5];
-  log('parseBladerunnerData: message type = ' + messageType );
+  //log('parseBladerunnerData: message type = ' + messageType );
   
   switch(messageType){
     case PLTLabsMessageHelper.PROTOCOL_VERSION_TYPE:
-      log('parseBladerunnerData: Protocol Version Type Message');
+    //  log('parseBladerunnerData: Protocol Version Type Message');
       break;
      case PLTLabsMessageHelper.GET_REQUEST_TYPE:
-      log('Get Request Type Message');
+    //  log('Get Request Type Message');
       break;
      case PLTLabsMessageHelper.GET_RESULT_SUCCESS_TYPE:
-      log('Get Result Success Type Message');
+    //  log('Get Result Success Type Message');
       break;
      case PLTLabsMessageHelper.GET_RESULT_EXCEPTION_TYPE:
-      log('Get Result Exception Type Message');
+     // log('Get Result Exception Type Message');
       break;
      case PLTLabsMessageHelper.PERFORM_COMMAND_TYPE:
-      log('Perform Command Type Message');
+     // log('Perform Command Type Message');
       break;
      case PLTLabsMessageHelper.PERFORM_COMMAND_RESULT_SUCCESS_TYPE:
-      log('Perform Command Result Success Type Message');
+      //log('Perform Command Result Success Type Message');
       var commandSuccessId = PLTLabsMessageHelper.parseResult(data);
-      log('parseBladerunnerData: command successful: id = 0x' + commandSuccessId.toString(16));
+      //log('parseBladerunnerData: command successful: id = 0x' + commandSuccessId.toString(16));
       onCommandSuccess(commandSuccessId);
       break;
      case PLTLabsMessageHelper.PERFORM_COMMAND_RESULT_EXCEPTION_TYPE:
       var exceptionCode = PLTLabsMessageHelper.parseResult(data);
-      log('Exception while performing command: id = 0x' + exceptionCode.toString(16));
+      //log('Exception while performing command: id = 0x' + exceptionCode.toString(16));
       break; 
      case PLTLabsMessageHelper.DEVICE_PROTOCOL_VERSION_TYPE:
       /*parseDevicePrototol(data, function(min, max){
@@ -369,7 +369,7 @@ var parseBladerunnerData = function(data){
       });*/
       break;
      case PLTLabsMessageHelper.METADATA_TYPE:
-      log('parseBladerunnerData: metadata');
+      //log('parseBladerunnerData: metadata');
         if (onMetaDataCallback) { 
           onMetaDataCallback(PLTLabsMessageHelper.parseMetadata(data));
         }
@@ -383,16 +383,16 @@ var parseBladerunnerData = function(data){
          connectedEvent(event);
       }
       if(PLTLabsAPI.subscribedEvents.indexOf(event.id) > -1){
-        log('parseBladerunnerData: sending event to callback');
+        //log('parseBladerunnerData: sending event to callback');
         onEventCallback(event);
       }
       
       break;
      case PLTLabsMessageHelper.CLOSE_SESSION_TYPE:
-      log('Close Session Type Message');
+      //log('Close Session Type Message');
       break;
      case PLTLabsMessageHelper.HOST_PROTOCOL_NEGOTIATION_REJECTION_TYPE:
-      log('Host Protocol Negotiation Rejection Type Message');
+      //log('Host Protocol Negotiation Rejection Type Message');
       break;
     default:
       log('Unknown Message Type: ' + messageType);
@@ -816,7 +816,7 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    //are 16 bit short integers - which map over to message ids
    bounds = index + (2 * arrayLength[0]);
    var commands = this.parseShortArray(index, data_view, bounds);
-   log("parseMetadata: device supports " + commands.length + " commands");
+   //log("parseMetadata: device supports " + commands.length + " commands");
    
    index = bounds;
    bounds = index + 2;
@@ -824,7 +824,7 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    index += 2;
    bounds = index +  (2 * arrayLength[0]);
    var getters = this.parseShortArray(index, data_view, bounds);
-   log("parseMetadata: device supports " + getters.length + " settings operations");
+   //log("parseMetadata: device supports " + getters.length + " settings operations");
   
    index = bounds;
    bounds = index + 2;
@@ -832,7 +832,7 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    index += 2;
    bounds = index +  (2 * arrayLength[0]);
    var events = this.parseShortArray(index, data_view, bounds);
-   log("parseMetadata: devices supports " + events.length + " events");
+   //log("parseMetadata: devices supports " + events.length + " events");
   
  
    index = bounds;
@@ -933,23 +933,55 @@ PLTLabsMessageHelper.parseEvent = function(message){
       event.properties["urgencyName"] = this.getUrgency(data_view[2]);
       break;
     case this.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT:
-       event.name  = "Sensor Data Change Event";
-       var serviceId = this.parseShortArray(2, data_view, 4);
-       event.properties["serviceId"] = serviceId[0];
-       //TODO - make this characteristic specific
-       var characteristic = this.parseShortArray(4, data_view, 6);
-       event.properties["characteristic"] = characteristic[0];
-       var serviceDataLength = this.parseShortArray(6, data_view, 8);
-       var serviceData = this.parseByteArray(8, data_view,(8 + serviceDataLength[0]));
-       event.properties["serviceDataLength"] = serviceDataLength[0];
-       event.properties["serviceData"] = serviceData;
-       break;
+      event.name  = "Sensor Data Change Event";
+      var serviceId = this.parseShortArray(2, data_view, 4);
+      event.properties["serviceId"] = serviceId[0];  
+      var characteristic = this.parseShortArray(4, data_view, 6);
+      event.properties["characteristic"] = characteristic[0];
+      var serviceDataLength = this.parseShortArray(6, data_view, 8);
+      var serviceData = this.parseShortArray(8, data_view,(8 + serviceDataLength[0]));
+      switch(serviceId[0]){
+        case this.HEAD_ORIENTATION_SERVICE_ID:
+          //convert quaternians to eular angles - w, x, y, z
+          event.properties["quaternian"] = this.convertToQuaternion(serviceData);
+          break;
+        case this.PEDOMETER_SERVICE_ID:
+          event.properties["steps"] = serviceData[0];
+          break;
+        case this.TAPS_SERVICE_ID:
+          event.properties["x"] = serviceData[0];
+          event.properties["y"] = serviceData[1];
+          break;
+        case this.FREE_FALL_SERVICE_ID:
+          event.properties["freefall"] = serviceData[0] == 1;
+          break;
+        }
+      break;
     default:
       event.name = "unknown";
   }
   return event;
+}
+
+PLTLabsMessageHelper.convertToQuaternion = function(serviceData){
+  var w = serviceData[0];
+  var x = serviceData[1];
+  var y = serviceData[2];
+  var z = serviceData[3];
+
+  if (w > 32767) w -= 65536;
+  if (x > 32767) x -= 65536;
+  if (y > 32767) y -= 65536;
+  if (z > 32767) z -= 65536;
   
-};
+  var x1 = x/16384.0;
+  var y1 = y/16384.0;
+  var z1 = z/16384.0;
+  var w1 = w/16384.0;
+  
+  return {"x": x1, "y": y1, "z": z1, "w": w1}
+  
+}
 
 PLTLabsMessageHelper.getDirection = function(direction){
   return direction == 0 ? "Initiator" : "Another Device"; 

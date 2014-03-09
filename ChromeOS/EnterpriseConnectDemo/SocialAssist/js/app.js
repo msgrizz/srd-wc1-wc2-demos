@@ -403,16 +403,28 @@ function enableWearableConceptEvents(){
 }
 
 function onEvent(info){
-   var event = '<span>Event: 0x'+info.id.toString(16) + ' - ' + info.name + '</span>';
-    event += '<ul>';
-    for(prop in info.properties){
-     event += '<li>' + prop + ' = ' + info.properties[prop] + '</li>';
-    }
-    event += '</ul>';
     
-   l(event);
+   log("onEvent received: " + info);
+   if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
+      switch(info.properties["serviceId"]) {
+        case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
+          break;
+        case PLTLabsMessageHelper.TAPS_SERVICE_ID:
+          $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
+          break;
+        case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
+          $('#freefall').text(info.properties["freefall"]);
+          break;
+        case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
+          $('#steps').text(info.properties["steps"]);
+          break;
+        default:
+          break;
+      }
+   }
+   
    if (window.existingDataConnection) {
-    window.existingDataConnection.send(event);
+      window.existingDataConnection.send(event);
    }
    //hook flash button
    if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {

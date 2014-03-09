@@ -32,23 +32,42 @@
             <div id="sensorpane">
             <div id="sensortable">
                 <table>
-                    <thead>Wearable Concept Sensors</thead>
+                    <thead><input type="checkbox" name="chkPLTDevice" id="chkPLTDevice" />
+                           <label for="chkPLTDevice">Connect to Wearable Concept 1 Device<label>
+                    </thead>
                     <tbody>
                         <tr>
                             <td><img src="img/pedometer.jpg"/></td>
-                            <td><textarea cols="32" rows="1"></textarea></td>
+                            <td><input type="checkbox" name="chkPedo" id="chkPedo" />
+                                <label for="chkPedo">Enable Pedometer</label><br>
+                            </td>
+                            <td width="300"><span id="steps">0</span><span> steps</span>
+                                <br>
+                            </td>
                         </tr>
                          <tr>
                             <td><img src="img/freefall.jpg"/></td>
-                            <td><textarea cols="32" rows="1"></textarea></td>
+                            <td><input type="checkbox" name="chkFF" id="chkFF" />
+                                <label for="chkFF">Enable Free Fall</label><br>
+                            </td>
+                            <td><span>In freefall: </span><span id="freefall">false</span></td>
                         </tr>
                         <tr>
                             <td><img src="img/tap.jpg"/></td>
-                            <td><textarea cols="32" rows="1"></textarea></td>
+                            <td><input type="checkbox" name="chkTap" id="chkTap" />
+                                <label for="chkTap">Enable Taps</label><br>
+                            </td>
+                            <td><span>Taps: </span><span id="taps"></span></td>
                         </tr>
                         <tr>
                             <td><img src="img/headtracking.jpg"/></td>
-                            <td><textarea cols="32" rows="1"></textarea></td>
+                            <td><input type="checkbox" name="chkHT" id="chkHT" />
+                                <label for="chkHT">Enable HT</label><br>
+                            </td>
+                            <td><span>Roll: </span><span id="roll"></span><br>
+                                <span>Pitch: </span><span id="pitch"></span><br>
+                                <span>Heading: </span><span id="heading"></span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -57,16 +76,7 @@
             <span>
               <fieldset>
                     <legend>WebRTC Connection Info:</legend>
-                    <input type="checkbox" name="chkPLTDevice" id="chkPLTDevice" />
-                    <label for="chkPLTDevice">Connect to device</label><br>
-                    <input type="checkbox" name="chkHT" id="chkHT" />
-                    <label for="chkHT">Enable HT</label><br>
-                    <input type="checkbox" name="chkTap" id="chkTap" />
-                    <label for="chkTap">Enable Taps</label><br>
-                     <input type="checkbox" name="chkFF" id="chkFF" />
-                    <label for="chkFF">Enable Free Fall</label><br>
-                     <input type="checkbox" name="chkPedo" id="chkPedo" />
-                    <label for="chkPedo">Enable Pedometer</label><br>
+                    
                     <span>Server:
                     <input name="txtServer" id="txtServer" type="text" value="localhost" max="15" maxlength="25" />
                     <br>
