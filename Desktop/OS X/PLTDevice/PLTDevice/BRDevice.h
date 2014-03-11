@@ -1,8 +1,8 @@
 //
 //  BRDevice.h
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/24/14.
+//  Created by Morgan Davis on 2/24/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -10,29 +10,14 @@
 
 @class BRMessage;
 @class BREvent;
+@class BRSettingResponse;
+@class BRException;
 @protocol BRDeviceDelegate;
-
-
-typedef enum {
-    BRServiceIDOrientationTracking = 0,
-    BRServiceIDPedometer = 2,
-    BRServiceIDFreeFall = 3,
-    BRServiceIDTaps = 4,
-    BRServiceIDMagCal = 5,
-    BRServiceIDGyroCal = 6,
-    BRServiceIDTemp = 11
-} BRServiceID;
-
-typedef enum {
-    BRServiceSubscriptionModeOff = 0,
-    BRServiceSubscriptionModeOnChange = 1,
-    BRServiceSubscriptionModePeriodic = 2
-} BRServiceSubscriptionMode;
 
 
 @interface BRDevice : NSObject
 
-+ (BRDevice *)controllerWithDeviceAddress:(NSString *)BTAddress;
++ (BRDevice *)deviceWithAddress:(NSString *)BTAddress;
 - (void)openConnection;
 - (void)sendMessage:(BRMessage *)message;
 
@@ -49,6 +34,8 @@ typedef enum {
 - (void)BRDeviceDidDisconnectFromHTDevice:(BRDevice *)device;
 - (void)BRDevice:(BRDevice *)device didFailConnectToHTDeviceWithError:(int)ioBTError;
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event;
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse;
+- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception;
 
 @end
 

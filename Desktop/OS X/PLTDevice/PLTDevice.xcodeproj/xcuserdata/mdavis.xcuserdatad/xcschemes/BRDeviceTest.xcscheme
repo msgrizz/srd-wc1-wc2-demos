@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "429E5F3118BEBE7C003563D6"
-               BuildableName = "PLTDevice.framework"
-               BlueprintName = "PLTDevice"
+               BlueprintIdentifier = "429E5FED18BEC510003563D6"
+               BuildableName = "BRDeviceTest.app"
+               BlueprintName = "BRDeviceTest"
                ReferencedContainer = "container:PLTDevice.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,13 +32,22 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "429E5F4818BEBE7C003563D6"
-               BuildableName = "PLTDeviceTests.xctest"
-               BlueprintName = "PLTDeviceTests"
+               BlueprintIdentifier = "429E600718BEC511003563D6"
+               BuildableName = "BRDeviceTestTests.xctest"
+               BlueprintName = "BRDeviceTestTests"
                ReferencedContainer = "container:PLTDevice.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "429E5FED18BEC510003563D6"
+            BuildableName = "BRDeviceTest.app"
+            BlueprintName = "BRDeviceTest"
+            ReferencedContainer = "container:PLTDevice.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -49,6 +58,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "429E5FED18BEC510003563D6"
+            BuildableName = "BRDeviceTest.app"
+            BlueprintName = "BRDeviceTest"
+            ReferencedContainer = "container:PLTDevice.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -58,6 +76,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "429E5FED18BEC510003563D6"
+            BuildableName = "BRDeviceTest.app"
+            BlueprintName = "BRDeviceTest"
+            ReferencedContainer = "container:PLTDevice.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

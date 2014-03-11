@@ -1,8 +1,8 @@
 //
 //  BRCommandRequest.h
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/24/14.
+//  Created by Morgan Davis on 2/24/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -12,5 +12,6 @@
 @interface BRSettingRequest : BRMessage
 
 + (BRSettingRequest *)request;
+- (void)parseData;
 
 @end

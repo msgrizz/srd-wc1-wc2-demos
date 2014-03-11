@@ -8,6 +8,40 @@
 
 #import "BRException.h"
 
+
 @implementation BRException
+
+@dynamic data;
+
+- (void)setData:(NSData *)data
+{
+    _data = data;
+    [self parseData];
+}
+
+- (NSData *)data
+{
+    return _data;
+}
+
+#pragma mark - Private
+
++ (BRException *)exceptionWithData:(NSData *)data
+{
+    BRException *exception = [[[super class] alloc] initWithData:data];
+    return exception;
+}
+
+- (id)initWithData:(NSData *)data
+{
+    self = [super init];
+    self.data = data;
+    return self;
+}
+
+- (void)parseData
+{
+    
+}
 
 @end

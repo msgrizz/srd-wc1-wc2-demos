@@ -8,6 +8,19 @@
 
 #import "BRMessage.h"
 
-@interface BRException : BRMessage
+
+typedef enum {
+    BRExceptionIDDeviceNotReady =   0xFF94,
+    BRExceptionIDIllegalValue =     0x0808
+} BRExceptionID;
+
+@interface BRException : BRMessage {
+    
+    NSData      *_data;
+}
+
++ (BRException *)exceptionWithData:(NSData *)data;
+
+@property(nonatomic,strong) NSData *data;
 
 @end

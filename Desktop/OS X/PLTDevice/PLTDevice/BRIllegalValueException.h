@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRException.h"
 
-@interface BRIllegalValueException : BRMessage
+
+@interface BRIllegalValueException : BRException
 
 @end

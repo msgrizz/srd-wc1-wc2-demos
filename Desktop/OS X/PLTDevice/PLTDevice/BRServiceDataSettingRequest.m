@@ -1,20 +1,20 @@
 //
-//  BRQueryServiceDataSettingRequest.m
+//  BRServiceDataSettingRequest.h
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 2/26/14.
+//  Created by Morgan Davis on 2/26/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRQueryServiceDataSettingRequest.h"
+#import "BRServiceDataSettingRequest.h"
 #import "NSData+HexStrings.h"
 
 
-@implementation BRQueryServiceDataSettingRequest
+@implementation BRServiceDataSettingRequest
 
-+ (BRQueryServiceDataSettingRequest *)requestWithServiceID:(uint16_t)serviceID;
++ (BRServiceDataSettingRequest *)requestWithServiceID:(uint16_t)serviceID;
 {
-    BRQueryServiceDataSettingRequest *request = [[BRQueryServiceDataSettingRequest alloc] init];
+    BRServiceDataSettingRequest *request = [[BRServiceDataSettingRequest alloc] init];
     request.serviceID = serviceID;
     return request;
 }
@@ -23,12 +23,12 @@
 
 - (NSData *)data;
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %02X %02X",
-                           8,                       // length
+    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
+                           10,                      // length
                            BRMessageTypeGetSetting, // message type
                            0xFF13,                  // deckard id
                            self.serviceID,          
-                           0x00];                   // characteristic
+                           0x0000];                 // characteristic
     
     return [NSData dataWithHexString:hexString];
 }

@@ -1,27 +1,19 @@
 //
 //  BRTapsEvent.h
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BREvent.h"
-
-
-typedef enum {
-    PLTTapDirectionXUp = 1,
-    PLTTapDirectionXDown,
-    PLTTapDirectionYUp,
-    PLTTapDirectionYDown,
-    PLTTapDirectionZUp,
-    PLTTapDirectionZDown
-} PLTTapDirection;
+#import "BRTapsSettingResponse.h"
+#import "PLTTapsInfo.h" // this is not cool.
 
 
 @interface BRTapsEvent : BREvent
 
-@property(nonatomic,readonly) NSUInteger        taps;
+@property(nonatomic,readonly) uint16_t          taps;
 @property(nonatomic,readonly) PLTTapDirection   direction;
 
 @end

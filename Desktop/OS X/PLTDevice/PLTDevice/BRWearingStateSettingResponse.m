@@ -2,29 +2,23 @@
 //  BRQueryWearingStateSettingResponse.m
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 2/26/14.
+//  Created by Morgan Davis on 2/26/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRQueryWearingStateSettingResponse.h"
+#import "BRWearingStateSettingResponse.h"
 
 
-@interface BRQueryWearingStateSettingResponse ()
+@interface BRWearingStateSettingResponse ()
 
 @property(nonatomic,readwrite) BOOL isBeingWorn;
 
 @end
 
 
-@implementation BRQueryWearingStateSettingResponse
+@implementation BRWearingStateSettingResponse
 
 #pragma mark - Public
-
-+ (BRSettingResponse *)settingResponseWithData:(NSData *)data
-{
-    BRQueryWearingStateSettingResponse *response = [[BRQueryWearingStateSettingResponse alloc] initWithData:data];
-    return response;
-}
 
 - (void)parseData
 {
@@ -37,9 +31,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRQueryWearingStateSettingResponse %p> isBeingWorn=%@",
+    return [NSString stringWithFormat:@"<BRWearingStateSettingResponse %p> isBeingWorn=%@",
             self, (self.isBeingWorn ? @"YES" : @"NO")];
 }
-
 
 @end

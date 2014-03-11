@@ -1,24 +1,16 @@
 //
-//  BRQueryWearingStateSettingRequest.m
-//  BTSniffer
+//  BRWearingStateSettingRequest.m
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRQueryWearingStateSettingRequest.h"
+#import "BRWearingStateSettingRequest.h"
 #import "NSData+HexStrings.h"
 
 
-@implementation BRQueryWearingStateSettingRequest
-
-#pragma mark - Public
-
-+ (BRSettingRequest *)request
-{
-    BRQueryWearingStateSettingRequest *request = [[BRQueryWearingStateSettingRequest alloc] init];
-    return request;
-}
+@implementation BRWearingStateSettingRequest
 
 #pragma BRMessage
 

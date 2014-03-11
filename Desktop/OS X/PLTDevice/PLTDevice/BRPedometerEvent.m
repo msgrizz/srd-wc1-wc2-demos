@@ -1,8 +1,8 @@
 //
 //  BRPedometerEvent.m
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 @interface BRPedometerEvent ()
 
-@property(nonatomic,assign,readwrite) NSUInteger steps;
+@property(nonatomic,assign,readwrite) uint16_t steps;
 
 @end
 
@@ -19,14 +19,6 @@
 @implementation BRPedometerEvent
 
 #pragma mark - Public
-
-+ (BREvent *)eventWithData:(NSData *)data
-{
-    BRPedometerEvent *event = [[BRPedometerEvent alloc] initWithData:data];
-    return event;
-}
-
-
 
 - (void)parseData
 {
@@ -40,8 +32,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRPedometerEvent %p> steps=%lu",
-            self, (unsigned long)self.steps];
+    return [NSString stringWithFormat:@"<BRPedometerEvent %p> steps=%d",
+            self, self.steps];
 }
 
 @end

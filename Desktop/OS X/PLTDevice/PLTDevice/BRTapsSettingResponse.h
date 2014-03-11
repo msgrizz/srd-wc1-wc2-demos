@@ -2,12 +2,17 @@
 //  BRTapsSettingResponse.h
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 3/3/14.
+//  Created by Morgan Davis on 3/3/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRSettingResponse.h"
+#import "PLTTapsInfo.h" // this is not cool.
+
 
 @interface BRTapsSettingResponse : BRSettingResponse
+
+@property(nonatomic,readonly) uint16_t          taps;
+@property(nonatomic,readonly) PLTTapDirection   direction;
 
 @end

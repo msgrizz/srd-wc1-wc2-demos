@@ -2,17 +2,29 @@
 //  AppDelegate.m
 //  BRDeviceTest
 //
-//  Created by Davis, Morgan on 2/26/14.
+//  Created by Morgan Davis on 2/26/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import "MainWindowController.h"
+
+
+@interface AppDelegate ()
+
+@property(nonatomic,strong) MainWindowController *mainWindowController;
+
+@end
+
 
 @implementation AppDelegate
 
+#pragma mark - NSApplicationDelegate
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    self.mainWindowController = [[MainWindowController alloc] init];
+    [self.mainWindowController showWindow:self];
 }
 
 @end

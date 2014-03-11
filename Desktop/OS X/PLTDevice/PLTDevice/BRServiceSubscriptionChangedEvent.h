@@ -7,7 +7,14 @@
 //
 
 #import "BREvent.h"
+#import "BRSubscribeToServiceCommand.h"
+
 
 @interface BRServiceSubscriptionChangedEvent : BREvent
+
+@property(nonatomic,assign) BRServiceID         serviceID;
+@property(nonatomic,assign) BRCharacteristicID  characteristicID;
+@property(nonatomic,assign) uint16_t            mode;
+@property(nonatomic,assign) uint16_t            period;
 
 @end

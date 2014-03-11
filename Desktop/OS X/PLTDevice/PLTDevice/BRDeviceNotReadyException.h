@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRException.h"
 
-@interface BRDeviceNotReadyException : BRMessage
+
+@interface BRDeviceNotReadyException : BRException
 
 @end

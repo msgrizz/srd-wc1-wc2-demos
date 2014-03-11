@@ -1,8 +1,8 @@
 //
 //  BRTapsEvent.m
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 @interface BRTapsEvent ()
 
-@property(nonatomic,assign,readwrite) NSUInteger        taps;
+@property(nonatomic,assign,readwrite) uint16_t          taps;
 @property(nonatomic,assign,readwrite) PLTTapDirection   direction;
 
 @end
@@ -20,12 +20,6 @@
 @implementation BRTapsEvent
 
 #pragma mark - Public
-
-+ (BREvent *)eventWithData:(NSData *)data
-{
-    BRTapsEvent *event = [[BRTapsEvent alloc] initWithData:data];
-    return event;
-}
 
 - (void)parseData
 {
@@ -37,7 +31,7 @@
     
     taps = ntohs(taps);
     direction = ntohs(direction);
-    
+
     self.taps = taps;
     self.direction = direction;
 }
@@ -46,8 +40,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRTapsEvent %p> taps=%lu, direction=%d",
-            self, (unsigned long)self.taps, self.direction];
+    return [NSString stringWithFormat:@"<BRTapsEvent %p> taps=%d, direction=%d",
+            self, self.taps, self.direction];
 }
 
 @end

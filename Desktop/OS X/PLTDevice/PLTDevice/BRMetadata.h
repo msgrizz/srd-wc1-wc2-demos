@@ -8,6 +8,11 @@
 
 #import "BRMessage.h"
 
+
 @interface BRMetadata : BRMessage
+
+@property(nonatomic,readonly) NSArray   *commands;
+@property(nonatomic,readonly) NSArray   *settings;
+@property(nonatomic,readonly) NSArray   *events;
 
 @end

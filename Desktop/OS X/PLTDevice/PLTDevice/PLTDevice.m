@@ -2,15 +2,15 @@
 //  PLTDevice.m
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 9/9/13.
+//  Created by Morgan Davis on 9/9/13.
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
 #import "PLTDeviceWatcher.h"
-#import <ExternalAccessory/ExternalAccessory.h>
-#import <UIKit/UIKit.h>
+//#import <ExternalAccessory/ExternalAccessory.h>
+//#import <UIKit/UIKit.h>
 #import "PLTInfo_Internal.h"
 #import "PLTWearingStateInfo_Internal.h"
 #import "PLTProximityInfo_Internal.h"
@@ -20,6 +20,13 @@
 #import "PLTFreeFallInfo_Internal.h"
 #import "PLTMagnetometerCalibrationInfo_Internal.h"
 #import "PLTGyroscopeCalibrationInfo_Internal.h"
+
+#import <IOBluetooth/IOBluetooth.h>
+#import "BRDevice.h"
+#import "BREvent.h"
+#import "BRSettingResponse.h"
+#import "BRDeviceInfoSettingRequest.h"
+#import "BRDeviceInfoSettingResponse.h"
 
 
 #define TICKER_RATE                                             20.0 // Hz
@@ -52,7 +59,7 @@ typedef NS_ENUM(NSInteger, PLTService_Internal) {
 };
 
 
-@interface PLTDevice() <NSStreamDelegate>
+@interface PLTDevice() <BRDeviceDelegate>
 
 - (void)closeConnection:(BOOL)notifyClose;
 - (void)didGetNewPacket:(NSData *)packetData;
@@ -87,7 +94,7 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 @property(nonatomic, readwrite, strong)	NSString							*serialNumber;
 @property(nonatomic, readwrite)			NSUInteger							fwMajorVersion;
 @property(nonatomic, readwrite)			NSUInteger							fwMinorVersion;
-@property(nonatomic, retain)			EASession							*session;
+//@property(nonatomic, retain)			EASession							*session;
 @property(nonatomic)					BOOL								didGetVersionInfo;
 @property(nonatomic)					BOOL								didNotifyOfConnectionOpen;
 @property(nonatomic)					BOOL								didNotifyOfConnectionClosed;
@@ -108,6 +115,8 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 @property(nonatomic)					BOOL								didGetFreeFallDown;
 @property(nonatomic)					BOOL								didGetTapsUp;
 @property(nonatomic)					BOOL								didGetTapsDown;
+
+@property(nonatomic, retain)            BRDevice                            *brDevice;
 
 @end
 
@@ -139,65 +148,69 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 
 - (void)openConnection
 {
-	NSLog(@"openConnection (%@)", self.accessory);
+	NSLog(@"openConnection (%@)", self.bluetoothDevice);
 	
-	if (!self.session) {
+	if (!self.brDevice.isConnected) {
 		// create data session if we found a matching accessory
-		if (self.accessory) {
-			NSLog(@"Attempting to create data session with accessory %@", [self.accessory name]);
+//		if (self.accessory) {
+			NSLog(@"Connecting to device at %@...", self.brDevice.BTAddress);
+        
+        [self.brDevice openConnection]; // wait for open callback
 			
-			self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:PLTDeviceProtocolString];
-			if (self.session) {
-				NSLog(@"Created EA session: %@", self.session);
-				
-				// reset state
-				self.didGetVersionInfo = NO;
-				self.didGetTapsUp = NO;
-				self.didGetTapsDown = YES;
-				self.didGetFreeFallUp = NO;
-				self.didGetFreeFallDown = NO;
-				
-				// open input and output streams
-				[[self.session inputStream] setDelegate:self];
-				[[self.session inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-				[[self.session inputStream] open];
-				[[self.session outputStream] setDelegate:self];
-				[[self.session outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-				[[self.session outputStream] open];
-				
-				// wait for version info to come through to set isConnectionOpen = YES and notify
-			}
-			else {
-				NSLog(@"Failed to create EA session.");
-				NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
-													 code:PLTDeviceErrorCodeFailedToCreateDataSession
-												 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
-				//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
-                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
-                                           PLTConnectionErrorNotificationKey: error};
-                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
-			}
-		}
-		else {
-			NSLog(@"No accessory accociated!");
-			NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
-												 code:PLTDeviceErrorCodeNoAccessoryAssociated
-											 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
-			//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
-            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
-                                       PLTConnectionErrorNotificationKey: error};
-            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
-		}
+//			self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:PLTDeviceProtocolString];
+//			if (self.session) {
+//				NSLog(@"Created EA session: %@", self.session);
+//				
+//				// reset state
+//				self.didGetVersionInfo = NO;
+//				self.didGetTapsUp = NO;
+//				self.didGetTapsDown = YES;
+//				self.didGetFreeFallUp = NO;
+//				self.didGetFreeFallDown = NO;
+//				
+//				// open input and output streams
+//				[[self.session inputStream] setDelegate:self];
+//				[[self.session inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//				[[self.session inputStream] open];
+//				[[self.session outputStream] setDelegate:self];
+//				[[self.session outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//				[[self.session outputStream] open];
+//				
+//				// wait for version info to come through to set isConnectionOpen = YES and notify
+//			}
+//			else {
+//				NSLog(@"Failed to create EA session.");
+//				NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+//													 code:PLTDeviceErrorCodeFailedToCreateDataSession
+//												 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
+//				//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+//                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+//                                           PLTConnectionErrorNotificationKey: error};
+//                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+//			}
+//		}
+//		else {
+//			NSLog(@"No accessory accociated!");
+//			NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+//												 code:PLTDeviceErrorCodeNoAccessoryAssociated
+//											 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
+//			//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+//            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+//                                       PLTConnectionErrorNotificationKey: error};
+//            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+//		}
 	}
 	else {
-		NSLog(@"Data session already active.");
-		NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
-											 code:PLTDeviceErrorCodeConnectionAlreadyOpen
-										 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
-		//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
-        NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
-                                   PLTConnectionErrorNotificationKey: error};
-        [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+        // connection already open
+        
+//		NSLog(@"Data session already active.");
+//		NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+//											 code:PLTDeviceErrorCodeConnectionAlreadyOpen
+//										 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
+//		//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+//        NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+//                                   PLTConnectionErrorNotificationKey: error};
+//        [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
 	}
 }
 
@@ -409,17 +422,22 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 
 #pragma mark - API Internal
 
-- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory
+- (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
 {
 	if (self = [super init]) {
-		
-		self.accessory = anAccessory;
-		self.model = self.accessory.modelNumber;
-		self.name = self.accessory.name;
-		self.serialNumber = self.accessory.serialNumber;
-		self.subscribers = [NSMutableDictionary dictionary];
         
-		self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:(PLTQuaternion){ 1, 0, 0, 0 }];
+        self.bluetoothDevice = [IOBluetoothDevice deviceWithAddressString:address];
+        self.brDevice = [BRDevice deviceWithAddress:address];
+        self.brDevice.delegate = self;
+        
+		
+//		self.accessory = anAccessory;
+//		self.model = self.accessory.modelNumber;
+//		self.name = self.accessory.name;
+//		self.serialNumber = self.accessory.serialNumber;
+//		self.subscribers = [NSMutableDictionary dictionary];
+//        
+//		self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:(PLTQuaternion){ 1, 0, 0, 0 }];
     }
 	
     return self;
@@ -429,31 +447,31 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 
 - (void)closeConnection:(BOOL)notifyClose
 {
-	NSLog(@"closeConnection (%@)", self.accessory);
+	NSLog(@"closeConnection (%@)", self.bluetoothDevice);
 
-	if (self.session) {
-		[[self.session inputStream] close];
-        [[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session inputStream] setDelegate:nil];
-        [[self.session outputStream] close];
-        [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session outputStream] setDelegate:nil];
-		
-		
-		// new in 1.0.1
-		self.subscribers = [NSMutableDictionary dictionary];
-		self.queryObservers = nil;
-		
-        
-        self.session = nil;
-		self.isConnectionOpen = NO;
-		
-		if (notifyClose) {
-			//[self.connectionDelegate PLTDeviceDidCloseConnection:self];
-            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self};
-            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidDisconnectNotification object:nil userInfo:userInfo];
-		}
-	}
+//	if (self.session) {
+//		[[self.session inputStream] close];
+//        [[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//        [[self.session inputStream] setDelegate:nil];
+//        [[self.session outputStream] close];
+//        [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//        [[self.session outputStream] setDelegate:nil];
+//		
+//		
+//		// new in 1.0.1
+//		self.subscribers = [NSMutableDictionary dictionary];
+//		self.queryObservers = nil;
+//		
+//        
+//        self.session = nil;
+//		self.isConnectionOpen = NO;
+//		
+//		if (notifyClose) {
+//			//[self.connectionDelegate PLTDeviceDidCloseConnection:self];
+//            NSDictionary *userInfo = @{PLTDeviceNotificationKey: self};
+//            [[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidDisconnectNotification object:nil userInfo:userInfo];
+//		}
+//	}
 }
 
 - (void)didGetNewPacket:(NSData *)packetData
@@ -900,56 +918,138 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 
 - (BOOL)versionsCompatible
 {
-	return (self.fwMajorVersion==2 && self.fwMinorVersion==8);
-	//return YES;
+    return YES;
 }
 
-#pragma mark - NSStreamDelegate
+//#pragma mark - NSStreamDelegate
+//
+//- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
+//{
+//	switch (streamEvent) {
+//        case NSStreamEventErrorOccurred: {
+//            NSError *error = [theStream streamError];
+//            NSString *errorMessage = [NSString stringWithFormat:@"%@ (code %d)", [error localizedDescription], [error code]];
+//            NSLog(@"StreamEventError %@", errorMessage);
+//            break; }
+//            
+//        case NSStreamEventNone:
+//            NSLog(@"NSStreamEventNone");
+//            break;
+//            
+//        case NSStreamEventEndEncountered:
+//            NSLog(@"NSStreamEventEndEncountered");
+//            break;
+//            
+//        case NSStreamEventHasBytesAvailable: {
+//            uint8_t buf[1024];
+//			const int pLen = 22;
+//            unsigned int len = pLen;
+//            len = [[self.session inputStream] read:buf maxLength:1];
+//            if (len == 0) return;
+//            
+//            while (buf[0] != 0x24) {
+//                len = [[self.session inputStream] read:buf maxLength:1];
+//                if (len==0) return;
+//            }
+//			
+//            len = [[self.session inputStream] read:(buf+1) maxLength:1023];
+//            
+//            if (len < 22) {
+//                NSLog(@"*** Message too small! Discarding. ***");
+//                return;
+//            }
+//			
+//			NSData *packetData = [NSData dataWithBytes:buf length:pLen]; // notice trim to pLen
+//			[self didGetNewPacket:packetData];
+//            break; }
+//			
+//		case NSStreamEventOpenCompleted:
+//		case NSStreamEventHasSpaceAvailable:
+//			break;
+//    }
+//}
 
-- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
+#pragma mark - BRDeviceDelegate
+
+- (void)BRDeviceDidConnectToHTDevice:(BRDevice *)device
 {
-	switch (streamEvent) {
-        case NSStreamEventErrorOccurred: {
-            NSError *error = [theStream streamError];
-            NSString *errorMessage = [NSString stringWithFormat:@"%@ (code %d)", [error localizedDescription], [error code]];
-            NSLog(@"StreamEventError %@", errorMessage);
-            break; }
-            
-        case NSStreamEventNone:
-            NSLog(@"NSStreamEventNone");
-            break;
-            
-        case NSStreamEventEndEncountered:
-            NSLog(@"NSStreamEventEndEncountered");
-            break;
-            
-        case NSStreamEventHasBytesAvailable: {
-            uint8_t buf[1024];
-			const int pLen = 22;
-            unsigned int len = pLen;
-            len = [[self.session inputStream] read:buf maxLength:1];
-            if (len == 0) return;
-            
-            while (buf[0] != 0x24) {
-                len = [[self.session inputStream] read:buf maxLength:1];
-                if (len==0) return;
-            }
+    NSLog(@"BRDeviceDidConnectToHTDevice: %@", device);
+    
+    self.didGetVersionInfo = NO;
+    self.didGetTapsUp = NO;
+    self.didGetTapsDown = YES;
+    self.didGetFreeFallUp = NO;
+    self.didGetFreeFallDown = NO;
+    
+    BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
+    [self.brDevice sendMessage:request];
+}
+
+- (void)BRDeviceDidDisconnectFromHTDevice:(BRDevice *)device
+{
+     NSLog(@"BRDeviceDidDisconnectFromHTDevice: %@", device);
+}
+
+- (void)BRDevice:(BRDevice *)device didFailConnectToHTDeviceWithError:(int)ioBTError
+{
+     NSLog(@"BRDevice: %@ didFailConnectToHTDeviceWithError: %d", device, ioBTError);
+    
+//    NSLog(@"Failed to create EA session.");
+//    NSError *error = [NSError errorWithDomain:PLTDeviceErrorDomain
+//                                         code:PLTDeviceErrorCodeFailedToCreateDataSession
+//                                     userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
+//    //[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+//    NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+//                               PLTConnectionErrorNotificationKey: error};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+}
+
+- (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event
+{
+     NSLog(@"BRDevice: %@ didReceiveEvent: %@", device, event);
+}
+
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse
+{
+     NSLog(@"BRDevice: %@ didReceiveSettingResponse: %@", device, settingResponse);
+    
+    if ([settingResponse isKindOfClass:[BRDeviceInfoSettingResponse class]]) {
+        
+        BRDeviceInfoSettingResponse *info = (BRDeviceInfoSettingResponse *)settingResponse;
+        NSLog(@"GOT VERSION INFO: %@", info);
+        
+        if (!self.didGetVersionInfo) {
+			//NSLog(@"Got version info.");
 			
-            len = [[self.session inputStream] read:(buf+1) maxLength:1023];
-            
-            if (len < 22) {
-                NSLog(@"*** Message too small! Discarding. ***");
-                return;
-            }
+			self.fwMajorVersion = 0;
+			self.fwMinorVersion = 0;
+			self.didGetVersionInfo = YES;
 			
-			NSData *packetData = [NSData dataWithBytes:buf length:pLen]; // notice trim to pLen
-			[self didGetNewPacket:packetData];
-            break; }
-			
-		case NSStreamEventOpenCompleted:
-		case NSStreamEventHasSpaceAvailable:
-			break;
+			BOOL versionsOK = [self versionsCompatible];
+			if (!versionsOK) {
+//				[self closeConnection:NO];
+//				self.isConnectionOpen = NO;
+//				NSString *description = [NSString stringWithFormat:@"API version %.1f is incompatible with device version %u.%u", PLT_API_VERSION, self.fwMajorVersion, self.fwMinorVersion];
+//				NSDictionary *errorUserInfo = @{ NSLocalizedDescriptionKey : description };
+//				NSError *error = [[NSError alloc] initWithDomain:PLTDeviceErrorDomain code:PLTDeviceErrorIncompatibleVersions userInfo:errorUserInfo];
+//				//[self.connectionDelegate PLTDevice:self didFailToOpenConnection:error];
+//                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self,
+//                                           PLTConnectionErrorNotificationKey: error};
+//                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidFailToOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+			}
+			else {
+				self.isConnectionOpen = YES;
+				// notify delegate of connection open
+                NSDictionary *userInfo = @{PLTDeviceNotificationKey: self};
+                [[NSNotificationCenter defaultCenter] postNotificationName:PLTDidOpenDeviceConnectionNotification object:nil userInfo:userInfo];
+			}
+		}
     }
+}
+
+- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
+{
+    NSLog(@"BRDevice: %@ didRaiseException: %@", device, exception);
 }
 
 #pragma mark - NSObject
@@ -957,16 +1057,15 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
 - (BOOL)isEqual:(id)object
 {
 	if ([object isKindOfClass:[PLTDevice class]]) {
-		EAAccessory *compareAccessory = ((PLTDevice *)object).accessory;
-		return (self.accessory.connectionID == compareAccessory.connectionID);
+        return [((PLTDevice *)object).bluetoothDevice.addressString isEqualToString:self.bluetoothDevice.addressString];
 	}
 	return NO;
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTDevice: %p> {\n\tisConnectionOpen: %@\n\tname: %@\n\tmodel: %@\n\tserialNumber: %@\n\tfwMajorVersion: %u\n\tfwMinorVersion: %u\n}",
-			self, (self.isConnectionOpen ? @"YES" : @"NO"), self.name, self.model, self.serialNumber, self.fwMajorVersion, self.fwMinorVersion];
+	return [NSString stringWithFormat:@"<PLTDevice: %p> {\n\tisConnectionOpen: %@\n\taddress: %@\n\tname: %@\n\tmodel: %@\n\tserialNumber: %@\n\tfwMajorVersion: %lu\n\tfwMinorVersion: %lu\n}",
+			self, (self.isConnectionOpen ? @"YES" : @"NO"), self.bluetoothDevice.addressString, self.name, self.model, self.serialNumber, self.fwMajorVersion, self.fwMinorVersion];
 }
 
 @end

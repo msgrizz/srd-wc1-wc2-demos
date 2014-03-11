@@ -2,14 +2,15 @@
 //  PLTDeviceWatcher.m
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 9/24/13.
+//  Created by Morgan Davis on 9/24/13.
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
 #import "PLTDeviceWatcher.h"
-#import <ExternalAccessory/ExternalAccessory.h>
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
+#import <IOBluetooth/IOBluetoothUserLib.h>
+#import <IOBluetooth/IOBluetooth.h>
 
 
 NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
@@ -17,12 +18,13 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 
 @interface PLTDeviceWatcher()
 
-- (void)accessoryDidConnectNotification:(NSNotification *)notification;
-- (void)accessoryDidDisconnectNotification:(NSNotification *)notification;
+- (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
+- (void)bluetoothDeviceDidDisconnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
 - (void)postNewDeviceNotification:(PLTDevice *)device;
+- (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device;
 
 @property(nonatomic, strong)	NSMutableArray	*devices;
-//@property(nonatomic, strong)	NSMutableArray	*connectedAccessories;
+//@property(nonatomic, strong)	NSMutableArray	*connectedBluetoothDevices;
 
 @end
 
@@ -44,49 +46,56 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 {
 	if (self = [super init]) {
 		
-		//self.connectedAccessories = [NSMutableArray array];
-		
-		self.devices = [NSMutableArray array];
-		NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
-		NSLog(@"Connected accessories: %@",accessories);
-		for (EAAccessory *a in accessories) {
-			PLTDevice *device = [[PLTDevice alloc] initWithAccessory:a];
-			[self.devices addObject:device];
-		}
-	
-		[[EAAccessoryManager sharedAccessoryManager] registerForLocalNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidConnectNotification:) name:EAAccessoryDidConnectNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidDisconnectNotification:) name:EAAccessoryDidDisconnectNotification object:nil];
+        self.devices = [NSMutableArray array];
+        
+        for (IOBluetoothDevice *d in [IOBluetoothDevice pairedDevices]) {
+            if (d.isConnected && [self bluetoothDeviceIsWC1:d]) {
+                [d registerForDisconnectNotification:self selector:@selector(bluetoothDeviceDidDisconnectNotification:device:)];
+                PLTDevice *device = [[PLTDevice alloc] initWithBluetoothAddress:d.addressString];
+                [self.devices addObject:device];
+            }
+        }
+        
+        [IOBluetoothDevice registerForConnectNotifications:self selector:@selector(bluetoothDeviceDidConnectNotification:device:)];
     }
 	
     return self;
 }
 
-- (void)accessoryDidConnectNotification:(NSNotification *)notification
+- (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)btDevice
 {
-	NSLog(@"PLTDeviceWatcher: accessoryDidConnectNotification: %@", notification);
-	
-	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
-	if ([accessory.protocolStrings containsObject:PLTDeviceProtocolString]) {
-		PLTDevice *device = [[PLTDevice alloc] initWithAccessory:accessory];
+	NSLog(@"bluetoothDeviceDidConnectNotification: %@", btDevice);
+    
+    if ([self bluetoothDeviceIsWC1:btDevice]) {
+        [btDevice registerForDisconnectNotification:self selector:@selector(bluetoothDeviceDidDisconnectNotification:device:)];
+        
+//        for (PLTDevice *d in self.devices) {
+//            if (![d.bluetoothDevice.addressString isEqualToString:btDevice.addressString]) {
+//                
+//            }
+//            else {
+//                NSLog(@"Device already listed!");
+//            }
+//        }
+        
+        
+		PLTDevice *device = [[PLTDevice alloc] initWithBluetoothAddress:btDevice.addressString];
 		if (![self.devices containsObject:device]) {
 			[self.devices addObject:device];
 			[self postNewDeviceNotification:device];
 		}
-	}
+    }
 }
 
-- (void)accessoryDidDisconnectNotification:(NSNotification *)notification
+- (void)bluetoothDeviceDidDisconnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)btDevice
 {
-	NSLog(@"PLTDeviceWatcher: accessoryDidDisconnectNotification: %@", notification);
+	NSLog(@"bluetoothDeviceDidDisconnectNotification: %@", btDevice);
 	
-	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
-	if ([accessory.protocolStrings containsObject:PLTDeviceProtocolString]) {
-		//	PLTDevice *device = [[PLTDevice alloc] initWithAccessory:accessory];
+    if ([self bluetoothDeviceIsWC1:btDevice]) { // this is a sanity check since we shouldn't get the disconnect notification if the device wasn't a WC1 in the first place...
 		NSMutableIndexSet *toRemove = [NSMutableIndexSet indexSet];
 		for (NSUInteger i=0; i<[self.devices count]; i++) {
 			PLTDevice *d = self.devices[i];
-			if (d.accessory.connectionID == accessory.connectionID) {
+			if ([d.bluetoothDevice.addressString isEqualToString:btDevice.addressString]) {
 				[toRemove addIndex:i];
 				[d closeConnection];
 			}
@@ -97,10 +106,22 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 		  
 - (void)postNewDeviceNotification:(PLTDevice *)device
 {
-	NSLog(@"postNewAccessoryNotification: %@", device);
+	NSLog(@"postNewDeviceNotification: %@", device);
 	
 	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
 	[[NSNotificationCenter defaultCenter] postNotificationName:PLTNewDeviceAvailableNotification object:nil userInfo:userInfo];
+}
+
+- (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device
+{
+    for (IOBluetoothSDPServiceRecord *service in device.services) {
+#warning CHECK VERSION/TYPE?
+        if ([[service getServiceName] isEqualToString:@"PltHeadsetDataService"]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

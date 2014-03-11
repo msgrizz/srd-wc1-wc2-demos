@@ -1,14 +1,14 @@
 //
-//  BRQuerySignalStrengthSettingRequest.h
-//  BTSniffer
+//  BRSignalStrengthSettingRequest.h
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRSettingRequest.h"
 
 
-@interface BRQuerySignalStrengthSettingRequest : BRSettingRequest
+@interface BRSignalStrengthSettingRequest : BRSettingRequest
 
 @end

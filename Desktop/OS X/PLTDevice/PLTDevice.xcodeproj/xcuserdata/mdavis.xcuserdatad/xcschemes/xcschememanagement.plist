@@ -4,10 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>BRDeviceTest.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>PLTDevice.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>PLTDeviceTest.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -18,6 +28,26 @@
 			<true/>
 		</dict>
 		<key>429E5F4818BEBE7C003563D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>429E5FB018BEC004003563D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>429E5FCA18BEC005003563D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>429E5FED18BEC510003563D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>429E600718BEC511003563D6</key>
 		<dict>
 			<key>primary</key>
 			<true/>

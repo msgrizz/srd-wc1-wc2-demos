@@ -8,6 +8,9 @@
 
 #import "BREvent.h"
 
+
 @interface BRDeviceDisconnectedEvent : BREvent
+
+@property(nonatomic,readonly) uint8_t port;
 
 @end

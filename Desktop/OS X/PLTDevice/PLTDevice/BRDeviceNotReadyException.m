@@ -8,6 +8,7 @@
 
 #import "BRDeviceNotReadyException.h"
 
+
 @implementation BRDeviceNotReadyException
 
 @end

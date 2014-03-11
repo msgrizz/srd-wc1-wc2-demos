@@ -1,8 +1,8 @@
 //
 //  BRPedometerEvent.h
-//  BTSniffer
+//  BRDevice
 //
-//  Created by Davis, Morgan on 2/25/14.
+//  Created by Morgan Davis on 2/25/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,6 +11,6 @@
 
 @interface BRPedometerEvent : BREvent
 
-@property(nonatomic,readonly) NSUInteger steps;
+@property(nonatomic,readonly) uint16_t steps;
 
 @end

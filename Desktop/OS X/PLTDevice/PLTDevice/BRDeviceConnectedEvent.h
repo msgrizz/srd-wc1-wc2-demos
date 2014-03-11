@@ -1,5 +1,5 @@
 //
-//  BRRemoteDeviceAvailableEvent.h
+//  BRDeviceConnectedEvent.h
 //  PLTDevice
 //
 //  Created by Morgan Davis on 3/8/14.
@@ -8,6 +8,9 @@
 
 #import "BREvent.h"
 
-@interface BRRemoteDeviceAvailableEvent : BREvent
+
+@interface BRDeviceConnectedEvent : BREvent
+
+@property(nonatomic,readonly) uint8_t port;
 
 @end

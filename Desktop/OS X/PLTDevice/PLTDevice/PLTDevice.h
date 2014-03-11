@@ -2,7 +2,7 @@
 //  PLTDevice.h
 //  PLTDevice
 //
-//  Created by Davis, Morgan on 9/9/13.
+//  Created by Morgan Davis on 9/9/13.
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
@@ -21,7 +21,7 @@
 #import "PLTGyroscopeCalibrationInfo.h"
 
 
-#define PLT_API_VERSION		1.1
+#define PLT_API_VERSION		2.0
 
 
 extern NSString *const PLTNewDeviceAvailableNotification;

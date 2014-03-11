@@ -8,6 +8,18 @@
 
 #import "BRMetadata.h"
 
+
+@interface BRMetadata ()
+
+@property(nonatomic,strong,readwrite) NSArray   *commands;
+@property(nonatomic,strong,readwrite) NSArray   *settings;
+@property(nonatomic,strong,readwrite) NSArray   *events;
+
+@end
+
+
 @implementation BRMetadata
+
+
 
 @end
