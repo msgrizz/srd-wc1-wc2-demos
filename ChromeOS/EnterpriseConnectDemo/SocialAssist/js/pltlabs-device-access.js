@@ -141,7 +141,7 @@ PLTLabsAPI.sendBladerunnerPacket = function(packet){
     return; 
   }
   
-  log('sendBladerunnerPacket: sending packet to device');
+ // log('sendBladerunnerPacket: sending packet to device');
   chrome.bluetooth.write({socket:this.socket, data:packet},
                          function(bytes) {
                            if (chrome.runtime.lastError) {
@@ -310,14 +310,15 @@ var onCommandSuccess = function(commandId){
         var enableButtonEvents = (PLTLabsAPI.subscribedEvents.indexOf(PLTLabsMessageHelper.BUTTON_EVENT) > -1);
         if(enableButtonEvents != PLTLabsAPI.buttonEventsEnabled){
             enableButtons(); 
-        }
-        
+        }  
         break;
       case PLTLabsMessageHelper.RAW_BUTTONTEST_EVENT_ENABLE_DISABLE_MESSAGE_ID:
-        log('onCommandSuccess: enable button events command successfully executed - 0x' + commandId);
+        log('onCommandSuccess: enable button events command successfully executed - 0x' + commandId.toString(16));
         break;
+      case PLTLabsMessageHelper.SUBSCRIBE_TO_SERVICES:
+        log('onCommandSuccess: subscribe to WC1 service command successfully executed - 0x' + commandId.toString(16));
       default:
-        log('onCommandSuccess: unknown command successfully executed - 0x' + commandId);
+        log('onCommandSuccess: unknown command successfully executed - 0x' + commandId.toString(16));
     }
 }
 
@@ -494,8 +495,6 @@ PLTLabsMessageHelper.AUDIO_STATUS_EVENT = 0x0E1E;
 PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT = 0x0FF1A;
 PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT = 0x0FF1B;
 PLTLabsMessageHelper.SERVICE_CALIBRATION_CHANGE_EVENT = 0x0FF1C;
-PLTLabsMessageHelper.SUBSCRIBED_APPLICATION_CONFIG_CHANGE_EVENT = 0x0FF1D;
-PLTLabsMessageHelper.SUBSCRIBED_APPLICATION_ACTION_RESULT_EVENT = 0x0FF1E;
 
 
 //commands
@@ -503,6 +502,7 @@ PLTLabsMessageHelper.CREATE_ENABLE_TEST_INTERFACE_MESSAGE_ID = 0x1000;
 PLTLabsMessageHelper.RAW_BUTTONTEST_EVENT_ENABLE_DISABLE_MESSAGE_ID = 0x1007;
 PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENTS = 0x0800;
 PLTLabsMessageHelper.CONFIGURE_LED_ALERT = 0x0808;
+
 //Wearable concept 1 Commands
 PLTLabsMessageHelper.CALIBRATE_SERVICES = 0xFF01;
 PLTLabsMessageHelper.SUBSCRIBE_TO_SERVICES = 0xFF0A;
@@ -681,32 +681,29 @@ The update mode for the service.
 2 = periodic
 */
 //Enable head tracking
-PLTLabsMessageHelper.createHeadTrackingOnChangeCommand = function(options, address){
+PLTLabsMessageHelper.createHeadTrackingOnChangeCommand = function(options){
   options.serviceId = this.HEAD_ORIENTATION_SERVICE_ID; // head tracking
-  return this.createWC1Command(options, address); 
+  return this.createWC1Command(options); 
 }
 
-PLTLabsMessageHelper.createPedometerOnChangeCommand = function(options, address){
+PLTLabsMessageHelper.createPedometerOnChangeCommand = function(options){
   options.serviceId = this.PEDOMETER_SERVICE_ID; //pedometer
-  return this.createWC1Command(options, address); 
+  return this.createWC1Command(options); 
 }
 
-PLTLabsMessageHelper.createTapOnChangeCommand = function(options, address){
+PLTLabsMessageHelper.createTapOnChangeCommand = function(options){
   options.serviceId = this.TAPS_SERVICE_ID; //taps
-  return this.createWC1Command(options, address); 
+  return this.createWC1Command(options); 
 }
 
-PLTLabsMessageHelper.createFreeFallOnChangeCommand = function(options, address){
+PLTLabsMessageHelper.createFreeFallOnChangeCommand = function(options){
   options.serviceId = this.FREE_FALL_SERVICE_ID; //pedometer
-  return this.createWC1Command(options, address); 
+  return this.createWC1Command(options); 
 }
 
-PLTLabsMessageHelper.createWC1Command = function(options, address){
+PLTLabsMessageHelper.createWC1Command = function(options){
   options.messageType = this.PERFORM_COMMAND_TYPE;
   options.messageId = this.SUBSCRIBE_TO_SERVICES;
-  
-  var address_view = new Uint8Array(address);
-  options.address = address;
   
   //this message has 4 unsigned shorts so 8-bytes
   var data = new ArrayBuffer(8);
@@ -729,6 +726,37 @@ PLTLabsMessageHelper.createWC1Command = function(options, address){
   options.messageData = data;
   return this.createMessage(options);
   
+}
+
+PLTLabsMessageHelper.createCalibrateCommand = function(options){
+  options.messageType = this.PERFORM_COMMAND_TYPE;
+  options.messageType = this.CALIBRATE_SERVICES;
+  
+  var data;
+  var data_view;
+  //service Id = 2 bytes
+  //characteristic = 2 bytes
+  switch(options.serviceId){
+    case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
+      //quaternions = 16 bytes
+      //TODO - write transformation routine to calibrate the quaternions
+      break;
+    case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
+    case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
+    case PLTLabsMessageHelper.TAPS_SERVICE_ID:
+      //one byte array - alloccate  3 bytes - 2 for the array length descriptor, one for the value to send
+      data = new ArrayBuffer(7);
+      data_view = new Uint8Array(data);
+      data_view[1] = options.serviceId;
+      data_view[5] = 0x1; // size of the array
+      data_view[6] = 0x1; // reset bit
+      break;
+  }
+  
+  if (data) {
+    options.messageData = data;
+    return this.createMessage(options);
+  }
 }
 
 //build and returns a message
@@ -802,7 +830,7 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    }
   
    var data_view = new Uint8Array(message, this.BR_HEADER_SIZE);
-   log('parseMetadata: parsing' + data_view);
+   //log('parseMetadata: parsing' + data_view);
    
    var index = 0;
    var bounds = 2;
@@ -842,7 +870,7 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    bounds = index + arrayLength[0] //bytes instead 16 bit integers
    //for available ports - this array is stored as single bits
    var availablePorts = this.parseByteArray(index, data_view, bounds)
-   console.log("parseMetadata: device has " + availablePorts.length + " available ports");
+   //log("parseMetadata: device has " + availablePorts.length + " available ports");
    return {"supportedCommands" : commands,
               "supportedGetSettings" : getters,
               "supportedEvents" : events,
@@ -943,7 +971,7 @@ PLTLabsMessageHelper.parseEvent = function(message){
       switch(serviceId[0]){
         case this.HEAD_ORIENTATION_SERVICE_ID:
           //convert quaternians to eular angles - w, x, y, z
-          event.properties["quaternian"] = this.convertToQuaternion(serviceData);
+          event.properties["quaternion"] = this.convertToQuaternion(serviceData);
           break;
         case this.PEDOMETER_SERVICE_ID:
           event.properties["steps"] = serviceData[0];

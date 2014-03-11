@@ -20,11 +20,21 @@ var eventSubscriptions = [
   PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
   PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
   PLTLabsMessageHelper.AUDIO_STATUS_EVENT,
-  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT];
+  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT,
+  PLTLabsMessageHelper.SERVICE_CALIBRATION_CHANGE_EVENT,
+  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT];
 
+//Device related variables
 var connectedToDevice = false;
 var connectedToSensorPort = false;
 var deviceMetadata = null;
+var lastQuaternion = null;
+var sensorPortAddress = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
+var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
+sensorPortAddress_view[0] = 0x50;
+
+
+//WebRTC variables
 var peer = null;
 var readyForCall = false;
 var ringing = false;
@@ -34,12 +44,15 @@ ringtone.addEventListener('ended', function() {this.currentTime = 0;if(ringing){
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 function init(){
-  setButtonState(false);
+  setPLTCheckboxesState(true);
   readyForCall = false;
   //webrtc stuff
   $('#chkPLTDevice').change(function(){
       if(this.checked){
         findPLTDevices();
+      }
+      else{
+        disconnectPLT();
       }
     }
   );
@@ -55,6 +68,7 @@ function init(){
   $('#chkPedo').change(function(){
       enablePedometer(this.checked);
   });
+  $('#btnResetPedometer').click(resetPedometer);
   $('#butCall').attr("disabled", true);
   $('#butConnect').attr("disabled", true);
   $('#butCall').click(makeCall);
@@ -110,6 +124,212 @@ function init(){
 
 }
 
+//PLTLabs Functions
+function findPLTDevices(){
+   PLTLabsAPI.findDevices(devicesFound);
+   l("Searching for PLT Labs devices");
+}
+
+function disconnectPLT(){
+   PLTLabsAPI.closeConnection(connectionClosed);
+   deviceMetadata = null;
+   lastQuaternion = null;
+   connectedToSensorPort = false;
+   connectedToDevice = false;
+   resetButtonsAfterWebRTCCall();
+}
+
+function connectionClosed(){
+  setPLTCheckboxesState(true);
+  l('PLTLabs device connection closed');
+}
+
+function setPLTCheckboxesState(connected){
+  
+  $('#chkHT').attr("disabled", connected);
+  $('#chkTap').attr("disabled", connected);
+  $('#chkFF').attr("disabled", connected);
+  $('#chkPedo').attr("disabled",connected);
+}
+
+
+
+function devicesFound(deviceList){
+  devices = JSON.parse(JSON.stringify(deviceList));
+  var d = deviceList[0];
+  PLTLabsAPI.openConnection(d, connectionOpened) 
+}
+
+function onMetadata(metadata){
+  //l("metadata recieved " + JSON.stringify(metadata));
+  deviceMetadata = metadata;
+  if (!connectedToSensorPort) {
+    enableWearableConceptEvents();
+  }
+}
+
+
+function connectionOpened(address){
+  
+  if (address == PLTLabsMessageHelper.SENSOR_PORT) {
+    log("connectionOpened: sensor port connection is open!");
+    connectedToSensorPort = true;
+    setPLTCheckboxesState(false);
+  }
+  else if (!connectedToDevice) {
+    log('connectionOpened: data connection opened to device');
+    var options = new Object();
+    options.events = eventSubscriptions;
+    PLTLabsAPI.subscribeToEvents(options, onEvent);
+    enableButtonPressEvents();
+    connectedToDevice = true;
+  }
+  
+  //TODO - UNCOMMENT ME 
+  //connectToServer();
+}
+
+//PLT checkbox functions 
+function enableHeadtracking(on) {
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode, "address" : sensorPortAddress};
+  var packet = PLTLabsMessageHelper.createHeadTrackingOnChangeCommand(options);
+  log("enableHeadtracking: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function enableFreeFallDetection(on) {
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode, "address": sensorPortAddress}; 
+  var packet = PLTLabsMessageHelper.createFreeFallOnChangeCommand(options);
+  log("enableFreeFallDetection: sending command to " + (on ? " enable " : " disable ") + " free fall" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function enableTapDetection(on) {
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode, "address": sensorPortAddress}; 
+  var packet = PLTLabsMessageHelper.createTapOnChangeCommand(options);
+  log("enableTapDetection: sending command to " + (on ? " enable " : " disable ") + " tap detection" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function enablePedometer(on) {
+  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
+  var options = {"mode" : mode, "address": sensorPortAddress}; 
+  var packet = PLTLabsMessageHelper.createPedometerOnChangeCommand(options);
+  log("enablePedometer: sending command to " + (on ? " enable " : " disable ") + " pedometer" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+function resetPedometer(){
+  var options = {"serviceId": PLTLabsMessageHelper.PEDOMETER_SERVICE_ID, "address": sensorPortAddress};
+  var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
+  log("resetPedometer: sending command to reset the pedometer cound" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
+//Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
+function enableWearableConceptEvents(){
+  if (!deviceMetadata) {
+    log("enableWearableConceptEvents: no device metadata abondoning efforts to sensor service device features");
+    return;
+  }
+  
+  var availablePorts = deviceMetadata.availablePorts;
+  if (availablePorts.indexOf(PLTLabsMessageHelper.SENSOR_PORT) < 0) {
+     log("enableWearableConceptEvents: device does not support sensor service subscription");
+     return;
+  }
+  
+  log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
+  var packet = PLTLabsMessageHelper.createHostNegotiateMessage(sensorPortAddress);
+  PLTLabsAPI.sendBladerunnerPacket(packet);  
+}
+
+function onEvent(info){
+    
+   //log("onEvent received: " + info);
+   if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
+      switch(info.properties["serviceId"]) {
+        case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
+          var q = info.properties["quaternion"];
+          var c = convertQuaternianToCoordinates(q); 
+          $('#roll').text(c.psi);
+          $('#pitch').text(c.theta);
+          $('#yaw').text(c.phi);
+          lastQuaternion = q;
+          break;
+        case PLTLabsMessageHelper.TAPS_SERVICE_ID:
+          $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
+          break;
+        case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
+          $('#freefall').text(info.properties["freefall"]);
+          break;
+        case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
+          $('#steps').text(info.properties["steps"]);
+          break;
+        default:
+          break;
+      }
+   }
+    
+  // if (window.existingDataConnection) {
+    //  window.existingDataConnection.send(event);
+  // }
+   //hook flash button
+   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
+      if(ringing){
+        $('#butAnswerCall').trigger("click");
+      }
+      else if (window.existingCall) {
+        //hang up the call
+        $('#butCall').trigger("click");
+      }
+   }
+}
+
+function convertQuaternianToCoordinates(q){
+  var m22 = (2 * q.w^2) + (2 * q.y^2) - 1;
+  var m21 = (2 * q.x * q.y) - (2 * q.w * q.z);
+  var m13 = (2 * q.x * q.z) - (2 * q.w * q.y);
+  var m23 = (2 * q.y * q.z) + (2 * q.w * q.x);
+  var m33 = (2 * q.w^2) + (2 * q.z^2) - 1;
+  var r2d = 180 / Math.PI;   // radians to degrees 
+  var psi = -r2d * Math.atan2(m21,m22);
+  var theta = r2d * Math.asin(m23);
+  var phi = -r2d * Math.atan2(m13, m33);
+  return {"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
+
+}
+
+function enableButtonPressEvents(){
+  eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
+  var options = new Object();
+  options.events = eventSubscriptions;
+  PLTLabsAPI.subscribeToEvents(options, onEvent);
+  
+}
+//END PLT FUNCTIONS
+
+///WEBRTC Functions
+
+function prepareForWebRTCCall(){
+   $('#butConnect').attr("value", "Connecting");
+   $('#butConnect').attr("disabled", true);
+   
+   connectToServer();
+  
+}
+
+//disconnect from webrtc server
+function disconnectWebRTC() {
+  if (peer) {
+    peer.destroy();
+    peer = null;
+   }
+}
+
 function connectToServer() {
   l('Connecting to WebRTC server');
   var handleId = $('#txtUserHandle').val();
@@ -125,7 +345,6 @@ function connectToServer() {
   peer.on('connection', handleDataConnection);
   peer.on('call', ring);
   $('#video-container').show();
-  
   
   peer.on('error', function(err){l('Error connecting to server: ' + err.type);});
 }
@@ -144,7 +363,6 @@ function handleDataConnection(dataConnection){
   window.existingDataConnection = dataConnection;
 }
 
-
 function ring(call){
   ringing = true;
   $('#incoming-call').find('h3').text('Incoming call from ' + call.peer);
@@ -156,7 +374,6 @@ function ring(call){
   ringtone.play();
   $('html, body').animate({scrollTop: $("#incoming-call").offset().top - 40}, 500);
 }
-
 
 function answerCall(call){
    l('Answering incoming call from ' + call.peer);
@@ -216,6 +433,22 @@ function hangUp(){
   
 }
 
+function gum (initiator) {
+            // Get audio/video stream
+            navigator.getUserMedia({audio: true, video: true},
+                                   function(stream){
+                                    // Set your video displays
+                                    l("GUM returned successfuly");
+                                    $('#local-video').prop('src', URL.createObjectURL(stream));
+                                    window.localStream = stream;
+                                    readyForCall = true;
+                                    //setButtonState(true);
+                                    $('#butConnect').attr("disabled", false);
+                                    },
+                                    function(error){ l(error); });
+            
+}
+
 function resetButtonsAfterWebRTCCall(){
   l('call has ended');
   ringing = false;
@@ -226,238 +459,13 @@ function resetButtonsAfterWebRTCCall(){
 }
 
 
-function gum (initiator) {
-            // Get audio/video stream
-            navigator.getUserMedia({audio: true, video: true},
-                                   function(stream){
-                                    // Set your video displays
-                                    l("GUM returned successfuly");
-                                    $('#local-video').prop('src', URL.createObjectURL(stream));
-                                    window.localStream = stream;
-                                    readyForCall = true;
-                                    setButtonState(true);
-                                    $('#butConnect').attr("disabled", false);
-                                    },
-                                    function(error){ l(error); });
-            
-}
-
-
-
+//END WEBRTC FUNCTIONS
 function l(msg) {
   var msg_str = (typeof(msg) == 'object') ? JSON.stringify(msg) : msg;
   var logEntry = '<div class="logEntry"><span>' + msg_str + '</span></div>';
   jScrollPaneAPI.getContentPane().append(logEntry);
   jScrollPaneAPI.reinitialise();
   jScrollPaneAPI.scrollToBottom(true);
-}
-
-function findPLTDevices(){
-   PLTLabsAPI.findDevices(devicesFound);
-   l("Searching for PLT Labs devices");
-}
-
-function disconnect(){
-   PLTLabsAPI.closeConnection(connectionClosed);
-   deviceMetadata = null;
-   if (peer) {
-    peer.destroy();
-    peer = null;
-   }
-   resetButtonsAfterWebRTCCall();
-}
-
-function connectionClosed(){
-  setButtonState(false);
-  l('PLTLabs device connection closed');
-}
-
-function setButtonState(connected){
-  if (connected) {
-    $('#butConnect').click(disconnect);
-    $('#butConnect').attr("value", "Disconnect");
-  }
-  else{
-    $('#butConnect').click(prepareForWebRTCCall);
-    $('#butConnect').attr("value", "Connect");
-  }
-}
-
-function prepareForWebRTCCall(){
-   $('#butConnect').attr("value", "Connecting");
-   $('#butConnect').attr("disabled", true);
-   
-  if ($("#chkPLTDevice").prop("checked")) {
-      findPLTDevices();
-  }
-  else{
-    connectToServer();
-  }
-  
-}
-
-function devicesFound(deviceList){
-  devices = JSON.parse(JSON.stringify(deviceList));
-  var d = deviceList[0];
-  PLTLabsAPI.openConnection(d, connectionOpened) 
-}
-
-function onMetadata(metadata){
-  //l("metadata recieved " + JSON.stringify(metadata));
-  deviceMetadata = metadata;
-  if (!connectedToSensorPort) {
-    enableWearableConceptEvents();
-  }
-}
-function connectionOpened(address){
-  
-  if (address == PLTLabsMessageHelper.SENSOR_PORT) {
-    log("connectionOpened: sensor port connection is open!")
-    connectedToSensorPort = true;
-  }
-  else if (!connectedToDevice) {
-    log('connectionOpened: data connection opened to device');
-    var options = new Object();
-    options.events = eventSubscriptions;
-    PLTLabsAPI.subscribeToEvents(options, onEvent);
-    enableButtonPressEvents();
-    connectedToDevice = true;
-  }
-  
-  //TODO - UNCOMMENT ME 
-  //connectToServer();
-}
-
-
-//Todo - Cliean up and use extract pattern to make less duplicate code
-function enableHeadtracking(on) {
-  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  address_view[0] = 0x50;
-  
-  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
-  var options = {"mode" : mode}; 
-  var packet = PLTLabsMessageHelper.createHeadTrackingOnChangeCommand(options, address);
-  log("enableHeadtracking: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function enableFreeFallDetection(on) {
-  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  address_view[0] = 0x50;
-  
-  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
-  var options = {"mode" : mode}; 
-  var packet = PLTLabsMessageHelper.createFreeFallOnChangeCommand(options, address);
-  log("enableFreeFallDetection: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function enableTapDetection(on) {
-  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  address_view[0] = 0x50;
-  
-  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
-  var options = {"mode" : mode}; 
-  var packet = PLTLabsMessageHelper.createTapOnChangeCommand(options, address);
-  log("enableTapDetection: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function enablePedometer(on) {
-  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  address_view[0] = 0x50;
-  
-  var mode = on ? PLTLabsMessageHelper.MODE_ON_CHANGE : PLTLabsMessageHelper.MODE_OFF;
-  var options = {"mode" : mode}; 
-  var packet = PLTLabsMessageHelper.createPedometerOnChangeCommand(options, address);
-  log("enablePedometer: sending command to " + (on ? " enable " : " disable ") + " headtracking" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function enableWearableConceptEvents(){
-  if (!deviceMetadata) {
-    log("enableWearableConceptEvents: no device metadata abondoning efforts to sensor service device features");
-    return;
-  }
-  
-  var availablePorts = deviceMetadata.availablePorts;
-  if (availablePorts.indexOf(PLTLabsMessageHelper.SENSOR_PORT) < 0) {
-     log("enableWearableConceptEvents: device does not support sensor service subscription");
-     return;
-  }
-  
-  log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
-  
-  var address = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
-  var address_view = new Uint8Array(address);
-  address_view[0] = 0x50;
-  
-  var packet = PLTLabsMessageHelper.createHostNegotiateMessage(address);
-  PLTLabsAPI.sendBladerunnerPacket(packet);
-  
-  
-}
-
-function onEvent(info){
-    
-   log("onEvent received: " + info);
-   if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
-      switch(info.properties["serviceId"]) {
-        case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
-          break;
-        case PLTLabsMessageHelper.TAPS_SERVICE_ID:
-          $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
-          break;
-        case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
-          $('#freefall').text(info.properties["freefall"]);
-          break;
-        case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
-          $('#steps').text(info.properties["steps"]);
-          break;
-        default:
-          break;
-      }
-   }
-   
-   if (window.existingDataConnection) {
-      window.existingDataConnection.send(event);
-   }
-   //hook flash button
-   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
-      if(ringing){
-        $('#butAnswerCall').trigger("click");
-      }
-      else if (window.existingCall) {
-        //hang up the call
-        $('#butCall').trigger("click");
-      }
-   }
-}
-
-function enableButtonPressEvents(){
-  eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
-  var options = new Object();
-  options.events = eventSubscriptions;
-  PLTLabsAPI.subscribeToEvents(options, onEvent);
-  
-}
-
-function enableProximity(){
-  var options = new Object();
-  options.enabled = true;
-  
-  for(i = 0; i < PLTLabsAPI.connectedDevices.byteLength; i++){
-    if (PLTLabsAPI.connectedDevices[i] == 0x0) {
-      continue;
-    }
-    options.connectionId = PLTLabsAPI.connectedDevices[i];
-    var packet = PLTLabsMessageHelper.createEnableProximityCommand(options);
-    PLTLabsAPI.sendCommand(packet);
-  }
 }
 
 init();
