@@ -7,45 +7,153 @@
     <Button
         android:id="@+id/connectToDeviceButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Open Connection" />
 
     <Button
         android:id="@+id/getWearingStateButton"
-        android:layout_marginTop="10pt"
+        android:layout_marginTop="7pt"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Get Wearing State" />
+
+    <Button
+        android:id="@+id/subscribeToSignalStrengthButton"
+        android:layout_width="fill_parent"
+        android:layout_height="17pt"
+        android:text="Subscribe to Signal Strength" />
 
     <Button
         android:id="@+id/getSignalStrengthButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Get Signal Strength" />
 
     <Button
         android:id="@+id/getDeviceInfoButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Get Device Info" />
 
     <Button
         android:id="@+id/subscribeToServicesButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Subscribe to Services" />
 
     <Button
         android:id="@+id/unsubscribeFromServicesButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Unsubscribe from Services" />
 
     <Button
         android:id="@+id/queryServicesButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Query Services" />
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5pt"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Connected: No"
+        android:id="@+id/connectedTextView" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Wearing? -"
+        android:id="@+id/wearingTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Signal Strength: -"
+        android:id="@+id/signalStrengthTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Heading/Pitch/Roll:"
+        android:id="@+id/headingPitchRollTextView" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:id="@+id/headingProgressBar"
+        android:layout_gravity="left"
+        android:max="360" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:id="@+id/pitchProgressBar"
+        android:layout_gravity="left"
+        android:max="180" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:id="@+id/rollProgressBar"
+        android:layout_gravity="left"
+        android:max="180" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Free fall? -"
+        android:id="@+id/freeFallTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Taps: -"
+        android:id="@+id/tapsTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Pedometer: -"
+        android:id="@+id/pedometerTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Gyro cal'd? -"
+        android:id="@+id/gyroCalTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Mag cal'd? -"
+        android:id="@+id/magCalTextView" />
+
+</LinearLayout>
