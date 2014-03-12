@@ -45,6 +45,30 @@
                             <td width="300"><span id="steps">0</span><span> steps</span>
                                 <br>
                             </td>
+                            <td rowspan="4" width="200">
+                                <div id="options">
+                                <span>
+                                  <fieldset>
+                                        <legend>WebRTC Connection Info:</legend>
+                                        
+                                     <!--   <span>Server:
+                                        <input name="txtServer" id="txtServer" type="text" value="10.0.1.51" max="15" maxlength="25" />
+                                        <br>
+                                        </span>
+                                        <span>Port:
+                                        <input name="txtPort" id="txtPort" type="text" value="9000" max="15" maxlength="25" />
+                                        <br>
+                                        </span>
+                                        <span>Name:
+                                        <input name="txtUserHandle" id="txtUserHandle" type="text" value="caller" max="15" maxlength="25" />
+                                        <br>
+                                        </span>
+-->
+                                     <input type="button" id="btnConnect" value="Connect"/><br>
+                                     <input type="button" id="btnCall" value="Call For Help"/>
+                                  </fieldset>    
+                                </div>
+                            </td>
                         </tr>
                          <tr>
                             <td><img src="img/freefall.jpg"/></td>
@@ -64,6 +88,7 @@
                             <td><img src="img/headtracking.jpg"/></td>
                             <td><input type="checkbox" name="chkHT" id="chkHT" />
                                 <label for="chkHT">Enable HT</label><br>
+                                <input type="button" id="btnCalHeadtracking" value="Calibrate"/> 
                             </td>
                             <td><span>Roll: </span><span id="roll"></span><br>
                                 <span>Pitch: </span><span id="pitch"></span><br>
@@ -73,36 +98,7 @@
                     </tbody>
                 </table>
             </div>
-            <div id="options">
-            <span>
-              <fieldset>
-                    <legend>WebRTC Connection Info:</legend>
-                    
-                    <span>Server:
-                    <input name="txtServer" id="txtServer" type="text" value="localhost" max="15" maxlength="25" />
-                    <br>
-                    </span>
-                    <span>Port:
-                    <input name="txtPort" id="txtPort" type="text" value="9000" max="15" maxlength="25" />
-                    <br>
-                    </span>
-                    <span>Name:
-                    <input name="txtUserHandle" id="txtUserHandle" type="text" max="15" maxlength="25" />
-                    <br>
-                    </span>
-                    <input type="button" id="butConnect" value="Connect"/>  
-              </fieldset>
-              <fieldset>
-                    <legend>Call Someone:</legend>
-                    <span>
-                    <label for="txtCallerId">User name:</label>
-                    <input name="txtCallerId" id="txtCallerId" type="text" max="15" maxlength="25" />
-                    </span>
-                    <input type="button" id="butCall" value="Call"/>
-              </fieldset>      
             </div>
-            </div>
-            <div id="logHolder"></div>
         </div>   
        </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script>    

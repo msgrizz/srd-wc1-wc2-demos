@@ -1,8 +1,8 @@
 
 
 .applicationContainer{
-    width:700px;
-    margin:25px auto;
+    width:900px;
+    margin:10px auto;
     position:relative;
 }
 
@@ -86,8 +86,8 @@
 
 
 #sensorpane{
-    height:360px;
-    width: 700px;
+    height:500px;
+    width: 900px;
     background-color: #FE481A;
     border:1px solid #000000;
 }

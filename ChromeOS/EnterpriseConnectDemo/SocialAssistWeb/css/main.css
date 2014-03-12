@@ -41,7 +41,7 @@
     border:1px solid #111111;
     height:360px;
     margin-left: 10px;
-    width:225px;
+    width:200px;
     float: right;
     color: #FFFFFF;    
 }
@@ -53,22 +53,21 @@
 
 #connectBar{
     height:80px;
-    border:1px solid #fff;
+    border:1px solid #000000;
     margin-bottom:5px;
     position:relative;
-    border-radius:25px;
-    color:#777;
-    background-color: #C0C0C0;
-    text-shadow:1px 1px 0 #FFFFFF;
-    
+    border-radius:25px;color:#222;
+    background-color: #ffffff;
 }
 
 #connectBar .name{
     position:absolute;
     top:30px;
-    left:100px;
-    color: #000000;
-    font-size: large;
+    left:240px;
+    color: #FE481A;
+    font-family: "gesta",sans-serif;
+    font-size: 20px;
+    font-weight: 400
 }
 
 #connectBar .user-name{
@@ -79,52 +78,42 @@
 #connectBar img{
     left:20px;
     position:absolute;
-    width: 64px;
+    width: 196px;
     height: 64px;
     background-color: #FFFFFF;
     top:8px;
 }
 
-#connectBar input[type="button"] {
-    color: #000;
-    position: absolute;
-    left:500px;
-    top: 20px;
-    -moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
-    box-shadow:inset 0px 1px 0px 0px #97c4fe;
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #3d94f6), color-stop(1, #1e62d0) );
-    background:-moz-linear-gradient( center top, #3d94f6 5%, #1e62d0 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3d94f6', endColorstr='#1e62d0');
-    background-color:#3d94f6;
-    -webkit-border-top-left-radius:42px;
-    -moz-border-radius-topleft:42px;
-    border-top-left-radius:42px;
-    -webkit-border-top-right-radius:0px;
-    -moz-border-radius-topright:0px;
-    border-top-right-radius:0px;
-    -webkit-border-bottom-right-radius:42px;
-    -moz-border-radius-bottomright:42px;
-    border-bottom-right-radius:42px;
-    -webkit-border-bottom-left-radius:0px;
-    -moz-border-radius-bottomleft:0px;
-    border-bottom-left-radius:0px;
-    text-indent:0px;
-    border:1px solid #337fed;
-    display:inline-block;
-    color:#ffffff;
-    font-family:Arial;
-    font-size:18px;
-    font-weight:bold;
-    font-style:normal;
-    height:46px;
-    line-height:46px;
-    width:127px;
-    text-decoration:none;
-    text-align:center;
-    text-shadow:1px 1px 0px #1570cd;
+
+#sensorpane{
+    height:360px;
+    width: 700px;
+    background-color: #FE481A;
+    border:1px solid #000000;
 }
-   
+
+#sensortable{
+    margin-right:10px;
+    float:left;
+    font-size: large;
+}
+
+#sensortable img{
+    height: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#sensortable tr, td{
+    background-color: #ffffff;
+}
+
+#sensortable td{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 #logHolder{
     height:360px;
     width:440px;
