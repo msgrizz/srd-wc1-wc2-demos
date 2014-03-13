@@ -12,8 +12,6 @@ var deviceRoute = new ArrayBuffer(4);
 //initialize the address array to 0x0
 var address = new Uint8Array(deviceRoute);
 
-var devices = [];
-
 var onDeviceAddedCallback = null;
 var onSocketConnectionCallback = null;
 var onEventCallback = null;
@@ -164,14 +162,17 @@ var findPLTLabsDevices = function(){
   // Add the listener to deal with our initial connection
   chrome.bluetooth.onConnection.addListener(onConnectDeviceHandler);
   
+  log('findPLTLabsDevices: added connection listener');
+  
   chrome.bluetooth.getAdapterState(function(adapterState){
     if(!adapterState.available || !adapterState.powered){
       log('findPLTLabsDevices: bluetooth adapter not available');
       return;
     }
-    devices.length = 0;
-    chrome.bluetooth.getDevices({deviceCallback: deviceCallBack}, returnDeviceList);
+    log('getAdaptorState: getting devices');
+    chrome.bluetooth.getDevices(returnDeviceList);
   });
+  log('findPLTLabsDevices: exit function');
   
 };
  
@@ -235,15 +236,8 @@ var onConnectDeviceHandler = function(_socket){
    }
    
 };
-  
-var deviceCallBack = function(device){
-  if(device.connected && (device.name.indexOf("PLT") > -1)){
-    //log('deviceCallBack: pushing device to array ' + JSON.stringify(device));
-    devices.push(device);
-  }
-};
-  
-var returnDeviceList = function() {
+
+var returnDeviceList = function(devices) {
   if (chrome.runtime.lastError) {
     log('returnDeviceList: error searching for a devices: ' + chrome.runtime.lastError.message);
     return;
@@ -251,7 +245,7 @@ var returnDeviceList = function() {
   
   //if we have some devices hand them back to the caller to decide what to do with them
   if(devices.length > 0){
-    //log('returnDeviceList: sending back found device array - size = ' + devices.length);
+    log('returnDeviceList: sending back found device array - size = ' + devices.length);
     stopReconnects();
     onDeviceAddedCallback(devices);
   }

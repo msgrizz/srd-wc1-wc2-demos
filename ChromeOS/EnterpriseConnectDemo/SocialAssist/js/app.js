@@ -36,7 +36,7 @@ sensorPortAddress_view[0] = 0x50;
 
 //WebRTC variables
 var handleId = "Cary";
-var calleeId = "Joe"
+var calleeId = "Joe";
 var server = "10.0.1.51";
 var port = "9000";
 
@@ -80,40 +80,6 @@ function init(){
   $('#btnConnect').click(prepareForWebRTCCall);
   $('#btnCall').click(makeCall);
   $('#btnCall').attr("disabled", false);
-      
- /* $('#txtUserHandle').keyup(function() {
-        var server = $('#txtServer').val();
-        var port = $('#txtPort').val();
-        if($(this).val() != '' && server != '' && port != '') {
-           $('#btnConnect').attr("disabled", false);
-        }
-        else{
-          $('#btnConnect').attr("disabled", true);
-        }
-     });
-  
-   $('#txtServer').keyup(function() {
-        var userHandle = $('#txtUserHandle').val();
-        var port = $('#txtPort').val();
-        if($(this).val() != '' && userHandle != '' && port != '') {
-           $('#btnConnect').attr("disabled", false);
-        }
-        else{
-          $('#btnConnect').attr("disabled", true);
-        }
-     });
-   
-    $('#txtPort').keyup(function() {
-        var server =  $('#txtServer').val();
-        var userHandle = $('#txtUserHandle').val();
-        if($(this).val() != '' && server != '' && userHandle != '') {
-           $('#btnConnect').attr("disabled", false);
-        }
-        else{
-          $('#btnConnect').attr("disabled", true);
-        }
-     });
-*/
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
 }

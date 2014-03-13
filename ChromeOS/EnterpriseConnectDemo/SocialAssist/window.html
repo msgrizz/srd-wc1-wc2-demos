@@ -49,24 +49,20 @@
                                 <div id="options">
                                 <span>
                                   <fieldset>
-                                        <legend>WebRTC Connection Info:</legend>
-                                        
-                                     <!--   <span>Server:
-                                        <input name="txtServer" id="txtServer" type="text" value="10.0.1.51" max="15" maxlength="25" />
-                                        <br>
-                                        </span>
-                                        <span>Port:
-                                        <input name="txtPort" id="txtPort" type="text" value="9000" max="15" maxlength="25" />
-                                        <br>
-                                        </span>
-                                        <span>Name:
-                                        <input name="txtUserHandle" id="txtUserHandle" type="text" value="caller" max="15" maxlength="25" />
-                                        <br>
-                                        </span>
--->
-                                     <input type="button" id="btnConnect" value="Connect"/><br>
-                                     <input type="button" id="btnCall" value="Call For Help"/>
-                                  </fieldset>    
+                                    <legend>WebRTC Connection Info:</legend>
+                                    <input type="button" id="btnConnect" value="Connect"/><br>
+                                    <input type="button" id="btnCall" value="Call For Help"/><br>
+                                    <label for="coordinates">Locations</label>
+                                    <select id="coordinates" name="coordinates">
+                                      <option value="0">Pike Place</option>
+                                      <option value="1" selected>Gator Adventure</option>
+                                      <option value="2">Times Square</option>
+                                    </select><br>
+                                    <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
+                                    <label for="chkSendCoordinates">Send my location</label>
+                                    
+                                  </fieldset> 
+                                  
                                 </div>
                             </td>
                         </tr>

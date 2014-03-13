@@ -1,15 +1,11 @@
-var 
-
+//WebRTC Web Page Application 
 function log(message){
     console.log(message);  
 }
 
 function connectToServer() {
   log('Connecting to WebRTC server');
-  var handleId = $('#txtUserHandle').val();
-  var server = $('#txtServer').val();
-  var portNumber = $('#txtPort').val();
-  peer = new Peer(handleId, {host:server, port: portNumber, debug: 3, config: {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
+  peer = new Peer(handleId, {host:server, port: port, debug: 3, config: {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
       $('#user-name').text("Connected as " + peer.id);
@@ -31,11 +27,28 @@ function handleDataConnection(dataConnection){
     window.existingDataConnection.close();
   }
   dataConnection.on("data", function(data){
-    var event = '<span class="remote-data">Data from :'+ dataConnection.peer + '<br>' + data + '</span>'; 
-    log(event);
+    var msg = JSON.parse(data);
+    if (msg.id == "gps") {
+        log("onData: GPS message receieved for location " + msg.description);
+        initializeStreetView(msg);
+    }
+    else if (msg.id == "ht") {
+        updateStreetView(msg.h, msg.p);
+    }
   });
    
   window.existingDataConnection = dataConnection;
+}
+
+function sendGPSSetMessageToPeer(){
+    sendMessageToPeer({"id":"gpsSet"});
+}
+
+function sendMessageToPeer(msg) {
+    if (window.existingDataConnection) {
+        log("sending data message to peer");
+        window.existingDataConnection.send(JSON.stringify(msg))
+    }
 }
 
 
@@ -64,12 +77,12 @@ function answerCall(call){
    }
    
    call.on('stream', function(stream){
-      $('#butCall').attr("value", "Hang Up");
-      $('#butCall').click(hangUp);
+      $('#btnCall').attr("value", "Hang Up");
+      $('#btnCall').click(hangUp);
       $('#remote-video').prop('src', URL.createObjectURL(stream));    
    });
    window.existingCall = call;
-   call.on('close', resetButtonsAfterWebRTCCall);
+   call.on('close', hangUp);
 }
 
 function makeCall() {
@@ -77,18 +90,16 @@ function makeCall() {
     return;
   }
   // Initiate a call
-  var userId = $('#txtCallerId').val();
-  $('#txtUserId').attr("disabled", true);
-  log('Calling ' + userId);
-  var call = peer.call(userId, window.localStream);
+  log('Calling ' + calleeId);
+  var call = peer.call(calleeId, window.localStream);
   if (window.existingCall) {
       window.existingCall.close();
   }
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
-    $('#butCall').attr("value", "Hang Up");
-    $('#butCall').click(hangUp);
+    $('#btnCall').attr("value", "Hang Up");
+    $('#btnCall').click(hangUp);
     $('#remote-video').prop('src', URL.createObjectURL(stream));
     //set up the data channel
     var dataConnection = peer.connect(call.peer, { label: 'device-events' });
@@ -113,8 +124,8 @@ function hangUp(){
 function resetButtonsAfterWebRTCCall(){
   log('call has ended');
   ringing = false;
-  $('#butCall').attr("value", "Call");
-  $('#butCall').click(makeCall);
+  $('#btnCall').attr("value", "Call");
+  $('#btnCall').click(makeCall);
   $('#txtCallerId').attr("disabled", false);
   $('#remote-video').prop('src', "");
 }
@@ -126,7 +137,7 @@ function gum (initiator) {
                                    function(stream){
                                     // Set your video displays
                                     log("GUM returned successfuly");
-                                    $('#local-video').prop('src', URL.createObjectURL(stream));
+                                    //$('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
                                     setButtonState(true);
