@@ -40,12 +40,21 @@ var calleeId = "Joe";
 var server = "10.0.1.51";
 var port = "9000";
 
+//Street view GPS coordinates
+var locationMatrix = [[47.608589,-122.340437, "Pike Place Market"],
+                   [33.799242,-78.737483, "Alligator Adventure"],
+                   [40.758911,-73.984853, "Times Square"]];
+
 
 var peer = null;
 var readyForCall = false;
 var ringing = false;
 var ringtone = new Audio('/media/ringtone.ogg');
 ringtone.addEventListener('ended', function() {this.currentTime = 0;if(ringing){this.play();}}); //loop for the ringtone
+
+var sendHeadtrackingData = false;
+var currentGPSIndex = null;
+
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
@@ -62,6 +71,11 @@ function init(){
       }
     }
   );
+  $('#chkSendCoordinates').attr("disabled", true);
+  $('#chkSendCoordinates').change(function(){
+      sendGPSToPeer(this.checked);
+  });
+  $('#coordinates').attr("disabled", true);
   $('#chkHT').change(function(){
       enableHeadtracking(this.checked);
   });
@@ -76,18 +90,18 @@ function init(){
   });
   $('#btnCalHeadtracking').click(calHeadset);
   $('#btnResetPedometer').click(resetPedometer);
-  $('#butCall').attr("disabled", true);
+  $('#btnCall').attr("disabled", true);
   $('#btnConnect').click(prepareForWebRTCCall);
   $('#btnCall').click(makeCall);
-  $('#btnCall').attr("disabled", false);
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
 }
 
 //PLTLabs Functions
 function findPLTDevices(){
-   PLTLabsAPI.findDevices(devicesFound);
-   log("findPLTDevices: Searching for PLT Labs devices");
+  log("findPLTDevices: Searching for PLT Labs devices");
+  PLTLabsAPI.findDevices(devicesFound);
+   
 }
 
 function disconnectPLT(){
@@ -114,9 +128,14 @@ function setPLTCheckboxesState(connected){
 
 
 function devicesFound(deviceList){
+  log('devices have been found!');
   devices = JSON.parse(JSON.stringify(deviceList));
-  var d = deviceList[0];
-  PLTLabsAPI.openConnection(d, connectionOpened) 
+  for(i = 0; l < deviceList.length; i++){
+    var d = deviceList[0];
+    if(d.connected == true && d.name == "PLT_WC1"){
+        PLTLabsAPI.openConnection(d, connectionOpened) 
+        break;
+    }
 }
 
 function onMetadata(metadata){
@@ -132,7 +151,6 @@ function onMetadata(metadata){
 
 
 function connectionOpened(address){
-  
   if (address == PLTLabsMessageHelper.SENSOR_PORT) {
     log("connectionOpened: sensor port connection is open!");
      enableWearableConceptEvents();
@@ -148,9 +166,6 @@ function connectionOpened(address){
     enableButtonPressEvents();
     connectedToDevice = true;
   }
-  
-  //TODO - UNCOMMENT ME 
-  //connectToServer();
 }
 
 //PLT checkbox functions 
@@ -229,6 +244,7 @@ function onEvent(info){
           $('#roll').text(c.psi);
           $('#pitch').text(c.theta);
           $('#yaw').text(c.phi);
+          sendHeadTrackingCoordinatesToPeer(c);
           calibrtionQuaternion = q;
           break;
         case PLTLabsMessageHelper.TAPS_SERVICE_ID:
@@ -286,8 +302,9 @@ function enableButtonPressEvents(){
 }
 //END PLT FUNCTIONS
 
-///WEBRTC Functions
 
+
+///WEBRTC Functions
 function prepareForWebRTCCall(){
    $('#btnConnect').attr("value", "Connecting");
    $('#btnConnect').attr("disabled", true);
@@ -298,17 +315,17 @@ function prepareForWebRTCCall(){
 
 //disconnect from webrtc server
 function disconnectWebRTC() {
+  log('disconnectWebRTC: disconnecting');
+  
   if (peer) {
-    peer.destroy();
+    peer.disconnect();
     peer = null;
+    
    }
 }
 
 function connectToServer() {
   log('connectToServer: Connecting to WebRTC server');
-  //var handleId = $('#txtUserHandle').val();
-  //var server = $('#txtServer').val();
-  //var portNumber = $('#txtPort').val();
   peer = new Peer(handleId, {"host":server, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
@@ -324,6 +341,43 @@ function connectToServer() {
   peer.on('error', function(err){log('Error connecting to server: ' + err.type);});
 }
 
+//sends headtracking coordinates
+function sendHeadTrackingCoordinatesToPeer(eularAngles){
+  if(!sendHeadtrackingData || !window.existingDataConnection){
+    return;
+  }
+  var ht = {'id': "ht" ,'p':eularAngles.theta,'h':eularAngles.psi};
+  window.existingDataConnection.send(JSON.stringify(ht));
+}
+
+//Sends the GPS coodrinages 
+function sendGPSToPeer(sendData){
+  if (!window.existingDataConnection) {
+    sendHeadtrackingData = false;
+    log("sendGPSToPeer: no data connection to send GPS to - returning");
+    return;
+  }
+  if(!sendData){
+    //send command to disable streaming of data if the data channel is open
+    sendHeadtrackingData;
+    currentGPSIndex = null;
+  }
+  else{
+    var gpsIndex = $("#coordinates option:selected").val();
+    if(currentGPSIndex == gpsIndex){
+        //nothing to do so return
+        return;
+    }
+    currentGPSIndex = gpsIndex;
+    var location = locationMatrix[currentGPSIndex];
+    var gpsMessage = {"id":"gps","lat":location[0], "long": location[1], "description": location[2]};
+    log('sendGPSToPeer: sending GPS for ' + gpsMessage.description + ' to peer');
+    
+    window.existingDataConnection.send(JSON.stringify(gpsMessage));
+  }
+  
+}
+
 function handleDataConnection(dataConnection){
   log("handleDataConnection: got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
   if (window.existingDataConnection) {
@@ -331,11 +385,11 @@ function handleDataConnection(dataConnection){
     window.existingDataConnection.close();
   }
   dataConnection.on("data", function(data){
-   // var event = '<span class="remote-data">Data from :'+ dataConnection.peer + '<br>' + data + '</span>'; 
-    //TODO - add logic here for sending/handling webrtc data
-    log("onData: from " + dataConnection.peer + " data: " + data);
+    var msg = JSON.parse(data);
+    if(msg.id == "gpsSet"){
+        sendHeadtrackingData = true;
+    }
   });
-   
   window.existingDataConnection = dataConnection;
 }
 
@@ -363,12 +417,13 @@ function answerCall(call){
    }
    
    call.on('stream', function(stream){
+      $('#chkSendCoordinates').attr("disabled", false);
+      $('#coordinates').attr("disabled", false);
       $('#btnCall').attr("value", "Hang Up");
       $('#btnCall').click(hangUp);
       $('#remote-video').prop('src', URL.createObjectURL(stream));    
    });
    window.existingCall = call;
-   call.on('close', resetButtonsAfterWebRTCCall);
 }
 
 function makeCall() {
@@ -384,12 +439,17 @@ function makeCall() {
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
+     $('#chkSendCoordinates').attr("disabled", false);
+     $('#coordinates').attr("disabled", false);
+ 
     $('#btnCall').attr("value", "Hang Up");
     $('#btnCall').click(hangUp);
     $('#remote-video').prop('src', URL.createObjectURL(stream));
     //set up the data channel
-    var dataConnection = peer.connect(call.peer, { label: 'device-events' });
+    log("setting up data connection for " + call.peer);
+    var dataConnection = peer.connect(call.peer);
     dataConnection.on('open', function() {
+        log("data connection has been opened");
         handleDataConnection(dataConnection);
       });
     dataConnection.on('error', function(err) { log(err); });
@@ -397,7 +457,6 @@ function makeCall() {
 
   // UI stuff
   window.existingCall = call;
-  call.on('close', resetButtonsAfterWebRTCCall);
 
 }
 
@@ -416,7 +475,6 @@ function gum (initiator) {
                                     $('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
-                                    //setButtonState(true);
                                     $('#btnConnect').attr("value", "Disconnect");
                                     $('#btnConnect').attr("disabled", false);
                                     $('#btnConnect').click(disconnectWebRTC);
@@ -431,6 +489,8 @@ function resetButtonsAfterWebRTCCall(){
   ringing = false;
   $('#btnCall').attr("value", "Call");
   $('#btnCall').attr("disabled", true);
+  $('#chkSendCoordinates').attr("disabled", true);
+  $('#coordinates').attr("disabled", true);
   $('#btnCall').click(makeCall);
   $('#remote-video').prop('src', "");
 }
