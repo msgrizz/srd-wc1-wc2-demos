@@ -4,31 +4,33 @@
 
 
 var eventSubscriptions = [
-  PLTLabsMessageHelper.TEST_INTERFACE_ENABLE_DISABLE_EVENT,
-  PLTLabsMessageHelper.RAW_BUTTON_TEST_ENABLE_DISABLE_EVENT,
-  PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT,
-  PLTLabsMessageHelper.AUTO_ANSWER_ON_DON_CHANGED_EVENT,
-  PLTLabsMessageHelper.WEARING_SENSOR_ENABLE_DISABLE_EVENT,
-  PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENT,
-  PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT,
-  PLTLabsMessageHelper.BATTERY_STATUS_CHANGED_EVENT,
-  PLTLabsMessageHelper.PAIRING_MODE_EVENT,
-  PLTLabsMessageHelper.LED_ALERT_STATUS_CHANGED,
-  PLTLabsMessageHelper.LOW_BATTERY_VOICE_PROMPT_EVENT,
-  PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT,
-  PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
-  PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
-  PLTLabsMessageHelper.AUDIO_STATUS_EVENT,
-  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT,
-  PLTLabsMessageHelper.SERVICE_CALIBRATION_CHANGE_EVENT,
-  PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT];
+PLTLabsMessageHelper.TEST_INTERFACE_ENABLE_DISABLE_EVENT,
+PLTLabsMessageHelper.RAW_BUTTON_TEST_ENABLE_DISABLE_EVENT,
+PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT,
+PLTLabsMessageHelper.AUTO_ANSWER_ON_DON_CHANGED_EVENT,
+PLTLabsMessageHelper.WEARING_SENSOR_ENABLE_DISABLE_EVENT,
+PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENT,
+PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT,
+PLTLabsMessageHelper.BATTERY_STATUS_CHANGED_EVENT,
+PLTLabsMessageHelper.PAIRING_MODE_EVENT,
+PLTLabsMessageHelper.LED_ALERT_STATUS_CHANGED,
+PLTLabsMessageHelper.LOW_BATTERY_VOICE_PROMPT_EVENT,
+PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT,
+PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT,
+PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
+PLTLabsMessageHelper.AUDIO_STATUS_EVENT,
+PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT,
+PLTLabsMessageHelper.SERVICE_CALIBRATION_CHANGE_EVENT,
+PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT];
 
 //Device related variables
 var connectedToDevice = false;
 var connectedToSensorPort = false;
 var connectingToSensorPort = false;
 var deviceMetadata = null;
-var calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
+//var calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
+var lastQuaternion = [1, 0, 0, 0]
+var calibrtionQuaternion = [1, 0, 0, 0];
 var sensorPortAddress = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
@@ -42,8 +44,8 @@ var port = "9000";
 
 //Street view GPS coordinates
 var locationMatrix = [[47.608589,-122.340437, "Pike Place Market"],
-                   [33.799242,-78.737483, "Alligator Adventure"],
-                   [40.758911,-73.984853, "Times Square"]];
+[33.799242,-78.737483, "Alligator Adventure"],
+[40.758911,-73.984853, "Times Square"]];
 
 
 var peer = null;
@@ -58,35 +60,68 @@ var currentGPSIndex = null;
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
+
+
+
+function multipliedQuaternions(q, p) {
+
+  var mulQuat = [0, 0, 0, 0];
+  var m = [p[0], p[1], p[2], p[3]];
+    
+    var quatmat = 
+    [ [ p[0], -p[1] -p[2], -p[3] ],
+      [ p[1], p[0], -p[3], p[2] ],
+      [ p[2], p[3], p[0], -p[1] ],
+      [ p[3], -p[2], p[1], p[0] ]
+    ];
+    
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            //double *qq = (double *)&q;
+            mulQuat[i] += quatmat[i][j] * qq[j];
+        }
+    }
+    
+    return [ mulQuat[0], mulQuat[1], mulQuat[2], mulQuat[3] ];
+}
+
+function inverseQuaternion(q) {
+
+  return [q[0], -q[1], -q[2], -q[3]];
+}
+
+
+
+
 function init(){
   setPLTCheckboxesState(true);
   readyForCall = false;
   //webrtc stuff
   $('#chkPLTDevice').change(function(){
-      if(this.checked){
-        findPLTDevices();
-      }
-      else{
-        disconnectPLT();
-      }
+    if(this.checked){
+      findPLTDevices();
     }
+    else{
+      disconnectPLT();
+    }
+  }
   );
   $('#chkSendCoordinates').attr("disabled", true);
   $('#chkSendCoordinates').change(function(){
-      sendGPSToPeer(this.checked);
+    sendGPSToPeer(this.checked);
   });
   $('#coordinates').attr("disabled", true);
   $('#chkHT').change(function(){
-      enableHeadtracking(this.checked);
+    enableHeadtracking(this.checked);
   });
   $('#chkTap').change(function(){
-      enableTapDetection(this.checked);
+    enableTapDetection(this.checked);
   });
   $('#chkFF').change(function(){
-      enableFreeFallDetection(this.checked);
+    enableFreeFallDetection(this.checked);
   });
   $('#chkPedo').change(function(){
-      enablePedometer(this.checked);
+    enablePedometer(this.checked);
   });
   $('#btnCalHeadtracking').click(calHeadset);
   $('#btnResetPedometer').click(resetPedometer);
@@ -101,15 +136,17 @@ function init(){
 function findPLTDevices(){
   log("findPLTDevices: Searching for PLT Labs devices");
   PLTLabsAPI.findDevices(devicesFound);
-   
+
 }
 
 function disconnectPLT(){
-   PLTLabsAPI.closeConnection(connectionClosed);
-   deviceMetadata = null;
-   calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
-   connectedToSensorPort = false;
-   connectedToDevice = false;
+ PLTLabsAPI.closeConnection(connectionClosed);
+ deviceMetadata = null;
+ //calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
+ lastQuaternion = [1, 0, 0, 0];
+ calibrtionQuaternion = [1, 0, 0, 0];
+ connectedToSensorPort = false;
+ connectedToDevice = false;
 }
 
 function connectionClosed(){
@@ -118,7 +155,7 @@ function connectionClosed(){
 }
 
 function setPLTCheckboxesState(connected){
-  
+
   $('#chkHT').attr("disabled", connected);
   $('#chkTap').attr("disabled", connected);
   $('#chkFF').attr("disabled", connected);
@@ -130,21 +167,25 @@ function setPLTCheckboxesState(connected){
 function devicesFound(deviceList){
   log('devices have been found!');
   devices = JSON.parse(JSON.stringify(deviceList));
-  for(i = 0; l < deviceList.length; i++){
-    var d = deviceList[0];
-    if(d.connected == true && d.name == "PLT_WC1"){
-        PLTLabsAPI.openConnection(d, connectionOpened) 
-        break;
+  for(i = 0; i < deviceList.length; i++){
+    var d = deviceList[i];
+    log('Device ' + i + ' + : ' + d.name);
+    //if(d.connected == true && d.name == "PLT_WC1"){
+    if(d.connected == true && d.name.indexOf("PLT_WC1") != -1) {
+      log('using: ' + d.name);
+      PLTLabsAPI.openConnection(d, connectionOpened);
+      break;
     }
+  }
 }
 
 function onMetadata(metadata){
   //l("metadata recieved " + JSON.stringify(metadata));
   deviceMetadata = metadata;
   if (!connectingToSensorPort && !connectedToSensorPort) {
-        connectingToSensorPort = true;
-        log("onMetadata: connecting to sensor port");
-        enableWearableConceptEvents(); 
+    connectingToSensorPort = true;
+    log("onMetadata: connecting to sensor port");
+    enableWearableConceptEvents(); 
   }
  // 
 }
@@ -153,10 +194,10 @@ function onMetadata(metadata){
 function connectionOpened(address){
   if (address == PLTLabsMessageHelper.SENSOR_PORT) {
     log("connectionOpened: sensor port connection is open!");
-     enableWearableConceptEvents();
-     connectedToSensorPort = true;
-     connectingToSensorPort = false;
-     setPLTCheckboxesState(false);
+    enableWearableConceptEvents();
+    connectedToSensorPort = true;
+    connectingToSensorPort = false;
+    setPLTCheckboxesState(false);
   }
   else if (!connectedToDevice) {
     log('connectionOpened: data connection opened to device');
@@ -209,10 +250,13 @@ function resetPedometer(){
 }
 
 function calHeadset(){
-  var options = {"serviceId": PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID, "address": sensorPortAddress, "quaternion": calibrtionQuaternion};
-  var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
-  log("calHeadset: sending packet to headset to calibrate headtracking");
-  PLTLabsAPI.sendCommand(packet);
+
+
+  calibrtionQuaternion = lastQuaternion;
+  // var options = {"serviceId": PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID, "address": sensorPortAddress, "quaternion": calibrtionQuaternion};
+  // var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
+  // log("calHeadset: sending packet to headset to calibrate headtracking");
+  // PLTLabsAPI.sendCommand(packet);
 }
 
 //Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
@@ -224,57 +268,70 @@ function enableWearableConceptEvents(){
   
   var availablePorts = deviceMetadata.availablePorts;
   if (availablePorts.indexOf(PLTLabsMessageHelper.SENSOR_PORT) < 0) {
-     log("enableWearableConceptEvents: device does not support sensor service subscription");
-     return;
-  }
-  
-  log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
-  var packet = PLTLabsMessageHelper.createHostNegotiateMessage(sensorPortAddress);
-  PLTLabsAPI.sendBladerunnerPacket(packet);  
+   log("enableWearableConceptEvents: device does not support sensor service subscription");
+   return;
+ }
+
+ log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
+ var packet = PLTLabsMessageHelper.createHostNegotiateMessage(sensorPortAddress);
+ PLTLabsAPI.sendBladerunnerPacket(packet);  
 }
 
 function onEvent(info){
-    
+
    //log("onEvent received: " + info);
    if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
-      switch(info.properties["serviceId"]) {
-        case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
-          var q = info.properties["quaternion"];
-          var c = convertQuaternianToCoordinates(q); 
-          $('#roll').text(c.psi);
-          $('#pitch').text(c.theta);
-          $('#yaw').text(c.phi);
-          sendHeadTrackingCoordinatesToPeer(c);
-          calibrtionQuaternion = q;
-          break;
-        case PLTLabsMessageHelper.TAPS_SERVICE_ID:
-          $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
-          break;
-        case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
-          $('#freefall').text(info.properties["freefall"]);
-          break;
-        case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
-          $('#steps').text(info.properties["steps"]);
-          break;
-        default:
-          break;
-      }
-   }
-    
-  // if (window.existingDataConnection) {
-    //  window.existingDataConnection.send(event);
-  // }
-   //hook flash button
+    switch(info.properties["serviceId"]) {
+      case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
+
+      var q = info.properties["quaternion"];
+
+      log("q: " + q);
+
+
+      lastQuaternion = [q['w'], q['x'], q['y'], q['z']];
+
+      inverse = inverseQuaternion(lastQuaternion);
+      calibrated = multipliedQuaternions(lastQuaternion, inverse);
+      q  = {"w":calibrated[0], "x":calibrated[1] , "y":calibrated[2], "z":calibrated[3]};
+
+      
+      var c = convertQuaternianToCoordinates(q); 
+      $('#roll').text(c.psi);
+      $('#pitch').text(c.theta);
+      $('#yaw').text(c.phi);
+      sendHeadTrackingCoordinatesToPeer(c);
+      //calibrtionQuaternion = q;
+      
+      break;
+      case PLTLabsMessageHelper.TAPS_SERVICE_ID:
+      $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
+      break;
+      case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
+      $('#freefall').text(info.properties["freefall"]);
+      break;
+      case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
+      $('#steps').text(info.properties["steps"]);
+      break;
+      default:
+      break;
+    }
+  }
+
+  if (window.existingDataConnection) {
+     window.existingDataConnection.send(event);
+  }
+   // hook flash button
    if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
-      if(ringing){
-        $('#butAnswerCall').trigger("click");
-      }
-      else if (window.existingCall) {
+    if(ringing){
+      $('#butAnswerCall').trigger("click");
+    }
+    else if (window.existingCall) {
         //hang up the call
         $('#btnCall').trigger("click");
       }
-   }
-}
+    }
+  }
 
 //converts a quaternion into a set of Euler angles 
 function convertQuaternianToCoordinates(q){
@@ -306,11 +363,11 @@ function enableButtonPressEvents(){
 
 ///WEBRTC Functions
 function prepareForWebRTCCall(){
-   $('#btnConnect').attr("value", "Connecting");
-   $('#btnConnect').attr("disabled", true);
-   
-   connectToServer();
-  
+ $('#btnConnect').attr("value", "Connecting");
+ $('#btnConnect').attr("disabled", true);
+
+ connectToServer();
+
 }
 
 //disconnect from webrtc server
@@ -321,7 +378,7 @@ function disconnectWebRTC() {
     peer.disconnect();
     peer = null;
     
-   }
+  }
 }
 
 function connectToServer() {
@@ -329,9 +386,9 @@ function connectToServer() {
   peer = new Peer(handleId, {"host":server, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
-      $('#user-name').text("Connected as " + peer.id);
-      $('#btnCall').attr("disabled", false);
-      gum();
+    $('#user-name').text("Connected as " + peer.id);
+    $('#btnCall').attr("disabled", false);
+    gum();
   });
   
   peer.on('connection', handleDataConnection);
@@ -367,27 +424,27 @@ function sendGPSToPeer(sendData){
     if(currentGPSIndex == gpsIndex){
         //nothing to do so return
         return;
-    }
-    currentGPSIndex = gpsIndex;
-    var location = locationMatrix[currentGPSIndex];
-    var gpsMessage = {"id":"gps","lat":location[0], "long": location[1], "description": location[2]};
-    log('sendGPSToPeer: sending GPS for ' + gpsMessage.description + ' to peer');
-    
-    window.existingDataConnection.send(JSON.stringify(gpsMessage));
-  }
-  
-}
+      }
+      currentGPSIndex = gpsIndex;
+      var location = locationMatrix[currentGPSIndex];
+      var gpsMessage = {"id":"gps","lat":location[0], "long": location[1], "description": location[2]};
+      log('sendGPSToPeer: sending GPS for ' + gpsMessage.description + ' to peer');
 
-function handleDataConnection(dataConnection){
-  log("handleDataConnection: got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
-  if (window.existingDataConnection) {
+      window.existingDataConnection.send(JSON.stringify(gpsMessage));
+    }
+
+  }
+
+  function handleDataConnection(dataConnection){
+    log("handleDataConnection: got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
+    if (window.existingDataConnection) {
     //close any existing calls
     window.existingDataConnection.close();
   }
   dataConnection.on("data", function(data){
     var msg = JSON.parse(data);
     if(msg.id == "gpsSet"){
-        sendHeadtrackingData = true;
+      sendHeadtrackingData = true;
     }
   });
   window.existingDataConnection = dataConnection;
@@ -406,24 +463,24 @@ function ring(call){
 }
 
 function answerCall(call){
-   log('answerCall: answering incoming call from ' + call.peer);
-   ringing = false;
-   $('#incoming-call').hide();
-   
-   call.answer(window.localStream);
-   if (window.existingCall) {
+ log('answerCall: answering incoming call from ' + call.peer);
+ ringing = false;
+ $('#incoming-call').hide();
+
+ call.answer(window.localStream);
+ if (window.existingCall) {
     //close any existing calls
     window.existingCall.close();
-   }
-   
-   call.on('stream', function(stream){
-      $('#chkSendCoordinates').attr("disabled", false);
-      $('#coordinates').attr("disabled", false);
-      $('#btnCall').attr("value", "Hang Up");
-      $('#btnCall').click(hangUp);
-      $('#remote-video').prop('src', URL.createObjectURL(stream));    
-   });
-   window.existingCall = call;
+  }
+
+  call.on('stream', function(stream){
+    $('#chkSendCoordinates').attr("disabled", false);
+    $('#coordinates').attr("disabled", false);
+    $('#btnCall').attr("value", "Hang Up");
+    $('#btnCall').click(hangUp);
+    $('#remote-video').prop('src', URL.createObjectURL(stream));    
+  });
+  window.existingCall = call;
 }
 
 function makeCall() {
@@ -434,24 +491,24 @@ function makeCall() {
   log('makeCall: calling ' + calleeId);
   var call = peer.call(calleeId, window.localStream);
   if (window.existingCall) {
-      window.existingCall.close();
+    window.existingCall.close();
   }
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
-     $('#chkSendCoordinates').attr("disabled", false);
-     $('#coordinates').attr("disabled", false);
- 
-    $('#btnCall').attr("value", "Hang Up");
-    $('#btnCall').click(hangUp);
-    $('#remote-video').prop('src', URL.createObjectURL(stream));
+   $('#chkSendCoordinates').attr("disabled", false);
+   $('#coordinates').attr("disabled", false);
+
+   $('#btnCall').attr("value", "Hang Up");
+   $('#btnCall').click(hangUp);
+   $('#remote-video').prop('src', URL.createObjectURL(stream));
     //set up the data channel
     log("setting up data connection for " + call.peer);
     var dataConnection = peer.connect(call.peer);
     dataConnection.on('open', function() {
-        log("data connection has been opened");
-        handleDataConnection(dataConnection);
-      });
+      log("data connection has been opened");
+      handleDataConnection(dataConnection);
+    });
     dataConnection.on('error', function(err) { log(err); });
   });
 
@@ -469,7 +526,7 @@ function hangUp(){
 function gum (initiator) {
             // Get audio/video stream
             navigator.getUserMedia({audio: true, video: true},
-                                   function(stream){
+             function(stream){
                                     // Set your video displays
                                     log("gum: GUM returned successfuly");
                                     $('#local-video').prop('src', URL.createObjectURL(stream));
@@ -478,10 +535,11 @@ function gum (initiator) {
                                     $('#btnConnect').attr("value", "Disconnect");
                                     $('#btnConnect').attr("disabled", false);
                                     $('#btnConnect').click(disconnectWebRTC);
-                                     
-                                    },
-                                    function(error){ log(error); });
-            
+
+                                  },
+                                  function(error){
+                                    log(error);
+                                  });
 }
 
 function resetButtonsAfterWebRTCCall(){
