@@ -3,7 +3,7 @@
 //This library is to enable experimental device data access
 //using the Google Chrome Bluetooth APIs 
   
-var BT_SOCKET_READ_INTERVAL = 20;
+var BT_SOCKET_READ_INTERVAL = 10;
 var PLT_RECONNECT_INTERVAL = 5000;
 
 var readIntervalId = null; 
@@ -11,8 +11,6 @@ var connectIntervalId = null;
 var deviceRoute = new ArrayBuffer(4);
 //initialize the address array to 0x0
 var address = new Uint8Array(deviceRoute);
-
-var devices = [];
 
 var onDeviceAddedCallback = null;
 var onSocketConnectionCallback = null;
@@ -187,14 +185,17 @@ var findPLTLabsDevices = function(){
   // Add the listener to deal with our initial connection
   chrome.bluetooth.onConnection.addListener(onConnectDeviceHandler);
   
+  log('findPLTLabsDevices: added connection listener');
+  
   chrome.bluetooth.getAdapterState(function(adapterState){
     if(!adapterState.available || !adapterState.powered){
       log('findPLTLabsDevices: bluetooth adapter not available');
       return;
     }
-    devices.length = 0;
-    chrome.bluetooth.getDevices({deviceCallback: deviceCallBack}, returnDeviceList);
+    log('getAdaptorState: getting devices');
+    chrome.bluetooth.getDevices(returnDeviceList);
   });
+  log('findPLTLabsDevices: exit function');
   
 };
  
@@ -258,15 +259,8 @@ var onConnectDeviceHandler = function(_socket){
    }
    
 };
-  
-var deviceCallBack = function(device){
-  if(device.connected && (device.name.indexOf("PLT") > -1)){
-    log('deviceCallBack: pushing device to array ' + JSON.stringify(device));
-    devices.push(device);
-  }
-};
-  
-var returnDeviceList = function() {
+
+var returnDeviceList = function(devices) {
   if (chrome.runtime.lastError) {
     log('returnDeviceList: error searching for a devices: ' + chrome.runtime.lastError.message);
     return;
@@ -401,7 +395,7 @@ var parseBladerunnerData = function(data){
      case PLTLabsMessageHelper.EVENT_TYPE:
       //parse and handle the event
       var event = PLTLabsMessageHelper.parseEvent(data);
-      log('parseBladerunnerData: event recieved: ' + JSON.stringify(event));
+      //log('parseBladerunnerData: event recieved: ' + JSON.stringify(event));
       if(PLTLabsMessageHelper.CONNECTED_DEVICE_EVENT == event.id ||
          PLTLabsMessageHelper.DISCONNECTED_DEVICE_EVENT == event.id){
          connectedEvent(event);
@@ -425,6 +419,40 @@ var parseBladerunnerData = function(data){
   }
 
 };
+
+function inverseQuaternion(q){
+  return { "w": -q.w, "x": -q.x, "y": -q.y, "z": -q.z}
+}
+
+function multiplyQuaternions(q, p){
+   var quaternianMatrix =[[p.w, -p.x, -p.y, -p.z],
+                          [ p.x, p.w, -p.z, p.y ],
+                          [ p.y, p.z, p.w, -p.x ],
+                          [p.z, -p.y, p.x, p.w ]];
+   var multipliedQuaternion = { "w": 0, "x": 0, "y": 0, "z": 0}
+   
+  for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            switch(j){
+              case 0:
+                multipliedQuaternion.w += quaternianMatrix[i][j] * q.w;
+                break;
+              case 1:
+                multipliedQuaternion.x += quaternianMatrix[i][j] * q.x;
+                break;
+              case 2:
+                multipliedQuaternion.y += quaternianMatrix[i][j] * q.y;
+                break;
+              case 3:
+                multipliedQuaternion.z += quaternianMatrix[i][j] * q. z;
+                break;
+            }
+        }
+    }
+    
+return multipliedQuaternion;
+  
+}
 
 //manages the connection state for the PLTLabs api
 var connectedEvent = function(event){
@@ -615,10 +643,10 @@ connectionId - 0 -  - The connection ID of the link being used to generate the s
 reportOnDonnedOnly - false - If true, report near far events only when headset is donned.
 trendDetection - false - If true, Report rssi and trend events in headset audio
 audioRSSIReport - false - If true, report Near/Far events in headset Audio 
-audioReportNearFar -false - If true, report SignalStrength and Near Far events to base Ê
+audioReportNearFar -false - If true, report SignalStrength and Near Far events to base ï¿½
 reportNearFarToBase - true - This number multiplies the dead_band value (currently 5 dB) in the headset configuration.
 sensitivity - 5 - This result is added to an minimum dead-band, currently 5 dB to compute the total deadband - in the range 0 to 9
-nearThreshold - 50 - The near / far threshold in dB Êin the range -99 to +99; larger values mean a weaker signal 
+nearThreshold - 50 - The near / far threshold in dB ï¿½in the range -99 to +99; larger values mean a weaker signal 
 */
 PLTLabsMessageHelper.createEnableProximityCommand = function(options){
   if(!options.address || options.address.byteLength != this.BR_ADDRESS_SIZE){
@@ -761,8 +789,23 @@ PLTLabsMessageHelper.createCalibrateCommand = function(options){
   //characteristic = 2 bytes
   switch(options.serviceId){
     case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
-      //quaternions = 16 bytes
+      //quaternions = 8 bytes + 2 bytes for the size of the array
       //TODO - write transformation routine to calibrate the quaternions
+      var q = options.quaternion;
+      var inverseQ = inverseQuaternion(q);
+      var calQ = multiplyQuaternions(q, inverseQ);
+      data = new ArrayBuffer(14);
+      data_view = new Uint8Array(data);
+      data_view[1] = options.serviceId;
+      data_view[5] = 0x10; // size of the array
+      data_view[6] = calQ.w >> 8; //high-bit part of the quaternion
+      data_view[7] = calQ.w & 0xFF; //low bit
+      data_view[8] = calQ.x >> 8; //high-bit part of the quaternion
+      data_view[9] = calQ.x & 0xFF; //low bit
+      data_view[10] = calQ.y >> 8; //high-bit part of the quaternion
+      data_view[11] = calQ.y & 0xFF; //low bit
+      data_view[12] = calQ.z >> 8; //high-bit part of the quaternion
+      data_view[13] = calQ.z & 0xFF; //low bit
       break;
     case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
     case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
@@ -1030,7 +1073,7 @@ PLTLabsMessageHelper.convertToQuaternion = function(serviceData){
   var z1 = z/16384.0;
   var w1 = w/16384.0;
   
-  return {"x": x1, "y": y1, "z": z1, "w": w1}
+  return {"w": w1, "x": x1, "y": y1, "z": z1}
   
 }
 
