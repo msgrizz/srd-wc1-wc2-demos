@@ -8,6 +8,9 @@
 
 #import "BRMessage.h"
 
+
 @interface BRCalibratePedometerServiceCommand : BRMessage
+
++ (BRCalibratePedometerServiceCommand *)command;
 
 @end

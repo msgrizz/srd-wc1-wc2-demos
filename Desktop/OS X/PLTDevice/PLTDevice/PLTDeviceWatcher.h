@@ -18,7 +18,7 @@
 
 + (PLTDeviceWatcher *)sharedWatcher;
 
-@property(readonly)	NSMutableArray	*devices; // this should prpbably be an NSArray, but since this class is API internal.... this works.
+@property(readonly)	NSMutableArray	*devices; // this should probably be an NSArray, but since this class is API internal.... this works.
 @property(readonly)	NSMutableArray	*connectedBluetoothDevices;
 
 @end

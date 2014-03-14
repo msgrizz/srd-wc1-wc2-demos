@@ -23,7 +23,7 @@
     return command;
 }
 
-#pragma BRMessage
+#pragma mark BRMessage
 
 - (NSData *)data;
 {

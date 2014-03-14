@@ -10,11 +10,12 @@
 #define __TestHarnessApp__DeviceOpenListenerImpl__
 
 #import <bladerunner_ios_sdk/DeviceOpenListener.h>
+#import <bladerunner_ios_sdk/BladeRunnerDevice.h>
 
 @protocol DeviceOpenListenerDelegate <NSObject>
 
 //- (void)openlistenerCallBackWithSuccess:(BOOL)success;
-- (void)openListenerCallBackWithError:(bladerunner::BRError)error;
+- (void)openListenerCallBackWithDevice:(bladerunner::BladeRunnerDevice &)device error:(bladerunner::BRError)error;
 
 @end
 

@@ -32,141 +32,173 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a179564b-59f1-4347-b129-1f840afa8d63" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/pltlabs_nav.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/pltlabs_nav@2x.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/pltlabs_nav_ios7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/pltlabs_nav_ios7@2x.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/settings_ios7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/settings_ios7@2x.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PL3DViewController_iPhone4.xib" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController_iOS7.xib" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PL3DViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PL3DViewController_iPhone5.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/AFNetworking" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/AppDelegate.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/AppDelegate.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor_Prefix.pch" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor_Prefix.pch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/ConfigTempViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/ConfigTempViewController.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-568h@2x.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-568h@2x.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-Landscape@2x~ipad.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-Landscape@2x~ipad.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-Portrait@2x~ipad.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Default-Portrait@2x~ipad.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Default@2x.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Default@2x.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/GLGravityView.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/GLGravityView.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PL3DViewController_iPad.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PL3DViewController_iPad.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcshareddata/PLTDevice.xccheckout" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcshareddata/PLTDevice.xccheckout" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTHeadsetManager.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTHeadsetManager.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController_iPad.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController_iPad.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StatusWatcher.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StatusWatcher.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController_iPad.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController_iPad.xib" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/HTCam/HTCam.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceDisconnectedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceDisconnectedEvent.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceNotReadyException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceNotReadyException.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRIllegalValueException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRIllegalValueException.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMetadata.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMetadata.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceSubscriptionChangedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceSubscriptionChangedEvent.m" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests-Info.plist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/en.lproj/InfoPlist.strings" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/PLTDeviceTestTests-Info.plist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/PLTDeviceTestTests.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/en.lproj/InfoPlist.strings" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/PLTDeviceTests-Info.plist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/PLTDeviceTests.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/en.lproj/InfoPlist.strings" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/Info.plist" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/Info.plist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../PhoneGap/my-plugin-example-app/platforms/ios/HelloWorld.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../PhoneGap/my-plugin-example-app/platforms/ios/HelloWorld.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/HT-CMX/HT-CMX.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/cogBarButton.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/cogBarButton.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/cogBarButton@2x.png" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/cogBarButton@2x.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/bladerunner_ios_sdk" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/bladerunner_ios_sdk" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/AppDelegate.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/AppDelegate.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/AppDelegate.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/AppDelegate.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/AppDelegate.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/AppDelegate.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/AppDelegate.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/AppDelegate.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BREvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BREvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BREvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BREvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRFreeFallSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRGyroscopeCalStatusSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMagnetometerCalStatusSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRPedometerSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingRequest.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToServiceCommand.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToServiceCommand.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToServiceCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToServiceCommand.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRTapsSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateEvent.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingResponse.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingResponse.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingResponse.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/PrivateHeaders/BladeRunnerRemoteDevice.h" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/Frameworks/bladerunner_ios_sdk.framework/PrivateHeaders/BladeRunnerRemoteDevice.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" afterPath="$PROJECT_DIR$/gen/com/plantronics/DX650ScreenLock/BuildConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DX650 Screen Lock.iml" afterPath="$PROJECT_DIR$/DX650 Screen Lock.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/DeviceOpenListenerImpl.h" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/DeviceOpenListenerImpl.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/DeviceOpenListenerImpl.mm" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/DeviceOpenListenerImpl.mm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" afterPath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/Base.lproj/MainMenu.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/Base.lproj/MainMenu.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/Base.lproj/MainMenu.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/Base.lproj/MainMenu.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindow.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindow.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindow.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindow.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindowController.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindowController.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/NSData+HexStrings.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/NSData+HexStrings.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/NSData+HexStrings.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/NSData+HexStrings.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTCalibration.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTCalibration.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTCalibration.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTCalibration.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTConfiguration.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTConfiguration.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTConfiguration.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTConfiguration.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.m" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTDevice.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/PLTDevice.xcscheme" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/PLTDevice.xcscheme" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDeviceTest/PLTDeviceTest-Info.plist" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDeviceTest/PLTDeviceTest-Info.plist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDeviceWatcher.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDeviceWatcher.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDeviceWatcher.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDeviceWatcher.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTFreeFallInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTGyroscopeCalibrationInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTMagnetometerCalibrationInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.h" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.m" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingCalibration.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.m" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice/PLTOrientationTrackingInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTOrientationTrackingInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTPedometerInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTProximityInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTTapsInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo_Internal.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTWearingStateInfo_Internal.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SettingsViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SettingsViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/ViewController.mm" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/BRPlayground/ViewController.mm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/BRPlayground/ViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/BRPlayground/ViewController.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/main.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/main.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/main.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest/main.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/res/layout/main.xml" afterPath="$PROJECT_DIR$/../BRPlayground/res/layout/main.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/misc.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../DX650 Seamless Transfer/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/xcschememanagement.plist" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/xcuserdata/mdavis.xcuserdatad/xcschemes/xcschememanagement.plist" />
     </list>
     <ignored path="BluetoothLocker.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372047060627" ignored="false" />
-    <file path="/a.dummy" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372046772247" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/Messenger/src/com/plantronics/messenger/VoiceService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369185617601" ignored="false" />
-    <file path="/VoiceService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369185611789" ignored="false" />
-    <file path="/.name" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369267714513" ignored="false" />
-    <file path="/BluetoothReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369272965921" ignored="false" />
-    <file path="/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372044043714" ignored="false" />
-    <file path="$PROJECT_DIR$/../SpeechStuff/src/com/plantronics/SpeechStuff/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269142295" ignored="false" />
-    <file path="/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372036141465" ignored="false" />
-    <file path="$PROJECT_DIR$/../SpeechStuff/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269126919" ignored="false" />
-    <file path="/lock_screen.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369356103207" ignored="false" />
-    <file path="/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269578333" ignored="false" />
-    <file path="/styles.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369269640096" ignored="false" />
-    <file path="/activity_main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371845344796" ignored="false" />
-    <file path="/a.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370030876089" ignored="false" />
-    <file path="/LockScreen.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369871881255" ignored="false" />
-    <file path="/MainApp.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372048252877" ignored="false" />
-    <file path="/PlantronicsXEventListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369271710264" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/gen/com/plantronics/Manifest.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274305155" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/gen/com/plantronics/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274305155" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/gen/com/plantronics/BuildConfig.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274312249" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/project.properties" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369273838238" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/users/cbran/PlantronicsXEvent/src/com/plantronics/bluetooth/PlantronicsReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274249303" ignored="false" />
-    <file path="/PlantronicsReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369274238914" ignored="false" />
-    <file path="$USER_HOME$/Desktop/BluetoothLocker/project.properties" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369290109296" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/controller/HeadsetDataController.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369857605551" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/ui/RemoteDeviceActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370557861659" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/src/com/plantronics/example/controller/HeadsetDataController.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369351264735" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/headsetdataservice/IHeadsetDataService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369425496199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/gen/com/plantronics/example/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369355638801" ignored="false" />
-    <file path="/RemoteDeviceActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369430751474" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/BladeRunnerTutorialApp.iml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369857030841" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/build.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856965185" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856965185" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/remote.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/values/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/device_selection.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunnerTutorialApp/res/layout/discovery_device_list_item.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1369856971199" ignored="false" />
-    <file path="/Dummy.txt" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1381188956210" ignored="false" />
-    <file path="/activity_settings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371852258484" ignored="false" />
-    <file path="/SettingsActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372047580869" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/TransferDialogIntentService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370034189427" ignored="false" />
-    <file path="/TransferDialogIntentService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370034188134" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/transfer_toast.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370033714036" ignored="false" />
-    <file path="/transfer_toast.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370033672844" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/activity_transfer.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370035068790" ignored="false" />
-    <file path="/activity_transfer.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370036249565" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/TransferActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370033853377" ignored="false" />
-    <file path="/TransferActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370040820029" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/gen/com/plantronics/DX650SeamlessTransfer/R.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370045804352" ignored="false" />
-    <file path="/AskTransferActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370633523179" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/DX650SeamlessTransfer/StayAliveIntentService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370039063174" ignored="false" />
-    <file path="/StayAliveIntentService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370038586224" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370040129459" ignored="false" />
-    <file path="/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370040121628" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/HeadsetServiceResponseListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/HeadsetServiceConnectionListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/HeadsetServiceEventListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/HeadsetServiceBluetoothListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/DiscoveryListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/listener/BindListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/controller/HeadsetDeviceSetting.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/controller/HeadsetDeviceCommand.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="$PROJECT_DIR$/../DX650 Seamless Transfer/src/com/plantronics/BladeRunner/controller/SettingsResult.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370046416566" ignored="false" />
-    <file path="/A2DPStateReceiver.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370279244793" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackOpen.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370202753" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackEvents.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370202753" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackSession.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370202753" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackMetadata.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370202753" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackDiscovery.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370202753" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/plantronics/headsetdataservice/IHeadsetDataServiceCallbackBluetoothConnection.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370370278792" ignored="false" />
-    <file path="/HeadsetDataController.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370375217201" ignored="false" />
-    <file path="/listItem_users.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370382143392" ignored="false" />
-    <file path="/activity_adduser.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370392134522" ignored="false" />
-    <file path="/AddUserActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370462004444" ignored="false" />
-    <file path="/listitem_users.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370461126970" ignored="false" />
-    <file path="/User.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370463470781" ignored="false" />
-    <file path="/activity_ask_transfer.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370907182203" ignored="false" />
-    <file path="/button_no.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1370907011719" ignored="false" />
-    <file path="$PROJECT_DIR$/../HFPFinagler/AndroidManifest.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371936451344" ignored="false" />
-    <file path="$PROJECT_DIR$/../HFPFinagler/res/values/strings.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371934272651" ignored="false" />
-    <file path="$PROJECT_DIR$/../HFPFinagler/res/layout/main.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371934272651" ignored="false" />
-    <file path="$PROJECT_DIR$/../HFPFinagler/src/com/plantronics/HFPFinagler/MainActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371935575654" ignored="false" />
-    <file path="$PROJECT_DIR$/../HFPFinagler/build.xml" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1371934272651" ignored="false" />
-    <file path="/FinaglePhoneStateListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372050882075" ignored="false" />
-    <file path="/MainService.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372024867012" ignored="false" />
-    <file path="/HelperActivity.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372037229454" ignored="false" />
-    <file path="$PROJECT_DIR$/../BTFinagler/src/com/plantronics/BTFinagler/FinaglePhoneStateListener.java" changelist="a179564b-59f1-4347-b129-1f840afa8d63" time="1372050882983" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,10 +259,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Definitions.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5550" column="2" selection-start="161804" selection-end="161804" vertical-scroll-proportion="0.0">
+            <state line="1318" column="13" selection-start="42909" selection-end="42914" vertical-scroll-proportion="0.33333334" vertical-offset="14982" max-vertical-offset="20232">
               <folding />
             </state>
           </provider>
@@ -270,13 +302,13 @@
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/SettingsActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockActivity.java" />
         <option value="$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java" />
+        <option value="$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="7" />
     <option name="y" value="22" />
-    <option name="width" value="1167" />
+    <option name="width" value="1264" />
     <option name="height" value="1024" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -428,6 +460,60 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="drawable-xhdpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable-mdpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable-ldpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DX650 Screen Lock" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="drawable-hdpi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -541,7 +627,7 @@
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Android Application.DX650 Screen Lock">
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
       <option name="PROGRAM_PARAMETERS" />
@@ -555,6 +641,7 @@
       <option name="CLASS_NAME" value="" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -563,6 +650,7 @@
       <option name="NETWORK_SPEED" value="full" />
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -571,6 +659,19 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -598,19 +699,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -652,7 +740,9 @@
       <option name="ACTIVITY_CLASS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -661,6 +751,7 @@
       <option name="NETWORK_SPEED" value="full" />
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="true" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="false" name="DX650 Screen Lock" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -668,7 +759,9 @@
       <option name="ACTIVITY_CLASS" value="com.plantronics.DX650ScreenLock.MainActivity" />
       <option name="MODE" value="default_activity" />
       <option name="DEPLOY" value="true" />
+      <option name="ARTIFACT_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -677,6 +770,7 @@
       <option name="NETWORK_SPEED" value="full" />
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="true" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <RunnerSettings RunnerId="AndroidDebugRunner" />
       <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
@@ -716,91 +810,53 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="22" width="1167" height="1024" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1264" height="1024" extended-state="0" />
+    <editor active="true" />
     <layout>
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23200513" sideWeight="0.4025717" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23586118" sideWeight="0.4025717" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39918533" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.697556" sideWeight="0.5002957" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6150713" sideWeight="0.49970433" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32990575" sideWeight="0.70168066" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32978722" sideWeight="0.70168066" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29831934" sideWeight="0.9713752" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23200513" sideWeight="0.4025717" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23586118" sideWeight="0.4025717" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34840766" sideWeight="0.70168066" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892057" sideWeight="0.9994048" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USERS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_NEW_TODO" value="true" />
     <option name="myTodoPanelSettings">
-      <value>
-        <are-packages-shown value="false" />
-        <are-modules-shown value="false" />
-        <flatten-packages value="false" />
-        <is-autoscroll-to-source value="false" />
-      </value>
+      <TodoPanelSettings />
     </option>
     <option name="PERFORM_UPDATE_IN_BACKGROUND" value="false" />
     <option name="PERFORM_COMMIT_IN_BACKGROUND" value="false" />
-    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="false" />
-    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
-    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
-    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
-    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
-    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
-    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
-    <option name="SHORT_DIFF_HORIZONTALLY" value="true" />
-    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
-    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
-    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
-    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
-    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
-    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
-    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
-    <option name="LIMIT_HISTORY" value="true" />
-    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
-    <option name="UPDATE_FILTER_SCOPE_NAME" />
-    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
-    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
-    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
-    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
-    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
-    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
-    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
-    <option name="ACTIVE_VCS_NAME" />
-    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
-    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
-    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
-    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
-    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -810,92 +866,115 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5576" column="0" selection-start="162496" selection-end="162496" vertical-scroll-proportion="0.0" vertical-offset="66912" max-vertical-offset="79740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5550" column="2" selection-start="161804" selection-end="161804" vertical-scroll-proportion="0.0" vertical-offset="72150" max-vertical-offset="86385">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5550" column="2" selection-start="161804" selection-end="161804" vertical-scroll-proportion="0.0" vertical-offset="72150" max-vertical-offset="86385">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$USER_HOME$/Library/android-sdk-macosx/platforms/android-15/android.jar!/android/app/Activity.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="62" selection-start="171" selection-end="203" vertical-scroll-proportion="0.08057851" />
+        <state line="6" column="62" selection-start="171" selection-end="203" vertical-scroll-proportion="0.08057851" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.project">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_settings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="24" selection-start="1881" selection-end="1881" vertical-scroll-proportion="0.02056962" />
-      </provider>
       <provider editor-type-id="android-designer">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="24" selection-start="1881" selection-end="1881" vertical-scroll-proportion="0.02056962" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="745" selection-end="745" vertical-scroll-proportion="0.20784883" />
+        <state line="11" column="0" selection-start="745" selection-end="745" vertical-scroll-proportion="0.20784883" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/example/listeners/HeadsetServiceConnectionListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="17" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4811417" />
+        <state line="12" column="17" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4811417" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../DX650 Screen Lock -- preservice/src/com/plantronics/DX650ScreenLock/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/AddUserActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/User.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="29" selection-start="2174" selection-end="2174" vertical-scroll-proportion="0.8400984" />
+        <state line="63" column="29" selection-start="2174" selection-end="2174" vertical-scroll-proportion="0.8400984" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/project.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="66" selection-start="735" selection-end="735" vertical-scroll-proportion="0.19877675">
+        <state line="15" column="66" selection-start="735" selection-end="735" vertical-scroll-proportion="0.19877675" vertical-offset="0" max-vertical-offset="0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/SettingsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="9" selection-start="5604" selection-end="5604" vertical-scroll-proportion="0.4434251" />
+        <state line="163" column="9" selection-start="5604" selection-end="5604" vertical-scroll-proportion="0.4434251" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockerReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.053007137" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="911" column="8" selection-start="30632" selection-end="30767" vertical-scroll-proportion="0.013251784" />
+        <state line="7" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.053007137" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/LockActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="8" selection-start="4511" selection-end="4747" vertical-scroll-proportion="0.36067298" />
+        <state line="136" column="8" selection-start="4511" selection-end="4747" vertical-scroll-proportion="0.36067298" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="39" selection-start="3528" selection-end="3529" vertical-scroll-proportion="0.77513516" />
-      </provider>
       <provider editor-type-id="android-designer">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="39" selection-start="3528" selection-end="3529" vertical-scroll-proportion="0.77513516" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/Definitions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5550" column="2" selection-start="161804" selection-end="161804" vertical-scroll-proportion="0.0">
+        <state line="5606" column="1" selection-start="163416" selection-end="163416" vertical-scroll-proportion="0.38135594" vertical-offset="66912" max-vertical-offset="79740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650ScreenLock/MainApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1318" column="13" selection-start="42909" selection-end="42914" vertical-scroll-proportion="0.33333334" vertical-offset="14982" max-vertical-offset="20232">
           <folding />
         </state>
       </provider>

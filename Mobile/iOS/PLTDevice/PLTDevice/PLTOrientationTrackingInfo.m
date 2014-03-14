@@ -23,35 +23,10 @@ double r2d(double d)
 
 PLTEulerAngles EulerAnglesFromQuaternion(PLTQuaternion q)
 {
-	//	// heading
-	//	double psi = (180.0 / M_PI) * atan2((-q.x * q.y + q.w * q.z), (q.w * q.w + q.y * q.y - (double)0.5));
-	//	// pitch
-	//	double theta = (180.0 / M_PI) * asin(2.0 * q.y * q.z + 2.0 * q.w * q.x);
-	//	// roll
-	//	double phi = (180.0 / M_PI) * atan2((-q.x * q.z + q.w * q.y), (q.w * q.w + q.z * q.z - (double)0.5));
-	
 	double q0 = q.w;
 	double q1 = q.x;
 	double q2 = q.y;
 	double q3 = q.z;
-	
-	//	double m11 = 2 * pow(q0,2) + 2 * pow(q2,2) - 1;
-	//	double m12 = -2 * q1 * q2 - 2 * q0 * q3;
-	//	double m13 = -2 * q2 * q3 + 2 * q0 * q1;
-	//	double m23 = 2 * q1 * q3 + 2 * q0 * q2;
-	//	double m33 = 2 * pow(q0,2) + 2 * pow(q3,2) - 1;
-	//	double psi = r2d(atan2(m12,m11));
-	//	double theta = r2d(asin(-m13));
-	//	double phi = r2d(atan2(m23, m33));
-	
-	//	double m11 = 2 * pow(q0,2) + 2 * pow(q2,2) - 1;
-	//	double m12 = -2 * q1 * q2 + 2 * q0 * q3;
-	//	double m13 = 2 * q2 * q3 + 2 * q0 * q1;
-	//	double m23 = -2 * q1 * q3 + 2 * q0 * q2;
-	//	double m33 = 2 * pow(q0,2) + 2 * pow(q3,2) - 1;
-	//	double psi = r2d(atan2(m12,m11));
-	//	double theta = r2d(asin(m13));
-	//	double phi = r2d(atan2(m23, m33));
 	
 	double m22=2*pow(q0,2)+2*pow(q2,2)-1;
 	double m21=2*q1*q2-2*q0*q3;
@@ -63,38 +38,15 @@ PLTEulerAngles EulerAnglesFromQuaternion(PLTQuaternion q)
 	double theta = r2d(asin(m23));
 	double phi = -r2d(atan2(m13, m33));
 	
-	
-	PLTEulerAngles angles = (PLTEulerAngles){ psi, theta, phi };
-	
-	return angles;
+    return (PLTEulerAngles){ psi, theta, phi };
 }
 
 PLTQuaternion QuaternionFromEulerAngles(PLTEulerAngles eulerAngles)
 {
-	//return (PLTQuaternion){0,0,0,0};
-	
-	double psi = d2r(eulerAngles.x);
+    double psi = d2r(eulerAngles.x);
 	double theta = d2r(eulerAngles.y);
 	double phi = d2r(eulerAngles.z);
 	
-	//	double q0 = cos(psi)*cos(theta)*cos(phi) + sin(psi)*sin(theta)*sin(psi);
-	//	double q1 = -cos(psi)*sin(theta)*cos(phi) - sin(psi)*cos(theta)*sin(psi);
-	//	double q2 = cos(psi)*cos(theta)*sin(phi) - sin(psi)*sin(theta)*cos(psi);
-	//	double q3 = sin(psi)*cos(theta)*cos(phi) - cos(psi)*sin(theta)*sin(psi);
-	
-	//	double q0 = cos(psi/2.0) * cos(theta/2.0) * cos(phi/2.0) - sin(psi/2.0) * sin(theta/2.0) * sin(phi/2.0);
-	//	double q1 = cos(psi/2.0) * sin(theta/2.0) * cos(phi/2.0) + sin(psi/2.0) * cos(theta/2.0) * sin(phi/2.0);
-	//	double q2 = -cos(psi/2.0) * cos(theta/2.0) * sin(phi/2.0) + sin(psi/2.0) * sin(theta/2.0) * cos(phi/2.0);
-	//	double q3 = sin(psi/2.0) * cos(theta/2.0) * cos(phi/2.0) + cos(psi/2.0) * sin(theta/2.0) * sin(phi/2.0);
-	
-	//	double q0 = cos(psi/2.0) * cos(theta/2.0) * cos(phi/2.0) + sin(psi/2.0) * sin(theta/2.0) * sin(phi/2.0);
-	//	double q1 = cos(psi/2.0) * cos(theta/2.0) * sin(phi/2.0) - sin(psi/2.0) * sin(theta/2.0) * cos(phi/2.0);
-	//	double q2 = cos(psi/2.0) * sin(theta/2.0) * cos(phi/2.0) + sin(psi/2.0) * cos(theta/2.0) * sin(phi/2.0);
-	//	double q3 = sin(psi/2.0) * cos(theta/2.0) * cos(phi/2.0) - cos(psi/2.0) * sin(theta/2.0) * sin(phi/2.0);
-	
-	//	psi=pi/180*psid;
-	//	theta=pi/180*thetad;
-	//	phi=pi/180*phid;
 	double q0=cos(psi/2.0)*cos(theta/2.0)*cos(phi/2.0)-sin(psi/2.0)*sin(theta/2.0)*sin(phi/2.0);
 	double q1=cos(psi/2.0)*sin(theta/2.0)*cos(phi/2.0)-sin(psi/2.0)*cos(theta/2.0)*sin(phi/2.0);
 	double q2=cos(psi/2.0)*cos(theta/2.0)*sin(phi/2.0)+sin(psi/2.0)*sin(theta/2.0)*cos(phi/2.0);

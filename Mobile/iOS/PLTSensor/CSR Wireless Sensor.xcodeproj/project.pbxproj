@@ -28,8 +28,6 @@
 		4217B12E16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4217B12D16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png */; };
 		4217B13216FCEAFA005FDA9C /* UIDevice+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */; };
 		4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */; };
-		4226343318A254C700FFA4F5 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343218A254C700FFA4F5 /* GoogleMaps.framework */; };
-		4226343618A254ED00FFA4F5 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */; };
 		4226343A18A25BB500FFA4F5 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343918A25BB500FFA4F5 /* libobjc.dylib */; };
 		4226343C18A25BBA00FFA4F5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343B18A25BBA00FFA4F5 /* libz.dylib */; };
 		4226343E18A25D4F00FFA4F5 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343D18A25D4F00FFA4F5 /* libc++.dylib */; };
@@ -59,6 +57,8 @@
 		427622B2171C76E400940355 /* NSProcessInfo+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 427622B1171C76E400940355 /* NSProcessInfo+Debugging.m */; };
 		4282215A16FBB53000B637A4 /* 50_yrs_icon_114@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4282215816FBB53000B637A4 /* 50_yrs_icon_114@2x.png */; };
 		4282215B16FBB53000B637A4 /* 50_yrs_icon_144@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4282215916FBB53000B637A4 /* 50_yrs_icon_144@2x.png */; };
+		4285583E18C10C4E00D82E72 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4285583D18C10C4E00D82E72 /* GoogleMaps.framework */; };
+		4285584018C10C7B00D82E72 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */; };
 		429959251714E97600C2A724 /* ServerLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429959231714E97600C2A724 /* ServerLogViewController.m */; };
 		429959261714E97600C2A724 /* ServerLogViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 429959241714E97600C2A724 /* ServerLogViewController.xib */; };
 		42995D411796392100B19FEF /* HTCalibrationTriggersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42995D401796392100B19FEF /* HTCalibrationTriggersViewController.m */; };
@@ -199,7 +199,6 @@
 		4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+ScreenSize.m"; sourceTree = "<group>"; };
 		4226342C18A2510B00FFA4F5 /* StreetView2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetView2ViewController.h; sourceTree = "<group>"; };
 		4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreetView2ViewController.m; sourceTree = "<group>"; };
-		4226343218A254C700FFA4F5 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = "../../../../../Desktop/GoogleMaps-iOS-1.6.2/GoogleMaps.framework"; sourceTree = "<group>"; };
 		4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMaps.bundle; sourceTree = "<group>"; };
 		4226343718A25A5800FFA4F5 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		4226343918A25BB500FFA4F5 /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
@@ -239,6 +238,8 @@
 		427622B1171C76E400940355 /* NSProcessInfo+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProcessInfo+Debugging.m"; sourceTree = "<group>"; };
 		4282215816FBB53000B637A4 /* 50_yrs_icon_114@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "50_yrs_icon_114@2x.png"; sourceTree = "<group>"; };
 		4282215916FBB53000B637A4 /* 50_yrs_icon_144@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "50_yrs_icon_144@2x.png"; sourceTree = "<group>"; };
+		4285583D18C10C4E00D82E72 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
+		4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		429959221714E97600C2A724 /* ServerLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerLogViewController.h; path = ../ServerLogViewController.h; sourceTree = "<group>"; };
 		429959231714E97600C2A724 /* ServerLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerLogViewController.m; path = ../ServerLogViewController.m; sourceTree = "<group>"; };
 		429959241714E97600C2A724 /* ServerLogViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ServerLogViewController.xib; path = ../ServerLogViewController.xib; sourceTree = "<group>"; };
@@ -425,12 +426,12 @@
 				42EC7B7616487B0200A782BD /* QuartzCore.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				C300638115BF6D5C00068870 /* CFNetwork.framework in Frameworks */,
-				4226343318A254C700FFA4F5 /* GoogleMaps.framework in Frameworks */,
 				C300637F15BF6D4100068870 /* CoreLocation.framework in Frameworks */,
 				42F2A55F18AE35B400177547 /* libTestFlight.a in Frameworks */,
 				C300637D15BF6D3000068870 /* Security.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				4285583E18C10C4E00D82E72 /* GoogleMaps.framework in Frameworks */,
 				00F93BF5104573EE00022230 /* ExternalAccessory.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,6 +469,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				42F2A56018AE35B900177547 /* TestFlight */,
 				422F75C016FBAD5C000DF717 /* Context Server */,
@@ -526,7 +528,6 @@
 				4226343B18A25BBA00FFA4F5 /* libz.dylib */,
 				4226343918A25BB500FFA4F5 /* libobjc.dylib */,
 				4226343718A25A5800FFA4F5 /* libstdc++.dylib */,
-				4226343218A254C700FFA4F5 /* GoogleMaps.framework */,
 				42B36A52182C36940017F943 /* SystemConfiguration.framework */,
 				42EC7B7516487B0200A782BD /* QuartzCore.framework */,
 				42EC7B7316487ADA00A782BD /* OpenGLES.framework */,
@@ -538,6 +539,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				4285583D18C10C4E00D82E72 /* GoogleMaps.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -973,7 +975,6 @@
 				422A300517FE16250040C7F1 /* settings_ios7.png in Resources */,
 				42082D661703F7170057F63B /* SensorsViewController_iPad.xib in Resources */,
 				42F2A54718AB49E900177547 /* ball_f1@2x.png in Resources */,
-				4226343618A254ED00FFA4F5 /* GoogleMaps.bundle in Resources */,
 				42F2A53918AB2ED300177547 /* ball@2x.png in Resources */,
 				42082D6B1703FB800057F63B /* SelectionListViewController.xib in Resources */,
 				4272370D17062EDA00101B91 /* signal_icon@2x.png in Resources */,
@@ -992,6 +993,7 @@
 				42749926170D0B6C00C8DD37 /* auth_status_icon@2x.png in Resources */,
 				42749927170D0B6C00C8DD37 /* hs_status_icon@2x.png in Resources */,
 				42749928170D0B6C00C8DD37 /* reg_status_icon@2x.png in Resources */,
+				4285584018C10C7B00D82E72 /* GoogleMaps.bundle in Resources */,
 				426FAB95170E7B0A0054D216 /* Default-Landscape@2x~ipad.png in Resources */,
 				422A300217FCDA840040C7F1 /* pltlabs_nav@2x.png in Resources */,
 				42F2A52D18A9F51000177547 /* game_icon@2x.png in Resources */,
@@ -1095,6 +1097,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
+					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1137,6 +1140,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
+					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CSR_Wireless_Sensor_Prefix.pch;

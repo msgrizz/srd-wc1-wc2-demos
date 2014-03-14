@@ -35,6 +35,9 @@
 #import "BRDeviceConnectedEvent.h"
 #import "BRDeviceDisconnectedEvent.h"
 #import "BRServiceSubscriptionChangedEvent.h"
+#import "BRHostVersionNegotiateCommand.h"
+#import "BRMetadata.h"
+#import "NSArray+PrettyPrint.h"
 
 
 typedef enum {
@@ -93,7 +96,8 @@ typedef enum {
 
 - (void)sendMessage:(BRMessage *)message
 {
-    NSLog(@"--> %@", [message.data hexStringWithSpaceEvery:2]);
+    //NSLog(@"--> %@", [message.data hexStringWithSpaceEvery:2]);
+    [self.delegate BRDevice:self willSendData:message.data];
     //self.state = BRDeviceStateAwaitingMessageResponse;
     [self.RFCOMMChannel writeAsync:(void *)[message.data bytes] length:[message.data length] refcon:nil];
 }
@@ -105,11 +109,9 @@ typedef enum {
     NSLog(@"Opening local port connection...");
     
     self.state = BRDeviceStateOpeningLocalPortConnection;
-    
-    NSString *hexString = @"100700000001010101";
-    NSData *data = [NSData dataWithHexString:hexString];
-    NSLog(@"--> %@", [data hexStringWithSpaceEvery:2]);
-    [self.RFCOMMChannel writeAsync:(void *)[data bytes] length:[data length] refcon:nil];
+
+    BRHostVersionNegotiateCommand *command = [BRHostVersionNegotiateCommand commandWithAddress:0x0000000];
+    [self sendMessage:command];
 }
 
 - (void)openSensorsConnection
@@ -117,11 +119,9 @@ typedef enum {
     NSLog(@"Opening sensors port connection...");
     
     self.state = BRDeviceStateOpeningSensorsPortConnection;
-    
-    NSString *hexString = @"100750000001010101";
-    NSData *data = [NSData dataWithHexString:hexString];
-    NSLog(@"--> %@", [data hexStringWithSpaceEvery:2]);
-    [self.RFCOMMChannel writeAsync:(void *)[data bytes] length:[data length] refcon:nil];
+
+    BRHostVersionNegotiateCommand *command = [BRHostVersionNegotiateCommand commandWithAddress:0x5000000];
+    [self sendMessage:command];
 }
 
 - (void)parseIncomingData:(NSData *)data
@@ -205,28 +205,28 @@ typedef enum {
         case BRMessageTypeCommandResultException: {
             NSLog(@"***** EXCEPTION *****");
             
-            BRExceptionID exceptionID;
-            NSData *exceptionIDData = [data subdataWithRange:NSMakeRange(10, sizeof(uint16_t))];
-            [exceptionIDData getBytes:&exceptionID length:sizeof(uint16_t)];
-            exceptionID = ntohs(exceptionID);
-            
-            Class class = nil;
-            
-            switch (exceptionID) {
-                case BRExceptionIDDeviceNotReady:
-                    class = [BRDeviceNotReadyException class];
-                    break;
-                case BRExceptionIDIllegalValue:
-                    class = [BRIllegalValueException class];
-                    break;
-                default:
-                    NSLog(@"Error: unknown Deckard exception 0x%04X", exceptionID);
-                    break;
-            }
-            
-            if (class) {
-                [self.delegate BRDevice:self didRaiseException:[class exceptionWithData:data]];
-            }
+//            BRExceptionID exceptionID;
+//            NSData *exceptionIDData = [data subdataWithRange:NSMakeRange(10, sizeof(uint16_t))];
+//            [exceptionIDData getBytes:&exceptionID length:sizeof(uint16_t)];
+//            exceptionID = ntohs(exceptionID);
+//            
+//            Class class = nil;
+//            
+//            switch (exceptionID) {
+//                case BRExceptionIDDeviceNotReady:
+//                    class = [BRDeviceNotReadyException class];
+//                    break;
+//                case BRExceptionIDIllegalValue:
+//                    class = [BRIllegalValueException class];
+//                    break;
+//                default:
+//                    NSLog(@"Error: unknown Deckard exception 0x%04X", exceptionID);
+//                    break;
+//            }
+//            
+//            if (class) {
+//                [self.delegate BRDevice:self didRaiseException:[class exceptionWithData:data]];
+//            }
             break; }
         case BRMessageTypeCommand:
             // something
@@ -241,14 +241,13 @@ typedef enum {
             NSLog(@"BRMessageTypeDeviceProtocolVersion");
             break;
         case BRMessageTypeMetadata: {
+            BRMetadata *metadata = [BRMetadata metadataWithData:data];
+            [self.delegate BRDevice:self didReceiveMetadata:metadata];
+            
             uint8_t port;
             NSData *portData = [data subdataWithRange:NSMakeRange(2, sizeof(uint8_t))];
             [portData getBytes:&port length:sizeof(uint8_t)];
-            if (port==0) {
-                NSLog(@"Connected to local device!");
-                [self openSensorsConnection];
-            }
-            else if (port==5) {
+            if (port==5) {
                 NSLog(@"Connected to sensors device!");
                 [self.delegate BRDeviceDidConnectToHTDevice:self];
             }
@@ -306,9 +305,16 @@ typedef enum {
                     class = [BRServiceSubscriptionChangedEvent class];
                     break;
                     
-                case BREventIDDeviceConnected:
+                case BREventIDDeviceConnected: {
                     class = [BRDeviceConnectedEvent class];
-                    break;
+                    
+                    BRDeviceConnectedEvent *event = (BRDeviceConnectedEvent *)[BRDeviceConnectedEvent eventWithData:data];
+                    if (event.port == 5) {
+                        [self openSensorsConnection];
+                    }
+//                    BRDevice *newDevice = [BRDevice deviceWithAddress:self.BTAddress];
+//                    [self.delegate BRDevice:self didDiscoverAdjacentDevice:newDevice];
+                    break; }
                     
                 case BREventIDDeviceDisconnected:
                     class = [BRDeviceDisconnectedEvent class];
@@ -348,7 +354,8 @@ typedef enum {
 - (void)rfcommChannelData:(IOBluetoothRFCOMMChannel*)rfcommChannel data:(void *)dataPointer length:(size_t)dataLength;
 {
     NSData *data = [NSData dataWithBytes:dataPointer length:dataLength];
-    NSLog(@"<-- %@", [data hexStringWithSpaceEvery:2]);
+    //NSLog(@"<-- %@", [data hexStringWithSpaceEvery:2]);
+    [self.delegate BRDevice:self didReceiveData:data];
     
     [self parseIncomingData:data];
 }
@@ -390,6 +397,20 @@ typedef enum {
             [self openLocalConnection];
         }
     }
+}
+
+#pragma mark - NSObject
+
+//- (NSString *)description
+//{
+//    return [NSString stringWithFormat:@"<BRDevice %p> address=0x%07X, isConnected=%@, commands=%@, settings=%@, events=%@, delegate=%@",
+//            self, self.address, (self.isConnected ? @"YES" : @"NO"), self.commands, self.settings, self.events, self.delegate];
+//}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<BRDevice %p> isConnected=%@, delegate=%@",
+            self, (self.isConnected ? @"YES" : @"NO"), self.delegate];
 }
 
 @end

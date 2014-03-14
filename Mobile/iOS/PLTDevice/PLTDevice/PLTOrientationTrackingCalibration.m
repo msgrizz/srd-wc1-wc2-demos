@@ -11,6 +11,9 @@
 
 @interface PLTOrientationTrackingCalibration()
 
+//@property(nonatomic, assign)	PLTEulerAngles	referenceEulerAngles;
+@property(nonatomic, assign)	PLTQuaternion	referenceQuaternion;
+
 - (id)initWithReferenceEulerAngles:(PLTEulerAngles)referenceEulerAngles;
 - (id)initWithReferenceQuaternion:(PLTQuaternion)referenceQuaternion;
 
@@ -28,7 +31,7 @@
 
 - (void)setReferenceEulerAngle:(PLTEulerAngles)anEulerAngles
 {
-	
+    self.referenceQuaternion = QuaternionFromEulerAngles(anEulerAngles);
 }
 
 #pragma mark - Public
@@ -46,7 +49,7 @@
 - (id)initWithReferenceEulerAngles:(PLTEulerAngles)referenceEulerAngles
 {
 	self = [super init];
-	self.referenceEulerAngles = referenceEulerAngles;
+	self.referenceQuaternion = QuaternionFromEulerAngles(referenceEulerAngles);
 	return self;
 }
 

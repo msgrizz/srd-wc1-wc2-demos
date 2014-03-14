@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSData (NSData_HexStrings)
+@interface NSData (HexStrings)
 
 + (NSData *)dataWithHexString:(NSString *)hexString;
 - (NSString *)hexStringWithSpaceEvery:(unsigned int)spaceInterval;

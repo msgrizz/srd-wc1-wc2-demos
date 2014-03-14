@@ -12,6 +12,7 @@
 @class BREvent;
 @class BRSettingResponse;
 @class BRException;
+@class BRMetadata;
 @protocol BRDeviceDelegate;
 
 
@@ -25,6 +26,14 @@
 @property(nonatomic,readonly)   NSString                *BTAddress;
 @property(nonatomic,readonly)   BOOL                    isConnected;
 
+
+
+//@property(nonatomic,assign)   uint32_t                address;
+//@property(nonatomic,strong)   NSArray                 *commands;
+//@property(nonatomic,strong)   NSArray                 *settings;
+//@property(nonatomic,strong)   NSArray                 *events;
+
+
 @end
 
 
@@ -33,9 +42,16 @@
 - (void)BRDeviceDidConnectToHTDevice:(BRDevice *)device;
 - (void)BRDeviceDidDisconnectFromHTDevice:(BRDevice *)device;
 - (void)BRDevice:(BRDevice *)device didFailConnectToHTDeviceWithError:(int)ioBTError;
+- (void)BRDevice:(BRDevice *)device didReceiveMetadata:(BRMetadata *)metadata;
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event;
 - (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse;
 - (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception;
+- (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data;
+- (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data;
+
+
+
+//- (void)BRDevice:(BRDevice *)device didDiscoverAdjacentDevice:(BRDevice *)newDevice;
 
 @end
 

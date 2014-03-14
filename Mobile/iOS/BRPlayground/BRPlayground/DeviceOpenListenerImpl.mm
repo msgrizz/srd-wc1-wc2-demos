@@ -14,11 +14,11 @@ namespace bladerunner
 {
     void DeviceOpenListenerImpl::deviceOpen(BladeRunnerDevice &device)
     {
-        [delegate openListenerCallBackWithError:BRError_Success];
+        [delegate openListenerCallBackWithDevice:device error:BRError_Success];
     }
     
     void DeviceOpenListenerImpl::openFailed(BladeRunnerDevice &device, BRError error)
     {
-        [delegate openListenerCallBackWithError:error];
+        [delegate openListenerCallBackWithDevice:device error:error];
     }
 }

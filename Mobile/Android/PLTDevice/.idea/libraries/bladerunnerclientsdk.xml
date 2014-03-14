@@ -1,9 +1,11 @@
 <component name="libraryTable">
-  <library name="bladerunnerclientsdk">
+  <library name="BladeRunnerClientSdk">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/bladerunnerclientsdk.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/" />
+    </SOURCES>
   </library>
 </component>

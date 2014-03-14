@@ -1,5 +1,8 @@
 package com.plantronics.PLTDevice.calibration;
 
+import com.plantronics.PLTDevice.info.EulerAngles;
+import com.plantronics.PLTDevice.info.Quaternion;
+
 /**
  * Created by mdavis on 1/16/14.
  */
@@ -9,7 +12,7 @@ public class OrientationTrackingCalibration extends com.plantronics.PLTDevice.ca
 
 	public OrientationTrackingCalibration(EulerAngles angles)
 	{
-		_referenceQuaternion = Quaternion.QuaternionFromEulerAngles(angles);
+
 	}
 
 	public OrientationTrackingCalibration(Quaternion quaternion)
@@ -19,7 +22,7 @@ public class OrientationTrackingCalibration extends com.plantronics.PLTDevice.ca
 
 	public EulerAngles getReferenceEulerAngles()
 	{
-		return EulerAngles.EulerAnglesFromQuaternion(_referenceQuaternion);
+		return null;
 	}
 
 	public Quaternion getReferenceQuaternion()

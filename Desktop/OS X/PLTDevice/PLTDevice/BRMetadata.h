@@ -11,6 +11,8 @@
 
 @interface BRMetadata : BRMessage
 
++ (BRMetadata *)metadataWithData:(NSData *)data;
+
 @property(nonatomic,readonly) NSArray   *commands;
 @property(nonatomic,readonly) NSArray   *settings;
 @property(nonatomic,readonly) NSArray   *events;

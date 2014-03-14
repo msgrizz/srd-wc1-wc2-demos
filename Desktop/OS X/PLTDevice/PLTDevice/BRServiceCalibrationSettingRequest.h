@@ -8,6 +8,11 @@
 
 #import "BRSettingRequest.h"
 
+
 @interface BRServiceCalibrationSettingRequest : BRSettingRequest
+
++ (BRServiceCalibrationSettingRequest *)requestWithServiceID:(uint16_t)serviceID;
+
+@property(nonatomic,assign) uint16_t   serviceID;
 
 @end

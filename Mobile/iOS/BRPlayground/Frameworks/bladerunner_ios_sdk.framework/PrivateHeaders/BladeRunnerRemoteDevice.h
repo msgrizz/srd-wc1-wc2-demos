@@ -24,7 +24,6 @@ namespace bladerunner
         BladeRunnerRemoteDevice(BladeRunnerDevice* currentDevice, byte port);
         virtual std::string& getBladeRunnerDeviceAddress();
         virtual BRError open(byte& port);
-        virtual BRError openOnPort(byte port);
         virtual BRError open(PacketType packetType, byte& port);
         virtual BRError close();
         virtual BRError perform(DeviceCommand& command, std::vector<BRProtocolElement> args);

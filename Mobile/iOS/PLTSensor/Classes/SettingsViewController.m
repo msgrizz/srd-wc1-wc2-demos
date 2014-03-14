@@ -865,7 +865,7 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
     [self.tableView reloadData];
     [self startConnectionTimer];
     
-    [TestFlight passCheckpoint:@"SETTINGS"];
+    //[TestFlight passCheckpoint:@"SETTINGS"];
 }
 
 - (void)viewDidAppear:(BOOL)animated

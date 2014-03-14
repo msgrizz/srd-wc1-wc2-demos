@@ -616,6 +616,7 @@ magnetometerCalibrationInfo:(PLTMagnetometerCalibrationInfo **)magnetometerCalib
     printf(".");
 	
 	PLTQuaternion quaternion = { quat[0], quat[1], quat[2], quat[3] };
+    NSLog(@"euler: %@", NSStringFromEulerAngles(EulerAnglesFromQuaternion(quaternion)));
 	*orientationTrackingInfo = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
 																			 timestamp:timestamp
 																		 rawQuaternion:quaternion

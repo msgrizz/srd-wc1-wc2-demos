@@ -11,6 +11,7 @@
 
 @interface BRDeviceConnectedEvent : BREvent
 
-@property(nonatomic,readonly) uint8_t port;
+//@property(nonatomic,readonly) uint32_t  address;
+@property(nonatomic,readonly) uint8_t   port;
 
 @end

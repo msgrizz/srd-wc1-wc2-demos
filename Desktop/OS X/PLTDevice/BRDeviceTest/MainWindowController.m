@@ -12,6 +12,7 @@
 
 
 #import "BRDevice.h"
+#import "NSData+HexStrings.h"
 #import "BRMessage.h"
 #import "BRSubscribeToServiceCommand.h"
 #import "BRWearingStateSettingRequest.h"
@@ -26,11 +27,6 @@
 #import "BRFreeFallEvent.h"
 #import "BRPedometerEvent.h"
 #import "BRGyroscopeCalStatusEvent.h"
-
-#import "PLTDevice.h"
-#import "PLTDevice_Internal.h"
-#import <IOBluetooth/IOBluetooth.h>
-
 #import "BRWearingStateSettingResponse.h"
 #import "BRSignalStrengthSettingResponse.h"
 #import "BROrientationTrackingSettingResponse.h"
@@ -38,9 +34,31 @@
 #import "BRFreeFallSettingResponse.h"
 #import "BRPedometerSettingResponse.h"
 #import "BRGyroscopeCalStatusSettingResponse.h"
+#import "BRCalibratePedometerServiceCommand.h"
+#import "BRServiceCalibrationSettingRequest.h"
+
+#import "PLTDevice.h"
+#import "PLTDevice_Internal.h"
+#import <IOBluetooth/IOBluetooth.h>
+
+
 
 
 @interface MainWindowController () <BRDeviceDelegate>
+
+- (IBAction)openConnectionButton:(id)sender;
+- (IBAction)subscribeToServicesButton:(id)sender;
+- (IBAction)unsubscribeFromServicesButton:(id)sender;
+- (IBAction)queryDeviceInfoButton:(id)sender;
+- (IBAction)queryWearingStateButton:(id)sender;
+- (IBAction)querySignalStrengthButton:(id)sender;
+- (IBAction)queryServicesButton:(id)sender;
+- (IBAction)subscribeToSignalStrengthButton:(id)sender;
+- (void)enableUI;
+- (void)disableUI;
+
+@property(nonatomic,retain) BRDevice *device;
+@property(nonatomic,retain) BRDevice *sensorsDevice;
 
 @property(nonatomic,assign) IBOutlet NSButton               *queryWearingStateButton;
 @property(nonatomic,assign) IBOutlet NSButton               *querySignalStrengthButton;
@@ -59,20 +77,7 @@
 @property(nonatomic,assign) IBOutlet NSTextField            *tapsTextField;
 @property(nonatomic,assign) IBOutlet NSTextField            *pedometerTextField;
 @property(nonatomic,assign) IBOutlet NSTextField            *gyroCalTextField;
-
-
-- (IBAction)openConnectionButton:(id)sender;
-- (IBAction)subscribeToServicesButton:(id)sender;
-- (IBAction)unsubscribeFromServicesButton:(id)sender;
-- (IBAction)queryDeviceInfoButton:(id)sender;
-- (IBAction)queryWearingStateButton:(id)sender;
-- (IBAction)querySignalStrengthButton:(id)sender;
-- (IBAction)queryServicesButton:(id)sender;
-- (IBAction)subscribeToSignalStrengthButton:(id)sender;
-- (void)enableUI;
-- (void)disableUI;
-
-@property(nonatomic,retain) BRDevice *device;
+@property(nonatomic,assign) IBOutlet NSTextField            *dataTextField;
 
 @end
 
@@ -136,8 +141,14 @@
 
 - (IBAction)querySignalStrengthButton:(id)sender
 {
-    BRSignalStrengthSettingRequest *request = (BRSignalStrengthSettingRequest *)[BRSignalStrengthSettingRequest request];
-    [self.device sendMessage:request];
+//    BRSignalStrengthSettingRequest *request = (BRSignalStrengthSettingRequest *)[BRSignalStrengthSettingRequest request];
+//    [self.device sendMessage:request];
+    
+    BRCalibratePedometerServiceCommand *command = [BRCalibratePedometerServiceCommand command];
+    [self.device sendMessage:command];
+    
+//    BRServiceCalibrationSettingRequest *request = [BRServiceCalibrationSettingRequest requestWithServiceID:BRServiceIDOrientationTracking];
+//    [self.device sendMessage:request];
 }
 
 - (IBAction)queryServicesButton:(id)sender
@@ -210,6 +221,11 @@
 - (void)BRDevice:(BRDevice *)device didFailConnectToHTDeviceWithError:(int)ioBTError
 {
     NSLog(@"BRDevice:didFailConnectToHTDeviceWithError: %d", ioBTError);
+}
+
+- (void)BRDevice:(BRDevice *)device didReceiveMetadata:(BRMetadata *)metadata
+{
+    NSLog(@"BRDevice:didReceiveMetadata: %@", metadata);
 }
 
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event
@@ -288,8 +304,29 @@
 
 - (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
 {
-    NSLog(@"BRDevice: %@ didRaiseException: %@", device, exception);
+    NSLog(@"BRDevice:didRaiseException: %@", exception);
 }
+
+- (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data
+{
+    NSString *hexString = [data hexStringWithSpaceEvery:2];
+    NSLog(@"--> %@", hexString);
+    self.dataTextField.stringValue = [NSString stringWithFormat:@"--> %@", hexString];
+}
+
+- (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data
+{
+    NSString *hexString = [data hexStringWithSpaceEvery:2];
+    NSLog(@"<-- %@", hexString);
+    self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
+}
+
+
+
+//- (void)BRDevice:(BRDevice *)device didDiscoverAdjacentDevice:(BRDevice *)newDevice
+//{
+//    NSLog(@"BRDevice:didDiscoverAdjacentDevice: %@", newDevice);
+//}
 
 #pragma mark - NSWindowController
 

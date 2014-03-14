@@ -1,7 +1,5 @@
 package com.plantronics.PLTDevice.info;
 
-import com.plantronics.labs.Info;
-
 import java.util.Date;
 
 /**

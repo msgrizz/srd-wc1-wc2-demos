@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSArray (PrettyPrint)
+
+- (NSString *)hexDescriptionFromShortIntegerArray;
 
 @end

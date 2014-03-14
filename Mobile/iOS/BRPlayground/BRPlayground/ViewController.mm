@@ -242,15 +242,15 @@ using namespace bladerunner;
 - (IBAction)subscribeHTButton:(id)sender
 {
     NSLog(@"subscribeHTButton");
-    if (self.device != NULL && self.device->isOpen()) {
+    if (self.remoteDevice != NULL) {// && self.device->isOpen()) {
         int16_t commandID = 0xFF0A; // subscribe to HT
         DeviceCommandType *dct = new DeviceCommandType(commandID);
-        BRError error = self.device->getCommandType(commandID, *dct);
+        BRError error = self.remoteDevice->getCommandType(commandID, *dct);
         if (error != BRError_Success ) {
             NSLog(@"Error getting command type: %d", error);
             return;
         }
-        DeviceCommand *dc = new DeviceCommand(self.device ,*dct);
+        DeviceCommand *dc = new DeviceCommand(self.remoteDevice ,*dct);
         delete dct;
         
         if (dc) {
@@ -350,6 +350,7 @@ using namespace bladerunner;
     }
 }
 
+
 - (void)timeout:(NSTimer *)theTimer
 {
     NSLog(@"Timeout.");
@@ -359,8 +360,8 @@ using namespace bladerunner;
 {
     BladeRunnerDeviceManager *manager = BladeRunnerDeviceManager::getManager();
     if (manager) {
-        NSLog(@"Openning connection to remote device on port %d...", port);
-        BRError error = manager->newDevice(*(_device), port, &(_remoteDevice));
+        NSLog(@"Creating remote device for port %d...", port);
+        BRError error = manager->newDevice(*_device, port, &_remoteDevice);
         NSLog(@"error: %d", error);
         if (error == BRError_Success && self.remoteDevice) {
             BRError error = BRError_Success;
@@ -368,69 +369,70 @@ using namespace bladerunner;
 //            error = self.remoteDevice->checkOpen();
 //            NSLog(@"open? %d", error);
             
-            // register to receive setting outputs
-            self.settingsSignatures = SignatureDefinitions::Settings::getSignatures();
-            error = self.remoteDevice->registerSettingOutputSignatures(_settingsSignatures); // why?
-            if (error != BRError_Success) {
-                NSLog(@"Failed to register setting output signatures: %d", error);
-                return;
-            }
-            
-            // register metadata listener
-            self.metadataListener = new DeviceMetadataListenerImpl();
-            self.metadataListener->delegate = self;
-            error = self.remoteDevice->addMetadataListener(self.metadataListener);
-            if (error != BRError_Success) {
-                NSLog(@"Failed to add metadata listener: %d", error);
-                return;
-            }
+//            // register to receive setting outputs
+//            self.settingsSignatures = SignatureDefinitions::Settings::getSignatures();
+//            error = self.remoteDevice->registerSettingOutputSignatures(_settingsSignatures); // why?
+//            if (error != BRError_Success) {
+//                NSLog(@"Failed to register setting output signatures: %d", error);
+//                return;
+//            }
+//            
+//            // register metadata listener
+//            self.metadataListener = new DeviceMetadataListenerImpl();
+//            self.metadataListener->delegate = self;
+//            error = self.remoteDevice->addMetadataListener(self.metadataListener);
+//            if (error != BRError_Success) {
+//                NSLog(@"Failed to add metadata listener: %d", error);
+//                return;
+//            }
              
             // register event listener
-            self.eventSignatures = SignatureDefinitions::Events::getSignatures();
+//            self.eventSignatures = SignatureDefinitions::Events::getSignatures();
             
-            if (port==5) {
-                // since the SDK was built with a Deckard version without BaDangle/WC1 messages, we artificially insert the "Subscribed service data" event payload signature
-                vector<BRType> *HT_EVENT_PAYLOAD_OUT = new std::vector<BRType>;
-                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_UNSIGNED_SHORT);
-                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_UNSIGNED_SHORT);
-                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_BYTE_ARRAY);
-                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_BYTE_ARRAY);
-                SignatureDescription *htEvent = new SignatureDescription(0xFF1A, *HT_EVENT_PAYLOAD_OUT);
-                _eventSignatures.insert(*htEvent);
-            }
+//            if (port==5) {
+//                // since the SDK was built with a Deckard version without BaDangle/WC1 messages, we artificially insert the "Subscribed service data" event payload signature
+//                vector<BRType> *HT_EVENT_PAYLOAD_OUT = new std::vector<BRType>;
+//                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_UNSIGNED_SHORT);
+//                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_UNSIGNED_SHORT);
+//                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_BYTE_ARRAY);
+//                HT_EVENT_PAYLOAD_OUT->push_back(BR_TYPE_BYTE_ARRAY);
+//                SignatureDescription *htEvent = new SignatureDescription(0xFF1A, *HT_EVENT_PAYLOAD_OUT);
+//                _eventSignatures.insert(*htEvent);
+//            }
             
-            for(set<SignatureDescription>::iterator i = _eventSignatures.begin(); i != _eventSignatures.end(); ++i) {
-                //NSLog(@"Type: %d", (*i).getID());
-            }
+//            for(set<SignatureDescription>::iterator i = _eventSignatures.begin(); i != _eventSignatures.end(); ++i) {
+//                NSLog(@"Type: %d", (*i).getID());
+//            }
             //NSLog(@"%lu events.", self.eventSignatures.size());
-            error = self.remoteDevice->registerEventSignatures(_eventSignatures); // why?
-            self.eventListener = new DeviceEventListenerImpl();
-            self.eventListener->delegate = self;
-            error = self.remoteDevice->addEventListener(self.eventListener);
-            if (error != BRError_Success) {
-                NSLog(@"Failed to add event listener: %d", error);
-                return;
-            }
+//            error = self.remoteDevice->registerEventSignatures(_eventSignatures); // why?
+//            self.eventListener = new DeviceEventListenerImpl();
+//            self.eventListener->delegate = self;
+//            error = self.remoteDevice->addEventListener(self.eventListener);
+//            if (error != BRError_Success) {
+//                NSLog(@"Failed to add event listener: %d", error);
+//                return;
+//            }
             
             // register open listener
             //if (!self.openListener) {
-                self.openListener = new DeviceOpenListenerImpl();
-                self.openListener->delegate = self;
-                error = self.remoteDevice->addOpenListener(self.openListener);
-                if (error != BRError_Success) {
-                    NSLog(@"Failed to add open listener: %d", error);
-                    return;
-                }
+//                self.openListener = new DeviceOpenListenerImpl();
+//                self.openListener->delegate = self;
+//                error = self.remoteDevice->addOpenListener(self.openListener);
+//                if (error != BRError_Success) {
+//                    NSLog(@"Failed to add open listener: %d", error);
+//                    return;
+//                }
             //}
             
             // open device connection
             // NOTICE 'newPort' is never set to 'port' from the function arguments. in face, in the source for open(), newPort is SET to 1. (??)
+            NSLog(@"Ready, set, go...");
             byte newPort;
             error = self.remoteDevice->open(newPort);
             if (error == BRError_DeviceAlreadyOpen) {
                 NSLog(@"Device already open.");
             }
-            if (error == BRError_Success) {
+            else if (error == BRError_Success) {
                 NSLog(@"Opening remote connection on port %d...", newPort);
                 self.timeoutTimer = [NSTimer scheduledTimerWithTimeInterval:TIME_OUT_INTERVAL target:self selector:@selector(timeout:) userInfo:nil repeats:NO];
             }
@@ -449,44 +451,64 @@ using namespace bladerunner;
 
 - (IBAction)queryRemoteCallStateButton:(id)sender
 {
-#warning not implemented
-    if (self.device != NULL && self.device->isOpen()) {
-        DeviceSettingType *dst = new DeviceSettingType(DEFAULT_TYPE);
-        int16_t settingID = 0x0202; // wearing state
-        BRError error = self.device->getSettingType(settingID, *dst);
-        if (error == BRError_Success) {
-            DeviceSetting *ds = new DeviceSetting(self.device, *dst);
-            delete dst;
-            error = self.device->fetch(*ds);
-            //delete ds;
-            
-            if (error == BRError_Success) {
-                NSLog(@"Fetch returned BRError_Success.");
-                
-                BRProtocolElement value = BRProtocolElement(false);
-                error = ds->getValue(value);
-                if (error == BRError_Success) {
-                    bool flag;
-                    value.getValue(flag);
-                    NSLog(@"Got setting: %@", (flag ? @"WEARING" : @"NOT WEARING"));
-                }
-                else {
-                    NSLog(@"Error getting setting value: %d", error);
-                }
-                
-                delete ds;
-            }
-            else {
-                NSLog(@"Fetch failed: %d", error);
-            }
-        }
-        else {
-            NSLog(@"Failed to get setting type for setting ID %04X: %d", settingID, error);
-        }
+    if (_remoteDevice != nil) {
+        BRError error = _remoteDevice->checkOpen();
+        NSLog(@"checkOpen: %d", error);
+        
+        BOOL open = _remoteDevice->isOpen();
+        NSLog(@"isOpen: %@", open ? @"YES" : @"NO");
     }
-    else {
-        NSLog(@"Device not open.");
+    
+    if (_device != nil) {
+        BOOL flag = _device->checkRemotePortExist(5);
+        NSLog(@"checkRemotePortExist(5): %@", flag ? @"YES" : @"NO");
+        
+        flag = _device->checkRemoteConnectedPortExist(5);
+        NSLog(@"checkRemoteConnectedPortExist(5): %@", flag ? @"YES" : @"NO");
+        
+        //flag = _device->isCa
     }
+    
+    
+    
+//#warning not implemented
+//    if (self.device != NULL && self.device->isOpen()) {
+//        DeviceSettingType *dst = new DeviceSettingType(DEFAULT_TYPE);
+//        int16_t settingID = 0x0202; // wearing state
+//        BRError error = self.device->getSettingType(settingID, *dst);
+//        if (error == BRError_Success) {
+//            DeviceSetting *ds = new DeviceSetting(self.device, *dst);
+//            delete dst;
+//            error = self.device->fetch(*ds);
+//            //delete ds;
+//            
+//            if (error == BRError_Success) {
+//                NSLog(@"Fetch returned BRError_Success.");
+//                
+//                BRProtocolElement value = BRProtocolElement(false);
+//                error = ds->getValue(value);
+//                if (error == BRError_Success) {
+//                    bool flag;
+//                    value.getValue(flag);
+//                    NSLog(@"Got setting: %@", (flag ? @"WEARING" : @"NOT WEARING"));
+//                }
+//                else {
+//                    NSLog(@"Error getting setting value: %d", error);
+//                }
+//                
+//                delete ds;
+//            }
+//            else {
+//                NSLog(@"Fetch failed: %d", error);
+//            }
+//        }
+//        else {
+//            NSLog(@"Failed to get setting type for setting ID %04X: %d", settingID, error);
+//        }
+//    }
+//    else {
+//        NSLog(@"Device not open.");
+//    }
 }
 
 - (IBAction)endRemoteCallButton:(id)sender
@@ -585,7 +607,7 @@ using namespace bladerunner;
 #pragma mark - DeviceOpenListenerDelegate
 
 //- (void)openlistenerCallBackWithSuccess:(BOOL)success
-- (void)openListenerCallBackWithError:(BRError)error
+- (void)openListenerCallBackWithDevice:(bladerunner::BladeRunnerDevice &)device error:(bladerunner::BRError)error
 {
     if (error == BRError_Success) {
         NSLog(@"Connection open.");
@@ -596,6 +618,9 @@ using namespace bladerunner;
     
     [self.timeoutTimer invalidate];
     self.timeoutTimer = nil;
+    
+    device.removeOpenListener(_openListener);
+    delete _openListener;
 }
 
 #pragma mark - DeviceMetadataListenerDelegate
@@ -670,6 +695,12 @@ using namespace bladerunner;
 {
     self = [super initWithNibName:@"ViewController" bundle:nil];
     return self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    //[self.view sizeToFit];
 }
 
 @end

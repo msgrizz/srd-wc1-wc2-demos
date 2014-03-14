@@ -7,7 +7,33 @@
 //
 
 #import "BRCalibratePedometerServiceCommand.h"
+#import "NSData+HexStrings.h"
+#import "BRSubscribeToServiceCommand.h"
+
 
 @implementation BRCalibratePedometerServiceCommand
+
+#pragma mark - Public
+
++ (BRCalibratePedometerServiceCommand *)command
+{
+    BRCalibratePedometerServiceCommand *command = [[BRCalibratePedometerServiceCommand alloc] init];
+    return command;
+}
+
+#pragma mark - BRMessage
+
+- (NSData *)data
+{
+    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X %02X",
+                           0xB,                     // length
+                           BRMessageTypeCommand,    // message type
+                           0xFF01,                  // deckard id
+                           BRServiceIDPedometer,    // serviceID
+                           0x0000,                  // characteristic
+                           0x01];                   // reset count
+    
+    return [NSData dataWithHexString:hexString];
+}
 
 @end

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		422A5B4318CEAB4C007E7564 /* BRHostVersionNegotiateCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 422A5B4118CEAB4C007E7564 /* BRHostVersionNegotiateCommand.h */; };
+		422A5B4418CEAB4C007E7564 /* BRHostVersionNegotiateCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A5B4218CEAB4C007E7564 /* BRHostVersionNegotiateCommand.m */; };
+		422A5B4918CED8B1007E7564 /* NSArray+PrettyPrint.h in Headers */ = {isa = PBXBuildFile; fileRef = 422A5B4718CED8B1007E7564 /* NSArray+PrettyPrint.h */; };
+		422A5B4A18CED8B1007E7564 /* NSArray+PrettyPrint.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A5B4818CED8B1007E7564 /* NSArray+PrettyPrint.m */; };
+		427B968218CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 427B968018CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.h */; };
+		427B968318CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B968118CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m */; };
+		427B968618CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 427B968418CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h */; };
+		427B968718CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B968518CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m */; };
 		429E5F3618BEBE7C003563D6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 429E5F3518BEBE7C003563D6 /* Cocoa.framework */; };
 		429E5F4018BEBE7C003563D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 429E5F3E18BEBE7C003563D6 /* InfoPlist.strings */; };
 		429E5FA218BEBEB9003563D6 /* NSData+HexStrings.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E5F8018BEBEB9003563D6 /* NSData+HexStrings.h */; };
@@ -145,6 +153,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		422A5B4118CEAB4C007E7564 /* BRHostVersionNegotiateCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRHostVersionNegotiateCommand.h; sourceTree = "<group>"; };
+		422A5B4218CEAB4C007E7564 /* BRHostVersionNegotiateCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRHostVersionNegotiateCommand.m; sourceTree = "<group>"; };
+		422A5B4718CED8B1007E7564 /* NSArray+PrettyPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PrettyPrint.h"; sourceTree = "<group>"; };
+		422A5B4818CED8B1007E7564 /* NSArray+PrettyPrint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PrettyPrint.m"; sourceTree = "<group>"; };
+		427B968018CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCalibratePedometerServiceCommand.h; sourceTree = "<group>"; };
+		427B968118CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCalibratePedometerServiceCommand.m; sourceTree = "<group>"; };
+		427B968418CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRServiceCalibrationSettingRequest.h; sourceTree = "<group>"; };
+		427B968518CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRServiceCalibrationSettingRequest.m; sourceTree = "<group>"; };
 		429E5F3218BEBE7C003563D6 /* PLTDevice.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PLTDevice.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		429E5F3518BEBE7C003563D6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		429E5F3818BEBE7C003563D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -401,6 +417,8 @@
 			children = (
 				429E5F8018BEBEB9003563D6 /* NSData+HexStrings.h */,
 				429E5F8118BEBEB9003563D6 /* NSData+HexStrings.m */,
+				422A5B4718CED8B1007E7564 /* NSArray+PrettyPrint.h */,
+				422A5B4818CED8B1007E7564 /* NSArray+PrettyPrint.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -573,10 +591,14 @@
 		429E60F018BEE1E5003563D6 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				422A5B4118CEAB4C007E7564 /* BRHostVersionNegotiateCommand.h */,
+				422A5B4218CEAB4C007E7564 /* BRHostVersionNegotiateCommand.m */,
 				429E60BD18BEE1A5003563D6 /* BRSubscribeToServiceCommand.h */,
 				429E60BE18BEE1A5003563D6 /* BRSubscribeToServiceCommand.m */,
 				429E60BF18BEE1A5003563D6 /* BRSubscribeToSignalStrengthCommand.h */,
 				429E60C018BEE1A5003563D6 /* BRSubscribeToSignalStrengthCommand.m */,
+				427B968018CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.h */,
+				427B968118CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m */,
 			);
 			name = Commands;
 			sourceTree = "<group>";
@@ -594,6 +616,8 @@
 				429E60B418BEE1A5003563D6 /* BRSignalStrengthSettingRequest.m */,
 				429E60B118BEE1A5003563D6 /* BRServiceDataSettingRequest.h */,
 				429E60B218BEE1A5003563D6 /* BRServiceDataSettingRequest.m */,
+				427B968418CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h */,
+				427B968518CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -655,6 +679,8 @@
 				429E608318BEE06F003563D6 /* PLTMagnetometerCalibrationInfo.h in Headers */,
 				429E609018BEE06F003563D6 /* PLTTapsInfo_Internal.h in Headers */,
 				429E60E318BEE1A5003563D6 /* BRSettingResponse.h in Headers */,
+				422A5B4318CEAB4C007E7564 /* BRHostVersionNegotiateCommand.h in Headers */,
+				422A5B4918CED8B1007E7564 /* NSArray+PrettyPrint.h in Headers */,
 				429E608018BEE06F003563D6 /* PLTInfo.h in Headers */,
 				429E607718BEE06F003563D6 /* PLTDeviceWatcher.h in Headers */,
 				429E609318BEE06F003563D6 /* PLTWearingStateInfo_Internal.h in Headers */,
@@ -685,8 +711,10 @@
 				429E60EB18BEE1A5003563D6 /* BRWearingStateEvent.h in Headers */,
 				429E60CD18BEE1A5003563D6 /* BRMagnetometerCalStatusEvent.h in Headers */,
 				429E60DB18BEE1A5003563D6 /* BRSignalStrengthSettingRequest.h in Headers */,
+				427B968218CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.h in Headers */,
 				429E5FA218BEBEB9003563D6 /* NSData+HexStrings.h in Headers */,
 				429E609418BEE06F003563D6 /* PLTWearingStateInfo.h in Headers */,
+				427B968618CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h in Headers */,
 				42F1C98918C5BC9000A75592 /* BRMagnetometerCalStatusSettingResponse.h in Headers */,
 				429E60DF18BEE1A5003563D6 /* BRWearingStateSettingResponse.h in Headers */,
 				429E60D318BEE1A5003563D6 /* BROrientationTrackingSettingResponse.h in Headers */,
@@ -872,13 +900,17 @@
 				429E608418BEE06F003563D6 /* PLTMagnetometerCalibrationInfo.m in Sources */,
 				429E60E218BEE1A5003563D6 /* BRSettingRequest.m in Sources */,
 				429E606F18BEE06F003563D6 /* PLTCalibration.m in Sources */,
+				427B968718CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m in Sources */,
 				42F1C97E18C5BC6800A75592 /* BRFreeFallSettingResponse.m in Sources */,
+				422A5B4A18CED8B1007E7564 /* NSArray+PrettyPrint.m in Sources */,
+				427B968318CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m in Sources */,
 				42F2316618CBF96800E08B93 /* BRDeviceNotReadyException.m in Sources */,
 				429E608618BEE06F003563D6 /* PLTOrientationTrackingCalibration.m in Sources */,
 				42F1C98218C5BC6F00A75592 /* BRPedometerSettingResponse.m in Sources */,
 				429E60DE18BEE1A5003563D6 /* BRWearingStateSettingRequest.m in Sources */,
 				429E60E018BEE1A5003563D6 /* BRWearingStateSettingResponse.m in Sources */,
 				429E60C818BEE1A5003563D6 /* BREvent.m in Sources */,
+				422A5B4418CEAB4C007E7564 /* BRHostVersionNegotiateCommand.m in Sources */,
 				42F1C97618C5B72100A75592 /* BRDeviceInfoSettingResponse.m in Sources */,
 				429E60D818BEE1A5003563D6 /* BRSignalStrengthEvent.m in Sources */,
 				429E608118BEE06F003563D6 /* PLTInfo.m in Sources */,

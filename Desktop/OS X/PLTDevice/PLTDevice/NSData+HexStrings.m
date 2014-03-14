@@ -9,7 +9,7 @@
 #import "NSData+HexStrings.h"
 
 
-@implementation NSData (NSData_HexStrings)
+@implementation NSData (HexStrings)
 
 + (NSData *)dataWithHexString:(NSString *)hexString
 {

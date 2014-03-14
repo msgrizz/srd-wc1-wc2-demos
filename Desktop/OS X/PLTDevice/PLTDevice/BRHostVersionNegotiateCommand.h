@@ -8,6 +8,11 @@
 
 #import "BRMessage.h"
 
+
 @interface BRHostVersionNegotiateCommand : BRMessage
+
++ (BRHostVersionNegotiateCommand *)commandWithAddress:(uint32_t)address;
+
+@property(nonatomic,assign) uint32_t   address;
 
 @end

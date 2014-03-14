@@ -7,6 +7,23 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World, ACTIVITY_ENTRY_NAME" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Connected"
+        android:id="@+id/connectedTextView" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Connection"
+        android:id="@+id/openConnectionButton"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Subscribe"
+        android:id="@+id/subscribeButton"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
 
