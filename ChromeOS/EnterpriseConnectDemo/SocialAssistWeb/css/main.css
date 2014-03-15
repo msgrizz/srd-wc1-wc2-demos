@@ -1,39 +1,24 @@
 
-
+/*
 .applicationContainer{
     width:auto;
     margin:25px auto;
     position:relative;
 }
-
+*/
 .remote-data{
     color: #0000FF;
 }
 
-#incoming-call{
-  display: none;
-}
-
-#local-video {
-    position:relative;
-    margin-top: 15px;
-    width: 175px;
-    height: auto;
-    margin-left: 20px;
-    background-color: #eee;
-}
-
 #remote-video {
     position:relative;
-    width: 200px;
+    width:200px;
     height: auto;
     background-color: #eee;
 }
 
 #video-container {
     display: none;
-    margin-bottom: 5px;
-    border: groove;
 }
 
 
@@ -42,7 +27,6 @@
     border:1px solid #111111;
     height:360px;
     margin-left: 10px;
-    width:200px;
     float: right;
     color: #FFFFFF;    
 }
@@ -75,7 +59,19 @@
     font-size: small;
 }
 
+#call-img{
+    width: 70px;
+    height: auto;
+    padding-left: 10px;
+    padding-top: 30px;
+    padding-right: 10px;
+}
 
+#peer-information{
+    font-size: larger;
+    font-weight: 300;
+    color: #ffff00;
+}
 #connectBar img{
     left:20px;
     position:absolute;
@@ -83,6 +79,23 @@
     height: 64px;
     background-color: #FFFFFF;
     top:8px;
+}
+
+#centerpoint {
+    top: 30%;
+    left: 15%;
+    position: absolute;
+}
+
+#incoming-call {
+    position: relative;
+    width: 400px;
+    height: 120px;
+    z-index: 2;
+    margin: auto;
+    text-align: center;
+    background-color: rgba(0,0,0,0.75);
+    display: none;
 }
 
 
@@ -113,26 +126,6 @@
 #sensortable td{
     padding-left: 10px;
     padding-right: 10px;
-}
-
-#logHolder{
-    height:360px;
-    width:440px;
-   /* margin-bottom:20px; */
-    outline:none;
-    background-color: #000000;
-    float: left;
-} 
-
-.logEntry{
-    min-height:24px;
-    padding:6px;
-    border:1px solid #FFFFFF;
-    border-radius:25px;
-    background-color: #C0C0C0;
-    padding:8px 6px 4px 37px;
-    position:relative;
-    margin:0 10px 10px 0;
 }
 
 

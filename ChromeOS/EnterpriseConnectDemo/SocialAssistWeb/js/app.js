@@ -54,7 +54,7 @@ function sendMessageToPeer(msg) {
 
 function ring(call){
   ringing = true;
-  $('#incoming-call').find('h3').text('Incoming call from ' + call.peer);
+  $('#peer-information').html('Incoming call from ' + call.peer);
   $('#butAnswerCall').click(function(){
     answerCall(call);
     $('#incoming-call').hide();
@@ -98,8 +98,9 @@ function makeCall() {
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
-    $('#btnCall').attr("value", "Hang Up");
-    $('#btnCall').click(hangUp);
+    
+    //$('#btnCall').attr("value", "Hang Up");
+    //$('#btnCall').click(hangUp);
     $('#remote-video').prop('src', URL.createObjectURL(stream));
     //set up the data channel
     var dataConnection = peer.connect(call.peer, { label: 'device-events' });
