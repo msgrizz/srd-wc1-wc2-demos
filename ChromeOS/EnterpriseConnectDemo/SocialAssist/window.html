@@ -19,10 +19,6 @@
             <span class="name">Wearables + WebRTC Concept<br><span class="user-name" id="user-name"></span></span>
             </span>
         </div>
-        <div id="video-container">
-            <video id="remote-video" autoplay></video>
-            <video id="local-video" muted="true" autoplay></video>
-        </div>
         <div id="incoming-call">
             <img src="img/incoming.png"/>
             <h3></h3>
@@ -31,39 +27,34 @@
         <div id="controlPanel">
             <div id="sensorpane">
             <div id="sensortable">
-                <table>
+              <table width="100%">
                     <thead><input type="checkbox" name="chkPLTDevice" id="chkPLTDevice" />
                            <label for="chkPLTDevice">Connect to Wearable Concept 1 Device<label>
                     </thead>
                     <tbody>
                         <tr>
                             <td><img src="img/pedometer.jpg"/></td>
-                            <td><input type="checkbox" name="chkPedo" id="chkPedo" />
+                            <td width="300"><input type="checkbox" name="chkPedo" id="chkPedo" />
                                 <label for="chkPedo">Enable Pedometer</label><br>
                                 <input type="button" id="btnResetPedometer" value="Reset Count"/> 
                             </td>
                             <td width="300"><span id="steps">0</span><span> steps</span>
                                 <br>
                             </td>
-                            <td rowspan="4" width="200">
-                                <div id="options">
-                                <span>
-                                  <fieldset>
-                                    <legend>WebRTC Connection Info:</legend>
-                                    <input type="button" id="btnConnect" value="Connect"/><br>
-                                    <input type="button" id="btnCall" value="Call For Help"/><br>
-                                    <label for="coordinates">Locations</label>
-                                    <select id="coordinates" name="coordinates">
-                                      <option value="0">Pike Place</option>
-                                      <option value="1" selected>Gator Adventure</option>
-                                      <option value="2">Times Square</option>
-                                    </select><br>
-                                    <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
-                                    <label for="chkSendCoordinates">Send my location</label>
-                                    
-                                  </fieldset> 
-                                  
-                                </div>
+                            <td rowspan="6" width="300">
+                              <div id="video-container">
+                                <video id="remote-video" autoplay></video>
+                              </div>
+                              <input type="button" id="btnConnect" value="Connect"/>
+                              <input type="button" id="btnCall" value="Call For Help"/><br>
+                              <label for="coordinates">Locations</label>
+                              <select id="coordinates" name="coordinates">
+                                <option value="0">Pike Place</option>
+                                <option value="1" selected>Gator Adventure</option>
+                                <option value="2">Times Square</option>
+                              </select><br>
+                              <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
+                              <label for="chkSendCoordinates">Send my location</label>
                             </td>
                         </tr>
                          <tr>
@@ -88,8 +79,22 @@
                             </td>
                             <td><span>Roll: </span><span id="roll"></span><br>
                                 <span>Pitch: </span><span id="pitch"></span><br>
-                                <span>Heading: </span><span id="yaw"></span>
+                                <span>Heading: </span><span id="heading"></span>
                             </td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/dondoff.jpg"/></td>
+                            <td>
+                              <span>On/Off Ear</span><br>
+                            </td>
+                            <td><span>Wear State: </span><span id="dondoff"></span></td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/button.jpg"/></td>
+                            <td>
+                              <span>Button Events</span><br>
+                            </td>
+                            <td><span>Button Pressed: </span><span id="buttons"></span></td>
                         </tr>
                     </tbody>
                 </table>

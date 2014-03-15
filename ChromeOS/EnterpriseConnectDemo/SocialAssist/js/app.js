@@ -39,7 +39,8 @@ sensorPortAddress_view[0] = 0x50;
 //WebRTC variables
 var handleId = "Cary";
 var calleeId = "Joe";
-var server = "10.0.1.51";
+//var server = "10.0.1.51";
+var server = "23.23.249.221";
 var port = "9000";
 
 //Street view GPS coordinates
@@ -69,7 +70,7 @@ function multipliedQuaternions(q, p) {
   var m = [p[0], p[1], p[2], p[3]];
     
     var quatmat = 
-    [ [ p[0], -p[1] -p[2], -p[3] ],
+    [ [ p[0], -p[1], -p[2], -p[3] ],
       [ p[1], p[0], -p[3], p[2] ],
       [ p[2], p[3], p[0], -p[1] ],
       [ p[3], -p[2], p[1], p[0] ]
@@ -78,7 +79,7 @@ function multipliedQuaternions(q, p) {
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
             //double *qq = (double *)&q;
-            mulQuat[i] += quatmat[i][j] * qq[j];
+            mulQuat[i] += quatmat[i][j] * q[j];
         }
     }
     
@@ -142,7 +143,6 @@ function findPLTDevices(){
 function disconnectPLT(){
  PLTLabsAPI.closeConnection(connectionClosed);
  deviceMetadata = null;
- //calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
  lastQuaternion = [1, 0, 0, 0];
  calibrtionQuaternion = [1, 0, 0, 0];
  connectedToSensorPort = false;
@@ -286,20 +286,20 @@ function onEvent(info){
 
       var q = info.properties["quaternion"];
 
-      log("q: " + q);
+     // log("q: " + q);
 
 
       lastQuaternion = [q['w'], q['x'], q['y'], q['z']];
 
-      inverse = inverseQuaternion(lastQuaternion);
-      calibrated = multipliedQuaternions(lastQuaternion, inverse);
-      q  = {"w":calibrated[0], "x":calibrated[1] , "y":calibrated[2], "z":calibrated[3]};
+     // var inverse = inverseQuaternion(lastQuaternion);
+     // var calibrated = multipliedQuaternions(lastQuaternion, inverse);
+     // q  = {"w":calibrated[0], "x":calibrated[1] , "y":calibrated[2], "z":calibrated[3]};
 
       
       var c = convertQuaternianToCoordinates(q); 
-      $('#roll').text(c.psi);
-      $('#pitch').text(c.theta);
-      $('#yaw').text(c.phi);
+      $('#roll').text(c.roll);
+      $('#pitch').text(c.pitch);
+      $('#heading').text(c.heading);
       sendHeadTrackingCoordinatesToPeer(c);
       //calibrtionQuaternion = q;
       
@@ -317,10 +317,18 @@ function onEvent(info){
       break;
     }
   }
+  if(info.id = PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT){
+    var state = info.properties['worn'] ? "On" : "Off";
+     $('#dondoff').text(state);
+  }
+  if(info.id = PLTLabsMessageHelper.BUTTON_EVENT){
+    $('#buttons').text(info.properties['buttonName']);
+  }
 
-  if (window.existingDataConnection) {
+ /* if (window.existingDataConnection) {
      window.existingDataConnection.send(event);
   }
+  */
    // hook flash button
    if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
     if(ringing){
@@ -333,20 +341,75 @@ function onEvent(info){
     }
   }
 
-//converts a quaternion into a set of Euler angles 
-function convertQuaternianToCoordinates(q){
-  var m22 = (2 * q.w^2) + (2 * q.y^2) - 1;
-  var m21 = (2 * q.x * q.y) - (2 * q.w * q.z);
-  var m13 = (2 * q.x * q.z) - (2 * q.w * q.y);
-  var m23 = (2 * q.y * q.z) + (2 * q.w * q.x);
-  var m33 = (2 * q.w^2) + (2 * q.z^2) - 1;
-  var r2d = 180 / Math.PI;   // radians to degrees 
-  var psi = -r2d * Math.atan2(m21,m22);
-  var theta = r2d * Math.asin(m23);
-  var phi = -r2d * Math.atan2(m13, m33);
-  return {"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
+
+// Pass the obj.quaternion that you want to convert here:
+//*********************************************************
+function quatToEuler (q1) {
+  var pitchYawRoll = {"x":0, "y":0, "z":0};
+     sqw = q1.w*q1.w;
+     sqx = q1.x*q1.x;
+     sqy = q1.y*q1.y;
+     sqz = q1.z*q1.z;
+     unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+     test = q1.x*q1.y + q1.z*q1.w;
+    if (test > 0.499*unit) { // singularity at north pole
+        heading = 2 * Math.atan2(q1.x,q1.w);
+        attitude = Math.PI/2;
+        bank = 0;
+        return;
+    }
+    if (test < -0.499*unit) { // singularity at south pole
+        heading = -2 * Math.atan2(q1.x,q1.w);
+        attitude = -Math.PI/2;
+        bank = 0;
+        return;
+    }
+    else {
+        heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
+        attitude = Math.asin(2*test/unit);
+        bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
+    }
+    pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
+    pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
+    pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
+
+    return pitchYawRoll;
+}        
+
+// Then, if I want the specific yaw (rotation around y), I pass the results of
+// pitchYawRoll.y into the following to get back the angle in radians which is
+// what can be set to the object's rotation.
+
+//*********************************************************
+function eulerToAngle(rot) {
+    var ca = 0;
+    if (rot > 0)
+        { ca = (Math.PI*2) - rot; } 
+    else 
+        { ca = -rot }
+
+    return Math.round((ca / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
 }
 
+
+//converts a quaternion into a set of Euler angles 
+function convertQuaternianToCoordinates(q){
+  
+  var p = quatToEuler(q);
+  log("q2e -> " + JSON.stringify(p));
+  //var pitch = eulerToAngle(p.x);
+  pitch = convertToPitch(q);
+  return {"pitch" :pitch, "roll" :eulerToAngle(p.z), "heading" : eulerToAngle(p.y)};
+}
+
+//I am sure there is a more elegant way to do this - but hack it is
+function convertToPitch(q){
+  var p = (2 * q.y * q.z) + (2 * q.w * q.x);
+  var r2d = 180 / Math.PI;   // radians to degrees 
+  var pitch = r2d * Math.asin(p);
+  return Math.round(pitch);//{"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
+  
+}
 
 
 
@@ -403,7 +466,7 @@ function sendHeadTrackingCoordinatesToPeer(eularAngles){
   if(!sendHeadtrackingData || !window.existingDataConnection){
     return;
   }
-  var ht = {'id': "ht" ,'p':eularAngles.theta,'h':eularAngles.psi};
+  var ht = {'id': "ht" ,'p':eularAngles.pitch,'h':eularAngles.heading};
   window.existingDataConnection.send(JSON.stringify(ht));
 }
 
@@ -529,7 +592,6 @@ function gum (initiator) {
              function(stream){
                                     // Set your video displays
                                     log("gum: GUM returned successfuly");
-                                    $('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
                                     $('#btnConnect').attr("value", "Disconnect");

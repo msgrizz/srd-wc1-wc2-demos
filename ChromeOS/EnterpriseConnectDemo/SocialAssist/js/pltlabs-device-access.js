@@ -773,7 +773,7 @@ PLTLabsMessageHelper.createWC1Command = function(options){
   }
   
   //add a frequency of packets - going for 50ms
-  data_view[7] = 0x32;
+  data_view[7] = 0x00;
   options.messageData = data;
   return this.createMessage(options);
   
