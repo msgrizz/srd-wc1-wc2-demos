@@ -37,7 +37,7 @@
                             <td width="300"><input type="checkbox" name="chkPedo" id="chkPedo" />
                                 <label for="chkPedo">Enable Pedometer</label><br>
                             </td>
-                            <td width="300"><span id="steps">0</span><span> steps</span>
+                          <td width="300"><span class="sensor-data" id="steps">0</span><span> steps</span>
                                 <br>
                             </td>
                             <td rowspan="6" width="300">
@@ -65,38 +65,38 @@
                             <td><input type="checkbox" name="chkFF" id="chkFF" />
                                 <label for="chkFF">Enable Free Fall</label><br>
                             </td>
-                            <td><span>In freefall: </span><span id="freefall">false</span></td>
+                            <td><span>Freefall: </span><span class="sensor-data" id="freefall">false</span></td>
                         </tr>
                         <tr>
                             <td><img src="img/tap.jpg"/></td>
                             <td><input type="checkbox" name="chkTap" id="chkTap" />
                                 <label for="chkTap">Enable Taps</label><br>
                             </td>
-                            <td><span>Taps: </span><span id="taps"></span></td>
+                            <td><span>Taps: </span><span class="sensor-data" id="taps"></span></td>
                         </tr>
                         <tr>
                             <td><img src="img/headtracking.jpg"/></td>
                             <td><input type="checkbox" name="chkHT" id="chkHT" />
-                                <label for="chkHT">Enable HT</label><br>
+                                <label for="chkHT">Enable Head Tracking</label><br>
                             </td>
-                            <td><span>Roll: </span><span id="roll"></span><br>
-                                <span>Pitch: </span><span id="pitch"></span><br>
-                                <span>Heading: </span><span id="heading"></span>
+                            <td><span>Roll: </span><span class="sensor-data" id="roll"></span><br>
+                                <span>Pitch: </span><span class="sensor-data" id="pitch"></span><br>
+                                <span>Heading: </span><span class="sensor-data" id="heading"></span>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td><img src="img/dondoff.jpg"/></td>
                             <td>
                               <span>On/Off Ear</span><br>
                             </td>
-                            <td><span>Wear State: </span><span id="dondoff"></span></td>
-                        </tr>
+                            <td><span>Wear State: </span><span class="sensor-data" id="dondoff"></span></td>
+                           </tr> -->
                         <tr>
                             <td><img src="img/button.jpg"/></td>
                             <td>
                               <span>Button Events</span><br>
                             </td>
-                            <td><span>Button Pressed: </span><span id="buttons"></span></td>
+                            <td><span>Button Pressed: </span><span class="sensor-data" id="buttons"></span></td>
                         </tr>
                     </tbody>
                 </table>

@@ -1,4 +1,7 @@
-
+.sensor-data{
+    font-weight: bold;
+    color: #880000;
+}
 
 .remote-data{
     color: #0000FF;
@@ -72,7 +75,7 @@
 
 
 #sensorpane{
-    height:550px;
+    height:500px;
     background-color: #FE481A;
     border:1px solid #000000;
 }

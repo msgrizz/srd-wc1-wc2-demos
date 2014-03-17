@@ -292,7 +292,7 @@ function onEvent(info){
   }
   if(info.id == PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT){
     var state = info.properties['worn'] ? "On" : "Off";
-     $('#dondoff').text(state);
+     //$('#dondoff').text(state);
   }
   if(info.id == PLTLabsMessageHelper.BUTTON_EVENT){
     $('#buttons').text(info.properties['buttonName']);
