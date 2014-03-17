@@ -36,17 +36,15 @@
                             <td><img src="img/pedometer.jpg"/></td>
                             <td width="300"><input type="checkbox" name="chkPedo" id="chkPedo" />
                                 <label for="chkPedo">Enable Pedometer</label><br>
-                                <input type="button" id="btnResetPedometer" value="Reset Count"/> 
                             </td>
                             <td width="300"><span id="steps">0</span><span> steps</span>
                                 <br>
                             </td>
                             <td rowspan="6" width="300">
-                              <!--<input type="button" id="btnConnect" value="Connect"/>-->
                               <span>WebRTC Server:</span><br>
-			      <input type="radio" name="server" id="server" value="10.0.1.51">Intranet
-			      <input type="radio" name="server" id="server" value="23.23.249.221">EC2<br>
-                               <div id="video-container">
+			                  <input type="radio" name="server" id="server" value="10.0.1.51">Intranet
+			                  <input type="radio" name="server" id="server" value="23.23.249.221">EC2<br>
+                              <div id="video-container">
                                 <video id="remote-video" autoplay></video>
                               </div>
                               <input type="button" id="btnCall" value="Call For Help"/>
@@ -80,7 +78,6 @@
                             <td><img src="img/headtracking.jpg"/></td>
                             <td><input type="checkbox" name="chkHT" id="chkHT" />
                                 <label for="chkHT">Enable HT</label><br>
-                                <input type="button" id="btnCalHeadtracking" value="Calibrate"/> 
                             </td>
                             <td><span>Roll: </span><span id="roll"></span><br>
                                 <span>Pitch: </span><span id="pitch"></span><br>

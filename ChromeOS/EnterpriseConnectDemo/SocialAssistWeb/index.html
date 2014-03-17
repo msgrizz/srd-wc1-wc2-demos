@@ -37,12 +37,14 @@
 		});
 	    $('#btnCall').click(makeCall);
 	    $('#pano').hide();
+	    $('#map-canvas').hide();
 	    
 	}
         
         function initializeStreetView(gps) {
 	    $('#content-filler').hide();
 	    $('#pano').show();
+	    $('#map-canvas').show();
             
 	    var view = new google.maps.LatLng(gps.lat, gps.long);
 	    var mapOptions = {

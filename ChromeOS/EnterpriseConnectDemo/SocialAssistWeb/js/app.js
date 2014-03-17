@@ -133,6 +133,17 @@ function resetButtonsAfterWebRTCCall(){
   $('#btnCall').attr("disabled", false);
   $('#remote-video').prop('src', "");
   $('#video-container').hide();
+  $('#map-canvas').empty();
+  $('#map-canvas').hide();
+  map = null;
+  
+  $('#pano').empty();
+  $('#pano').hide();
+  panorama = null;
+  
+  $('#content-filler').show();
+  
+  
 }
 
 
@@ -152,12 +163,6 @@ function gum (initiator) {
           
 }
 
-
-function prepareForWebRTCCall(){
-   $('#butConnect').attr("value", "Connecting");
-   $('#butConnect').attr("disabled", true);
-    connectToServer();
-}
 
 function disconnect(){
    if (peer) {

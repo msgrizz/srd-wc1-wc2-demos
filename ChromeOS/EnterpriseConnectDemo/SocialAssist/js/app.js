@@ -28,7 +28,6 @@ var connectedToDevice = false;
 var connectedToSensorPort = false;
 var connectingToSensorPort = false;
 var deviceMetadata = null;
-//var calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
 var lastQuaternion = [1, 0, 0, 0]
 var calibrtionQuaternion = [1, 0, 0, 0];
 var sensorPortAddress = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
@@ -122,8 +121,6 @@ function init(){
   $('#chkPedo').change(function(){
     enablePedometer(this.checked);
   });
-  $('#btnCalHeadtracking').click(calHeadset);
-  $('#btnResetPedometer').click(resetPedometer);
   $('#btnCall').attr("disabled", true);
   $('#btnCall').click(makeCall);
   $('#btnHangUp').attr("disabled", true);
@@ -247,22 +244,6 @@ function enablePedometer(on) {
   PLTLabsAPI.sendCommand(packet);
 }
 
-function resetPedometer(){
-  var options = {"serviceId": PLTLabsMessageHelper.PEDOMETER_SERVICE_ID, "address": sensorPortAddress};
-  var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
-  log("resetPedometer: sending command to reset the pedometer cound" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function calHeadset(){
-
-
-  calibrtionQuaternion = lastQuaternion;
-  // var options = {"serviceId": PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID, "address": sensorPortAddress, "quaternion": calibrtionQuaternion};
-  // var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
-  // log("calHeadset: sending packet to headset to calibrate headtracking");
-  // PLTLabsAPI.sendCommand(packet);
-}
 
 //Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
 function enableWearableConceptEvents(){
