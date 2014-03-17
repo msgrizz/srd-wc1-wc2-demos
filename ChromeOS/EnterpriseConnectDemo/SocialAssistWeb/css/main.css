@@ -1,15 +1,4 @@
 
-/*
-.applicationContainer{
-    width:auto;
-    margin:25px auto;
-    position:relative;
-}
-*/
-.remote-data{
-    color: #0000FF;
-}
-
 #remote-video {
     position:relative;
     width:200px;
@@ -119,8 +108,14 @@
     display: block;
 }
 
+#sensortable th, h3{
+    font-family: "gesta",sans-serif;
+    padding-left: 20px;
+}
+
 #sensortable tr, td{
     background-color: #ffffff;
+    font-family: "gesta",sans-serif;
 }
 
 #sensortable td{

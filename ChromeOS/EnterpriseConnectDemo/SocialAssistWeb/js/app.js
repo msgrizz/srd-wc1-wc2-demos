@@ -3,18 +3,18 @@ function log(message){
     console.log(message);  
 }
 
-function connectToServer() {
-  log('Connecting to WebRTC server');
+function connectToServer(server) {
+  log('Connecting to WebRTC server:' + server);
   peer = new Peer(handleId, {host:server, port: port, debug: 3, config: {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
       $('#user-name').text("Connected as " + peer.id);
+      $('#btnCall').attr("disabled", false);
       gum();
   });
   
   peer.on('connection', handleDataConnection);
   peer.on('call', ring);
-  $('#video-container').show();
   
   
   peer.on('error', function(err){log('Error connecting to server: ' + err.type);});
@@ -69,6 +69,7 @@ function answerCall(call){
    log('Answering incoming call from ' + call.peer);
    ringing = false;
    $('#incoming-call').hide();
+   $('#video-container').show();
    
    call.answer(window.localStream);
    if (window.existingCall) {
@@ -76,13 +77,9 @@ function answerCall(call){
     window.existingCall.close();
    }
    
-   call.on('stream', function(stream){
-      $('#btnCall').attr("value", "Hang Up");
-      $('#btnCall').click(hangUp);
-      $('#remote-video').prop('src', URL.createObjectURL(stream));    
-   });
+   call.on('stream', onStream);    
    window.existingCall = call;
-   call.on('close', hangUp);
+   call.on('close', resetButtonsAfterWebRTCCall);
 }
 
 function makeCall() {
@@ -98,10 +95,7 @@ function makeCall() {
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
-    
-    //$('#btnCall').attr("value", "Hang Up");
-    //$('#btnCall').click(hangUp);
-    $('#remote-video').prop('src', URL.createObjectURL(stream));
+    onStream(stream);
     //set up the data channel
     var dataConnection = peer.connect(call.peer, { label: 'device-events' });
     dataConnection.on('open', function() {
@@ -116,19 +110,29 @@ function makeCall() {
 
 }
 
+//when a stream comes in
+function onStream(stream){
+    $('#btnCall').attr("disabled",true);
+    $('#btnCall').hide();
+    $('#btnHangUp').show();
+    $('#btnHangUp').attr("disabled", false);
+    $('#remote-video').prop('src', URL.createObjectURL(stream));
+    $('#video-container').show();
+}
+
 function hangUp(){
   window.existingCall.close();
-  resetButtonsAfterWebRTCCall;
-  
 }
 
 function resetButtonsAfterWebRTCCall(){
-  log('call has ended');
+  log('resetButtonsAfterWebRTCCall: call has ended');
   ringing = false;
-  $('#btnCall').attr("value", "Call");
-  $('#btnCall').click(makeCall);
-  $('#txtCallerId').attr("disabled", false);
+  $('#btnHangUp').attr("disabled", true);
+  $('#btnHangUp').hide();
+  $('#btnCall').show();
+  $('#btnCall').attr("disabled", false);
   $('#remote-video').prop('src', "");
+  $('#video-container').hide();
 }
 
 
@@ -141,7 +145,6 @@ function gum (initiator) {
                                     //$('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
-                                    setButtonState(true);
                                     $('#butConnect').attr("disabled", false);
                                     },
                                     function(error){ log(error); });
@@ -149,16 +152,6 @@ function gum (initiator) {
           
 }
 
-function setButtonState(connected){
-  if (connected) {
-    $('#butConnect').click(disconnect);
-    $('#butConnect').attr("value", "Disconnect");
-  }
-  else{
-    $('#butConnect').click(prepareForWebRTCCall);
-    $('#butConnect').attr("value", "Connect");
-  }
-}
 
 function prepareForWebRTCCall(){
    $('#butConnect').attr("value", "Connecting");

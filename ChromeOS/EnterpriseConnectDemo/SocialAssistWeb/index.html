@@ -11,8 +11,6 @@
     <script>
 	var handleId = "Joe";
 	var calleeId = "Cary";
-	//var server = "10.0.1.51";
-	var server = "23.23.249.221"
 	var port = "9000";
 
 	// Compatibility shim
@@ -27,18 +25,26 @@
 	var map;
 	
 	function init(){
-	    setButtonState(false);
-            readyForCall = false;
-	    
+	    readyForCall = false;
 	    $('#btnCall').attr("disabled", true);
-	    $('#btnConnect').click(connectToServer);
 	    $('#btnCall').click(makeCall);
+	    $('#btnHangUp').attr("disabled", true);
+	    $('#btnHangUp').click(hangUp);
+	    $('#btnHangUp').hide();
+	    $("input[name='server']").click(function(){
+		connectToServer(this.value);
+		this.disabled = true;
+		});
+	    $('#btnCall').click(makeCall);
+	    $('#pano').hide();
 	    
 	}
         
         function initializeStreetView(gps) {
-	    
-            var view = new google.maps.LatLng(gps.lat, gps.long);
+	    $('#content-filler').hide();
+	    $('#pano').show();
+            
+	    var view = new google.maps.LatLng(gps.lat, gps.long);
 	    var mapOptions = {
 		"center": view,
 		"zoom": 15
@@ -93,19 +99,27 @@
             <div id="sensortable">
                 <table>
                     <thead>
-                        <h2>Help! Wanderlust has gotten the better of me...</h2>
+                        <h3>Wanderlust has gotten the better of me...</h3>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
+				<div id="content-filler" style="width: 600px; background-size: cover; background-image: url('img/content-filler.png'); height: 400px">
+				</div>
 				<div id="pano" style="width: 600px; height: 400px;"></div>
 			    </td>
                             <td width="300">
+				<span>WebRTC Server:</span><br>
+				<input type="radio" name="server" id="server" value="10.0.1.51">Intranet
+				<input type="radio" name="server" id="server" value="23.23.249.221">EC2<br>
 				<div id="video-container">
 				   <video id="remote-video" autoplay></video>
 				</div>
-				<input type="button" id="btnConnect" value="Connect"/>
 				<input type="button" id="btnCall" value="Call For Help"/>
+                                <input type="button" id="btnHangUp" value="Hang Up"/><br>
+				
+				<!--<input type="button" id="btnConnect" value="Connect"/>
+				<input type="button" id="btnCall" value="Call For Help"/>-->
 				<div id="map-canvas" style="width: 300px; height: 200px"></div>
                             </td>
                         </tr>

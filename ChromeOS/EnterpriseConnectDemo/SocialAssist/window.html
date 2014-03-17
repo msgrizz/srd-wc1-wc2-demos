@@ -42,19 +42,24 @@
                                 <br>
                             </td>
                             <td rowspan="6" width="300">
-                              <div id="video-container">
+                              <!--<input type="button" id="btnConnect" value="Connect"/>-->
+                              <span>WebRTC Server:</span><br>
+			      <input type="radio" name="server" id="server" value="10.0.1.51">Intranet
+			      <input type="radio" name="server" id="server" value="23.23.249.221">EC2<br>
+                               <div id="video-container">
                                 <video id="remote-video" autoplay></video>
                               </div>
-                              <input type="button" id="btnConnect" value="Connect"/>
-                              <input type="button" id="btnCall" value="Call For Help"/><br>
-                              <label for="coordinates">Locations</label>
+                              <input type="button" id="btnCall" value="Call For Help"/>
+                              <input type="button" id="btnHangUp" value="Hang Up"/><br>
+                               <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
+                              <label for="chkSendCoordinates">Send my location</label>
                               <select id="coordinates" name="coordinates">
                                 <option value="0">Pike Place</option>
-                                <option value="1" selected>Gator Adventure</option>
-                                <option value="2">Times Square</option>
+                                <option value="1">Gator Adventure</option>
+                                <option value="2" selected="1">Times Square</option>
                               </select><br>
-                              <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
-                              <label for="chkSendCoordinates">Send my location</label>
+                            
+                              <div id="space" style="width: 300px; height: 200px"></div>
                             </td>
                         </tr>
                          <tr>
