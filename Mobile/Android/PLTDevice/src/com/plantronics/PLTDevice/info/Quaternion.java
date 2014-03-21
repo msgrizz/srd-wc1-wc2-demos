@@ -61,13 +61,11 @@ public class Quaternion {
 		return "{ " + w + ", " + x + ", " + y + ", " + z + " }";
 	}
 
-	private static double d2r(double d)
-	{
+	private static double d2r(double d) {
 		return d * (Math.PI/180.0);
 	}
 
-	private static double r2d(double d)
-	{
+	private static double r2d(double d) {
 		return d * (180.0/Math.PI);
 	}
 }

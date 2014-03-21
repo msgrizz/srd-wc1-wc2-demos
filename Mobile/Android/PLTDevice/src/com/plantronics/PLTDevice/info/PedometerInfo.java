@@ -9,23 +9,18 @@ public class PedometerInfo extends com.plantronics.PLTDevice.info.Info
 {
 	private int _steps;
 
-	public PedometerInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int steps)
-	{
+	public PedometerInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int steps) {
 		super(requestType, timestamp, calibration);
-//		_requestType = requestType;
-//		_timestamp = timestamp;
-//		_calibration = calibration;
 		_steps = steps;
 	}
 
-	public int getSteps()
-	{
+	public int getSteps() {
 		return _steps;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "";
+	public String toString() {
+		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
+				+ ", steps=" + _steps;
 	}
 }

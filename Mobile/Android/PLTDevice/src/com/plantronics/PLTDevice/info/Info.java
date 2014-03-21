@@ -14,25 +14,22 @@ public class Info
 	protected Date _timestamp;
 	protected com.plantronics.PLTDevice.calibration.Calibration _calibration;
 
-	public Info(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration)
-	{
+	public Info(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration) {
 		_requestType = requestType;
 		_timestamp = timestamp;
 		_calibration = calibration;
 	}
 
-	public int getRequestType()
-	{
+	public int getRequestType() {
 		return _requestType;
 	}
 
-	public Date getTimestamp()
-	{
+	public Date getTimestamp() {
 		return _timestamp;
 	}
 
 	@Override
 	public String toString() {
-		return "";
+		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration;
 	}
 }

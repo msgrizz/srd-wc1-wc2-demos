@@ -14,28 +14,21 @@ public class ProximityInfo extends com.plantronics.PLTDevice.info.Info
 	private int _pcProximity;
 	private int _mobileProximity;
 
-	public ProximityInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int pcProximity, int mobileProximity)
-	{
+	public ProximityInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int pcProximity, int mobileProximity) {
 		super(requestType, timestamp, calibration);
-//		_requestType = requestType;
-//		_timestamp = timestamp;
-//		_calibration = calibration;
 		_pcProximity = pcProximity;
 		_mobileProximity = mobileProximity;
 	}
 
-	public int getPCProximity()
-	{
+	public int getPCProximity() {
 		return _pcProximity;
 	}
 
-	public int getMobileProximity()
-	{
+	public int getMobileProximity() {
 		return _mobileProximity;
 	}
 
-	public static String StringFromProximity(int proximity)
-	{
+	public static String StringFromProximity(int proximity) {
 		switch (proximity) {
 			case PROXIMITY_FAR:
 				return "far";
@@ -49,8 +42,8 @@ public class ProximityInfo extends com.plantronics.PLTDevice.info.Info
 	}
 
 	@Override
-	public String toString()
-	{
-		return "";
+	public String toString() {
+		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
+				+ ", pcProximity=" + StringFromProximity(_pcProximity) + ", mobileProximity=" + StringFromProximity(_mobileProximity);
 	}
 }

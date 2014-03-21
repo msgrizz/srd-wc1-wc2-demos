@@ -14,26 +14,20 @@ public class TapsInfo extends com.plantronics.PLTDevice.info.Info
 	public static final int TAP_DIRECTION_Z_UP = 	5;
 	public static final int TAP_DIRECTION_Z_DOWN =	6;
 
-	private int _taps;
+	private int _count;
 	private int _direction;
 
-	public TapsInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int taps, int direction)
-	{
+	public TapsInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, int count, int direction) {
 		super(requestType, timestamp, calibration);
-//		_requestType = requestType;
-//		_timestamp = timestamp;
-//		_calibration = calibration;
-		_taps = taps;
+		_count = count;
 		_direction = direction;
 	}
 
-	public int getTaps()
-	{
-		return _taps;
+	public int getCount() {
+		return _count;
 	}
 
-	public int getDirection()
-	{
+	public int getDirection() {
 		return _direction;
 	}
 
@@ -56,8 +50,8 @@ public class TapsInfo extends com.plantronics.PLTDevice.info.Info
 	}
 
 	@Override
-	public String toString()
-	{
-		return "";
+	public String toString() {
+		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
+				+ ", count=" + _count + ", direction=" + StringFromTapDirection(_direction);
 	}
 }

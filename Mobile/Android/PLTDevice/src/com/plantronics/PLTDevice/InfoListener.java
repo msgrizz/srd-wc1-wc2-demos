@@ -8,5 +8,6 @@ import com.plantronics.PLTDevice.info.Info;
 
 public interface InfoListener {
 
+	public void onSubscriptionChanged(Subscription oldSubscription, Subscription newSubscription);
 	public void onInfoReceived(Info info);
 }

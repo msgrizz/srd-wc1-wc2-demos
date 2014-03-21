@@ -9,30 +9,24 @@ public class FreeFallInfo extends Info
 {
 	private boolean _isInFreeFall;
 
-	public FreeFallInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, boolean isInFreeFall)
-	{
+	public FreeFallInfo(int requestType, Date timestamp, com.plantronics.PLTDevice.calibration.Calibration calibration, boolean isInFreeFall) {
 		super(requestType, timestamp, calibration);
-//		_requestType = requestType;
-//		_timestamp = timestamp;
-//		_calibration = calibration;
 		_isInFreeFall = isInFreeFall;
 	}
 
-	public boolean getIsInFreeFall()
-	{
+	public boolean getIsInFreeFall() {
 		return _isInFreeFall;
 	}
 
 	@Override
-	public boolean equals(Object other)
-	{
+	public boolean equals(Object other) {
 		FreeFallInfo info = (FreeFallInfo)other;
-		return this._isInFreeFall == info.getIsInFreeFall();
+		return _isInFreeFall == info.getIsInFreeFall();
 	}
 
 	@Override
-	public String toString()
-	{
-		return "";
+	public String toString() {
+		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
+				+ ", isInFreeFall=" + (_isInFreeFall ? "yes" : "no");
 	}
 }
