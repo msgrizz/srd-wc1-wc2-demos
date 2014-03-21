@@ -1,9 +1,6 @@
-
-
-.applicationContainer{
-    width:900px;
-    margin:10px auto;
-    position:relative;
+.sensor-data{
+    font-weight: bold;
+    color: #880000;
 }
 
 .remote-data{
@@ -14,25 +11,16 @@
   display: none;
 }
 
-#local-video {
-    position:relative;
-    margin-top: 15px;
-    width: 175px;
-    height: auto;
-    margin-left: 20px;
-    background-color: #eee;
-}
 
 #remote-video {
     position:relative;
-    width: 440px;
+    width: 200px;
     height: auto;
     background-color: #eee;
 }
 
 #video-container {
     display: none;
-    margin-bottom: 5px;
 }
 
 
@@ -48,6 +36,7 @@
 
 #controlPanel{
     margin-right:10px;
+    margin-left:80px;
     float:left;
 }
 
@@ -87,14 +76,13 @@
 
 #sensorpane{
     height:500px;
-    width: 900px;
     background-color: #FE481A;
     border:1px solid #000000;
 }
 
 #sensortable{
-    margin-right:10px;
-    float:left;
+    margin-right:50px;
+    margin-left:50px;
     font-size: large;
 }
 
@@ -113,25 +101,4 @@
     padding-left: 10px;
     padding-right: 10px;
 }
-
-#logHolder{
-    height:360px;
-    width:440px;
-   /* margin-bottom:20px; */
-    outline:none;
-    background-color: #000000;
-    float: left;
-} 
-
-.logEntry{
-    min-height:24px;
-    padding:6px;
-    border:1px solid #FFFFFF;
-    border-radius:25px;
-    background-color: #C0C0C0;
-    padding:8px 6px 4px 37px;
-    position:relative;
-    margin:0 10px 10px 0;
-}
-
 

@@ -28,7 +28,6 @@ var connectedToDevice = false;
 var connectedToSensorPort = false;
 var connectingToSensorPort = false;
 var deviceMetadata = null;
-//var calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
 var lastQuaternion = [1, 0, 0, 0]
 var calibrtionQuaternion = [1, 0, 0, 0];
 var sensorPortAddress = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
@@ -39,7 +38,6 @@ sensorPortAddress_view[0] = 0x50;
 //WebRTC variables
 var handleId = "Cary";
 var calleeId = "Joe";
-var server = "10.0.1.51";
 var port = "9000";
 
 //Street view GPS coordinates
@@ -69,7 +67,7 @@ function multipliedQuaternions(q, p) {
   var m = [p[0], p[1], p[2], p[3]];
     
     var quatmat = 
-    [ [ p[0], -p[1] -p[2], -p[3] ],
+    [ [ p[0], -p[1], -p[2], -p[3] ],
       [ p[1], p[0], -p[3], p[2] ],
       [ p[2], p[3], p[0], -p[1] ],
       [ p[3], -p[2], p[1], p[0] ]
@@ -78,7 +76,7 @@ function multipliedQuaternions(q, p) {
     for (var i = 0; i < 4; i++) {
         for (var j = 0; j < 4; j++) {
             //double *qq = (double *)&q;
-            mulQuat[i] += quatmat[i][j] * qq[j];
+            mulQuat[i] += quatmat[i][j] * q[j];
         }
     }
     
@@ -123,11 +121,16 @@ function init(){
   $('#chkPedo').change(function(){
     enablePedometer(this.checked);
   });
-  $('#btnCalHeadtracking').click(calHeadset);
-  $('#btnResetPedometer').click(resetPedometer);
   $('#btnCall').attr("disabled", true);
-  $('#btnConnect').click(prepareForWebRTCCall);
   $('#btnCall').click(makeCall);
+  $('#btnHangUp').attr("disabled", true);
+  $('#btnHangUp').click(hangUp);
+  $('#btnHangUp').hide();
+  
+ $("input[name='server']").click(function(){
+		connectToServer(this.value);
+		this.disabled = true;
+		});
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
 }
@@ -142,7 +145,6 @@ function findPLTDevices(){
 function disconnectPLT(){
  PLTLabsAPI.closeConnection(connectionClosed);
  deviceMetadata = null;
- //calibrtionQuaternion = {"w": 1, "x": 0, "y": 0, "z": 0};
  lastQuaternion = [1, 0, 0, 0];
  calibrtionQuaternion = [1, 0, 0, 0];
  connectedToSensorPort = false;
@@ -242,22 +244,6 @@ function enablePedometer(on) {
   PLTLabsAPI.sendCommand(packet);
 }
 
-function resetPedometer(){
-  var options = {"serviceId": PLTLabsMessageHelper.PEDOMETER_SERVICE_ID, "address": sensorPortAddress};
-  var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
-  log("resetPedometer: sending command to reset the pedometer cound" );
-  PLTLabsAPI.sendCommand(packet);
-}
-
-function calHeadset(){
-
-
-  calibrtionQuaternion = lastQuaternion;
-  // var options = {"serviceId": PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID, "address": sensorPortAddress, "quaternion": calibrtionQuaternion};
-  // var packet = PLTLabsMessageHelper.createCalibrateCommand(options);
-  // log("calHeadset: sending packet to headset to calibrate headtracking");
-  // PLTLabsAPI.sendCommand(packet);
-}
 
 //Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
 function enableWearableConceptEvents(){
@@ -278,31 +264,18 @@ function enableWearableConceptEvents(){
 }
 
 function onEvent(info){
-
-   //log("onEvent received: " + info);
    if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
     switch(info.properties["serviceId"]) {
       case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
 
       var q = info.properties["quaternion"];
-
-      log("q: " + q);
-
-
       lastQuaternion = [q['w'], q['x'], q['y'], q['z']];
 
-      inverse = inverseQuaternion(lastQuaternion);
-      calibrated = multipliedQuaternions(lastQuaternion, inverse);
-      q  = {"w":calibrated[0], "x":calibrated[1] , "y":calibrated[2], "z":calibrated[3]};
-
-      
       var c = convertQuaternianToCoordinates(q); 
-      $('#roll').text(c.psi);
-      $('#pitch').text(c.theta);
-      $('#yaw').text(c.phi);
-      sendHeadTrackingCoordinatesToPeer(c);
-      //calibrtionQuaternion = q;
-      
+      $('#roll').text(c.roll);
+      $('#pitch').text(c.pitch);
+      $('#heading').text(c.heading);
+      sendHeadTrackingCoordinatesToPeer(c);   
       break;
       case PLTLabsMessageHelper.TAPS_SERVICE_ID:
       $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
@@ -317,38 +290,95 @@ function onEvent(info){
       break;
     }
   }
-
-  if (window.existingDataConnection) {
-     window.existingDataConnection.send(event);
+  if(info.id == PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT){
+    var state = info.properties['worn'] ? "On" : "Off";
+     //$('#dondoff').text(state);
   }
-   // hook flash button
-   if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
+  if(info.id == PLTLabsMessageHelper.BUTTON_EVENT){
+    $('#buttons').text(info.properties['buttonName']);
+  }
+
+  // hook flash button
+  if (PLTLabsMessageHelper.BUTTON_EVENT == info.id && info.properties['buttonId'] == 2) {
     if(ringing){
-      $('#butAnswerCall').trigger("click");
+      $('#btnCall').trigger("click");
     }
     else if (window.existingCall) {
         //hang up the call
-        $('#btnCall').trigger("click");
+        $('#btnHangUp').trigger("click");
       }
     }
   }
 
-//converts a quaternion into a set of Euler angles 
-function convertQuaternianToCoordinates(q){
-  var m22 = (2 * q.w^2) + (2 * q.y^2) - 1;
-  var m21 = (2 * q.x * q.y) - (2 * q.w * q.z);
-  var m13 = (2 * q.x * q.z) - (2 * q.w * q.y);
-  var m23 = (2 * q.y * q.z) + (2 * q.w * q.x);
-  var m33 = (2 * q.w^2) + (2 * q.z^2) - 1;
-  var r2d = 180 / Math.PI;   // radians to degrees 
-  var psi = -r2d * Math.atan2(m21,m22);
-  var theta = r2d * Math.asin(m23);
-  var phi = -r2d * Math.atan2(m13, m33);
-  return {"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
+
+// Pass the obj.quaternion that you want to convert here:
+//*********************************************************
+function quatToEuler (q1) {
+  var pitchYawRoll = {"x":0, "y":0, "z":0};
+     sqw = q1.w*q1.w;
+     sqx = q1.x*q1.x;
+     sqy = q1.y*q1.y;
+     sqz = q1.z*q1.z;
+     unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+     test = q1.x*q1.y + q1.z*q1.w;
+    if (test > 0.499*unit) { // singularity at north pole
+        heading = 2 * Math.atan2(q1.x,q1.w);
+        attitude = Math.PI/2;
+        bank = 0;
+        //return;
+    }
+    if (test < -0.499*unit) { // singularity at south pole
+        heading = -2 * Math.atan2(q1.x,q1.w);
+        attitude = -Math.PI/2;
+        bank = 0;
+        //return;
+    }
+    else {
+        heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
+        attitude = Math.asin(2*test/unit);
+        bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
+    }
+    pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
+    pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
+    pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
+
+    return pitchYawRoll;
+}        
+
+// Then, if I want the specific yaw (rotation around y), I pass the results of
+// pitchYawRoll.y into the following to get back the angle in radians which is
+// what can be set to the object's rotation.
+
+//*********************************************************
+function eulerToAngle(rot) {
+    var ca = 0;
+    if (rot > 0)
+        { ca = (Math.PI*2) - rot; } 
+    else 
+        { ca = -rot }
+
+    return Math.round((ca / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
 }
 
 
+//converts a quaternion into a set of Euler angles 
+function convertQuaternianToCoordinates(q){
+  
+  var p = quatToEuler(q);
+  log("q2e -> " + JSON.stringify(p));
+  //var pitch = eulerToAngle(p.x);
+  pitch = convertToPitch(q);
+  return {"pitch" :pitch, "roll" :eulerToAngle(p.z), "heading" : eulerToAngle(p.y)};
+}
 
+//I am sure there is a more elegant way to do this - but hack it is
+function convertToPitch(q){
+  var p = (2 * q.y * q.z) + (2 * q.w * q.x);
+  var r2d = 180 / Math.PI;   // radians to degrees 
+  var pitch = r2d * Math.asin(p);
+  return Math.round(pitch);//{"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
+  
+}
 
 function enableButtonPressEvents(){
   eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);
@@ -361,15 +391,6 @@ function enableButtonPressEvents(){
 
 
 
-///WEBRTC Functions
-function prepareForWebRTCCall(){
- $('#btnConnect').attr("value", "Connecting");
- $('#btnConnect').attr("disabled", true);
-
- connectToServer();
-
-}
-
 //disconnect from webrtc server
 function disconnectWebRTC() {
   log('disconnectWebRTC: disconnecting');
@@ -381,7 +402,7 @@ function disconnectWebRTC() {
   }
 }
 
-function connectToServer() {
+function connectToServer(server) {
   log('connectToServer: Connecting to WebRTC server');
   peer = new Peer(handleId, {"host":server, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
@@ -393,7 +414,6 @@ function connectToServer() {
   
   peer.on('connection', handleDataConnection);
   peer.on('call', ring);
-  $('#video-container').show();
   
   peer.on('error', function(err){log('Error connecting to server: ' + err.type);});
 }
@@ -403,7 +423,7 @@ function sendHeadTrackingCoordinatesToPeer(eularAngles){
   if(!sendHeadtrackingData || !window.existingDataConnection){
     return;
   }
-  var ht = {'id': "ht" ,'p':eularAngles.theta,'h':eularAngles.psi};
+  var ht = {'id': "ht" ,'p':eularAngles.pitch,'h':eularAngles.heading};
   window.existingDataConnection.send(JSON.stringify(ht));
 }
 
@@ -463,25 +483,22 @@ function ring(call){
 }
 
 function answerCall(call){
- log('answerCall: answering incoming call from ' + call.peer);
- ringing = false;
- $('#incoming-call').hide();
+  log('answerCall: answering incoming call from ' + call.peer);
+  ringing = false;
+  $('#incoming-call').hide();
 
- call.answer(window.localStream);
- if (window.existingCall) {
+  call.answer(window.localStream);
+  if (window.existingCall) {
     //close any existing calls
     window.existingCall.close();
   }
-
-  call.on('stream', function(stream){
-    $('#chkSendCoordinates').attr("disabled", false);
-    $('#coordinates').attr("disabled", false);
-    $('#btnCall').attr("value", "Hang Up");
-    $('#btnCall').click(hangUp);
-    $('#remote-video').prop('src', URL.createObjectURL(stream));    
-  });
+  call.on('stream', onStream);
+  
+  call.on('close', resetButtonsAfterWebRTCCall);
+  
   window.existingCall = call;
 }
+
 
 function makeCall() {
   if (!readyForCall) {
@@ -496,12 +513,7 @@ function makeCall() {
 
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
-   $('#chkSendCoordinates').attr("disabled", false);
-   $('#coordinates').attr("disabled", false);
-
-   $('#btnCall').attr("value", "Hang Up");
-   $('#btnCall').click(hangUp);
-   $('#remote-video').prop('src', URL.createObjectURL(stream));
+    onStream(stream);
     //set up the data channel
     log("setting up data connection for " + call.peer);
     var dataConnection = peer.connect(call.peer);
@@ -512,15 +524,26 @@ function makeCall() {
     dataConnection.on('error', function(err) { log(err); });
   });
 
+  call.on('close', resetButtonsAfterWebRTCCall);
   // UI stuff
   window.existingCall = call;
 
 }
 
+//when a stream comes in
+function onStream(stream){
+  $('#chkSendCoordinates').attr("disabled", false);
+    $('#coordinates').attr("disabled", false);
+    $('#btnCall').attr("disabled",true);
+    $('#btnCall').hide();
+    $('#btnHangUp').show();
+    $('#btnHangUp').attr("disabled", false);
+    $('#remote-video').prop('src', URL.createObjectURL(stream));
+    $('#video-container').show();
+}
+
 function hangUp(){
   window.existingCall.close();
-  resetButtonsAfterWebRTCCall();
-  
 }
 
 function gum (initiator) {
@@ -529,13 +552,8 @@ function gum (initiator) {
              function(stream){
                                     // Set your video displays
                                     log("gum: GUM returned successfuly");
-                                    $('#local-video').prop('src', URL.createObjectURL(stream));
                                     window.localStream = stream;
                                     readyForCall = true;
-                                    $('#btnConnect').attr("value", "Disconnect");
-                                    $('#btnConnect').attr("disabled", false);
-                                    $('#btnConnect').click(disconnectWebRTC);
-
                                   },
                                   function(error){
                                     log(error);
@@ -545,12 +563,14 @@ function gum (initiator) {
 function resetButtonsAfterWebRTCCall(){
   log('resetButtonsAfterWebRTCCall: call has ended');
   ringing = false;
-  $('#btnCall').attr("value", "Call");
-  $('#btnCall').attr("disabled", true);
+  $('#btnHangUp').attr("disabled", true);
+  $('#btnHangUp').hide();
+  $('#btnCall').show();
+  $('#btnCall').attr("disabled", false);
   $('#chkSendCoordinates').attr("disabled", true);
   $('#coordinates').attr("disabled", true);
-  $('#btnCall').click(makeCall);
   $('#remote-video').prop('src', "");
+  $('#video-container').hide();
 }
 //END WEBRTC FUNCTIONS
 
