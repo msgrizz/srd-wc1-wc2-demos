@@ -8,6 +8,7 @@ import com.plantronics.PLTDevice.calibration.OrientationTrackingCalibration;
 import com.plantronics.PLTDevice.configuration.Configuration;
 import com.plantronics.PLTDevice.info.*;
 import com.plantronics.appcore.service.bluetooth.communicator.Communicator;
+import com.plantronics.appcore.service.bluetooth.plugins.xevent.responses.GetWearingStateResponse;
 import com.plantronics.bladerunner.communicator.BladeRunnerCommunicator;
 import com.plantronics.bladerunner.model.device.BladeRunnerDevice;
 import com.plantronics.bladerunner.model.device.BladeRunnerDeviceManager;
@@ -17,6 +18,10 @@ import com.plantronics.bladerunner.protocol.command.SubscribeToServicesCommand;
 import com.plantronics.bladerunner.protocol.event.SignalStrengthEvent;
 import com.plantronics.bladerunner.protocol.event.SubscribedServiceDataEvent;
 import com.plantronics.bladerunner.protocol.event.WearingStateChangedEvent;
+import com.plantronics.bladerunner.protocol.setting.CurrentSignalStrengthResponse;
+import com.plantronics.bladerunner.protocol.setting.QueryServicesDataRequest;
+import com.plantronics.bladerunner.protocol.setting.QueryServicesDataResponse;
+import com.plantronics.bladerunner.protocol.setting.SignalStrengthConfigurationResponse;
 
 import java.util.*;
 
@@ -44,19 +49,21 @@ public class Device
 	public static final int INFO_REQUEST_TYPE_SUBSCRIPTION =	0;
 	public static final int INFO_REQUEST_TYPE_QUERY =			1;
 
-	private ArrayList<ConnectionListener> 			_connectionListeners;
-	private HashMap<Integer, InternalSubscription>	_subscriptions;
+	private ArrayList<ConnectionListener> 				_connectionListeners;
+	private HashMap<Integer, InternalSubscription>		_subscriptions;
 
-	private HashMap<Integer, Info>					_cachedInfo;
+	private HashMap<Integer, Info>						_cachedInfo;
 
-	private boolean 								_isConnectionOpen;
+	private HashMap<Integer, ArrayList<InfoListener>>	_queryListeners;
 
-	private Context					 				_context;
-	private Communicator							_communicator; // from appcore
-	private BladeRunnerCommunicator					_bladeRunnerCommunicator;
-	private EventListener							_eventListener;
-	private BladeRunnerDevice 						_device;
-	private BladeRunnerDevice 						_sensorsDevice;
+	private boolean 									_isConnectionOpen;
+
+	private Context					 					_context;
+	private Communicator								_communicator; // from appcore
+	private BladeRunnerCommunicator						_bladeRunnerCommunicator;
+	private EventListener								_eventListener;
+	private BladeRunnerDevice 							_device;
+	private BladeRunnerDevice 							_sensorsDevice;
 
 	/* ****************************************************************************************************
 			Public
@@ -68,7 +75,7 @@ public class Device
 		_eventListener = new com.plantronics.bladerunner.protocol.EventListener() {
 			@Override
 			public void onEventReceived(Event event) {
-				eventReceived(event);
+				Device.this.onEventReceived(event);
 			}
 		};
 
@@ -351,8 +358,7 @@ public class Device
 						}, new BladeRunnerCommunicator.FastEventListener() {
 							@Override
 							public void onEventReceived(Event event) {
-								//Log.i(FN(), "\"********* Streaming: " + event.toString() + "*********");
-								eventReceived(event);
+								Device.this.onEventReceived(event);
 							}
 						});
 			}
@@ -436,6 +442,7 @@ public class Device
 					@Override
 					public void onFailure(BladerunnerException exception) {
 						Log.e(FN(), "********* Unsubscribe exception: " + exception + " *********");
+						// TODO: handle.
 					}
 				});
 			}
@@ -463,12 +470,68 @@ public class Device
 		unsubscribe(listener, SERVICE_GYROSCOPE_CAL_STATUS);
 	}
 
-	public Info cachedInfo(int service) {
-		return null;
+	public Info getCachedInfo(int service) {
+		return _cachedInfo.get(service);
 	}
 
-	public void queryInfo(InfoListener subscriber, int service) {
+	public void queryInfo(InfoListener listener, int service) {
+		Log.i(FN(), "queryInfo(): listener=" + listener + ", service=" + service);
 
+		if (_queryListeners==null) {
+			_queryListeners = new HashMap<Integer, ArrayList<InfoListener>>();
+		}
+
+		boolean execRequest = false;
+
+		ArrayList<InfoListener> listeners = _queryListeners.get(service);
+		if (listeners==null) {
+			// nobody is waiting for this query right now. add the listener and do the query.
+			Log.i(FN(), "Adding new listener " + listener + " for service " + service);
+
+			listeners = new ArrayList<InfoListener>();
+			listeners.add(listener);
+			_queryListeners.put(service, listeners);
+			execRequest = true;
+		}
+		else if (!listeners.contains(listener)) {
+			// somebody is waiting for this query, but listener isn't. add it.
+			Log.i(FN(), "Adding listener " + listener + " for service " + service);
+
+			if (!listeners.contains(listener)) {
+				listeners.add(listener);
+			}
+			execRequest = true;
+		}
+		else {
+			// listener is already waiting for the query result. do nothing.
+			Log.i(FN(), "Listener " + listener + " is already waiting for service " + service);
+
+
+			// ************ TEMPORARY FOR TESTING ************
+			if (!listeners.contains(listener)) {
+				listeners.add(listener);
+			}
+			execRequest = true;
+		}
+
+		if (execRequest) {
+			QueryServicesDataRequest request = new QueryServicesDataRequest();
+			request.setServiceID(service);
+			request.setCharacteristic(0);
+
+			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+				@Override
+				public void onSuccess(IncomingMessage message) {
+					onSettingsResponseReceived((SettingsResponse)message);
+				}
+
+				@Override
+				public void onFailure(BladerunnerException exception) {
+					Log.e(FN(), "********* Query service exception: " + exception + " *********");
+					// TODO: handle.
+				}
+			});
+		}
 	}
 
 	/* ****************************************************************************************************
@@ -478,14 +541,18 @@ public class Device
 	private void onConnectionOpen() {
 		Log.i(FN(), "************ CONNECTION OPEN! ************");
 
-		Iterator i =  _connectionListeners.iterator();
-		while (i.hasNext()) {
-			((ConnectionListener)i.next()).onConnectionOpen(this);
+		_cachedInfo = new HashMap<Integer, Info>();
+
+		if (_connectionListeners!=null) {
+			Iterator i =  _connectionListeners.iterator();
+			while (i.hasNext()) {
+				((ConnectionListener)i.next()).onConnectionOpen(this);
+			}
 		}
 	}
 
-	private void eventReceived(Event event) {
-		Log.i(FN(), "eventReceived(): " + event);
+	private void onEventReceived(Event event) {
+		Log.i(FN(), "onEventReceived(): " + event);
 
 		int requestType = INFO_REQUEST_TYPE_SUBSCRIPTION;
 		Date timestamp = new Date();
@@ -497,7 +564,7 @@ public class Device
 			int service = serviceEvent.getServiceID();
 
 			InternalSubscription internalSubscription = _subscriptions.get(service);
-			if (internalSubscription !=null) {
+			if (internalSubscription!=null) {
 				int[] data = serviceEvent.getServiceData();
 				listeners = internalSubscription.getListeners();
 
@@ -514,7 +581,7 @@ public class Device
 						break;
 					case SERVICE_FREE_FALL:
 						Log.i(FN(), "SERVICE_FREE_FALL");
-						info = new FreeFallInfo(requestType, timestamp, null, getInFreeFallFromData(data));
+						info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
 						break;
 					case SERVICE_TAPS:
 						Log.i(FN(), "SERVICE_TAPS");
@@ -531,6 +598,10 @@ public class Device
 					default:
 						Log.e(FN(), "Invalid service in event: " + service);
 						return;
+				}
+
+				if (info!=null && _cachedInfo!=null) {
+					_cachedInfo.put(service, info);
 				}
 			}
 			else {
@@ -554,6 +625,88 @@ public class Device
 				Log.i(FN(), "********* Signal strength event: Near/far: " + signalStrengthEvent.getNearFar() + ", Strength: " + signalStrengthEvent.getStrength() + " *********");
 			}
 		}
+
+		if (listeners!=null) {
+			Iterator i = listeners.iterator();
+			while (i.hasNext()) {
+				((InfoListener)i.next()).onInfoReceived(info);
+			}
+		}
+	}
+
+	private void onSettingsResponseReceived(SettingsResponse response) {
+		Log.i(FN(), "onSettingsResponseReceived(): " + response);
+
+		int requestType = INFO_REQUEST_TYPE_QUERY;
+		Date timestamp = new Date();
+		Info info = null;
+		ArrayList<InfoListener> listeners = null;
+
+		if (response instanceof QueryServicesDataResponse) {
+			QueryServicesDataResponse queryServicesDataResponse = (QueryServicesDataResponse)response;
+			int service = queryServicesDataResponse.getServiceID();
+
+			listeners = _queryListeners.get(service);
+			if (listeners!=null) {
+				int[] data = queryServicesDataResponse.getServiceData();
+
+				switch (service) {
+					case SERVICE_ORIENTATION_TRACKING:
+						Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
+						Quaternion q = quaternionFromData(data);
+						OrientationTrackingCalibration cal = new OrientationTrackingCalibration(new Quaternion(1, 0, 0, 0));
+						info = new OrientationTrackingInfo(requestType, timestamp, cal, q);
+						break;
+					case SERVICE_PEDOMETER:
+						Log.i(FN(), "SERVICE_PEDOMETER");
+						info = new PedometerInfo(requestType, timestamp, null, getPedometerCountFromData(data));
+						break;
+					case SERVICE_FREE_FALL:
+						Log.i(FN(), "SERVICE_FREE_FALL");
+						info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
+						break;
+					case SERVICE_TAPS:
+						Log.i(FN(), "SERVICE_TAPS");
+						info = new TapsInfo(requestType, timestamp, null, getTapCountFromData(data), getTapDirectionFromData(data));
+						break;
+					case SERVICE_MAGNETOMETER_CAL_STATUS:
+						Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
+						info = new MagnetometerCalInfo(requestType, timestamp, null, getMagIsCaldFromData(data));
+						break;
+					case SERVICE_GYROSCOPE_CAL_STATUS:
+						Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
+						info = new GyroscopeCalInfo(requestType, timestamp, null, getGyroIsCaldFromData(data));
+						break;
+					default:
+						Log.e(FN(), "Invalid service in event: " + service);
+						return;
+				}
+
+				if (info!=null && _cachedInfo!=null) {
+					_cachedInfo.put(service, info);
+				}
+			}
+			else {
+				// nodoby is waiting for this query...
+				Log.i(FN(), "Odd. No query listeners for service " + service);
+			}
+		}
+//		else if (response instanceof GetWearingStateResponse) {
+//			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_WEARING_STATE);
+//			if (internalSubscription !=null) {
+//				GetWearingStateResponse getWearingStateResponse = (GetWearingStateResponse)response;
+//				// TODO: Handle.
+//				Log.i(FN(), "********* Wearing state response: " + (getWearingStateResponse.getWorn() ? "Donned" : "Doffed") + " *********");
+//			}
+//		}
+//		else if (response instanceof CurrentSignalStrengthResponse) {
+//			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_PROXIMITY);
+//			if (internalSubscription !=null) {
+//				CurrentSignalStrengthResponse currentSignalStrengthResponse = (CurrentSignalStrengthResponse)response;
+//				// TODO: Handle.
+//				Log.i(FN(), "********* Signal strength response: Near/far: " + currentSignalStrengthResponse.getNearFar() + ", Strength: " + currentSignalStrengthResponse.getStrength() + " *********");
+//			}
+//		}
 
 		if (listeners!=null) {
 			Iterator i = listeners.iterator();
@@ -594,31 +747,58 @@ public class Device
 		return null;
 	}
 
-	private boolean getInFreeFallFromData(int[] data) {
-		return (data[1]==1 ? true : false);
+	private boolean getIsInFreeFallFromData(int[] data) {
+		if (data.length > 1) { // event
+			return (data[1]==1 ? true : false);
+		}
+		else { // setting
+			return (data[0]==1 ? true : false);
+		}
 	}
 
 	private int getTapCountFromData(int[] data) {
-		int taps = data[3];
-		return taps;
+		if (data.length > 3) { // event
+			return data[3];
+		}
+		else { // setting
+			return data[1];
+		}
 	}
 
 	private int getTapDirectionFromData(int[] data) {
-		int direction = data[1];
-		return direction;
+		if (data.length > 1) { // event
+			return data[1];
+		}
+		else { // setting
+			return data[0];
+		}
 	}
 
 	private int getPedometerCountFromData(int[] data) {
-		int count = data[1];
-		return count;
+		if (data.length > 1) { // event
+			return data[1];
+		}
+		else { // setting
+			return data[0];
+		}
 	}
 
 	private boolean getGyroIsCaldFromData(int[] data) {
-		return (data[1] == 3 ? true : false);
+		if (data.length > 1) { // event
+			return (data[1] == 3 ? true : false);
+		}
+		else { // setting
+			return (data[0] == 3 ? true : false);
+		}
 	}
 
 	private boolean getMagIsCaldFromData(int[] data) {
-		return (data[1] == 3 ? true : false);
+		if (data.length > 1) { // event
+			return (data[1] == 3 ? true : false);
+		}
+		else { // setting
+			return (data[0] == 3 ? true : false);
+		}
 	}
 
 	/* ****************************************************************************************************

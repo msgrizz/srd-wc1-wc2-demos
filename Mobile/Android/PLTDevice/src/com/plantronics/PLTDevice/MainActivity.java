@@ -37,6 +37,8 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 	private Button		_changeSubscriptionButton5;
 	private Button		_unsubscribeButton;
 	private Button		_unsubscribeAllButton;
+	private Button		_queryButton;
+	private Button		_getCachedButton;
 
 
 	/* ****************************************************************************************************
@@ -120,6 +122,22 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 			@Override
 			public void onClick(View v) {
 				unsubscribeAllButton();
+			}
+		});
+
+		_queryButton = ((Button)findViewById(R.id.queryButton));
+		_queryButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				queryButton();
+			}
+		});
+
+		_getCachedButton = ((Button)findViewById(R.id.getCachedButton));
+		_getCachedButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getCachedButton();
 			}
 		});
 	}
@@ -235,6 +253,30 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 		Log.i(FN(), "unsubscribeAllButton()");
 
 		_device.unsubscribe(this);
+	}
+
+	private void queryButton() {
+		Log.i(FN(), "queryButton()");
+
+		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
+		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
+		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
+		_device.queryInfo(this, Device.SERVICE_TAPS);
+		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
+		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
+	}
+
+	private void getCachedButton() {
+		Log.i(FN(), "getCachedButton()");
+
+		Log.i(FN(), "SERVICE_PROXIMITY: " + _device.getCachedInfo(Device.SERVICE_PROXIMITY));
+		Log.i(FN(), "SERVICE_WEARING_STATE: " + _device.getCachedInfo(Device.SERVICE_WEARING_STATE));
+		Log.i(FN(), "SERVICE_ORIENTATION_TRACKING: " + _device.getCachedInfo(Device.SERVICE_ORIENTATION_TRACKING));
+		Log.i(FN(), "SERVICE_PEDOMETER: " + _device.getCachedInfo(Device.SERVICE_PEDOMETER));
+		Log.i(FN(), "SERVICE_FREE_FALL: " + _device.getCachedInfo(Device.SERVICE_FREE_FALL));
+		Log.i(FN(), "SERVICE_TAPS: " + _device.getCachedInfo(Device.SERVICE_TAPS));
+		Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_MAGNETOMETER_CAL_STATUS));
+		Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_GYROSCOPE_CAL_STATUS));
 	}
 
 	/* ****************************************************************************************************

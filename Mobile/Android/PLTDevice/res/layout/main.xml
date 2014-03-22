@@ -13,65 +13,79 @@
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Open Connection"
         android:id="@+id/openConnectionButton"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Subscribe"
         android:id="@+id/subscribeButton"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Change Subscription 1"
         android:id="@+id/changeSubscriptionButton1"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Change Subscription 2"
         android:id="@+id/changeSubscriptionButton2"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Change Subscription 3"
         android:id="@+id/changeSubscriptionButton3"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Change Subscription 4"
         android:id="@+id/changeSubscriptionButton4"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Change Subscription 5"
         android:id="@+id/changeSubscriptionButton5"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Unsubscribe"
         android:id="@+id/unsubscribeButton"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="17pt"
         android:text="Unsubscribe All"
         android:id="@+id/unsubscribeAllButton"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="17pt"
+        android:text="Query"
+        android:id="@+id/queryButton"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="17pt"
+        android:text="Get Cached"
+        android:id="@+id/getCachedButton"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

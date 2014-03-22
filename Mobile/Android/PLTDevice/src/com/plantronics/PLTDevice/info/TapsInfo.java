@@ -31,7 +31,7 @@ public class TapsInfo extends com.plantronics.PLTDevice.info.Info
 		return _direction;
 	}
 
-	private static String StringFromTapDirection(int direction) {
+	public static String StringFromTapDirection(int direction) {
 		switch (direction) {
 			case TAP_DIRECTION_X_UP:
 				return "x up";
