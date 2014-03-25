@@ -15,9 +15,11 @@
 #import "LocationMonitor.h"
 #import "NSData+Base64.h"
 //#import "TestFlight.h"
+#import "Reachability.h"
 
 
 #define CAMERA_FOV						80.0
+#define COORD_SEARCH_RADIUS             100.0 // meters
 
 
 @interface StreetView2ViewController () <PLTContextServerDelegate, GMSPanoramaViewDelegate>
@@ -27,6 +29,8 @@
 
 @property(nonatomic,strong) GMSPanoramaView     *panoramaView;
 @property(nonatomic,assign) BOOL                panoramaConfigured;
+@property(nonatomic,strong) Reachability        *reachability;
+@property(nonatomic,strong) UIImageView         *reachabilityImageView;
 
 @end
 
@@ -38,7 +42,7 @@
 - (void)locationButton:(id)sender
 {
     CLLocationCoordinate2D location = [LocationMonitor sharedMonitor].location.coordinate;
-    [self.panoramaView moveNearCoordinate:location];
+    [self.panoramaView moveNearCoordinate:location radius:COORD_SEARCH_RADIUS];
 }
 
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note
@@ -56,14 +60,39 @@
     //[self.panoramaView animateToCamera:camera animationDuration:.05];
 }
 
+- (void)didUpdateLocationNotification:(NSDictionary *)info
+{
+    [self locationButton:self];
+}
+
+- (BOOL)checkReachability
+{
+    NetworkStatus status = [self.reachability currentReachabilityStatus];
+                            
+    if (status==ReachableViaWiFi || status==ReachableViaWWAN) {
+        self.reachabilityImageView.alpha = 0.0;
+        return YES;
+    }
+    else {
+        //[self.panoramaView moveNearCoordinate:CLLocationCoordinate2DMake(37.623304, -122.976724)]; // out in the SF bay
+        self.reachabilityImageView.alpha = 1.0;
+    }
+    return NO;
+}
+
 #pragma mark - GMSPanoramaViewDelegate
 
 - (void)panoramaView:(GMSPanoramaView *)view didMoveToPanorama:(GMSPanorama *)panorama
 {
-    if (!self.panoramaConfigured) {
+    if (!self.panoramaConfigured || ![[PLTHeadsetManager sharedManager] latestInfo]) {
         self.panoramaView.camera = [GMSPanoramaCamera cameraWithHeading:0 pitch:0 zoom:1.0];
         self.panoramaConfigured = YES;
     }
+}
+
+- (void)panoramaView:(GMSPanoramaView *)view error:(NSError *)erro onMoveNearCoordinate:(CLLocationCoordinate2D)coordinate
+{
+    NSLog(@"panoramaView:error: %@ onMoveNearCoordinate:", erro);
 }
 
 - (BOOL)panoramaView:(GMSPanoramaView *)panoramaView didTapMarker:(GMSMarker *)marker
@@ -96,6 +125,15 @@
     self.title = @"Street View";
     self.tabBarItem.title = @"Street View";
     self.tabBarItem.image = [UIImage imageNamed:@"buildings_icon.png"];
+    
+    self.reachability = [Reachability reachabilityForInternetConnection];
+    [[NSNotificationCenter defaultCenter] addObserverForName:kReachabilityChangedNotification object:nil queue:NULL usingBlock:^(NSNotification *note) {
+        NSLog(@"kReachabilityChangedNotification");
+        if ([self checkReachability]) {
+            [self locationButton:self];
+        }
+    }];
+    [self.reachability startNotifier];
     
     return self;
 }
@@ -143,16 +181,37 @@
 {
     [super viewWillAppear:animated];
     
+    self.reachabilityImageView.alpha = 0.0;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocationNotification:) name:LocationMonitorDidUpdateNotification object:nil];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     
     //[TestFlight passCheckpoint:@"STREETVIEW_TAB"];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (!self.reachabilityImageView) {
+        self.reachabilityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        self.reachabilityImageView.contentMode = UIViewContentModeCenter;
+        self.reachabilityImageView.image = [UIImage imageNamed:(IPAD ? @"no_internet_ipad.png" : @"no_internet_iphone.png")];
+        self.reachabilityImageView.alpha = 0.0;
+        [self.view addSubview:self.reachabilityImageView];
+    }
+    
+    if ([self checkReachability]) {
+        [self locationButton:self];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[PLTContextServer sharedContextServer] removeDelegate:self];
 }

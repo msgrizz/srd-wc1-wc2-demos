@@ -46,6 +46,10 @@
 		422F40A01651AC3800735AB5 /* iToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F409F1651AC3800735AB5 /* iToast.m */; };
 		422F75BB16FBA121000DF717 /* StreetViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F75B916FBA121000DF717 /* StreetViewViewController.m */; };
 		422F75BC16FBA121000DF717 /* StreetViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422F75BA16FBA121000DF717 /* StreetViewViewController.xib */; };
+		424E640318E2111000698FAE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 424E640218E2111000698FAE /* Reachability.m */; };
+		424E640518E21D9300698FAE /* no_internet_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 424E640418E21D9300698FAE /* no_internet_ipad@2x.png */; };
+		424E640718E2257600698FAE /* no_internet_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 424E640618E2257600698FAE /* no_internet_iphone@2x.png */; };
+		424E640C18E2338100698FAE /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 424E640818E2338100698FAE /* libTestFlight.a */; };
 		426FAB95170E7B0A0054D216 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 426FAB94170E7B0A0054D216 /* Default-Landscape@2x~ipad.png */; };
 		4272370D17062EDA00101B91 /* signal_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4272370C17062EDA00101B91 /* signal_icon@2x.png */; };
 		4272371217064DCC00101B91 /* LocationOverrideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272371017064DCC00101B91 /* LocationOverrideViewController.m */; };
@@ -140,7 +144,6 @@
 		42F2A55618ACBDB200177547 /* block_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55418ACBDB200177547 /* block_iphone@2x.png */; };
 		42F2A55918ACBFF800177547 /* paddle_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55718ACBFF800177547 /* paddle_iphone.png */; };
 		42F2A55A18ACBFF800177547 /* paddle_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55818ACBFF800177547 /* paddle_iphone@2x.png */; };
-		42F2A55F18AE35B400177547 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42F2A55B18AE35B400177547 /* libTestFlight.a */; };
 		42FC09F0170F6F3B007238A6 /* 50_yrs_icon_144.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E6170F6F3B007238A6 /* 50_yrs_icon_144.png */; };
 		42FC09F1170F6F3B007238A6 /* auth_status_icon_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E7170F6F3B007238A6 /* auth_status_icon_small.png */; };
 		42FC09F2170F6F3B007238A6 /* buildings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E8170F6F3B007238A6 /* buildings_icon.png */; };
@@ -223,6 +226,14 @@
 		422F75BA16FBA121000DF717 /* StreetViewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreetViewViewController.xib; sourceTree = "<group>"; };
 		42335DC7171F8916009AE9D5 /* NSData+ShortDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ShortDescription.h"; sourceTree = "<group>"; };
 		42335DC8171F8916009AE9D5 /* NSData+ShortDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ShortDescription.m"; sourceTree = "<group>"; };
+		424E640118E2111000698FAE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		424E640218E2111000698FAE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		424E640418E21D9300698FAE /* no_internet_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_internet_ipad@2x.png"; sourceTree = "<group>"; };
+		424E640618E2257600698FAE /* no_internet_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_internet_iphone@2x.png"; sourceTree = "<group>"; };
+		424E640818E2338100698FAE /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = TestFlight/libTestFlight.a; sourceTree = SOURCE_ROOT; };
+		424E640918E2338100698FAE /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = TestFlight/TestFlight.h; sourceTree = SOURCE_ROOT; };
+		424E640A18E2338100698FAE /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+AsyncLogging.h"; path = "TestFlight/TestFlight+AsyncLogging.h"; sourceTree = SOURCE_ROOT; };
+		424E640B18E2338100698FAE /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+ManualSessions.h"; path = "TestFlight/TestFlight+ManualSessions.h"; sourceTree = SOURCE_ROOT; };
 		42518A3F1641F2E1005C0E33 /* WebSocketTest1-Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebSocketTest1-Defines.h"; sourceTree = "<group>"; };
 		426FAB94170E7B0A0054D216 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		4272370C17062EDA00101B91 /* signal_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal_icon@2x.png"; sourceTree = "<group>"; };
@@ -368,10 +379,6 @@
 		42F2A55418ACBDB200177547 /* block_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "block_iphone@2x.png"; sourceTree = "<group>"; };
 		42F2A55718ACBFF800177547 /* paddle_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paddle_iphone.png; sourceTree = "<group>"; };
 		42F2A55818ACBFF800177547 /* paddle_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paddle_iphone@2x.png"; sourceTree = "<group>"; };
-		42F2A55B18AE35B400177547 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
-		42F2A55C18AE35B400177547 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
-		42F2A55D18AE35B400177547 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		42F2A55E18AE35B400177547 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
 		42FC09E6170F6F3B007238A6 /* 50_yrs_icon_144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 50_yrs_icon_144.png; sourceTree = "<group>"; };
 		42FC09E7170F6F3B007238A6 /* auth_status_icon_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auth_status_icon_small.png; sourceTree = "<group>"; };
 		42FC09E8170F6F3B007238A6 /* buildings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildings_icon.png; sourceTree = "<group>"; };
@@ -427,7 +434,7 @@
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				C300638115BF6D5C00068870 /* CFNetwork.framework in Frameworks */,
 				C300637F15BF6D4100068870 /* CoreLocation.framework in Frameworks */,
-				42F2A55F18AE35B400177547 /* libTestFlight.a in Frameworks */,
+				424E640C18E2338100698FAE /* libTestFlight.a in Frameworks */,
 				C300637D15BF6D3000068870 /* Security.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -496,6 +503,8 @@
 				42D59B241713B30600E98394 /* SegmentedControlCell.m */,
 				422F409E1651AC3800735AB5 /* iToast.h */,
 				422F409F1651AC3800735AB5 /* iToast.m */,
+				424E640118E2111000698FAE /* Reachability.h */,
+				424E640218E2111000698FAE /* Reachability.m */,
 				42518A3F1641F2E1005C0E33 /* WebSocketTest1-Defines.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				4217B12F16FCE8BC005FDA9C /* Unused */,
@@ -681,6 +690,8 @@
 		426FAB93170E774B0054D216 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				424E640418E21D9300698FAE /* no_internet_ipad@2x.png */,
+				424E640618E2257600698FAE /* no_internet_iphone@2x.png */,
 				4226344718A27B4100FFA4F5 /* locationIcon@2x.png */,
 				42C76A9F17FE392E00E6415D /* pltlabs_nav_ios7.png */,
 				42C76AA017FE392E00E6415D /* pltlabs_nav.png */,
@@ -824,10 +835,10 @@
 		42F2A56018AE35B900177547 /* TestFlight */ = {
 			isa = PBXGroup;
 			children = (
-				42F2A55B18AE35B400177547 /* libTestFlight.a */,
-				42F2A55C18AE35B400177547 /* TestFlight.h */,
-				42F2A55D18AE35B400177547 /* TestFlight+AsyncLogging.h */,
-				42F2A55E18AE35B400177547 /* TestFlight+ManualSessions.h */,
+				424E640818E2338100698FAE /* libTestFlight.a */,
+				424E640918E2338100698FAE /* TestFlight.h */,
+				424E640A18E2338100698FAE /* TestFlight+AsyncLogging.h */,
+				424E640B18E2338100698FAE /* TestFlight+ManualSessions.h */,
 			);
 			name = TestFlight;
 			path = Classes;
@@ -943,6 +954,7 @@
 				42C6DBE516532A4600739A62 /* hair_1024_withalph.png in Resources */,
 				42C6DBE616532A4600739A62 /* hair_alph_1024.png in Resources */,
 				42C6DBE816532A4600739A62 /* Scarlet_eye_left.jpg in Resources */,
+				424E640518E21D9300698FAE /* no_internet_ipad@2x.png in Resources */,
 				42C6DBE916532A4600739A62 /* Scarlet_eye_right.jpg in Resources */,
 				42C6DBEA16532A4600739A62 /* Scarlet2.jpg in Resources */,
 				42F2A52C18A9F51000177547 /* game_icon.png in Resources */,
@@ -998,6 +1010,7 @@
 				422A300217FCDA840040C7F1 /* pltlabs_nav@2x.png in Resources */,
 				42F2A52D18A9F51000177547 /* game_icon@2x.png in Resources */,
 				42FC09F0170F6F3B007238A6 /* 50_yrs_icon_144.png in Resources */,
+				424E640718E2257600698FAE /* no_internet_iphone@2x.png in Resources */,
 				42FC09F1170F6F3B007238A6 /* auth_status_icon_small.png in Resources */,
 				42FC09F2170F6F3B007238A6 /* buildings_icon.png in Resources */,
 				422A300E17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib in Resources */,
@@ -1040,6 +1053,7 @@
 				C3F97B681607CF7D00BC0B84 /* InfoViewController.m in Sources */,
 				42B36A4A182C36770017F943 /* AFHTTPRequestOperationManager.m in Sources */,
 				42EC7B5C1648779A00A782BD /* CC3Foundation.m in Sources */,
+				424E640318E2111000698FAE /* Reachability.m in Sources */,
 				42EC7B5D1648779A00A782BD /* CC3GLMatrix.m in Sources */,
 				4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */,
 				42B36A4C182C36770017F943 /* AFNetworkReachabilityManager.m in Sources */,
@@ -1117,6 +1131,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
+					"$(PROJECT_DIR)/TestFlight",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1153,6 +1168,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
+					"$(PROJECT_DIR)/TestFlight",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

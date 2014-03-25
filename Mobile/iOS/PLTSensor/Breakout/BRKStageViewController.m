@@ -110,7 +110,7 @@ double r2d(double d)
         label.alpha = 1.0;
     }
     else if (gameState == PLTGameStateEnded && !paused) {
-        label.text = @"Bahhh! Tap headset to try again!";
+        label.text = @"Tap headset to try again!";
         label.alpha = 1.0;
     }
     else if (gameState == PLTGameStateStarted && paused) {
@@ -257,7 +257,7 @@ double r2d(double d)
             //The ball is below the paddle.
             
             gameState = PLTGameStateEnded;
-            label.text = @"Bahhh! Tap headset to try again!";
+            label.text = @"Tap headset to try again!";
             label.alpha = 1.0;
             ball.alpha = 0.0;
             [ball stopAnimating];

@@ -42,6 +42,18 @@
 		</dict>
 		<dict>
 			<key>Label</key>
+			<string>Centrtal Park NYC</string>
+			<key>Latitude</key>
+			<real>40.778726</real>
+			<key>Longitude</key>
+			<real>-73.97239399999999</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
 			<string>Lafayette Park, San Francisco</string>
 			<key>Latitude</key>
 			<real>37.792702</real>
@@ -59,18 +71,6 @@
 			<real>36.99717</real>
 			<key>Longitude</key>
 			<real>-122.055382</real>
-			<key>StreetViewPrecacheRoundingMultiple</key>
-			<integer>-1</integer>
-			<key>AskedPrecacheStreetViewRoundingMultiple</key>
-			<integer>-1</integer>
-		</dict>
-		<dict>
-			<key>Label</key>
-			<string>Bardejov, Slovakia</string>
-			<key>Latitude</key>
-			<real>49.292184</real>
-			<key>Longitude</key>
-			<real>21.276038</real>
 			<key>StreetViewPrecacheRoundingMultiple</key>
 			<integer>-1</integer>
 			<key>AskedPrecacheStreetViewRoundingMultiple</key>
