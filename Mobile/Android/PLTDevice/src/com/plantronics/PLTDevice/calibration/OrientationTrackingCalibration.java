@@ -10,29 +10,24 @@ public class OrientationTrackingCalibration extends com.plantronics.PLTDevice.ca
 {
 	private Quaternion _referenceQuaternion;
 
-	public OrientationTrackingCalibration(EulerAngles angles)
-	{
-
+	public OrientationTrackingCalibration(EulerAngles angles) {
+		_referenceQuaternion = new Quaternion(angles);
 	}
 
-	public OrientationTrackingCalibration(Quaternion quaternion)
-	{
+	public OrientationTrackingCalibration(Quaternion quaternion) {
 		_referenceQuaternion = quaternion;
 	}
 
-	public EulerAngles getReferenceEulerAngles()
-	{
-		return null;
+	public EulerAngles getReferenceEulerAngles() {
+		return new EulerAngles(_referenceQuaternion);
 	}
 
-	public Quaternion getReferenceQuaternion()
-	{
+	public Quaternion getReferenceQuaternion() {
 		return _referenceQuaternion;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "";
+	public String toString() {
+		return this.getClass().getName() + ": referenceQuaternion=" + getReferenceQuaternion() + ", referenceEulerAngles=" + getReferenceEulerAngles();
 	}
 }

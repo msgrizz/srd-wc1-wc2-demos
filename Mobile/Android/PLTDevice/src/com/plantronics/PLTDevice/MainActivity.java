@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 	private Button		_unsubscribeAllButton;
 	private Button		_queryButton;
 	private Button		_getCachedButton;
+	private Button		_calibrateButton;
 
 
 	/* ****************************************************************************************************
@@ -140,6 +141,14 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 				getCachedButton();
 			}
 		});
+
+		_calibrateButton = ((Button)findViewById(R.id.calibrateButton));
+		_calibrateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				calibrateButton();
+			}
+		});
 	}
 
 	@Override
@@ -205,48 +214,49 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
-		//_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void changeSubscriptionButton1() {
 		Log.i(FN(), "changeSubscriptionButton1()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 2000);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_PERIODIC, 2000);
 	}
 
 	private void changeSubscriptionButton2() {
 		Log.i(FN(), "changeSubscriptionButton2()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
 	}
 
 	private void changeSubscriptionButton3() {
 		Log.i(FN(), "changeSubscriptionButton3()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
 	}
 
 	private void changeSubscriptionButton4() {
 		Log.i(FN(), "changeSubscriptionButton4()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void changeSubscriptionButton5() {
 		Log.i(FN(), "changeSubscriptionButton5()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void unsubscribeButton() {
 		Log.i(FN(), "unsubscribeButton()");
 
-		_device.unsubscribe(this, Device.SERVICE_ORIENTATION_TRACKING);
+		_device.unsubscribe(this, Device.SERVICE_WEARING_STATE);
 	}
 
 	private void unsubscribeAllButton() {
@@ -258,12 +268,14 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 	private void queryButton() {
 		Log.i(FN(), "queryButton()");
 
-		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
-		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
-		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
-		_device.queryInfo(this, Device.SERVICE_TAPS);
-		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
-		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
+		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
+//		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
+//		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
+//		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
+//		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
+//		_device.queryInfo(this, Device.SERVICE_TAPS);
+//		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
+//		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
 	}
 
 	private void getCachedButton() {
@@ -277,6 +289,12 @@ public class MainActivity extends Activity implements ConnectionListener, InfoLi
 		Log.i(FN(), "SERVICE_TAPS: " + _device.getCachedInfo(Device.SERVICE_TAPS));
 		Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_MAGNETOMETER_CAL_STATUS));
 		Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_GYROSCOPE_CAL_STATUS));
+	}
+
+	public void calibrateButton() {
+		Log.i(FN(), "calibrateButton()");
+
+		_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
 	}
 
 	/* ****************************************************************************************************

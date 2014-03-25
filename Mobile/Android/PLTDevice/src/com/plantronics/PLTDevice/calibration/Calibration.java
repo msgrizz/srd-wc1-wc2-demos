@@ -6,8 +6,7 @@ package com.plantronics.PLTDevice.calibration;
 public class Calibration
 {
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "";
 	}
 }

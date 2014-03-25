@@ -9,6 +9,7 @@ public class Info
 {
 	public static final int REQUEST_TYPE_SUBSCRIPTION = 0;
 	public static final int REQUEST_TYPE_QUERY =		1;
+	public static final int REQUEST_TYPE_CACHED = 		2;
 
 	protected int _requestType;
 	protected Date _timestamp;
@@ -26,6 +27,14 @@ public class Info
 
 	public Date getTimestamp() {
 		return _timestamp;
+	}
+
+	public void setRequestType(int requestType) {
+		_requestType = requestType;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		_timestamp = timestamp;
 	}
 
 	@Override

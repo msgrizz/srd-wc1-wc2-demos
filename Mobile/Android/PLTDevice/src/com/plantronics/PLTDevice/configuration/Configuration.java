@@ -6,8 +6,7 @@ package com.plantronics.PLTDevice.configuration;
 public class Configuration
 {
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "";
 	}
 }

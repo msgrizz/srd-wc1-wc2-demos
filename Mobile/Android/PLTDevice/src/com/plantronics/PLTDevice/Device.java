@@ -14,14 +14,12 @@ import com.plantronics.bladerunner.model.device.BladeRunnerDevice;
 import com.plantronics.bladerunner.model.device.BladeRunnerDeviceManager;
 import com.plantronics.bladerunner.protocol.*;
 import com.plantronics.bladerunner.protocol.EventListener;
+import com.plantronics.bladerunner.protocol.command.ConfigureSignalStrengthEventsCommand;
 import com.plantronics.bladerunner.protocol.command.SubscribeToServicesCommand;
 import com.plantronics.bladerunner.protocol.event.SignalStrengthEvent;
 import com.plantronics.bladerunner.protocol.event.SubscribedServiceDataEvent;
 import com.plantronics.bladerunner.protocol.event.WearingStateChangedEvent;
-import com.plantronics.bladerunner.protocol.setting.CurrentSignalStrengthResponse;
-import com.plantronics.bladerunner.protocol.setting.QueryServicesDataRequest;
-import com.plantronics.bladerunner.protocol.setting.QueryServicesDataResponse;
-import com.plantronics.bladerunner.protocol.setting.SignalStrengthConfigurationResponse;
+import com.plantronics.bladerunner.protocol.setting.*;
 
 import java.util.*;
 
@@ -34,8 +32,8 @@ public class Device
 {
 	private static final String TAG = "com.plantronics.PLTDevice";
 
-	public static final int SERVICE_PROXIMITY =			 		0x1000;
-	public static final int SERVICE_WEARING_STATE = 			0x1001;
+	public static final int SERVICE_WEARING_STATE = 			0x1000;
+	public static final int SERVICE_PROXIMITY =			 		0x1001;
 	public static final int SERVICE_ORIENTATION_TRACKING = 		0x0000;
 	public static final int SERVICE_PEDOMETER = 				0x0002;
 	public static final int SERVICE_FREE_FALL = 				0x0003;
@@ -46,24 +44,20 @@ public class Device
 	public static final int SUBSCRIPTION_MODE_ON_CHANGE = 		1;
 	public static final int SUBSCRIPTION_MODE_PERIODIC = 		2;
 
-	public static final int INFO_REQUEST_TYPE_SUBSCRIPTION =	0;
-	public static final int INFO_REQUEST_TYPE_QUERY =			1;
-
 	private ArrayList<ConnectionListener> 				_connectionListeners;
 	private HashMap<Integer, InternalSubscription>		_subscriptions;
-
 	private HashMap<Integer, Info>						_cachedInfo;
-
 	private HashMap<Integer, ArrayList<InfoListener>>	_queryListeners;
-
 	private boolean 									_isConnectionOpen;
-
 	private Context					 					_context;
 	private Communicator								_communicator; // from appcore
 	private BladeRunnerCommunicator						_bladeRunnerCommunicator;
 	private EventListener								_eventListener;
 	private BladeRunnerDevice 							_device;
 	private BladeRunnerDevice 							_sensorsDevice;
+	private TimerTask									_wearingStateTimerTask;
+	private TimerTask									_proximityTimerTask;
+	private OrientationTrackingCalibration				_orientationTrackingCalibration;
 
 	/* ****************************************************************************************************
 			Public
@@ -75,7 +69,7 @@ public class Device
 		_eventListener = new com.plantronics.bladerunner.protocol.EventListener() {
 			@Override
 			public void onEventReceived(Event event) {
-				Device.this.onEventReceived(event);
+				Device.this.onEventReceived(event); // Device.this donno why but stack overflow otherwise
 			}
 		};
 
@@ -228,7 +222,8 @@ public class Device
 	}
 
 	public void closeConnection() {
-
+		Log.i(FN(), "closeConnection()");
+		_bladeRunnerCommunicator.close(_device);
 	}
 
 	public void setConfiguration(Configuration config, int service) {
@@ -240,10 +235,36 @@ public class Device
 	}
 
 	public void setCalibration(Calibration cal, int service) {
+		Log.i(FN(), "setCalibration(): cal=" + cal + "service" + service);
 
+		switch (service) {
+			case SERVICE_ORIENTATION_TRACKING:
+				OrientationTrackingCalibration daCal = null;
+				if (cal==null) {
+					daCal = new OrientationTrackingCalibration(((OrientationTrackingInfo)_cachedInfo.get(service)).getUncalibratedQuaternion());
+				}
+				if (daCal==null) {
+					// no saved orientation info to use for cal. query info and use that.
+					queryOrientationTrackingForCal();
+				}
+				else {
+					_orientationTrackingCalibration = daCal;
+				}
+				break;
+			case SERVICE_PEDOMETER:
+				break;
+			default:
+				break;
+		}
 	}
 
 	public Calibration getCalibration(int service) {
+		switch (service) {
+			case SERVICE_ORIENTATION_TRACKING:
+				return _orientationTrackingCalibration;
+			default:
+				break;
+		}
 		return null;
 	}
 
@@ -258,11 +279,9 @@ public class Device
 				case SERVICE_TAPS:
 				case SERVICE_MAGNETOMETER_CAL_STATUS:
 				case SERVICE_GYROSCOPE_CAL_STATUS:
-					// cool.
-					break;
-				case SERVICE_PROXIMITY:
 				case SERVICE_WEARING_STATE:
-					// TODO: handle this!
+				case SERVICE_PROXIMITY:
+					// cool.
 					break;
 				default:
 					Log.e(FN(), "Invalid service: " + service);
@@ -278,8 +297,12 @@ public class Device
 			// 1. if doesnt exist, create it. add listener. add subscription. notify subscribers. execute BR command.
 			// 2. if exists and the mode is different, change to new mode. remove and re-add listener. update subscription. notify all listeners. execute BR command.
 			// 3. if exists and mode is onchange for both, remove and re-add listener. update subscription. dont notify subscribers. dont execute BR command.
-			// 4. if exists and mode is periodic for both and both periods are the same, remove and re-add listener. update subscription. dont notify subscribers. dont execute BR command.
-			// 5. if exists and mode is periodic for both and both periods are not the same, remove and re-add listener. update subscription. notify all subscribers. execute BR command.
+			// 4. if exists and mode is periodic for both and both periods ARE the same, remove and re-add listener. update subscription. dont notify subscribers. dont execute BR command.
+					// UPDATE: how about do nothing?
+			// 5. if exists and mode is periodic for both and both periods are NOT the same, remove and re-add listener. update subscription. notify all subscribers. execute BR command.
+
+			// to help keep the "record keeping" logic on top, and the "execution" logic on bottom, save the "case" from above and reference it below for wearing state and proximity
+			int casee = 0;
 
 			ArrayList<InfoListener> listenersToNotify = new ArrayList<InfoListener>();
 			InternalSubscription oldInternalSubscription;
@@ -288,6 +311,7 @@ public class Device
 			InternalSubscription sub = _subscriptions.get(service);
 			// 1.
 			if (sub==null) {
+				casee = 1;
 				_subscriptions.put(service, newInternalSubscription);
 				listenersToNotify.add(listener);
 				oldInternalSubscription = null;
@@ -297,23 +321,27 @@ public class Device
 
 				// 2.
 				if (mode!=sub.getMode()) {
+					casee = 2;
 					listenersToNotify.addAll(sub.getListeners());
 					sub.addListener(listener); // removes and re-adds
 					_subscriptions.put(service, newInternalSubscription);
 				}
 				// 3.
 				else if (mode==SUBSCRIPTION_MODE_ON_CHANGE && sub.getMode()==SUBSCRIPTION_MODE_ON_CHANGE) {
+					casee = 3;
 					sub.addListener(listener); // removes and re-adds
 					_subscriptions.put(service, newInternalSubscription);
 				}
 				else if (mode==SUBSCRIPTION_MODE_PERIODIC && sub.getMode()==SUBSCRIPTION_MODE_PERIODIC) {
 					// 4.
 					if (period==sub.getPeriod()) {
-						sub.addListener(listener); // removes and re-adds
-						_subscriptions.put(service, newInternalSubscription);
+//						casee = 4;
+//						sub.addListener(listener); // removes and re-adds
+//						_subscriptions.put(service, newInternalSubscription);
 					}
 					// 5.
 					else {
+						casee = 5;
 						sub.addListener(listener); // removes and re-adds
 						_subscriptions.put(service, newInternalSubscription);
 						listenersToNotify.addAll(sub.getListeners());
@@ -362,6 +390,51 @@ public class Device
 							}
 						});
 			}
+
+			// now for wearing state and proximity. we'll reference the "case" from above.
+
+			if (service==SERVICE_WEARING_STATE) {
+				boolean periodic = newInternalSubscription.getMode()==SUBSCRIPTION_MODE_PERIODIC;
+				switch (casee) {
+					case 1:
+						if (periodic) {
+							startWearingStateTimerTask(period);
+						}
+						else if (_wearingStateTimerTask!=null) {
+							_wearingStateTimerTask.cancel();
+						}
+						break;
+					case 2:
+						if (periodic) {
+							startWearingStateTimerTask(period);
+						}
+						else if (_wearingStateTimerTask!=null) {
+							_wearingStateTimerTask.cancel();
+						}
+						break;
+					case 3:
+						if (_wearingStateTimerTask!=null) {
+							_wearingStateTimerTask.cancel();
+						}
+						break;
+					case 4:
+						// disabled
+						break;
+					case 5:
+						if (periodic) {
+							startWearingStateTimerTask(period);
+						}
+						else if (_wearingStateTimerTask!=null) {
+							_wearingStateTimerTask.cancel();
+						}
+						break;
+				}
+			}
+			else if (service==SERVICE_PROXIMITY) {
+
+			}
+
+
 		}
 		else {
 			Log.e(FN(), "Listener is null!");
@@ -379,11 +452,9 @@ public class Device
 				case SERVICE_TAPS:
 				case SERVICE_MAGNETOMETER_CAL_STATUS:
 				case SERVICE_GYROSCOPE_CAL_STATUS:
-					// cool.
-					break;
-				case SERVICE_PROXIMITY:
 				case SERVICE_WEARING_STATE:
-					// TODO: handle this!
+				case SERVICE_PROXIMITY:
+					// cool.
 					break;
 				default:
 					Log.e(FN(), "Invalid service: " + service);
@@ -426,25 +497,55 @@ public class Device
 			}
 
 			if (execCommand) {
-				SubscribeToServicesCommand command = new SubscribeToServicesCommand();
-				command.setServiceID(service);
-				command.setCharacteristic(0);
-				command.setMode(SubscribeToServicesCommand.Mode.ModeOff.getValue());
-				command.setPeriod(0);
+				if (service==SERVICE_WEARING_STATE) {
+					// wearing state cant be turned off. nothing to do.
+				}
+				else if(service==SERVICE_PROXIMITY) {
+					ConfigureSignalStrengthEventsCommand command = new ConfigureSignalStrengthEventsCommand();
+					command.setEnable(false);
+					command.setConnectionId(2); // TODO: how do we know what this should be?
+					command.setDononly(false);
+					command.setReportNearFarAudio(false);
+					command.setReportNearFarToBase(false);
+					command.setReportRssiAudio(false);
+					command.setTrend(false);
+					// TODO: check these values
+					command.setSensitivity(5);
+					command.setNearThreshold(70);
+					command.setMaxTimeout(15);
+					_bladeRunnerCommunicator.execute(command, _device, new MessageCallback() {
+						@Override
+						public void onSuccess(IncomingMessage incomingMessage) {
 
-				Log.i(FN(), "Unsubscribing...");
-				_bladeRunnerCommunicator.execute(command, _sensorsDevice, new MessageCallback() {
-					@Override
-					public void onSuccess(IncomingMessage message) {
-						Log.i(FN(), "********* Unsubscribe success: " + message + " *********");
-					}
+						}
 
-					@Override
-					public void onFailure(BladerunnerException exception) {
-						Log.e(FN(), "********* Unsubscribe exception: " + exception + " *********");
-						// TODO: handle.
-					}
-				});
+						@Override
+						public void onFailure(BladerunnerException exception) {
+							Log.e(FN(), "********* Subscribe to signal strength exception: " + exception + " *********");
+						}
+					});
+				}
+				else {
+					SubscribeToServicesCommand command = new SubscribeToServicesCommand();
+					command.setServiceID(service);
+					command.setCharacteristic(0);
+					command.setMode(SubscribeToServicesCommand.Mode.ModeOff.getValue());
+					command.setPeriod(0);
+
+					Log.i(FN(), "Unsubscribing...");
+					_bladeRunnerCommunicator.execute(command, _sensorsDevice, new MessageCallback() {
+						@Override
+						public void onSuccess(IncomingMessage message) {
+							Log.i(FN(), "********* Unsubscribe success: " + message + " *********");
+						}
+
+						@Override
+						public void onFailure(BladerunnerException exception) {
+							Log.e(FN(), "********* Unsubscribe exception: " + exception + " *********");
+							// TODO: handle.
+						}
+					});
+				}
 			}
 
 			Iterator i = listenersToNotify.iterator();
@@ -460,8 +561,8 @@ public class Device
 	}
 
 	public void unsubscribe(InfoListener listener) {
-		unsubscribe(listener, SERVICE_PROXIMITY);
 		unsubscribe(listener, SERVICE_WEARING_STATE);
+		unsubscribe(listener, SERVICE_PROXIMITY);
 		unsubscribe(listener, SERVICE_ORIENTATION_TRACKING);
 		unsubscribe(listener, SERVICE_PEDOMETER);
 		unsubscribe(listener, SERVICE_FREE_FALL);
@@ -471,7 +572,11 @@ public class Device
 	}
 
 	public Info getCachedInfo(int service) {
-		return _cachedInfo.get(service);
+		Info info = _cachedInfo.get(service);
+		if (info!=null) {
+			info.setRequestType(Info.REQUEST_TYPE_CACHED);
+		}
+		return info;
 	}
 
 	public void queryInfo(InfoListener listener, int service) {
@@ -508,29 +613,52 @@ public class Device
 
 
 			// ************ TEMPORARY FOR TESTING ************
-			if (!listeners.contains(listener)) {
-				listeners.add(listener);
+			if (service!=SERVICE_WEARING_STATE && service!=SERVICE_PROXIMITY) {
+				if (!listeners.contains(listener)) {
+					listeners.add(listener);
+				}
+				execRequest = true;
 			}
-			execRequest = true;
+			// ***********************************************
 		}
 
 		if (execRequest) {
-			QueryServicesDataRequest request = new QueryServicesDataRequest();
-			request.setServiceID(service);
-			request.setCharacteristic(0);
+			if (service==SERVICE_WEARING_STATE) {
+				WearingStateRequest request = new WearingStateRequest();
+				_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+					@Override
+					public void onSuccess(IncomingMessage incomingMessage) {
+						onSettingsResponseReceived((SettingsResponse)incomingMessage);
+					}
 
-			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
-				@Override
-				public void onSuccess(IncomingMessage message) {
-					onSettingsResponseReceived((SettingsResponse)message);
-				}
+					@Override
+					public void onFailure(BladerunnerException exception) {
+						Log.e(FN(), "********* Wearing state exception: " + exception + " *********");
+						// TODO: handle.
+					}
+				});
+			}
+			else if(service==SERVICE_PROXIMITY) {
 
-				@Override
-				public void onFailure(BladerunnerException exception) {
-					Log.e(FN(), "********* Query service exception: " + exception + " *********");
-					// TODO: handle.
-				}
-			});
+			}
+			else {
+				QueryServicesDataRequest request = new QueryServicesDataRequest();
+				request.setServiceID(service);
+				request.setCharacteristic(0);
+
+				_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+					@Override
+					public void onSuccess(IncomingMessage message) {
+						onSettingsResponseReceived((SettingsResponse)message);
+					}
+
+					@Override
+					public void onFailure(BladerunnerException exception) {
+						Log.e(FN(), "********* Query service exception: " + exception + " *********");
+						// TODO: handle.
+					}
+				});
+			}
 		}
 	}
 
@@ -554,79 +682,83 @@ public class Device
 	private void onEventReceived(Event event) {
 		Log.i(FN(), "onEventReceived(): " + event);
 
-		int requestType = INFO_REQUEST_TYPE_SUBSCRIPTION;
+		int requestType = Info.REQUEST_TYPE_SUBSCRIPTION;
 		Date timestamp = new Date();
 		Info info = null;
 		ArrayList<InfoListener> listeners = null;
+		int service = -1;
+		InternalSubscription internalSubscription = null;
 
 		if (event instanceof SubscribedServiceDataEvent) {
 			SubscribedServiceDataEvent serviceEvent = (SubscribedServiceDataEvent)event;
-			int service = serviceEvent.getServiceID();
+			service = serviceEvent.getServiceID();
 
-			InternalSubscription internalSubscription = _subscriptions.get(service);
-			if (internalSubscription!=null) {
-				int[] data = serviceEvent.getServiceData();
-				listeners = internalSubscription.getListeners();
-
-				switch (service) {
-					case SERVICE_ORIENTATION_TRACKING:
-						Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
-						Quaternion q = quaternionFromData(data);
-						OrientationTrackingCalibration cal = new OrientationTrackingCalibration(new Quaternion(1, 0, 0, 0));
-						info = new OrientationTrackingInfo(requestType, timestamp, cal, q);
-						break;
-					case SERVICE_PEDOMETER:
-						Log.i(FN(), "SERVICE_PEDOMETER");
-						info = new PedometerInfo(requestType, timestamp, null, getPedometerCountFromData(data));
-						break;
-					case SERVICE_FREE_FALL:
-						Log.i(FN(), "SERVICE_FREE_FALL");
-						info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
-						break;
-					case SERVICE_TAPS:
-						Log.i(FN(), "SERVICE_TAPS");
-						info = new TapsInfo(requestType, timestamp, null, getTapCountFromData(data), getTapDirectionFromData(data));
-						break;
-					case SERVICE_MAGNETOMETER_CAL_STATUS:
-						Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
-						info = new MagnetometerCalInfo(requestType, timestamp, null, getMagIsCaldFromData(data));
-						break;
-					case SERVICE_GYROSCOPE_CAL_STATUS:
-						Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
-						info = new GyroscopeCalInfo(requestType, timestamp, null, getGyroIsCaldFromData(data));
-						break;
-					default:
-						Log.e(FN(), "Invalid service in event: " + service);
-						return;
-				}
-
-				if (info!=null && _cachedInfo!=null) {
-					_cachedInfo.put(service, info);
+			if (_subscriptions!=null) {
+				internalSubscription = _subscriptions.get(service);
+				if (internalSubscription!=null) {
+					listeners = internalSubscription.getListeners();
 				}
 			}
-			else {
-				// we dont have a internalSubscription for this service...
-				Log.i(FN(), "No internalSubscription for service: " + service);
+
+			int[] data = serviceEvent.getServiceData();
+
+			switch (service) {
+				case SERVICE_ORIENTATION_TRACKING:
+					Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
+					Quaternion q = getQuaternionFromData(data);
+					//Log.i(FN(), "angles: " + new EulerAngles(q));
+					info = new OrientationTrackingInfo(requestType, timestamp, _orientationTrackingCalibration, q);
+					break;
+				case SERVICE_PEDOMETER:
+					Log.i(FN(), "SERVICE_PEDOMETER");
+					info = new PedometerInfo(requestType, timestamp, null, getPedometerCountFromData(data));
+					break;
+				case SERVICE_FREE_FALL:
+					Log.i(FN(), "SERVICE_FREE_FALL");
+					info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
+					break;
+				case SERVICE_TAPS:
+					Log.i(FN(), "SERVICE_TAPS");
+					info = new TapsInfo(requestType, timestamp, null, getTapCountFromData(data), getTapDirectionFromData(data));
+					break;
+				case SERVICE_MAGNETOMETER_CAL_STATUS:
+					Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
+					info = new MagnetometerCalInfo(requestType, timestamp, null, getMagIsCaldFromData(data));
+					break;
+				case SERVICE_GYROSCOPE_CAL_STATUS:
+					Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
+					info = new GyroscopeCalInfo(requestType, timestamp, null, getGyroIsCaldFromData(data));
+					break;
+				default:
+					Log.e(FN(), "Invalid service in event: " + service);
+					return;
 			}
 		}
 		else if (event instanceof WearingStateChangedEvent) {
-			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_WEARING_STATE);
-			if (internalSubscription !=null) {
-				WearingStateChangedEvent wearingStateEvent = (WearingStateChangedEvent)event;
-				// TODO: Handle.
-				Log.i(FN(), "********* Wearing state event: " + (wearingStateEvent.getWorn() ? "Donned" : "Doffed") + " *********");
+			service = SERVICE_WEARING_STATE;
+			WearingStateChangedEvent wearingStateEvent = (WearingStateChangedEvent)event;
+			info = new WearingStateInfo(requestType, timestamp, null, wearingStateEvent.getWorn());
+			if (_subscriptions!=null) {
+				internalSubscription = _subscriptions.get(service);
+				if (internalSubscription!=null) {
+					if (internalSubscription.getMode()==SUBSCRIPTION_MODE_ON_CHANGE) {
+						listeners = internalSubscription.getListeners();
+					}
+				}
 			}
 		}
 		else if (event instanceof SignalStrengthEvent) {
-			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_PROXIMITY);
-			if (internalSubscription !=null) {
-				SignalStrengthEvent signalStrengthEvent = (SignalStrengthEvent)event;
-				// TODO: Handle.
-				Log.i(FN(), "********* Signal strength event: Near/far: " + signalStrengthEvent.getNearFar() + ", Strength: " + signalStrengthEvent.getStrength() + " *********");
-			}
+			service = SERVICE_PROXIMITY;
+			SignalStrengthEvent signalStrengthEvent = (SignalStrengthEvent)event;
+			// TODO: Handle.
+			Log.i(FN(), "********* Signal strength event: Near/far: " + signalStrengthEvent.getNearFar() + ", Strength: " + signalStrengthEvent.getStrength() + " *********");
 		}
 
-		if (listeners!=null) {
+		if (info!=null && _cachedInfo!=null) {
+			_cachedInfo.put(service, info);
+		}
+
+		if (listeners!=null && info!=null) {
 			Iterator i = listeners.iterator();
 			while (i.hasNext()) {
 				((InfoListener)i.next()).onInfoReceived(info);
@@ -637,14 +769,15 @@ public class Device
 	private void onSettingsResponseReceived(SettingsResponse response) {
 		Log.i(FN(), "onSettingsResponseReceived(): " + response);
 
-		int requestType = INFO_REQUEST_TYPE_QUERY;
+		int requestType = Info.REQUEST_TYPE_QUERY;
 		Date timestamp = new Date();
 		Info info = null;
 		ArrayList<InfoListener> listeners = null;
+		int service = -1;
 
 		if (response instanceof QueryServicesDataResponse) {
 			QueryServicesDataResponse queryServicesDataResponse = (QueryServicesDataResponse)response;
-			int service = queryServicesDataResponse.getServiceID();
+			service = queryServicesDataResponse.getServiceID();
 
 			listeners = _queryListeners.get(service);
 			if (listeners!=null) {
@@ -653,9 +786,8 @@ public class Device
 				switch (service) {
 					case SERVICE_ORIENTATION_TRACKING:
 						Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
-						Quaternion q = quaternionFromData(data);
-						OrientationTrackingCalibration cal = new OrientationTrackingCalibration(new Quaternion(1, 0, 0, 0));
-						info = new OrientationTrackingInfo(requestType, timestamp, cal, q);
+						Quaternion q = getQuaternionFromData(data);
+						info = new OrientationTrackingInfo(requestType, timestamp, _orientationTrackingCalibration, q);
 						break;
 					case SERVICE_PEDOMETER:
 						Log.i(FN(), "SERVICE_PEDOMETER");
@@ -681,24 +813,20 @@ public class Device
 						Log.e(FN(), "Invalid service in event: " + service);
 						return;
 				}
-
-				if (info!=null && _cachedInfo!=null) {
-					_cachedInfo.put(service, info);
-				}
 			}
 			else {
 				// nodoby is waiting for this query...
 				Log.i(FN(), "Odd. No query listeners for service " + service);
 			}
 		}
-//		else if (response instanceof GetWearingStateResponse) {
-//			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_WEARING_STATE);
-//			if (internalSubscription !=null) {
-//				GetWearingStateResponse getWearingStateResponse = (GetWearingStateResponse)response;
-//				// TODO: Handle.
-//				Log.i(FN(), "********* Wearing state response: " + (getWearingStateResponse.getWorn() ? "Donned" : "Doffed") + " *********");
-//			}
-//		}
+		else if (response instanceof WearingStateResponse) {
+			service = SERVICE_WEARING_STATE;
+			listeners = _queryListeners.get(service);
+			if (listeners!=null) {
+				WearingStateResponse wearingStateResponse = (WearingStateResponse)response;
+				info = new WearingStateInfo(requestType, timestamp, null, wearingStateResponse.getWorn());
+			}
+		}
 //		else if (response instanceof CurrentSignalStrengthResponse) {
 //			InternalSubscription internalSubscription = _subscriptions.get(SERVICE_PROXIMITY);
 //			if (internalSubscription !=null) {
@@ -708,19 +836,149 @@ public class Device
 //			}
 //		}
 
-		if (listeners!=null) {
+		if (info!=null && _cachedInfo!=null) {
+			_cachedInfo.put(service, info);
+		}
+
+		if (listeners!=null && info!=null) {
 			Iterator i = listeners.iterator();
 			while (i.hasNext()) {
 				((InfoListener)i.next()).onInfoReceived(info);
 			}
 		}
+
+		if (_queryListeners!=null) {
+			_queryListeners.remove(service);
+		}
+	}
+
+	private void startWearingStateTimerTask(long period) {
+		Log.i(FN(), "startWearingStateTimerTask(): " + period);
+
+		if (_cachedInfo.get(SERVICE_WEARING_STATE)==null) {
+			queryWearingState(); // prime the cached info
+		}
+		if (_wearingStateTimerTask!=null) {
+			_wearingStateTimerTask.cancel();
+		}
+		_wearingStateTimerTask = new TimerTask() {
+			@Override
+			public void run() {
+				wearingStateTimerTask();
+			}
+		};
+
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(_wearingStateTimerTask, period, period);
+		//timer.schedule(_wearingStateTimerTask, period);
+	}
+
+	private void startProximityTimerTask(long period) {
+		Log.i(FN(), "startProximityTimerTask(): " + period);
+
+		_proximityTimerTask.cancel();
+		_proximityTimerTask = new TimerTask() {
+			@Override
+			public void run() {
+				proximityTimerTask();
+			}
+		};
+
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(_proximityTimerTask, period, period);
+		//timer.schedule(_proximityTimerTask, period);
+	}
+
+	private void wearingStateTimerTask() {
+		Log.i(FN(), "wearingStateTimerTask()");
+
+		InternalSubscription sub = _subscriptions.get(SERVICE_WEARING_STATE);
+		if (sub!=null && sub.getMode()==SUBSCRIPTION_MODE_PERIODIC) {
+			ArrayList<InfoListener> listeners = sub.getListeners();
+			Info info = _cachedInfo.get(SERVICE_WEARING_STATE);
+			if (listeners!=null && info!=null) {
+				info.setRequestType(Info.REQUEST_TYPE_SUBSCRIPTION);
+				info.setTimestamp(new Date());
+
+				Iterator i = listeners.iterator();
+				while (i.hasNext()) {
+					((InfoListener)i.next()).onInfoReceived(info);
+				}
+			}
+			else {
+				Log.i(FN(), "(No wearing info yet)");
+			}
+		}
+	}
+
+	private void proximityTimerTask() {
+		Log.i(FN(), "proximityTimerTask()");
+
+		InternalSubscription sub = _subscriptions.get(SERVICE_PROXIMITY);
+		if (sub!=null && sub.getMode()==SUBSCRIPTION_MODE_PERIODIC) {
+			ArrayList<InfoListener> listeners = sub.getListeners();
+			Info info = _cachedInfo.get(SERVICE_PROXIMITY);
+			if (listeners!=null && info!=null) {
+				info.setRequestType(Info.REQUEST_TYPE_SUBSCRIPTION);
+				info.setTimestamp(new Date());
+
+				Iterator i = listeners.iterator();
+				while (i.hasNext()) {
+					((InfoListener)i.next()).onInfoReceived(info);
+				}
+			}
+		}
+	}
+
+	private void queryWearingState() {
+		// intended only as a "primer" to get cached info for periodic subscriptions.
+
+		WearingStateRequest request = new WearingStateRequest();
+		_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+			@Override
+			public void onSuccess(IncomingMessage incomingMessage) {
+				WearingStateResponse response = (WearingStateResponse)incomingMessage;
+				WearingStateInfo info = new WearingStateInfo(Info.REQUEST_TYPE_QUERY, new Date(), null, response.getWorn());
+				_cachedInfo.put(SERVICE_WEARING_STATE, info);
+			}
+
+			@Override
+			public void onFailure(BladerunnerException exception) {
+				Log.e(FN(), "********* Wearing state exception: " + exception + " *********");
+				// TODO: ?
+			}
+		});
+	}
+
+	private void queryOrientationTrackingForCal() {
+		Log.i(FN(), "queryOrientationTrackingForCal()");
+
+		QueryServicesDataRequest request = new QueryServicesDataRequest();
+		request.setServiceID(SERVICE_ORIENTATION_TRACKING);
+		request.setCharacteristic(0);
+
+		_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+			@Override
+			public void onSuccess(IncomingMessage response) {
+				QueryServicesDataResponse queryServicesDataResponse = (QueryServicesDataResponse)response;
+				int[] data = queryServicesDataResponse.getServiceData();
+				Quaternion q = getQuaternionFromData(data);
+				_orientationTrackingCalibration = new OrientationTrackingCalibration(q);
+			}
+
+			@Override
+			public void onFailure(BladerunnerException exception) {
+				Log.e(FN(), "********* Query service exception: " + exception + " *********");
+				// TODO: handle.
+			}
+		});
 	}
 
 	/* ****************************************************************************************************
 			Helpers
 	*******************************************************************************************************/
 
-	private Quaternion quaternionFromData(int[] data) {
+	private Quaternion getQuaternionFromData(int[] data) {
 		int w = (data[0] << 8) + data[1];
 		int x = (data[2] << 8) + data[3];
 		int y = (data[4] << 8) + data[5];
@@ -827,10 +1085,10 @@ public class Device
 
 	private class InternalSubscription {
 
-		private int 					_serviceID;
-		private int 					_mode;
-		private int						_period;
-		ArrayList<InfoListener> _listeners;
+		private int 				_serviceID;
+		private int 				_mode;
+		private int					_period;
+		ArrayList<InfoListener>		_listeners;
 
 		public InternalSubscription(int serviceID, int mode, int period, InfoListener listener) {
 			_serviceID = serviceID;
