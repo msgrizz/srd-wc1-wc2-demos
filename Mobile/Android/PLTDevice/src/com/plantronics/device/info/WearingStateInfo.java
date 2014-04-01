@@ -1,15 +1,18 @@
 package com.plantronics.device.info;
 
+import com.plantronics.device.calibration.Calibration;
+
 import java.util.Date;
 
 /**
  * Created by mdavis on 1/16/14.
  */
-public class WearingStateInfo extends com.plantronics.device.info.Info {
+public class WearingStateInfo extends Info {
 
-	private boolean _isBeingWorn;
+	private boolean 	_isBeingWorn;
 
-	public WearingStateInfo(int requestType, Date timestamp, com.plantronics.device.calibration.Calibration calibration, boolean isBeingWorn) {
+
+	public WearingStateInfo(int requestType, Date timestamp, Calibration calibration, boolean isBeingWorn) {
 		super(requestType, timestamp, calibration);
 		_isBeingWorn = isBeingWorn;
 	}

@@ -1,5 +1,7 @@
 package com.plantronics.device.info;
 
+import com.plantronics.device.calibration.Calibration;
+
 import java.util.Date;
 
 /**
@@ -7,9 +9,10 @@ import java.util.Date;
  */
 public class FreeFallInfo extends Info {
 
-	private boolean _isInFreeFall;
+	private boolean 	_isInFreeFall;
 
-	public FreeFallInfo(int requestType, Date timestamp, com.plantronics.device.calibration.Calibration calibration, boolean isInFreeFall) {
+
+	public FreeFallInfo(int requestType, Date timestamp, Calibration calibration, boolean isInFreeFall) {
 		super(requestType, timestamp, calibration);
 		_isInFreeFall = isInFreeFall;
 	}

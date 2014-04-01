@@ -5,9 +5,10 @@ package com.plantronics.device;
  */
 public class Subscription {
 
-	private int 					_service;
-	private int 					_mode;
-	private int						_period;
+	private int 		_service;
+	private int 		_mode;
+	private int			_period;
+
 
 	public Subscription(int service, int mode, int period) {
 		_service = service;

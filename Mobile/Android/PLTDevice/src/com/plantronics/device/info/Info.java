@@ -1,5 +1,7 @@
 package com.plantronics.device.info;
 
+import com.plantronics.device.calibration.Calibration;
+
 import java.util.Date;
 
 /**
@@ -11,11 +13,12 @@ public class Info
 	public static final int REQUEST_TYPE_QUERY =		1;
 	public static final int REQUEST_TYPE_CACHED = 		2;
 
-	protected int _requestType;
-	protected Date _timestamp;
-	protected com.plantronics.device.calibration.Calibration _calibration;
+	protected int										_requestType;
+	protected Date 										_timestamp;
+	protected Calibration 								_calibration;
 
-	public Info(int requestType, Date timestamp, com.plantronics.device.calibration.Calibration calibration) {
+
+	public Info(int requestType, Date timestamp, Calibration calibration) {
 		_requestType = requestType;
 		_timestamp = timestamp;
 		_calibration = calibration;

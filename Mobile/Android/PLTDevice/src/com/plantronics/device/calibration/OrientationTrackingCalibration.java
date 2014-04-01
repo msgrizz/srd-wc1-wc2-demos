@@ -6,9 +6,10 @@ import com.plantronics.device.info.Quaternion;
 /**
  * Created by mdavis on 1/16/14.
  */
-public class OrientationTrackingCalibration extends com.plantronics.device.calibration.Calibration {
+public class OrientationTrackingCalibration extends Calibration {
 
-	private Quaternion _referenceQuaternion;
+	private Quaternion 		_referenceQuaternion;
+
 
 	public OrientationTrackingCalibration(EulerAngles angles) {
 		_referenceQuaternion = new Quaternion(angles);

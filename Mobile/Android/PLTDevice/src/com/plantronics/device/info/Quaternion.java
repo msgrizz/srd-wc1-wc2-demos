@@ -6,10 +6,11 @@ package com.plantronics.device.info;
 
 public class Quaternion {
 
-	public double w;
-	public double x;
-	public double y;
-	public double z;
+	public double 	w;
+	public double 	x;
+	public double 	y;
+	public double 	z;
+
 
 	public Quaternion(double w_, double x_, double y_, double z_) {
 		w = w_;

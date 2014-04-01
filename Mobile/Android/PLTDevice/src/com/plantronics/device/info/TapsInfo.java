@@ -1,11 +1,13 @@
 package com.plantronics.device.info;
 
+import com.plantronics.device.calibration.Calibration;
+
 import java.util.Date;
 
 /**
  * Created by mdavis on 1/16/14.
  */
-public class TapsInfo extends com.plantronics.device.info.Info {
+public class TapsInfo extends Info {
 
 	public static final int TAP_DIRECTION_X_UP =	1;
 	public static final int TAP_DIRECTION_X_DOWN = 	2;
@@ -14,10 +16,11 @@ public class TapsInfo extends com.plantronics.device.info.Info {
 	public static final int TAP_DIRECTION_Z_UP = 	5;
 	public static final int TAP_DIRECTION_Z_DOWN =	6;
 
-	private int _count;
-	private int _direction;
+	private int 									_count;
+	private int 									_direction;
 
-	public TapsInfo(int requestType, Date timestamp, com.plantronics.device.calibration.Calibration calibration, int count, int direction) {
+
+	public TapsInfo(int requestType, Date timestamp, Calibration calibration, int count, int direction) {
 		super(requestType, timestamp, calibration);
 		_count = count;
 		_direction = direction;

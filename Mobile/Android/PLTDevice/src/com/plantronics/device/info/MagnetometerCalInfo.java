@@ -1,5 +1,7 @@
 package com.plantronics.device.info;
 
+import com.plantronics.device.calibration.Calibration;
+
 import java.util.Date;
 
 /**
@@ -7,9 +9,10 @@ import java.util.Date;
  */
 public class MagnetometerCalInfo extends com.plantronics.device.info.Info {
 
-	private boolean _isCalibrated;
+	private boolean 	_isCalibrated;
 
-	public MagnetometerCalInfo(int requestType, Date timestamp, com.plantronics.device.calibration.Calibration calibration, boolean isCalibrated) {
+
+	public MagnetometerCalInfo(int requestType, Date timestamp, Calibration calibration, boolean isCalibrated) {
 		super(requestType, timestamp, calibration);
 		_isCalibrated = isCalibrated;
 	}

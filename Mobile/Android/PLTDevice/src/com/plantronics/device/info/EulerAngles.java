@@ -5,9 +5,10 @@ package com.plantronics.device.info;
  */
 public class EulerAngles {
 
-	public double x;
-	public double y;
-	public double z;
+	public double 	x;
+	public double 	y;
+	public double 	z;
+
 
 	public EulerAngles(double x_, double y_, double z_) {
 		x = x_;

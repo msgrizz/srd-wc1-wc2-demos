@@ -19,7 +19,7 @@ import com.plantronics.device.info.Info;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements BondListener, ConnectionListener, InfoListener {
+public class MainActivity extends Activity implements PairingListener, ConnectionListener, InfoListener {
 
 	private static final String TAG = "com.plantronics.device.MainActivity";
 
@@ -151,8 +151,8 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 		Device.initialize(this, new Device.InitializationCallback() {
 			@Override
 			public void onInitialized() {
-				Log.i(FN(), "onInitialized(). Devices: " + Device.getBondedDevices());
-				Device.registerBondListener((BondListener) _context);
+				Log.i(FN(), "onInitialized(). Devices: " + Device.getPairedDevices());
+				Device.registerPairingListener((PairingListener) _context);
 			}
 
 			@Override
@@ -196,7 +196,7 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 	private void openConnectionButton() {
 		Log.i(FN(), "openConnectionButton()");
 
-		ArrayList<Device> devices = Device.getBondedDevices();
+		ArrayList<Device> devices = Device.getPairedDevices();
 
 		if (devices.size() > 0) {
 			_device = devices.get(0);
@@ -207,7 +207,7 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 			Log.i(FN(), "No PLT devices found!");
 		}
 
-//		Device.getBondedDevices(this, new Device.AvailableDevicesCallback() {
+//		Device.getPairedDevices(this, new Device.AvailableDevicesCallback() {
 //			@Override
 //			public void onAvailableDevices(ArrayList<Device> devices) {
 //				Log.i(FN(), "onAvailableDevices(): " + devices);
@@ -232,9 +232,9 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
@@ -286,12 +286,12 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 	private void queryButton() {
 		Log.i(FN(), "queryButton()");
 
-		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
+//		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
 //		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
 //		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
 //		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
 //		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
-//		_device.queryInfo(this, Device.SERVICE_TAPS);
+		_device.queryInfo(this, Device.SERVICE_TAPS);
 //		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
 //		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
 	}
@@ -312,19 +312,21 @@ public class MainActivity extends Activity implements BondListener, ConnectionLi
 	public void calibrateButton() {
 		Log.i(FN(), "calibrateButton()");
 
-		_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+		//_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+
+		_device.setCalibration(null, Device.SERVICE_PEDOMETER);
 	}
 
 	/* ****************************************************************************************************
-			 BondListener
+			 PairingListener
 	*******************************************************************************************************/
 
-	public void onDeviceBonded(Device device) {
-		Log.i(FN(), "onDeviceBonded(): " + device);
+	public void onDevicePaired(Device device) {
+		Log.i(FN(), "onDevicePaired(): " + device);
 	}
 
-	public void onDeviceUnbonded(Device device) {
-		Log.i(FN(), "onDeviceUnbonded(): " + device);
+	public void onDeviceUnpaired(Device device) {
+		Log.i(FN(), "onDeviceUnpaired(): " + device);
 	}
 
 	/* ****************************************************************************************************
