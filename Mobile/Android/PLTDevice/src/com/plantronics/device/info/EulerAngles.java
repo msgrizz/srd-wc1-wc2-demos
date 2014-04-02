@@ -5,22 +5,22 @@ package com.plantronics.device.info;
  */
 public class EulerAngles {
 
-	public double 	x;
-	public double 	y;
-	public double 	z;
+	private double 	_x;
+	private double 	_y;
+	private double 	_z;
 
 
-	public EulerAngles(double x_, double y_, double z_) {
-		x = x_;
-		y = y_;
-		z = z_;
+	public EulerAngles(double x, double y, double z) {
+		_x = x;
+		_y = y;
+		_z = z;
 	}
 
 	public EulerAngles(Quaternion quaternion) {
-		double q0 = quaternion.w;
-		double q1 = quaternion.x;
-		double q2 = quaternion.y;
-		double q3 = quaternion.z;
+		double q0 = quaternion.getW();
+		double q1 = quaternion.getX();
+		double q2 = quaternion.getY();
+		double q3 = quaternion.getZ();
 
 		double m22 = 2*Math.pow(q0, 2) + 2*Math.pow(q2, 2) - 1;
 		double m21 = 2*q1*q2 - 2*q0*q3;
@@ -32,14 +32,26 @@ public class EulerAngles {
 		double theta = r2d(Math.asin(m23));
 		double phi = -r2d(Math.atan2(m13, m33));
 
-		x = psi;
-		y = theta;
-		z = phi;
+		_x = psi;
+		_y = theta;
+		_z = phi;
+	}
+
+	public double getX() {
+		return _x;
+	}
+
+	public double getY() {
+		return _y;
+	}
+
+	public double getZ() {
+		return _z;
 	}
 
 	@Override
 	public String toString() {
-		return "{ " + x + ", " + y + ", " + z + " }";
+		return "{ " + _x + ", " + _y + ", " + _z + " }";
 	}
 
 	private static double d2r(double d)
