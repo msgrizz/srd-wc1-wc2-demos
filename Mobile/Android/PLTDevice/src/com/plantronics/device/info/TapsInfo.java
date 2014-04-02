@@ -34,7 +34,7 @@ public class TapsInfo extends Info {
 		return _direction;
 	}
 
-	public static String StringFromTapDirection(int direction) {
+	public static String getStringForTapDirection(int direction) {
 		switch (direction) {
 			case TAP_DIRECTION_X_UP:
 				return "x up";
@@ -55,6 +55,6 @@ public class TapsInfo extends Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", count=" + _count + ", direction=" + StringFromTapDirection(_direction);
+				+ ", count=" + _count + ", direction=" + getStringForTapDirection(_direction);
 	}
 }

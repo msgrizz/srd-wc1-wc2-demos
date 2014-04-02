@@ -31,7 +31,7 @@ public class ProximityInfo extends Info {
 		return _remoteProximity;
 	}
 
-	public static String StringFromProximity(int proximity) {
+	public static String getStringForProximity(int proximity) {
 		switch (proximity) {
 			case PROXIMITY_FAR:
 				return "far";
@@ -47,6 +47,6 @@ public class ProximityInfo extends Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", localProximity=" + StringFromProximity(_localProximity) + ", remoteProximity=" + StringFromProximity(_remoteProximity);
+				+ ", localProximity=" + getStringForProximity(_localProximity) + ", remoteProximity=" + getStringForProximity(_remoteProximity);
 	}
 }

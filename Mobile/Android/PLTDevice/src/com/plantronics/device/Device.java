@@ -45,8 +45,8 @@ public class Device {
 	public static final int SERVICE_PEDOMETER = 				0x0002;
 	public static final int SERVICE_FREE_FALL = 				0x0003;
 	public static final int SERVICE_TAPS = 						0x0004;
-	public static final int SERVICE_MAGNETOMETER_CAL_STATUS = 	0x0006;
-	public static final int SERVICE_GYROSCOPE_CAL_STATUS =		0x0005;
+	public static final int SERVICE_MAGNETOMETER_CAL_STATUS = 	0x0005;
+	public static final int SERVICE_GYROSCOPE_CAL_STATUS =		0x0006;
 
 	public static final int SUBSCRIPTION_MODE_ON_CHANGE = 		1;
 	public static final int SUBSCRIPTION_MODE_PERIODIC = 		2;
@@ -92,7 +92,7 @@ public class Device {
 		_eventListener = new com.plantronics.bladerunner.protocol.EventListener() {
 			@Override
 			public void onEventReceived(Event event) {
-				Device.this.onEventReceived(event); // Device.this donno why but stack overflow otherwise
+				Device.this.onEventReceived(event); // MUST use Device.this or stack overflow... (?!)
 			}
 		};
 
@@ -472,8 +472,7 @@ public class Device {
 						}, new BladeRunnerCommunicator.FastEventListener() {
 							@Override
 							public void onEventReceived(Event event) {
-								//Device.this.onEventReceived(event);
-								onEventReceived(event);
+								Device.this.onEventReceived(event); // MUST use Device.this or stack overflow... (?!)
 							}
 						});
 			}
@@ -854,26 +853,31 @@ public class Device {
 	private void getConnectionStatus() {
 		Log.i(FN(), "getConnectionStatus()");
 
-		ConnectionStatusRequest request = new ConnectionStatusRequest();
-		_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
-			@Override
-			public void onSuccess(IncomingMessage message) {
-				ConnectionStatusResponse reponse = (ConnectionStatusResponse)message;
+		// TODO: temporary.
+		getDeviceInfo();
 
-				Log.i(FN(), "********* Connection status success: " + reponse + " *********");
-				onConnectionStatusReceived(reponse);
-			}
-
-			@Override
-			public void onFailure(BladerunnerException exception) {
-				Log.e(FN(), "********* Get device info exception: " + exception + " *********");
-			}
-		});
+//		ConnectionStatusRequest request = new ConnectionStatusRequest();
+//		_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+//			@Override
+//			public void onSuccess(IncomingMessage message) {
+//				ConnectionStatusResponse reponse = (ConnectionStatusResponse)message;
+//
+//				Log.i(FN(), "********* Connection status success: " + reponse + " *********");
+//				onConnectionStatusReceived(reponse);
+//			}
+//
+//			@Override
+//			public void onFailure(BladerunnerException exception) {
+//				Log.e(FN(), "********* Get device info exception: " + exception + " *********");
+//			}
+//		});
 	}
 
 	private void onConnectionStatusReceived(ConnectionStatusResponse reponse) {
 		_localPort = reponse.getOriginatingPortID();
 		Log.i(FN(), "getConnectionStatus(): remotePort=" + _remotePort);
+
+		getDeviceInfo();
 	}
 
 	private void getDeviceInfo() {
@@ -957,8 +961,10 @@ public class Device {
 				case SERVICE_ORIENTATION_TRACKING:
 					Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
 					Quaternion q = getQuaternionFromData(data);
-					//Log.i(FN(), "angles: " + new EulerAngles(q));
-					info = new OrientationTrackingInfo(requestType, timestamp, _orientationTrackingCalibration, q);
+					if (q != null) {
+						//Log.i(FN(), "angles: " + new EulerAngles(q));
+						info = new OrientationTrackingInfo(requestType, timestamp, _orientationTrackingCalibration, q);
+					}
 					break;
 				case SERVICE_PEDOMETER:
 					Log.i(FN(), "SERVICE_PEDOMETER");
@@ -1274,7 +1280,7 @@ public class Device {
 		double fz = ((double)z) / 16384.0f;
 
 		Quaternion q = new Quaternion(fw, fx, fy, fz);
-		if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
+		if (q.getW()>1.0001f || q.getX()>1.0001f || q.getY()>1.0001f || q.getZ()>1.0001f) {
 			Log.i(FN(), "Bad quaternion! " + q);
 		}
 		else {
