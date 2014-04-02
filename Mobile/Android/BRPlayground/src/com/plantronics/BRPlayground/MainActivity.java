@@ -17,10 +17,7 @@ import com.plantronics.bladerunner.model.device.BladeRunnerDevice;
 import com.plantronics.bladerunner.model.device.BladeRunnerDeviceManager;
 import com.plantronics.bladerunner.model.device.CapabilityFilter;
 import com.plantronics.bladerunner.protocol.*;
-import com.plantronics.bladerunner.protocol.command.CommandEnum;
-import com.plantronics.bladerunner.protocol.command.CommandSuccessResult;
-import com.plantronics.bladerunner.protocol.command.ConfigureSignalStrengthEventsCommand;
-import com.plantronics.bladerunner.protocol.command.SubscribeToServicesCommand;
+import com.plantronics.bladerunner.protocol.command.*;
 import com.plantronics.bladerunner.protocol.control.BladeRunnerServiceInfoResponse;
 import com.plantronics.bladerunner.protocol.control.ConnectToDeviceCommand;
 import com.plantronics.bladerunner.protocol.event.ConnectedDeviceEvent;
@@ -57,6 +54,7 @@ public class MainActivity extends Activity
 	private Button						 _subscribeToServicesButton;
 	private Button 						_unsubscribeFromServicesButton;
 	private Button						_queryServicesButton;
+	private Button						_calibratePedometerButton;
 	private TextView  					_connectedTextView;
 	private TextView 					_wearingTextView;
 	private TextView  					_signalStrengthTextView;
@@ -172,6 +170,14 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) {
 				queryServicesButton();
+			}
+		});
+
+		_calibratePedometerButton = ((Button)findViewById(R.id.calibratePedometerButton));
+		_calibratePedometerButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				calibratePedometerButton();
 			}
 		});
 
@@ -410,57 +416,102 @@ public class MainActivity extends Activity
 		Log.i(FN(), "subscribeToSignalStrengthButton()");
 
 		if (_device != null) {
-			ConfigureSignalStrengthEventsCommand command = new ConfigureSignalStrengthEventsCommand();
-			command.setEnable(true);
-			command.setConnectionId(2);
-			command.setDononly(false);
-			command.setReportNearFarAudio(false);
-			command.setReportNearFarToBase(false);
-			command.setReportRssiAudio(false);
-			command.setTrend(false);
-			command.setSensitivity(5);
-			command.setNearThreshold(70);
-			command.setMaxTimeout(15);
-			_bladeRunnerCommunicator.execute(command, _device, new MessageCallback() {
+
+			ConnectionStatusRequest request = new ConnectionStatusRequest();
+			_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
 				@Override
-				public void onSuccess(IncomingMessage incomingMessage) {
-					//CurrentSignalStrengthResponse response = (CurrentSignalStrengthResponse)incomingMessage;
-					Log.i(FN(), "********* Subscribe to signal strength success: " + incomingMessage + " *********");
+				public void onSuccess(IncomingMessage message) {
+					ConnectionStatusResponse reponse = (ConnectionStatusResponse)message;
+					Log.i(FN(), "********* Connection status success: " + reponse + " *********");
 				}
 
 				@Override
 				public void onFailure(BladerunnerException exception) {
-					Log.e(FN(), "********* Subscribe to signal strength exception: " + exception + " *********");
+					Log.e(FN(), "********* Get device info exception: " + exception + " *********");
 				}
 			});
+
+
+//			ConfigureSignalStrengthEventsCommand command = new ConfigureSignalStrengthEventsCommand();
+//			command.setEnable(true);
+//			command.setConnectionId(3);
+//			command.setDononly(false);
+//			command.setReportNearFarAudio(false);
+//			command.setReportNearFarToBase(false);
+//			command.setReportRssiAudio(false);
+//			command.setTrend(false);
+//			command.setSensitivity(5);
+//			command.setNearThreshold(70);
+//			command.setMaxTimeout(15);
+//			_bladeRunnerCommunicator.executeWithStreaming(command, _device, new MessageCallback() {
+//						@Override
+//						public void onSuccess(IncomingMessage incomingMessage) {
+//							//CurrentSignalStrengthResponse response = (CurrentSignalStrengthResponse)incomingMessage;
+//							Log.i(FN(), "********* Subscribe to signal strength success: " + incomingMessage + " *********");
+//						}
+//
+//						@Override
+//						public void onFailure(BladerunnerException exception) {
+//							Log.e(FN(), "********* Subscribe to signal strength exception: " + exception + " *********");
+//						}
+//					}, new BladeRunnerCommunicator.FastEventListener() {
+//						@Override
+//						public void onEventReceived(Event event) {
+//							//Log.i(FN(), "\"********* Streaming: " + event.toString() + "*********");
+//							eventReceived(event);
+//						}
+//					});
 		}
 	}
 
 	private void getSignalStrengthButton() {
 		Log.i(FN(), "getSignalStrengthButton()");
 
-		if (_device != null) {
-			CurrentSignalStrengthRequest request = new CurrentSignalStrengthRequest();
-			request.setConnectionId(2); // ??
-			_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+
+		if (_sensorsDevice != null) {
+			CalibrateServicesCommand request = new CalibrateServicesCommand();
+			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
+			request.setCharacteristic(0);
+			//int[] calData = {0x0FFFFFFF};
+			int[] calData = {1};
+			request.setCalibrationData(calData);
+			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
 				@Override
 				public void onSuccess(IncomingMessage incomingMessage) {
-					final CurrentSignalStrengthResponse response = (CurrentSignalStrengthResponse)incomingMessage;
-					Log.i(FN(), "********* Current signal strength success: Near/far: " + response.getNearFar() + ", Strength: " + response.getStrength() + " *********");
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							_signalStrengthTextView.setText("Signal Strength: " + response.getStrength());
-						}
-					});
+					Log.i(FN(), "********* Cal pedometer success! *********");
 				}
 
 				@Override
 				public void onFailure(BladerunnerException exception) {
-					Log.e(FN(), "********* Current signal strength exception: " + exception + " *********");
+					Log.e(FN(), "********* Cal pedometer exception: " + exception + " *********");
 				}
 			});
 		}
+
+
+//		if (_device != null) {
+////			CurrentSignalStrengthRequest request = new CurrentSignalStrengthRequest();
+////			request.setConnectionId(2); // ??
+//
+//			_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+//				@Override
+//				public void onSuccess(IncomingMessage incomingMessage) {
+//					final CurrentSignalStrengthResponse response = (CurrentSignalStrengthResponse)incomingMessage;
+//					Log.i(FN(), "********* Current signal strength success: Near/far: " + response.getNearFar() + ", Strength: " + response.getStrength() + " *********");
+//					runOnUiThread(new Runnable() {
+//						@Override
+//						public void run() {
+//							_signalStrengthTextView.setText("Signal Strength: " + response.getStrength());
+//						}
+//					});
+//				}
+//
+//				@Override
+//				public void onFailure(BladerunnerException exception) {
+//					Log.e(FN(), "********* Current signal strength exception: " + exception + " *********");
+//				}
+//			});
+//		}
 	}
 
 	private void getDeviceInfoButton() {
@@ -472,7 +523,7 @@ public class MainActivity extends Activity
 				@Override
 				public void onSuccess(IncomingMessage message) {
 					GetDeviceInfoRequest reponse = (GetDeviceInfoRequest)message;
-					Log.i(FN(), "********* Get device info success: " + message + " *********");
+					Log.i(FN(), "********* Get device info success: " + reponse + " *********");
 				}
 
 				@Override
@@ -490,25 +541,25 @@ public class MainActivity extends Activity
 			ArrayList<SubscribeToServicesCommand> commands = new ArrayList<SubscribeToServicesCommand>();
 
 			SubscribeToServicesCommand command = new SubscribeToServicesCommand();
-			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_HeadOrientation.getValue());
-			command.setCharacteristic(0);
-			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
-			command.setPeriod(15);
-			commands.add(command);
+//			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_HeadOrientation.getValue());
+//			command.setCharacteristic(0);
+//			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
+//			command.setPeriod(15);
+//			commands.add(command);
 
-			command = new SubscribeToServicesCommand();
-			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_FreeFall.getValue());
-			command.setCharacteristic(0);
-			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
-			command.setPeriod(15);
-			commands.add(command);
-
-			command = new SubscribeToServicesCommand();
-			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Taps.getValue());
-			command.setCharacteristic(0);
-			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
-			command.setPeriod(15);
-			commands.add(command);
+//			command = new SubscribeToServicesCommand();
+//			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_FreeFall.getValue());
+//			command.setCharacteristic(0);
+//			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
+//			command.setPeriod(15);
+//			commands.add(command);
+//
+//			command = new SubscribeToServicesCommand();
+//			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Taps.getValue());
+//			command.setCharacteristic(0);
+//			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
+//			command.setPeriod(15);
+//			commands.add(command);
 
 			command = new SubscribeToServicesCommand();
 			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
@@ -517,12 +568,12 @@ public class MainActivity extends Activity
 			command.setPeriod(15);
 			commands.add(command);
 
-			command = new SubscribeToServicesCommand();
-			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_GyroscopeCalibrationStatus.getValue());
-			command.setCharacteristic(0);
-			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
-			command.setPeriod(15);
-			commands.add(command);
+//			command = new SubscribeToServicesCommand();
+//			command.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_GyroscopeCalibrationStatus.getValue());
+//			command.setCharacteristic(0);
+//			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
+//			command.setPeriod(15);
+//			commands.add(command);
 
 			for (SubscribeToServicesCommand c : commands) {
 				_bladeRunnerCommunicator.executeWithStreaming(c, _sensorsDevice, new MessageCallback() {
@@ -614,131 +665,113 @@ public class MainActivity extends Activity
 		Log.i(FN(), "queryServicesButton()");
 
 		if (_sensorsDevice != null) {
-			ArrayList<QueryServicesDataRequest> requests = new ArrayList<QueryServicesDataRequest>();
+
 
 			QueryServicesDataRequest request = new QueryServicesDataRequest();
 			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_HeadOrientation.getValue());
 			request.setCharacteristic(0);
-			requests.add(request);
 
-			request = new QueryServicesDataRequest();
-			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_FreeFall.getValue());
-			request.setCharacteristic(0);
-			requests.add(request);
+			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+				@Override
+				public void onSuccess(IncomingMessage message) {
+					QueryServicesDataResponse response = (QueryServicesDataResponse)message;
+					Log.i(FN(), "********* Query service success: " + message + " *********");
 
-			request = new QueryServicesDataRequest();
-			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Taps.getValue());
-			request.setCharacteristic(0);
-			requests.add(request);
+					int serviceID = response.getServiceID();
+					Log.i(FN(), "serviceID: " + serviceID);
 
-			request = new QueryServicesDataRequest();
+					final int[] data = response.getServiceData();
+					for (int d = 0; d<data.length; d++) {
+						Log.i(FN(), "data[" + d + "] = " + data[d]);
+					}
+				}
+
+				@Override
+				public void onFailure(BladerunnerException exception) {
+					Log.e(FN(), "********* Query service exception: " + exception + " *********");
+				}
+			});
+
+
+//			ArrayList<QueryServicesDataRequest> requests = new ArrayList<QueryServicesDataRequest>();
+//
+//			QueryServicesDataRequest request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_HeadOrientation.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_FreeFall.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Taps.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_GyroscopeCalibrationStatus.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			request = new QueryServicesDataRequest();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_MagnetometerCalibrationStatus.getValue());
+//			request.setCharacteristic(0);
+//			requests.add(request);
+//
+//			for (QueryServicesDataRequest r : requests) {
+//				_bladeRunnerCommunicator.execute(r, _sensorsDevice, new MessageCallback() {
+//					@Override
+//					public void onSuccess(IncomingMessage message) {
+//						QueryServicesDataResponse response = (QueryServicesDataResponse)message;
+//						Log.i(FN(), "********* Query service success: " + message + " *********");
+//
+//						int serviceID = response.getServiceID();
+//						Log.i(FN(), "serviceID: " + serviceID);
+//
+//						final int[] data = response.getServiceData();
+//						for (int d = 0; d<data.length; d++) {
+//							Log.i(FN(), "data[" + d + "] = " + data[d]);
+//						}
+//					}
+//
+//					@Override
+//					public void onFailure(BladerunnerException exception) {
+//						Log.e(FN(), "********* Query service exception: " + exception + " *********");
+//					}
+//				});
+//			}
+		}
+	}
+
+	private void calibratePedometerButton() {
+		Log.i(FN(), "calibratePedometerButton()");
+
+		if (_sensorsDevice != null) {
+
+			CalibrateServicesCommand request = new CalibrateServicesCommand();
 			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
 			request.setCharacteristic(0);
-			requests.add(request);
+			int[] calData = {0x0FFFFFFF};
+			request.setCalibrationData(calData);
 
-			request = new QueryServicesDataRequest();
-			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_GyroscopeCalibrationStatus.getValue());
-			request.setCharacteristic(0);
-			requests.add(request);
-
-			request = new QueryServicesDataRequest();
-			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_MagnetometerCalibrationStatus.getValue());
-			request.setCharacteristic(0);
-			requests.add(request);
-
-			for (QueryServicesDataRequest r : requests) {
-				_bladeRunnerCommunicator.execute(r, _sensorsDevice, new MessageCallback() {
-					@Override
-					public void onSuccess(IncomingMessage message) {
-						QueryServicesDataResponse response = (QueryServicesDataResponse)message;
-						Log.i(FN(), "********* Query service success: " + message + " *********");
-
-						int serviceID = response.getServiceID();
-						Log.i(FN(), "serviceID: " + serviceID);
-
-						final int[] data = response.getServiceData();
-						for (int d = 0; d<data.length; d++) {
-							Log.i(FN(), "data[" + d + "] = " + data[d]);
-						}
-
-//						switch (serviceID) {
-//							case 0x0000: // head orientation
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										Quaternion q = quaternionFromData(data);
-//										EulerAngles angles = new EulerAngles(q);
-//										_headingProgressBar.setProgress((int)Math.round(-(angles.x - 180)));
-//										_pitchProgressBar.setProgress((int)Math.round(angles.y + 90));
-//										_rollProgressBar.setProgress((int)Math.round(angles.z + 90));
-//									}
-//								});
-//								break;
-//							case 0x0003: // free fall
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										_freeFallTextView.setText("Free fall? " + (data[1]==1 ? "Yes" : "No"));
-//									}
-//								});
-//								break;
-//							case 0x0004: // taps
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										int taps = data[3];
-//										int direction = data[1];
-//										if (taps>0) {
-//											_tapsTextView.setText("Taps: " + taps + " taps in " + getStringForTapDirection(direction));
-//										}
-//										else {
-//											_tapsTextView.setText("Taps: -");
-//										}
-//									}
-//								});
-//								break;
-//							case 0x0002: // pedometer
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										_pedometerTextView.setText("Pedometer: " + data[1]);
-//									}
-//								});
-//								break;
-//							case 0x0006: // gyro cal status
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										_gyroCalTextView.setText("Gyro cal'd? " + (data[1] == 3 ? "Yes" : "No"));
-//									}
-//								});
-//								break;
-//							case 0x0007: // mag cal status
-//								runOnUiThread(new Runnable() {
-//									@Override
-//									public void run() {
-//										_magCalTextView.setText("Gyro cal'd? " + (data[1] == 3 ? "Yes" : "No"));
-//									}
-//								});
-//								break;
-//						}
-					}
-
-					@Override
-					public void onFailure(BladerunnerException exception) {
-						Log.e(FN(), "********* Query service exception: " + exception + " *********");
-					}
-				});
-
-				try {
-					Thread.sleep(1000);
-				}
-				catch (Exception exception) {
-					Log.i(FN(), "Exception in sleep(): ", exception);
-					//throw exception;
+			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+				@Override
+				public void onSuccess(IncomingMessage incomingMessage) {
+					Log.i(FN(), "********* Calibrate service success: " + incomingMessage + " *********");
 				}
 
-			}
+				@Override
+				public void onFailure(BladerunnerException exception) {
+					Log.e(FN(), "********* Calibrate service exception: " + exception + " *********");
+				}
+			});
 		}
 	}
 
@@ -787,6 +820,7 @@ public class MainActivity extends Activity
 					});
 					break;
 				case 0x0002: // pedometer
+					Log.i(FN(), "PEDOMETER: " + data[1]);
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -845,6 +879,7 @@ public class MainActivity extends Activity
 				_subscribeToServicesButton.setEnabled(true);
 				_unsubscribeFromServicesButton.setEnabled(true);
 				_queryServicesButton.setEnabled(true);
+				_calibratePedometerButton.setEnabled(true);
 			}
 		});
 	}
@@ -860,6 +895,7 @@ public class MainActivity extends Activity
 				_subscribeToServicesButton.setEnabled(false);
 				_unsubscribeFromServicesButton.setEnabled(false);
 				_queryServicesButton.setEnabled(false);
+				_calibratePedometerButton.setEnabled(false);
 
 				_connectedTextView.setText("Connected? No");
 				_wearingTextView.setText("Wearing? -");

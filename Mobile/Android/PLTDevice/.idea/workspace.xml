@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AndroidLayoutPreviewToolWindow">
-    <option name="state">
-      <GlobalState />
-    </option>
-  </component>
   <component name="AndroidLayouts">
     <shared>
       <config />
     </shared>
   </component>
-  <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="com.plantronics.device" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="7360be1e-43c2-43a5-88fe-1871c644ce88" name="Default" comment="" />
+    <list default="true" id="dd185e2d-d32c-4d3c-999b-a53d3eafd5a9" name="Default" comment="" />
     <ignored path="PLTDevice.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -77,10 +69,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Device.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="851" column="5" selection-start="27060" selection-end="27060" vertical-scroll-proportion="0.29829547" vertical-offset="10002" max-vertical-offset="18864">
+            <state line="26" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.42048517" vertical-offset="0" max-vertical-offset="742">
               <folding />
             </state>
           </provider>
@@ -96,64 +88,17 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/WearingStateInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/EulerAngles.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/InfoSubscriber.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/ConnectionSubscriber.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/DeviceWatcher.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/SubscriptionChangeListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/SubscriptionChangesListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/SubscriptionChangedListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/SubscriptionListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/Subscription.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/InfoListener.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/Info.java" />
-        <option value="$PROJECT_DIR$/res/layout/main.xml" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/ConnectionListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/FreeFallInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/GyroscopeCalInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/MagnetometerCalInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/OrientationTrackingInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/PedometerInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/ProximityInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/Quaternion.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/TapsInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/info/WearingStateInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/configuration/Configuration.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/calibration/OrientationTrackingCalibration.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/calibration/Calibration.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/MainActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/PLTDevice/Device.java" />
+        <option value="$PROJECT_DIR$/gen/com/plantronics/PLTDevice/R.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/bluetooth/BluetoothDevice.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/AvailabilityListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/ConnectionListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/BondListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/PairingListener.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/calibration/PedometerCalibration.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/MainActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/Info.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/ProximityInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/TapsInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/calibration/OrientationTrackingCalibration.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/EulerAngles.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/FreeFallInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/GyroscopeCalInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/MagnetometerCalInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/OrientationTrackingInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/PedometerInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/Quaternion.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/info/WearingStateInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/Subscription.java" />
-        <option value="$PROJECT_DIR$/src/com/plantronics/device/Device.java" />
+        <option value="$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java" />
+        <option value="$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="131" />
     <option name="y" value="22" />
-    <option name="width" value="1667" />
+    <option name="width" value="1603" />
     <option name="height" value="1174" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -182,18 +127,12 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="PLTDevice" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -203,6 +142,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="PLTDevice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PLTDevice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PLTDevice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -303,8 +256,18 @@
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
+              <option name="myItemId" value="PLTDevice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PLTDevice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PLTDeviceTest" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -318,11 +281,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="PLTDeviceTest" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -336,38 +303,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="gen" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.General" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/otto-1.3.3.jar!/" />
+    <property name="options.searchVisible" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.17019475" />
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
-    <property name="SearchEverywhereHistory" value="" />
   </component>
-  <component name="RunManager" selected="Android Application.PLTDevice">
+  <component name="RunManager" selected="Android Application.PLTDeviceTest">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
       <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
       <method />
     </configuration>
@@ -474,12 +441,12 @@
       <method />
     </configuration>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="PLTDevice" />
+      <module name="PLTDeviceTest" />
       <option name="ACTIVITY_CLASS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="DEPLOY" value="true" />
       <option name="ARTIFACT_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
       <option name="USE_LAST_SELECTED_DEVICE" value="false" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
@@ -492,8 +459,8 @@
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
-    <configuration default="false" name="PLTDevice" type="AndroidRunConfigurationType" factoryName="Android Application">
-      <module name="PLTDevice" />
+    <configuration default="false" name="PLTDeviceTest" type="AndroidRunConfigurationType" factoryName="Android Application">
+      <module name="PLTDeviceTest" />
       <option name="ACTIVITY_CLASS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="DEPLOY" value="true" />
@@ -514,7 +481,7 @@
       <method />
     </configuration>
     <list size="1">
-      <item index="0" class="java.lang.String" itemvalue="Android Application.PLTDevice" />
+      <item index="0" class="java.lang.String" itemvalue="Android Application.PLTDeviceTest" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -522,11 +489,6 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SliceManager">
-    <option name="analysisUIOptions">
-      <AnalysisUIOptions />
-    </option>
-  </component>
   <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
@@ -546,61 +508,40 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7360be1e-43c2-43a5-88fe-1871c644ce88" name="Default" comment="" />
-      <created>1389826180512</created>
-      <updated>1389826180512</updated>
+      <changelist id="dd185e2d-d32c-4d3c-999b-a53d3eafd5a9" name="Default" comment="" />
+      <created>1396393507421</created>
+      <updated>1396393507421</updated>
     </task>
     <servers />
   </component>
-  <component name="TodoView" selected-index="0">
-    <todo-panel id="selected-file">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="default-changelist">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="false" />
-    </todo-panel>
-  </component>
   <component name="ToolWindowManager">
-    <frame x="131" y="22" width="1667" height="1174" extended-state="0" />
+    <frame x="0" y="22" width="1603" height="1174" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24984616" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3998195" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23421717" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26805055" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32851985" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32848233" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33032492" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32942238" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2283077" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3267148" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24983984" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942238" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32902032" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32761732" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -625,72 +566,11 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="449" column="0" selection-start="14482" selection-end="14482" vertical-scroll-proportion="0.0" vertical-offset="4683" max-vertical-offset="17760">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="677" selection-end="677" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="325">
+        <state line="19" column="0" selection-start="674" selection-end="674" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="300">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="330" column="18" selection-start="14436" selection-end="14436" vertical-scroll-proportion="0.0" vertical-offset="3900" max-vertical-offset="5434" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/local.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/content/Context.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="22" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.17799753" vertical-offset="24" max-vertical-offset="32304" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/view/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5712" column="16" selection-start="220534" selection-end="220534" vertical-scroll-proportion="0.0" vertical-offset="66900" max-vertical-offset="218136" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/protocol/command/SubscribeToServicesCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="0" selection-start="2461" selection-end="2747" vertical-scroll-proportion="0.014833127" vertical-offset="684" max-vertical-offset="3828">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/os/Handler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="0" selection-start="4112" selection-end="4112" vertical-scroll-proportion="0.39759037" vertical-offset="732" max-vertical-offset="9252" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/os/Looper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="158" column="0" selection-start="5547" selection-end="5547" vertical-scroll-proportion="0.0" vertical-offset="1704" max-vertical-offset="3180" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="115" selection-end="115" vertical-scroll-proportion="0.048582997" vertical-offset="0" max-vertical-offset="988">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/protocol/setting/QueryServicesDataResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="63" selection-start="347" selection-end="363" vertical-scroll-proportion="0.010869565" vertical-offset="156" max-vertical-offset="2616" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/java/util/Timer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="454" column="16" selection-start="15113" selection-end="15113" vertical-scroll-proportion="0.16233091" vertical-offset="5292" max-vertical-offset="7128" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
@@ -698,204 +578,63 @@
         <state />
       </provider>
       <provider editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="936" selection-end="936" vertical-scroll-proportion="0.3243243" vertical-offset="0" max-vertical-offset="1260">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1260">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/model/device/BladeRunnerDeviceManager.java">
+    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="130" column="22" selection-start="5442" selection-end="5442" vertical-scroll-proportion="0.604336" vertical-offset="891" max-vertical-offset="2760">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/bluetooth/BluetoothAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="342" column="28" selection-start="15308" selection-end="15308" vertical-scroll-proportion="0.08888889" vertical-offset="4032" max-vertical-offset="16872" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="0" selection-start="2511" selection-end="3675" vertical-scroll-proportion="0.58008075" vertical-offset="121" max-vertical-offset="864">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/model/network/BladeRunnerRoute.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="240" selection-end="240" vertical-scroll-proportion="0.10840108" vertical-offset="0" max-vertical-offset="1296" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/model/device/RemoteBladeRunnerDevice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="266" selection-end="266" vertical-scroll-proportion="0.10840108" vertical-offset="0" max-vertical-offset="1107" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/bluetooth/BluetoothDevice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="19" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="13608" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/java/lang/Thread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="589" column="28" selection-start="19546" selection-end="19563" vertical-scroll-proportion="0.01615074" vertical-offset="7056" max-vertical-offset="15756" />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/java/lang/StackTraceElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="152" column="18" selection-start="5068" selection-end="5068" vertical-scroll-proportion="0.0" vertical-offset="1824" max-vertical-offset="2868" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/InfoListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="17" selection-start="134" selection-end="134" vertical-scroll-proportion="0.12920593" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/PairingListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="17" selection-start="91" selection-end="91" vertical-scroll-proportion="0.054102797" vertical-offset="0" max-vertical-offset="1109">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/protocol/setting/GetDeviceInfoRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="13" selection-start="364" selection-end="364" vertical-scroll-proportion="0.18428184" vertical-offset="0" max-vertical-offset="1107" />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/communicator/BladeRunnerCommunicator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="460" column="7" selection-start="20858" selection-end="20858" vertical-scroll-proportion="0.59178084" vertical-offset="5088" max-vertical-offset="9360">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/PedometerCalibration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="33" selection-start="99" selection-end="119" vertical-scroll-proportion="0.0807537" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/Calibration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="99" selection-end="99" vertical-scroll-proportion="0.0807537" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/OrientationTrackingCalibration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="4" selection-start="295" selection-end="295" vertical-scroll-proportion="0.19380888" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/EulerAngles.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="20" selection-start="161" selection-end="161" vertical-scroll-proportion="0.14535666" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/FreeFallInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="24" selection-start="219" selection-end="219" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/GyroscopeCalInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="24" selection-start="223" selection-end="223" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/MagnetometerCalInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="24" selection-start="254" selection-end="254" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/OrientationTrackingInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="28" selection-start="307" selection-end="307" vertical-scroll-proportion="0.19380888" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/PedometerInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="20" selection-start="216" selection-end="216" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/Quaternion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="20" selection-start="180" selection-end="180" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="936">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/TapsInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="17" selection-start="682" selection-end="682" vertical-scroll-proportion="0.37146702" vertical-offset="0" max-vertical-offset="792" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/WearingStateInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="716" selection-end="716" vertical-scroll-proportion="0.46837148" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/ConnectionListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="210" selection-end="210" vertical-scroll-proportion="0.17765814" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Subscription.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="5" selection-start="344" selection-end="344" vertical-scroll-proportion="0.3230148" vertical-offset="0" max-vertical-offset="743" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/Info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="460" selection-end="460" vertical-scroll-proportion="0.30686405" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/model/device/BladeRunnerDevice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="34" selection-start="2118" selection-end="2144" vertical-scroll-proportion="-0.16531165" vertical-offset="963" max-vertical-offset="2088" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="287" column="0" selection-start="8704" selection-end="8704" vertical-scroll-proportion="0.35501355" vertical-offset="3051" max-vertical-offset="4728">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/configuration/Configuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="101" selection-end="101" vertical-scroll-proportion="0.05420054" vertical-offset="0" max-vertical-offset="1107">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/ProximityInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="45" selection-start="319" selection-end="336" vertical-scroll-proportion="0.14092141" vertical-offset="0" max-vertical-offset="1107">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSdk.jar!/com/plantronics/bladerunner/protocol/event/SignalStrengthEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="19" selection-start="2977" selection-end="2977" vertical-scroll-proportion="0.6531165" vertical-offset="249" max-vertical-offset="1356">
+        <state line="2" column="37" selection-start="88" selection-end="88" vertical-scroll-proportion="0.032388665" vertical-offset="0" max-vertical-offset="741">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="851" column="5" selection-start="27060" selection-end="27060" vertical-scroll-proportion="0.29829547" vertical-offset="10002" max-vertical-offset="18864">
+        <state line="44" column="48" selection-start="1899" selection-end="1899" vertical-scroll-proportion="0.32906765" vertical-offset="168" max-vertical-offset="18864">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/PairingListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="91" selection-end="91" vertical-scroll-proportion="0.05420054" vertical-offset="0" max-vertical-offset="1107">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="4" selection-start="214" selection-end="349" vertical-scroll-proportion="0.06504065" vertical-offset="0" max-vertical-offset="1107">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PLTDeviceTest/local.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="53" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.25202155" vertical-offset="377" max-vertical-offset="4740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PLTDeviceTest/PLTDeviceTest.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1107">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.42048517" vertical-offset="0" max-vertical-offset="742">
           <folding />
         </state>
       </provider>
@@ -906,21 +645,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>PLTDevice:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="Copyright.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
+                <option value="0.085178874" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -928,7 +658,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
-          <last-edited>Android (PLTDevice)|Android</last-edited>
+          <last-edited>Android</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -963,23 +693,11 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>Android|PLTDevice</last-edited>
+          <last-edited>PLTDeviceTest</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>Android 4.0 Platform</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
+                <option value="0.17019475" />
               </list>
             </option>
           </splitter-proportions>
@@ -987,18 +705,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>otto-1.3.3</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
+          <last-edited>BladeRunnerClientSdk</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PLTDevice_lib/PLTDevice_lib.iml" filepath="$PROJECT_DIR$/PLTDevice_lib/PLTDevice_lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PLTDevice_run.iml" filepath="$PROJECT_DIR$/PLTDevice_run.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PLTDevice.iml" filepath="$PROJECT_DIR$/PLTDevice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PLTDeviceTest/PLTDeviceTest.iml" filepath="$PROJECT_DIR$/PLTDeviceTest/PLTDeviceTest.iml" />
     </modules>
   </component>
 </project>

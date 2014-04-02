@@ -7,8 +7,27 @@
     <Button
         android:id="@+id/connectToDeviceButton"
         android:layout_width="fill_parent"
-        android:layout_height="17pt"
+        android:layout_height="wrap_content"
         android:text="Open Connection" />
+
+    <Button
+        android:id="@+id/queryServicesButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7pt"
+        android:text="Query Service (Bug 28704)" />
+
+    <Button
+        android:id="@+id/getDeviceInfoButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Device Info (Bug 28706)" />
+
+    <Button
+        android:id="@+id/calibratePedometerButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Calibrate Pedometer (Bug 28707)" />
 
     <Button
         android:id="@+id/getWearingStateButton"
@@ -29,11 +48,11 @@
         android:layout_height="17pt"
         android:text="Get Signal Strength" />
 
-    <Button
-        android:id="@+id/getDeviceInfoButton"
-        android:layout_width="fill_parent"
-        android:layout_height="17pt"
-        android:text="Get Device Info" />
+    <!--<Button-->
+        <!--android:id="@+id/getDeviceInfoButton"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="17pt"-->
+        <!--android:text="Get Device Info" />-->
 
     <Button
         android:id="@+id/subscribeToServicesButton"
@@ -47,11 +66,11 @@
         android:layout_height="17pt"
         android:text="Unsubscribe from Services" />
 
-    <Button
-        android:id="@+id/queryServicesButton"
-        android:layout_width="fill_parent"
-        android:layout_height="17pt"
-        android:text="Query Services" />
+    <!--<Button-->
+        <!--android:id="@+id/queryServicesButton"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="17pt"-->
+        <!--android:text="Query Services" />-->
 
     <TextView
         android:layout_width="wrap_content"
