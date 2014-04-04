@@ -7,5 +7,6 @@ package com.plantronics.device;
 public interface ConnectionListener {
 
 	public void onConnectionOpen(Device device);
+	public void onConnectionFailedToOpen(Device device, int error);
 	public void onConnectionClosed(Device device);
 }

@@ -149,18 +149,26 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 			}
 		});
 
-		Device.initialize(this, new Device.InitializationCallback() {
-			@Override
-			public void onInitialized() {
-				Log.i(FN(), "onInitialized(). Devices: " + Device.getPairedDevices());
-				Device.registerPairingListener((PairingListener) _context);
-			}
+		if (!Device.getIsInitialized()) {
+			Device.initialize(this, new Device.InitializationCallback() {
+				@Override
+				public void onInitialized() {
+					Log.i(FN(), "onInitialized(). Devices: " + Device.getPairedDevices());
+					Device.registerPairingListener((PairingListener) _context);
+				}
 
-			@Override
-			public void onFailure() {
-				Log.i(FN(), "onFailure()");
-			}
-		});
+				@Override
+				public void onFailure(int error) {
+					Log.i(FN(), "onFailure()");
+
+					if (error == Device.ERROR_PLTHUB_NOT_AVAILABLE) {
+						Log.i(FN(), "PLTHub was not found.");
+					} else if (error == Device.ERROR_FAILED_GET_DEVICE_LIST) {
+						Log.i(FN(), "Failed to get device list.");
+					}
+				}
+			});
+		}
 	}
 
 	@Override
@@ -173,9 +181,6 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 		if (_device != null) {
 			_device.onResume();
 		}
-
-//		IntentFilter filter = new IntentFilter(Device.ACTION_NEW_DEVICE);
-//		registerReceiver(_receiver, filter);
 	}
 
 	@Override
@@ -233,49 +238,50 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
+//		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void changeSubscriptionButton1() {
 		Log.i(FN(), "changeSubscriptionButton1()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 2000);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 2000);
 	}
 
 	private void changeSubscriptionButton2() {
 		Log.i(FN(), "changeSubscriptionButton2()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
 	}
 
 	private void changeSubscriptionButton3() {
 		Log.i(FN(), "changeSubscriptionButton3()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
 	}
 
 	private void changeSubscriptionButton4() {
 		Log.i(FN(), "changeSubscriptionButton4()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void changeSubscriptionButton5() {
 		Log.i(FN(), "changeSubscriptionButton5()");
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 	}
 
 	private void unsubscribeButton() {
 		Log.i(FN(), "unsubscribeButton()");
 
-		_device.unsubscribe(this, Device.SERVICE_WEARING_STATE);
+		_device.unsubscribe(this, Device.SERVICE_PROXIMITY);
 	}
 
 	private void unsubscribeAllButton() {
@@ -288,11 +294,11 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 		Log.i(FN(), "queryButton()");
 
 //		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
-//		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
+		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
 //		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
 //		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
 //		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
-		_device.queryInfo(this, Device.SERVICE_TAPS);
+//		_device.queryInfo(this, Device.SERVICE_TAPS);
 //		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
 //		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
 	}
@@ -343,6 +349,14 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 				_connectedTextView.setText("Connected");
 			}
 		});
+	}
+
+	public void onConnectionFailedToOpen(Device device, int error) {
+		Log.i(FN(), "onConnectionFailedToOpen()");
+
+		if (error == Device.ERROR_CONNECTION_TIMEOUT) {
+			Log.i(FN(), "Open connection timed out.");
+		}
 	}
 
 	public void onConnectionClosed(Device device) {
