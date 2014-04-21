@@ -319,7 +319,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	public void calibrateButton() {
 		Log.i(FN(), "calibrateButton()");
 
-		//_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+		_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
 
 		_device.setCalibration(null, Device.SERVICE_PEDOMETER);
 	}

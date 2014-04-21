@@ -1,6 +1,7 @@
 package com.plantronics.device.calibration;
 
 import com.plantronics.device.info.EulerAngles;
+import com.plantronics.device.info.OrientationTrackingInfo;
 import com.plantronics.device.info.Quaternion;
 
 /**
@@ -10,6 +11,9 @@ public class OrientationTrackingCalibration extends Calibration {
 
 	private Quaternion 		_referenceQuaternion;
 
+	public OrientationTrackingCalibration(OrientationTrackingInfo info) {
+		_referenceQuaternion = info.getQuaternion();
+	}
 
 	public OrientationTrackingCalibration(EulerAngles angles) {
 		_referenceQuaternion = new Quaternion(angles);

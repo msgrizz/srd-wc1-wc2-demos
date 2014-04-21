@@ -15,7 +15,7 @@ public class Info
 
 	protected int										_requestType;
 	protected Date 										_timestamp;
-	protected Calibration 								_calibration;
+	protected Calibration _calibration;
 
 
 	public Info(int requestType, Date timestamp, Calibration calibration) {
