@@ -83,7 +83,6 @@ public class Device {
 	private BluetoothDevice										_btDevice;
 	private BladeRunnerDevice 									_device;
 	private BladeRunnerDevice 									_sensorsDevice;
-	private int 												_localPort;
 	private int 												_remotePort;
 	private TimerTask											_wearingStateTimerTask;
 	private TimerTask											_proximityTimerTask;
@@ -136,7 +135,7 @@ public class Device {
 	}
 
 	public static void initialize(Context context, final InitializationCallback callback) {
-		Log.i(FN(), "initialize()");
+		Log.d(FN(), "initialize()");
 
 		if (!_isInitialized) {
 			if (context == null) {
@@ -180,7 +179,7 @@ public class Device {
 	}
 
 	public void onResume() {
-		Log.i(FN(), "onResume()");
+		Log.d(FN(), "onResume()");
 
 		if (_bladeRunnerCommunicator != null) _bladeRunnerCommunicator.onResume();
 		if (_bladeRunnerCommunicator != null) _bladeRunnerCommunicator.registerEventListener(_eventListener);
@@ -189,7 +188,7 @@ public class Device {
 	}
 
 	public void onPause() {
-		Log.i(FN(), "onPause()");
+		Log.d(FN(), "onPause()");
 
 		if (_bladeRunnerCommunicator != null) _bladeRunnerCommunicator.unregisterEventListener(_eventListener);
 		if (_bladeRunnerCommunicator != null) _bladeRunnerCommunicator.onPause();
@@ -221,7 +220,7 @@ public class Device {
 	public static ArrayList<Device> getPairedDevices() {
 
 		if (!_isInitialized) {
-			Log.i(FN(), "getPairedDevices(): Not initialized!");
+			Log.w(FN(), "getPairedDevices(): Not initialized!");
 		}
 
 		return _pairedDevices;
@@ -232,10 +231,10 @@ public class Device {
 	}
 
 	public void openConnection() {
-		Log.i(FN(), "openConnection(): " + getAddress());
+		Log.d(FN(), "openConnection(): " + getAddress());
 
 		if (_isConnectionOpen) {
-			Log.e(FN(), "Device connection already open!");
+			Log.w(FN(), "Device connection already open!");
 		}
 		else {
 			// start the timeout timer
@@ -260,7 +259,6 @@ public class Device {
 				_device = BladeRunnerDeviceManager.getInstance().getBladeRunnerDevice(_btDevice);
 
 				_openingConnection = true;
-				_localPort = -1;
 				_remotePort = -1;
 
 				_bladeRunnerCommunicator.initialize(_device, new BladeRunnerCommunicator.InitializationCallback() {
@@ -316,7 +314,7 @@ public class Device {
 						Log.i(FN(), "Remote device on port " + port + " disconnected.");
 
 						if (remoteDevice == null) {
-							Log.i(FN(), "********************* This is happening because of an error in service, will be fixed, for now, restart headset. *********************");
+							Log.e(FN(), "********************* This is happening because of an error in service, will be fixed, for now, restart headset. *********************");
 							return;
 						}
 						if (port == 5) {
@@ -332,7 +330,7 @@ public class Device {
 	}
 
 	public void closeConnection() {
-		Log.i(FN(), "closeConnection()");
+		Log.d(FN(), "closeConnection()");
 		_bladeRunnerCommunicator.close(_device);
 	}
 
@@ -373,7 +371,7 @@ public class Device {
 	}
 
 	public void setCalibration(Calibration cal, int service) {
-		Log.i(FN(), "setCalibration(): cal=" + cal + ", service=" + service);
+		Log.d(FN(), "setCalibration(): cal=" + cal + ", service=" + service);
 
 		switch (service) {
 			case SERVICE_ORIENTATION_TRACKING:
@@ -421,7 +419,7 @@ public class Device {
 	}
 
 	public void subscribe(InfoListener listener, int service, int mode, int period) {
-		Log.i(FN(), "subscribe(): listener=" + listener + ", service=" + service + ", mode=" + mode + ", period=" + period);
+		Log.d(FN(), "subscribe(): listener=" + listener + ", service=" + service + ", mode=" + mode + ", period=" + period);
 
 		if (listener!=null) {
 			switch (service) {
@@ -520,7 +518,7 @@ public class Device {
 					}
 					command.setPeriod(period);
 
-					Log.i(FN(), "Subscribing... (" + service + ")");
+					Log.d(FN(), "Subscribing... (" + service + ")");
 					_bladeRunnerCommunicator.executeWithStreaming(command, _sensorsDevice, new MessageCallback() {
 								@Override
 								public void onSuccess(IncomingMessage message) {
@@ -591,7 +589,10 @@ public class Device {
 				boolean periodic = newInternalSubscription.getMode()==SUBSCRIPTION_MODE_PERIODIC;
 
 				if (case1) {
-					configureSignalStrengthEvents(true, 2);
+					configureSignalStrengthEvents(true, 0);
+					if (_remotePort > 0) {
+						configureSignalStrengthEvents(true, _remotePort);
+					}
 				}
 
 				if (periodic) {
@@ -711,7 +712,10 @@ public class Device {
 						_proximityTimerTask.cancel();
 					}
 
-					configureSignalStrengthEvents(false, 2);
+					configureSignalStrengthEvents(false, 0);
+					if (_remotePort > 0) {
+						configureSignalStrengthEvents(false, _remotePort);
+					}
 				}
 				else {
 					SubscribeToServicesCommand command = new SubscribeToServicesCommand();
@@ -720,11 +724,11 @@ public class Device {
 					command.setMode(SubscribeToServicesCommand.Mode.ModeOff.getValue());
 					command.setPeriod(0);
 
-					Log.i(FN(), "Unsubscribing...");
+					Log.d(FN(), "Unsubscribing...");
 					_bladeRunnerCommunicator.execute(command, _sensorsDevice, new MessageCallback() {
 						@Override
 						public void onSuccess(IncomingMessage message) {
-							Log.i(FN(), "********* Unsubscribe success: " + message + " *********");
+							Log.d(FN(), "********* Unsubscribe success: " + message + " *********");
 						}
 
 						@Override
@@ -760,7 +764,7 @@ public class Device {
 	}
 
 	public void queryInfo(InfoListener listener, int service) {
-		Log.i(FN(), "queryInfo(): listener=" + listener + ", service=" + service);
+		Log.d(FN(), "queryInfo(): listener=" + listener + ", service=" + service);
 
 //		if (_queryListeners==null) {
 //			_queryListeners = new HashMap<Integer, ArrayList<InfoListener>>();
@@ -771,7 +775,7 @@ public class Device {
 		ArrayList<InfoListener> listeners = _queryListeners.get(service);
 		if (listeners==null) {
 			// nobody is waiting for this query right now. add the listener and do the query.
-			Log.i(FN(), "Adding new listener " + listener + " for service " + service + ".");
+			Log.d(FN(), "Adding new listener " + listener + " for service " + service + ".");
 
 			listeners = new ArrayList<InfoListener>();
 			listeners.add(listener);
@@ -780,7 +784,7 @@ public class Device {
 		}
 		else if (!listeners.contains(listener)) {
 			// somebody is waiting for this query, but listener isn't. add it.
-			Log.i(FN(), "Adding listener " + listener + " for service " + service + ".");
+			Log.d(FN(), "Adding listener " + listener + " for service " + service + ".");
 
 			if (!listeners.contains(listener)) {
 				listeners.add(listener);
@@ -789,7 +793,7 @@ public class Device {
 		}
 		else {
 			// listener is already waiting for the query result. do nothing.
-			Log.i(FN(), "Listener " + listener + " is already waiting for service " + service + ".");
+			Log.d(FN(), "Listener " + listener + " is already waiting for service " + service + ".");
 
 
 			// ************ TEMPORARY FOR TESTING ************
@@ -820,11 +824,21 @@ public class Device {
 			}
 			else if(service==SERVICE_PROXIMITY) {
 				// signal strength query wont work unless we're subscribed
-				// subscribe and when the first event comes in, check if there's a service subscription for it
-				// if not, send the BR command to stop it.
 				InternalSubscription subscription = _subscriptions.get(service);
-				if (subscription==null) {
-					configureSignalStrengthEvents(true, 2);
+				if (subscription != null) {
+					// since signal strength is already configured, we can query it right away
+					querySignalStrength(0);
+					if (_remotePort > 0) {
+						querySignalStrength(_remotePort);
+					}
+				}
+				else {
+					// since signal strength is not already configured, we have to enable it,
+					// the wait for confirmation that it was enabled, and then we can query.
+					configureSignalStrengthEvents(true, 0);
+					if (_remotePort > 0) {
+						configureSignalStrengthEvents(true, _remotePort);
+					}
 				}
 
 //				CurrentSignalStrengthRequest request = new CurrentSignalStrengthRequest();
@@ -884,7 +898,7 @@ public class Device {
 //	}
 
 	private void onConnectionOpen() {
-		Log.i(FN(), "onConnectionOpen()");
+		Log.d(FN(), "onConnectionOpen()");
 
 //		if (_openConnectionTimeoutTimerTask!=null) {
 //			_openConnectionTimeoutTimerTask.cancel();
@@ -896,7 +910,8 @@ public class Device {
 		_subscriptions = new HashMap<Integer, InternalSubscription>();
 		_queryListeners = new HashMap<Integer, ArrayList<InfoListener>>();
 		_cachedInfo = new HashMap<Integer, Info>();
-		getConnectionStatus();
+
+		getDeviceInfo();
 	}
 
 //	private void onOpenConnectionTimedOut() {
@@ -911,7 +926,7 @@ public class Device {
 //	}
 
 	private void onConnectionClosed() {
-		Log.i(FN(), "************ CONNECTION CLOSED! ************");
+		Log.d(FN(), "************ CONNECTION CLOSED! ************");
 
 //		if (_openConnectionTimeoutTimerTask!=null) {
 //			_openConnectionTimeoutTimerTask.cancel();
@@ -946,36 +961,6 @@ public class Device {
 		}
 	}
 
-	private void getConnectionStatus() {
-		Log.i(FN(), "getConnectionStatus()");
-
-		// TODO: temporary.
-		getDeviceInfo();
-
-//		ConnectionStatusRequest request = new ConnectionStatusRequest();
-//		_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
-//			@Override
-//			public void onSuccess(IncomingMessage message) {
-//				ConnectionStatusResponse response = (ConnectionStatusResponse)message;
-//
-//				Log.i(FN(), "********* Connection status success: " + response + " *********");
-//				onConnectionStatusReceived(response);
-//			}
-//
-//			@Override
-//			public void onFailure(BladerunnerException exception) {
-//				Log.e(FN(), "********* Get device info exception: " + exception + " *********");
-//			}
-//		});
-	}
-
-	private void onConnectionStatusReceived(ConnectionStatusResponse reponse) {
-		_localPort = reponse.getOriginatingPortID();
-		Log.i(FN(), "getConnectionStatus(): remotePort=" + _remotePort);
-
-		getDeviceInfo();
-	}
-
 	private void getDeviceInfo() {
 
 		// *** temporary work-around since v010 HS and current Android SDK dont support "Get Version Info" setting. ***
@@ -1000,7 +985,7 @@ public class Device {
 	}
 
 	private void onDeviceInfoReceived(GetDeviceInfoRequest response) {
-		Log.i(FN(), "************ onDeviceInfoReceived() ************");
+		Log.d(FN(), "************ onDeviceInfoReceived() ************");
 
 		if (response == null) {
 			_model = "PLT_WC1";
@@ -1031,7 +1016,7 @@ public class Device {
 	}
 
 	private void onEventReceived(Event event) {
-		Log.i(FN(), "onEventReceived(): " + event);
+		Log.d(FN(), "onEventReceived(): " + event);
 
 		int requestType = Info.REQUEST_TYPE_SUBSCRIPTION;
 		Date timestamp = new Date();
@@ -1055,7 +1040,7 @@ public class Device {
 
 			switch (service) {
 				case SERVICE_ORIENTATION_TRACKING:
-					Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
+					Log.d(FN(), "SERVICE_ORIENTATION_TRACKING");
 					Quaternion q = getQuaternionFromData(data);
 					if (q != null) {
 						//Log.i(FN(), "angles: " + new EulerAngles(q));
@@ -1063,26 +1048,26 @@ public class Device {
 					}
 					break;
 				case SERVICE_PEDOMETER:
-					Log.i(FN(), "SERVICE_PEDOMETER");
+					Log.d(FN(), "SERVICE_PEDOMETER");
 					int steps = getPedometerCountFromData(data);
 					int calSteps = steps - _pedometerOffset;
 					if (calSteps < 0) calSteps = steps;
 					info = new PedometerInfo(requestType, timestamp, null, calSteps);
 					break;
 				case SERVICE_FREE_FALL:
-					Log.i(FN(), "SERVICE_FREE_FALL");
+					Log.d(FN(), "SERVICE_FREE_FALL");
 					info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
 					break;
 				case SERVICE_TAPS:
-					Log.i(FN(), "SERVICE_TAPS");
+					Log.d(FN(), "SERVICE_TAPS");
 					info = new TapsInfo(requestType, timestamp, null, getTapCountFromData(data), getTapDirectionFromData(data));
 					break;
 				case SERVICE_MAGNETOMETER_CAL_STATUS:
-					Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
+					Log.d(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
 					info = new MagnetometerCalInfo(requestType, timestamp, null, getMagIsCaldFromData(data));
 					break;
 				case SERVICE_GYROSCOPE_CAL_STATUS:
-					Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
+					Log.d(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
 					info = new GyroscopeCalInfo(requestType, timestamp, null, getGyroIsCaldFromData(data));
 					break;
 				default:
@@ -1091,7 +1076,7 @@ public class Device {
 			}
 		}
 		else if (event instanceof WearingStateChangedEvent) {
-			Log.i(FN(), "SERVICE_WEARING_STATE");
+			Log.d(FN(), "SERVICE_WEARING_STATE");
 			service = SERVICE_WEARING_STATE;
 			WearingStateChangedEvent wearingStateEvent = (WearingStateChangedEvent)event;
 			info = new WearingStateInfo(requestType, timestamp, null, wearingStateEvent.getWorn());
@@ -1105,12 +1090,25 @@ public class Device {
 			}
 		}
 		else if (event instanceof SignalStrengthEvent) {
-			Log.i(FN(), "SERVICE_PROXIMITY");
+			Log.d(FN(), "SERVICE_PROXIMITY");
 			service = SERVICE_PROXIMITY;
-			// TODO: Handle for local + remote.
 			SignalStrengthEvent signalStrengthEvent = (SignalStrengthEvent)event;
+			ProximityInfo cachedInfo = (ProximityInfo)getCachedInfo(service);
+			int localProximity = ProximityInfo.PROXIMITY_UNKNOWN;
+			int remoteProximity = ProximityInfo.PROXIMITY_UNKNOWN;
+			if (cachedInfo != null) {
+				localProximity = cachedInfo.getLocalProximity();
+				remoteProximity = cachedInfo.getRemoteProximity();
+			}
+			int connectionID = signalStrengthEvent.getConnectionId();
 			int proximity = signalStrengthEvent.getNearFar(); // maps directly
-			info = new ProximityInfo(requestType, timestamp, null, proximity, ProximityInfo.PROXIMITY_UNKNOWN);
+			if (connectionID == _remotePort) {
+				remoteProximity = proximity;
+			}
+			else {
+				localProximity = proximity;
+			}
+			info = new ProximityInfo(requestType, timestamp, null, localProximity, remoteProximity);
 
 			ArrayList<InfoListener> queryListeners = _queryListeners.get(service);
 			if (queryListeners != null) {
@@ -1132,10 +1130,13 @@ public class Device {
 						listeners = internalSubscription.getListeners();
 					}
 				}
-				else {
-					// must have been a query
-					configureSignalStrengthEvents(false, 2);
-				}
+//				else {
+//					// must have been a query
+//					configureSignalStrengthEvents(false, 0);
+//					if (_remotePort > 0) {
+//						configureSignalStrengthEvents(false, _remotePort);
+//					}
+//				}
 			}
 		}
 
@@ -1152,7 +1153,7 @@ public class Device {
 	}
 
 	private void onSettingsResponseReceived(SettingsResponse response) {
-		Log.i(FN(), "onSettingsResponseReceived(): " + response);
+		Log.d(FN(), "onSettingsResponseReceived(): " + response);
 
 		int requestType = Info.REQUEST_TYPE_QUERY;
 		Date timestamp = new Date();
@@ -1170,31 +1171,31 @@ public class Device {
 
 				switch (service) {
 					case SERVICE_ORIENTATION_TRACKING:
-						Log.i(FN(), "SERVICE_ORIENTATION_TRACKING");
+						Log.d(FN(), "SERVICE_ORIENTATION_TRACKING");
 						Quaternion q = getQuaternionFromData(data);
 						info = new OrientationTrackingInfo(requestType, timestamp, _orientationTrackingCalibration, q);
 						break;
 					case SERVICE_PEDOMETER:
-						Log.i(FN(), "SERVICE_PEDOMETER");
+						Log.d(FN(), "SERVICE_PEDOMETER");
 						int steps = getPedometerCountFromData(data);
 						int calSteps = steps - _pedometerOffset;
 						if (calSteps < 0) calSteps = steps;
 						info = new PedometerInfo(requestType, timestamp, null, calSteps);
 						break;
 					case SERVICE_FREE_FALL:
-						Log.i(FN(), "SERVICE_FREE_FALL");
+						Log.d(FN(), "SERVICE_FREE_FALL");
 						info = new FreeFallInfo(requestType, timestamp, null, getIsInFreeFallFromData(data));
 						break;
 					case SERVICE_TAPS:
-						Log.i(FN(), "SERVICE_TAPS");
+						Log.d(FN(), "SERVICE_TAPS");
 						info = new TapsInfo(requestType, timestamp, null, getTapCountFromData(data), getTapDirectionFromData(data));
 						break;
 					case SERVICE_MAGNETOMETER_CAL_STATUS:
-						Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
+						Log.d(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS");
 						info = new MagnetometerCalInfo(requestType, timestamp, null, getMagIsCaldFromData(data));
 						break;
 					case SERVICE_GYROSCOPE_CAL_STATUS:
-						Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
+						Log.d(FN(), "SERVICE_GYROSCOPE_CAL_STATUS");
 						info = new GyroscopeCalInfo(requestType, timestamp, null, getGyroIsCaldFromData(data));
 						break;
 					default:
@@ -1204,11 +1205,11 @@ public class Device {
 			}
 			else {
 				// nodoby is waiting for this query...
-				Log.i(FN(), "Odd. No query listeners for service " + service);
+				Log.d(FN(), "Odd. No query listeners for service " + service);
 			}
 		}
 		else if (response instanceof WearingStateResponse) {
-			Log.i(FN(), "SERVICE_WEARING_STATE");
+			Log.d(FN(), "SERVICE_WEARING_STATE");
 			service = SERVICE_WEARING_STATE;
 			listeners = _queryListeners.get(service);
 			if (listeners!=null) {
@@ -1217,14 +1218,43 @@ public class Device {
 			}
 		}
 		else if (response instanceof CurrentSignalStrengthResponse) {
-			Log.i(FN(), "SERVICE_PROXIMITY");
+			Log.d(FN(), "SERVICE_PROXIMITY");
 			service = SERVICE_PROXIMITY;
-			// TODO: Handle for local + remote.
 			listeners = _queryListeners.get(service);
 			if (listeners!=null) {
 				CurrentSignalStrengthResponse signalStrengthResponse = (CurrentSignalStrengthResponse)response;
-				int proximity = signalStrengthResponse.getNearFar();
-				info = new ProximityInfo(requestType, timestamp, null, proximity, ProximityInfo.PROXIMITY_UNKNOWN);
+//				int proximity = signalStrengthResponse.getNearFar();
+//				info = new ProximityInfo(requestType, timestamp, null, proximity, ProximityInfo.PROXIMITY_UNKNOWN);
+
+				ProximityInfo cachedInfo = (ProximityInfo)getCachedInfo(service);
+				int localProximity = ProximityInfo.PROXIMITY_UNKNOWN;
+				int remoteProximity = ProximityInfo.PROXIMITY_UNKNOWN;
+				if (cachedInfo != null) {
+					localProximity = cachedInfo.getLocalProximity();
+					remoteProximity = cachedInfo.getRemoteProximity();
+				}
+				int connectionID = signalStrengthResponse.getConnectionId();
+				int proximity = signalStrengthResponse.getNearFar(); // maps directly
+				if (connectionID == _remotePort) {
+					remoteProximity = proximity;
+				}
+				else {
+					localProximity = proximity;
+				}
+				info = new ProximityInfo(requestType, timestamp, null, localProximity, remoteProximity);
+
+				if (_subscriptions != null) {
+					InternalSubscription internalSubscription = _subscriptions.get(SERVICE_PROXIMITY);
+					if (internalSubscription == null) {
+						// looks like this was just a query (without otherwise being subscribed)
+						// turn off signal strength events
+
+						configureSignalStrengthEvents(false, 0);
+						if (_remotePort > 0) {
+							configureSignalStrengthEvents(false, _remotePort);
+						}
+					}
+				}
 			}
 		}
 
@@ -1245,7 +1275,7 @@ public class Device {
 	}
 
 	public BluetoothDevice getBluetoothDeviceForAddress(String address) {
-		Log.i(FN(), "getBluetoothDeviceForAddress(): " + address);
+		Log.d(FN(), "getBluetoothDeviceForAddress(): " + address);
 
 		BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 		Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
@@ -1260,7 +1290,7 @@ public class Device {
 	}
 
 	private void startWearingStateTimerTask(long period) {
-		Log.i(FN(), "startWearingStateTimerTask(): " + period);
+		Log.d(FN(), "startWearingStateTimerTask(): " + period);
 
 		if (_cachedInfo.get(SERVICE_WEARING_STATE) == null) {
 			queryWearingState(); // prime the cached info
@@ -1280,7 +1310,7 @@ public class Device {
 	}
 
 	private void startProximityTimerTask(long period) {
-		Log.i(FN(), "startProximityTimerTask(): " + period);
+		Log.d(FN(), "startProximityTimerTask(): " + period);
 
 		if (_proximityTimerTask != null) {
 			_proximityTimerTask.cancel();
@@ -1297,7 +1327,7 @@ public class Device {
 	}
 
 	private void wearingStateTimerTask() {
-		Log.i(FN(), "wearingStateTimerTask()");
+		Log.d(FN(), "wearingStateTimerTask()");
 
 		InternalSubscription sub = _subscriptions.get(SERVICE_WEARING_STATE);
 		if (sub!=null && sub.getMode() == SUBSCRIPTION_MODE_PERIODIC) {
@@ -1313,13 +1343,13 @@ public class Device {
 				}
 			}
 			else {
-				Log.i(FN(), "Waiting for wearing info...");
+				Log.d(FN(), "Waiting for wearing info...");
 			}
 		}
 	}
 
 	private void proximityTimerTask() {
-		Log.i(FN(), "proximityTimerTask()");
+		Log.d(FN(), "proximityTimerTask()");
 
 		InternalSubscription sub = _subscriptions.get(SERVICE_PROXIMITY);
 		if (sub!=null && sub.getMode()==SUBSCRIPTION_MODE_PERIODIC) {
@@ -1372,12 +1402,27 @@ public class Device {
 		_bladeRunnerCommunicator.executeWithStreaming(command, _device, new MessageCallback() {
 					@Override
 					public void onSuccess(IncomingMessage message) {
-						Log.i(FN(), "********* Configure signal strength events success: " + message + " *********");
+						Log.d(FN(), "********* Configure signal strength events success: " + message + " *********");
+
+						if (_subscriptions != null) {
+							InternalSubscription internalSubscription = _subscriptions.get(SERVICE_PROXIMITY);
+							if (internalSubscription == null) {
+								// must be waiting for a query.
+
+								querySignalStrength(0);
+								if (_remotePort > 0) {
+									querySignalStrength(_remotePort);
+								}
+
+								// wait to check/disable signal strength events until the query comes back
+							}
+						}
 					}
 
 					@Override
 					public void onFailure(BladerunnerException exception) {
 						Log.e(FN(), "********* Configure signal strength events exception: " + exception + " *********");
+						// TODO: handle.
 					}
 				}, new BladeRunnerCommunicator.FastEventListener() {
 					@Override
@@ -1387,8 +1432,27 @@ public class Device {
 				});
 	}
 
+	private void querySignalStrength(int connectionID) {
+		CurrentSignalStrengthRequest request = new CurrentSignalStrengthRequest();
+		request.setConnectionId(connectionID);
+		_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+			@Override
+			public void onSuccess(IncomingMessage incomingMessage) {
+				final CurrentSignalStrengthResponse response = (CurrentSignalStrengthResponse)incomingMessage;
+				Log.d(FN(), "********* Signal strength event: Port: " + response.getConnectionId() + ", Near/far: " + response.getNearFar() + ", Strength: " + response.getStrength() + " *********");
+				onSettingsResponseReceived(response);
+			}
+
+			@Override
+			public void onFailure(BladerunnerException exception) {
+				Log.e(FN(), "********* Current signal strength exception: " + exception + " *********");
+				// TODO: handle.
+			}
+		});
+	}
+
 	private void queryOrientationTrackingForCal() {
-		Log.i(FN(), "queryOrientationTrackingForCal()");
+		Log.d(FN(), "queryOrientationTrackingForCal()");
 
 		QueryServicesDataRequest request = new QueryServicesDataRequest();
 		request.setServiceID(SERVICE_ORIENTATION_TRACKING);
@@ -1433,7 +1497,7 @@ public class Device {
 
 		Quaternion q = new Quaternion(fw, fx, fy, fz);
 		if (q.getW()>1.0001f || q.getX()>1.0001f || q.getY()>1.0001f || q.getZ()>1.0001f) {
-			Log.i(FN(), "Bad quaternion! " + q);
+			Log.d(FN(), "Bad quaternion! " + q);
 		}
 		else {
 			return q;
@@ -1530,11 +1594,11 @@ public class Device {
 				int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, -1);
 
 				if (bondState == BluetoothDevice.BOND_BONDED) {
-					Log.i(FN(), btDevice + " BONDED");
+					Log.d(FN(), btDevice + " BONDED");
 					checkAddDevice(btDevice);
 				}
 				else if (bondState == BluetoothDevice.BOND_NONE) {
-					Log.i(FN(), btDevice + " NOT BONDED");
+					Log.d(FN(), btDevice + " NOT BONDED");
 
 					//Device device = new Device(btDevice);
 					Device device = Device.getOrCreateDevice(btDevice);
@@ -1542,7 +1606,7 @@ public class Device {
 					if (_pairedDevices.contains(device)) {
 						_pairedDevices.remove(device);
 
-						Log.i(FN(), "Removing. Devices: " + _pairedDevices);
+						Log.i(FN(), "Devices: " + _pairedDevices);
 
 						ArrayList<PairingListener> pairingListeners = Device.getPairingListeners();
 						if (pairingListeners != null) {
@@ -1554,15 +1618,15 @@ public class Device {
 					}
 				}
 				else if (bondState == BluetoothDevice.BOND_BONDING) {
-					Log.i(FN(), btDevice + " BONDING");
+					Log.d(FN(), btDevice + " BONDING");
 				}
 			}
 			else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
-				Log.i(FN(), btDevice + " CONNECTED");
+				Log.d(FN(), btDevice + " CONNECTED");
 				checkAddDevice(btDevice);
 			}
 			else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-				Log.i(FN(), btDevice + " DISCONNECTED");
+				Log.d(FN(), btDevice + " DISCONNECTED");
 
 				if (isBladerunnerDevice(btDevice)) {
 					//Device device = new Device(btDevice);
@@ -1581,14 +1645,14 @@ public class Device {
 					}
 				}
 				else {
-					Log.i(FN(), "Not a Bladerunner device. Ignoring.");
+					Log.d(FN(), "Not a Bladerunner device. Ignoring.");
 				}
 			}
 		}
 	};
 
 	private static void checkAddDevice(BluetoothDevice btDevice) {
-		Log.i(FN(), "checkAddDevice(): " + btDevice);
+		Log.d(FN(), "checkAddDevice(): " + btDevice);
 
 		if (isBladerunnerDevice(btDevice)) {
 			//Device device = new Device(btDevice);
@@ -1597,7 +1661,7 @@ public class Device {
 			if (!_pairedDevices.contains(device)) {
 				_pairedDevices.add(device);
 
-				Log.i(FN(), "Added. Devices: " + _pairedDevices);
+				Log.i(FN(), "Devices: " + _pairedDevices);
 
 				ArrayList<PairingListener> pairingListeners = Device.getPairingListeners();
 				if (pairingListeners != null) {
@@ -1608,16 +1672,16 @@ public class Device {
 				}
 			}
 			else {
-				Log.i(FN(), "Already added.");
+				Log.d(FN(), "Already added.");
 			}
 		}
 		else {
-			Log.i(FN(), "Not a Bladerunner device.");
+			Log.d(FN(), "Not a Bladerunner device.");
 		}
 	}
 
 	private static void registerConnectionAndBondStateReceiver() {
-		Log.i(FN(), "registerConnectionAndBondStateReceiver()");
+		Log.d(FN(), "registerConnectionAndBondStateReceiver()");
 
 		try {
 			_context.unregisterReceiver(_receiver);
@@ -1635,7 +1699,7 @@ public class Device {
 	}
 
 	private static void updatePairedDevices(final PairedDeviceUpdateCallback callback) {
-		Log.i(FN(), "updatePairedDevices()");
+		Log.d(FN(), "updatePairedDevices()");
 
 		BladeRunnerCommunicator bladeRunnerCommunicator = BladeRunnerCommunicator.getInstance(_context);
 		bladeRunnerCommunicator.onResume();

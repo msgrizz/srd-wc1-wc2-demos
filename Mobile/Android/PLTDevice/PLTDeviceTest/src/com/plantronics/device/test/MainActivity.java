@@ -10,6 +10,7 @@ package com.plantronics.device.test;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -171,6 +172,11 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 		}
 	}
 
+//	@Override
+//	public void onConfigurationChanged(Configuration newConfig) {
+//		super.onConfigurationChanged(newConfig);
+//	}
+
 	@Override
 	public void onResume() {
 		Log.i(FN(), "onResume()");
@@ -178,9 +184,12 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		_context = this;
 
+		// OPTIONAL: If your activity's onPause() called Device.onPause() stop receiving subscribed info while inactive, call Device.onRusume() here to resume subscribed info.
 		if (_device != null) {
 			_device.onResume();
 		}
+
+		Log.i(FN(), "THIS: " + this);
 	}
 
 	@Override
@@ -190,9 +199,16 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		_context = null;
 
+		// OPTIONAL: If your activity doesnt want to receive subscribed info while inactive, call Device.onPause().
 		if (_device != null) {
 			_device.onPause();
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		Log.i(FN(), "onDestroy()");
+		super.onDestroy();
 	}
 
 	/* ****************************************************************************************************
@@ -202,46 +218,27 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void openConnectionButton() {
 		Log.i(FN(), "openConnectionButton()");
 
-		ArrayList<Device> devices = Device.getPairedDevices();
+		if (_device == null) {
+			ArrayList<Device> devices = Device.getPairedDevices();
 
-		if (devices.size() > 0) {
-			_device = devices.get(0);
-			_device.registerConnectionListener(this);
-			_device.openConnection();
+			if (devices.size() > 0) {
+				_device = devices.get(0);
+				_device.registerConnectionListener(this);
+				_device.openConnection();
+			}
+			else {
+				Log.i(FN(), "No PLT devices found!");
+			}
 		}
-		else {
-			Log.i(FN(), "No PLT devices found!");
-		}
-
-//		Device.getPairedDevices(this, new Device.AvailableDevicesCallback() {
-//			@Override
-//			public void onAvailableDevices(ArrayList<Device> devices) {
-//				Log.i(FN(), "onAvailableDevices(): " + devices);
-//
-//				if (devices.size() > 0) {
-//					_device = devices.get(0);
-//					_device.registerConnectionListener((ConnectionListener)_context);
-//					_device.openConnection();
-//				}
-//				else {
-//					Log.i(FN(), "No PLT devices found!");
-//				}
-//			}
-//
-//			@Override
-//			public void failure() {
-//				Log.i(FN(), "failure()");
-//			}
-//		});
 	}
 
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
 //		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
@@ -380,6 +377,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 	public void onInfoReceived(Info info) {
 		Log.i(FN(), "onInfoReceived(): " + info);
+		Log.i(FN(), "THIS: " + this);
 	}
 
 	/* ****************************************************************************************************
