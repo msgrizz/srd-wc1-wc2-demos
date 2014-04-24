@@ -188,8 +188,6 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 		if (_device != null) {
 			_device.onResume();
 		}
-
-		Log.i(FN(), "THIS: " + this);
 	}
 
 	@Override
@@ -235,10 +233,10 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
-//		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_PERIODIC, 1000);
+//		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 1000);
 //		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+//		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
 //		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
@@ -290,8 +288,8 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void queryButton() {
 		Log.i(FN(), "queryButton()");
 
-//		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
-		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
+		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
+//		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
 //		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
 //		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
 //		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
@@ -359,6 +357,8 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	public void onConnectionClosed(Device device) {
 		Log.i(FN(), "onConnectionClosed()");
 
+		_device = null;
+
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -377,7 +377,6 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 	public void onInfoReceived(Info info) {
 		Log.i(FN(), "onInfoReceived(): " + info);
-		Log.i(FN(), "THIS: " + this);
 	}
 
 	/* ****************************************************************************************************
