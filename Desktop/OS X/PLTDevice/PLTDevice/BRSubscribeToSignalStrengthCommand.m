@@ -34,7 +34,7 @@
                            0x11,                    // length
                            BRMessageTypeCommand,    // message type
                            0x0800,                  // deckard id
-                           2,                       // connectionID
+                           0,                       // connectionID
                            (int)self.subscribe,     // enabled?
                            0,                       // don only
                            0,                       // trend

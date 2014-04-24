@@ -11,7 +11,7 @@
 
 typedef enum {
     BRMessageTypeHostProtocolVersion =      0x1,
-    BRMessageTypeGetSetting =               0x2,
+    BRMessageTypeSettingRequest =               0x2,
     BRMessageTypeSettingResultSuccess =     0x3,
     BRMessageTypeSettingResultException =   0x4,
     BRMessageTypeCommand =                  0x5,

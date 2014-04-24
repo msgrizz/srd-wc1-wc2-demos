@@ -17,9 +17,9 @@
 - (NSData *)data;
 {
     NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X",
-                           6,                       // length
-                           BRMessageTypeGetSetting, // message type
-                           0xFF18];                 // deckard id
+                           6,                           // length
+                           BRMessageTypeSettingRequest, // message type
+                           0xFF18];                     // deckard id
     
     return [NSData dataWithHexString:hexString];
 }

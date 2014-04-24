@@ -18,7 +18,7 @@
 {
     NSString *hexString = [NSString stringWithFormat:@"1 %03X 00 00 00 0%1X %04X %02X",
                            7,                       // length
-                           BRMessageTypeGetSetting, // message type
+                           BRMessageTypeSettingRequest, // message type
                            0x0800,                  // deckard id
                            0x02];                   // connection id
     

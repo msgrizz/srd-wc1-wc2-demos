@@ -13,7 +13,7 @@
 
 @interface BRTapsEvent : BREvent
 
-@property(nonatomic,readonly) uint16_t          taps;
+@property(nonatomic,readonly) uint8_t           taps;
 @property(nonatomic,readonly) PLTTapDirection   direction;
 
 @end

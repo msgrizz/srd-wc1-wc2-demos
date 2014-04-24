@@ -9,7 +9,7 @@
 #import "PLTInfo.h"
 
 
-typedef NS_ENUM(NSUInteger, PLTTapDirection) {
+typedef NS_ENUM(uint8_t, PLTTapDirection) {
     PLTTapDirectionXUp = 1,
     PLTTapDirectionXDown,
     PLTTapDirectionYUp,

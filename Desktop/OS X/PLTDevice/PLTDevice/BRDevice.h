@@ -20,6 +20,7 @@
 
 + (BRDevice *)deviceWithAddress:(NSString *)BTAddress;
 - (void)openConnection;
+- (void)closeConnection;
 - (void)sendMessage:(BRMessage *)message;
 
 @property(nonatomic,assign)     id <BRDeviceDelegate>   delegate;

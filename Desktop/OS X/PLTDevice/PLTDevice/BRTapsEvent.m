@@ -11,7 +11,7 @@
 
 @interface BRTapsEvent ()
 
-@property(nonatomic,assign,readwrite) uint16_t          taps;
+@property(nonatomic,assign,readwrite) uint8_t          taps;
 @property(nonatomic,assign,readwrite) PLTTapDirection   direction;
 
 @end
@@ -23,15 +23,12 @@
 
 - (void)parseData
 {
-    uint16_t taps;
-    uint16_t direction;
+    uint8_t taps;
+    uint8_t direction;
 
-    [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint16_t))] getBytes:&direction length:sizeof(uint16_t)];
-    [[self.data subdataWithRange:NSMakeRange(16, sizeof(uint16_t))] getBytes:&taps length:sizeof(uint16_t)];
+    [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint8_t))] getBytes:&direction length:sizeof(uint8_t)];
+    [[self.data subdataWithRange:NSMakeRange(15, sizeof(uint8_t))] getBytes:&taps length:sizeof(uint8_t)];
     
-    taps = ntohs(taps);
-    direction = ntohs(direction);
-
     self.taps = taps;
     self.direction = direction;
 }

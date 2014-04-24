@@ -25,7 +25,7 @@
 {
     NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
                            10,                      // length
-                           BRMessageTypeGetSetting, // message type
+                           BRMessageTypeSettingRequest, // message type
                            0xFF11,                  // deckard id
                            self.serviceID,          
                            0x0000];                 // characteristic

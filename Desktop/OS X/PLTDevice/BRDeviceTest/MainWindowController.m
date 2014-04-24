@@ -41,12 +41,15 @@
 #import "PLTDevice_Internal.h"
 #import <IOBluetooth/IOBluetooth.h>
 
+#import "BRRawMessage.h"
+
 
 
 
 @interface MainWindowController () <BRDeviceDelegate>
 
 - (IBAction)openConnectionButton:(id)sender;
+- (IBAction)closeConnectionButton:(id)sender;
 - (IBAction)subscribeToServicesButton:(id)sender;
 - (IBAction)unsubscribeFromServicesButton:(id)sender;
 - (IBAction)queryDeviceInfoButton:(id)sender;
@@ -60,6 +63,7 @@
 @property(nonatomic,retain) BRDevice *device;
 @property(nonatomic,retain) BRDevice *sensorsDevice;
 
+@property(nonatomic,assign) IBOutlet NSButton               *closeConnectionButton;
 @property(nonatomic,assign) IBOutlet NSButton               *queryWearingStateButton;
 @property(nonatomic,assign) IBOutlet NSButton               *querySignalStrengthButton;
 @property(nonatomic,assign) IBOutlet NSButton               *queryDeviceInfoButton;
@@ -99,32 +103,41 @@
     }
 }
 
+- (IBAction)closeConnectionButton:(id)sender
+{
+    [self.device closeConnection];
+}
+
 - (IBAction)subscribeToServicesButton:(id)sender
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        for (int i = 1; i <= BRServiceIDGyroCal; i++) {
-            if (i==1) continue;
-            BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-                                                                                                mode:BRServiceSubscriptionModeOnChange
-                                                                                              period:0];
-            [self.device sendMessage:message];
-            [NSThread sleepForTimeInterval:.1];
-        }
-    });
+    BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDTaps
+                                                                                        mode:BRServiceSubscriptionModeOnChange
+                                                                                      period:250];
+    [self.device sendMessage:message];
+    
+//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+//        if (i==1) continue;
+//        
+//        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+//                                                                                            mode:BRServiceSubscriptionModeOnChange
+//                                                                                          period:0];
+//        [self.device sendMessage:message];
+//    }
 }
 
 - (IBAction)unsubscribeFromServicesButton:(id)sender
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-            if (i==1) continue;
-            BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-                                                                                                mode:BRServiceSubscriptionModeOff
-                                                                                              period:0];
-            [self.device sendMessage:message];
-            [NSThread sleepForTimeInterval:.1];
-        }
-    });
+    BRCalibratePedometerServiceCommand *cal = [BRCalibratePedometerServiceCommand command];
+    [self.device sendMessage:cal];
+    
+    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+        if (i==1) continue;
+        
+        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+                                                                                            mode:BRServiceSubscriptionModeOff
+                                                                                          period:0];
+        [self.device sendMessage:message];
+    }
 }
 
 - (IBAction)queryDeviceInfoButton:(id)sender
@@ -135,32 +148,48 @@
 
 - (IBAction)queryWearingStateButton:(id)sender
 {
+//    // 28704 Query services fails on first try
+//    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
+//                           10,                          // length
+//                           BRMessageTypeSettingRequest, // message type
+//                           0xFF13,                      // deckard id
+//                           0x0000,                      // serviceID
+//                           0x0000];                     // characteristicID
+    
+    
+//    // 28706 Get Device Info doesn’t return a result
+//    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X",
+//                           6,                           // length
+//                           BRMessageTypeSettingRequest, // message type
+//                           0xFF18];                     // deckard id
+    
+    
+//    BRRawMessage *message = [BRRawMessage messageWithData:[NSData dataWithHexString:hexString]];
+//    [self.device sendMessage:message];
+    
+    
     BRWearingStateSettingRequest *request = (BRWearingStateSettingRequest *)[BRWearingStateSettingRequest request];
     [self.device sendMessage:request];
 }
 
 - (IBAction)querySignalStrengthButton:(id)sender
 {
-//    BRSignalStrengthSettingRequest *request = (BRSignalStrengthSettingRequest *)[BRSignalStrengthSettingRequest request];
-//    [self.device sendMessage:request];
-    
-    BRCalibratePedometerServiceCommand *command = [BRCalibratePedometerServiceCommand command];
-    [self.device sendMessage:command];
-    
-//    BRServiceCalibrationSettingRequest *request = [BRServiceCalibrationSettingRequest requestWithServiceID:BRServiceIDOrientationTracking];
-//    [self.device sendMessage:request];
+    BRSignalStrengthSettingRequest *request = (BRSignalStrengthSettingRequest *)[BRSignalStrengthSettingRequest request];
+    [self.device sendMessage:request];
 }
 
 - (IBAction)queryServicesButton:(id)sender
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-            if (i==1) continue;
+    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+        if (i==1) continue;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:i];
             [self.device sendMessage:request];
-            [NSThread sleepForTimeInterval:1.0];
-        }
-    });
+        });
+        
+        //[NSThread sleepForTimeInterval:1.0];
+    }
 }
 
 - (IBAction)subscribeToSignalStrengthButton:(id)sender
@@ -171,6 +200,7 @@
 
 - (void)enableUI
 {
+    [self.closeConnectionButton setEnabled:YES];
     [self.queryWearingStateButton setEnabled:YES];
     [self.querySignalStrengthButton setEnabled:YES];
     [self.queryDeviceInfoButton setEnabled:YES];
@@ -182,6 +212,7 @@
 
 - (void)disableUI
 {
+    [self.closeConnectionButton setEnabled:NO];
     [self.queryWearingStateButton setEnabled:NO];
     [self.querySignalStrengthButton setEnabled:NO];
     [self.queryDeviceInfoButton setEnabled:NO];

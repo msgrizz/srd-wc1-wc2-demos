@@ -1,24 +1,24 @@
 //
-//  BRHostVersionNegotiateCommand.m
+//  BRHostVersionNegotiateMessage.h
 //  PLTDevice
 //
 //  Created by Morgan Davis on 3/10/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRHostVersionNegotiateCommand.h"
+#import "BRHostVersionNegotiateMessage.h"
 #import "NSData+HexStrings.h"
 
 
-@implementation BRHostVersionNegotiateCommand
+@implementation BRHostVersionNegotiateMessage
 
 #pragma mark - Public
 
-+ (BRHostVersionNegotiateCommand *)commandWithAddress:(uint32_t)address
++ (BRHostVersionNegotiateMessage *)messageWithAddress:(uint32_t)address
 {
-    BRHostVersionNegotiateCommand *command = [[BRHostVersionNegotiateCommand alloc] init];
-    command.address = address;
-    return command;
+    BRHostVersionNegotiateMessage *message = [[BRHostVersionNegotiateMessage alloc] init];
+    message.address = address;
+    return message;
 }
 
 #pragma BRMessage

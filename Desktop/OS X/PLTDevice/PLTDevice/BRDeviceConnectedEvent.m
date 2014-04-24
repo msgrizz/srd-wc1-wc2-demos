@@ -36,7 +36,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRDeviceConnectedEvent %p> address=0x%07X, port=0x%1X",
+    return [NSString stringWithFormat:@"<BRDeviceConnectedEvent %p> address=0x%07X, port=%d",
             self, self.address, self.port];
 }
 

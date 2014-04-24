@@ -35,9 +35,10 @@
 #import "BRDeviceConnectedEvent.h"
 #import "BRDeviceDisconnectedEvent.h"
 #import "BRServiceSubscriptionChangedEvent.h"
-#import "BRHostVersionNegotiateCommand.h"
+#import "BRHostVersionNegotiateMessage.h"
 #import "BRMetadata.h"
 #import "NSArray+PrettyPrint.h"
+#import "BRCloseSessionMessage.h"
 
 
 typedef enum {
@@ -94,6 +95,19 @@ typedef enum {
     }
 }
 
+- (void)closeConnection
+{
+    NSLog(@"Closing connection (%@)...", self.BTAddress);
+    
+    BRCloseSessionMessage *message = [BRCloseSessionMessage messageWithAddress:0x5000000];
+    [self sendMessage:message];
+    
+    message = [BRCloseSessionMessage messageWithAddress:0x0000000];
+    [self sendMessage:message];
+    
+    [self.RFCOMMChannel closeChannel];
+}
+
 - (void)sendMessage:(BRMessage *)message
 {
     //NSLog(@"--> %@", [message.data hexStringWithSpaceEvery:2]);
@@ -110,8 +124,8 @@ typedef enum {
     
     self.state = BRDeviceStateOpeningLocalPortConnection;
 
-    BRHostVersionNegotiateCommand *command = [BRHostVersionNegotiateCommand commandWithAddress:0x0000000];
-    [self sendMessage:command];
+    BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x0000000];
+    [self sendMessage:message];
 }
 
 - (void)openSensorsConnection
@@ -120,8 +134,8 @@ typedef enum {
     
     self.state = BRDeviceStateOpeningSensorsPortConnection;
 
-    BRHostVersionNegotiateCommand *command = [BRHostVersionNegotiateCommand commandWithAddress:0x5000000];
-    [self sendMessage:command];
+    BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x5000000];
+    [self sendMessage:message];
 }
 
 - (void)parseIncomingData:(NSData *)data
@@ -136,7 +150,7 @@ typedef enum {
             // something
             break;
             
-        case BRMessageTypeGetSetting:
+        case BRMessageTypeSettingRequest:
             // something
             break;
             

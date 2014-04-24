@@ -1,5 +1,5 @@
 //
-//  BRHostVersionNegotiateCommand.h
+//  BRHostVersionNegotiateMessage.h
 //  PLTDevice
 //
 //  Created by Morgan Davis on 3/10/14.
@@ -9,9 +9,9 @@
 #import "BRMessage.h"
 
 
-@interface BRHostVersionNegotiateCommand : BRMessage
+@interface BRHostVersionNegotiateMessage : BRMessage
 
-+ (BRHostVersionNegotiateCommand *)commandWithAddress:(uint32_t)address;
++ (BRHostVersionNegotiateMessage *)messageWithAddress:(uint32_t)address;
 
 @property(nonatomic,assign) uint32_t   address;
 

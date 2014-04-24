@@ -8,6 +8,11 @@
 
 #import "BRMessage.h"
 
+
 @interface BRRawMessage : BRMessage
+
++ (BRRawMessage *)messageWithData:(NSData *)data;
+
+@property(nonatomic,strong,readwrite)   NSData  *data;
 
 @end

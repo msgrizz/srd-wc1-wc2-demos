@@ -24,11 +24,11 @@
 - (NSData *)data;
 {
     NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
-                           10,                      // length
-                           BRMessageTypeGetSetting, // message type
-                           0xFF13,                  // deckard id
+                           10,                          // length
+                           BRMessageTypeSettingRequest, // message type
+                           0xFF13,                      // deckard id
                            self.serviceID,          
-                           0x0000];                 // characteristic
+                           0x0000];                     // characteristic
     
     return [NSData dataWithHexString:hexString];
 }
