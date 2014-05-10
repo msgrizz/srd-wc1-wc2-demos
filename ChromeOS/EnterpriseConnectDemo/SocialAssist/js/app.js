@@ -21,7 +21,9 @@ PLTLabsMessageHelper.CALL_STATUS_CHANGE_EVENT,
 PLTLabsMessageHelper.AUDIO_STATUS_EVENT,
 PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT,
 PLTLabsMessageHelper.SERVICE_CALIBRATION_CHANGE_EVENT,
-PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT];
+PLTLabsMessageHelper.SUBSCRIBED_SERVICE_CONFIG_CHANGE_EVENT,
+PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT,
+PLTLabsMessageHelper.CONFIGURE_SIGNAL_STRENGTH_EVENT];
 
 //Device related variables
 var connectedToDevice = false;
@@ -38,7 +40,7 @@ sensorPortAddress_view[0] = 0x50;
 //WebRTC variables
 var handleId = "Cary";
 var calleeId = "Joe";
-var port = "9000";
+var port = "8080";
 
 //Street view GPS coordinates
 var locationMatrix = [[47.608589,-122.340437, "Pike Place Market"],
@@ -58,7 +60,9 @@ var currentGPSIndex = null;
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-
+$(function() {
+  $( "#accordion" ).accordion();
+});
 
 
 function multipliedQuaternions(q, p) {
@@ -121,6 +125,9 @@ function init(){
   $('#chkPedo').change(function(){
     enablePedometer(this.checked);
   });
+  $('#chkProximity').change(function(){
+    enableProximity(this.checked);
+  });
   $('#btnCall').attr("disabled", true);
   $('#btnCall').click(makeCall);
   $('#btnHangUp').attr("disabled", true);
@@ -133,7 +140,9 @@ function init(){
 		});
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
+  
 }
+
 
 //PLTLabs Functions
 function findPLTDevices(){
@@ -173,7 +182,7 @@ function devicesFound(deviceList){
     var d = deviceList[i];
     log('Device ' + i + ' + : ' + d.name);
     //if(d.connected == true && d.name == "PLT_WC1"){
-    if(d.connected == true && d.name.indexOf("PLT_WC1") != -1) {
+    if(d.connected == true && d.name.indexOf("PLT_") != -1) {
       log('using: ' + d.name);
       PLTLabsAPI.openConnection(d, connectionOpened);
       break;
@@ -182,7 +191,7 @@ function devicesFound(deviceList){
 }
 
 function onMetadata(metadata){
-  //l("metadata recieved " + JSON.stringify(metadata));
+  log("metadata recieved " + JSON.stringify(metadata));
   deviceMetadata = metadata;
   if (!connectingToSensorPort && !connectedToSensorPort) {
     connectingToSensorPort = true;
@@ -208,6 +217,7 @@ function connectionOpened(address){
     PLTLabsAPI.subscribeToEvents(options, onEvent);
     enableButtonPressEvents();
     connectedToDevice = true;
+    $('#chkProximity').attr("disabled",false);
   }
 }
 
@@ -244,6 +254,13 @@ function enablePedometer(on) {
   PLTLabsAPI.sendCommand(packet);
 }
 
+function enableProximity(on){
+  var options = {"enabled": on ? true : false};
+  var packet = PLTLabsMessageHelper.createEnableProximityCommand(options);
+  log("enableProximity: sending command to " +  (on ? " enable " : " disable ") + " proximity" );
+  PLTLabsAPI.sendCommand(packet);
+}
+
 
 //Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
 function enableWearableConceptEvents(){
@@ -264,6 +281,7 @@ function enableWearableConceptEvents(){
 }
 
 function onEvent(info){
+   log('event received: ' + JSON.stringify(info));
    if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
     switch(info.properties["serviceId"]) {
       case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
@@ -278,7 +296,7 @@ function onEvent(info){
       sendHeadTrackingCoordinatesToPeer(c);   
       break;
       case PLTLabsMessageHelper.TAPS_SERVICE_ID:
-      $('#taps').text("X = " + info.properties["x"] + ",Y = " + info.properties["y"]);
+      $('#taps').text("X = " + info.properties["x"]);
       break;
       case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
       $('#freefall').text(info.properties["freefall"]);
@@ -292,7 +310,10 @@ function onEvent(info){
   }
   if(info.id == PLTLabsMessageHelper.WEARING_STATE_CHANGED_EVENT){
     var state = info.properties['worn'] ? "On" : "Off";
-     //$('#dondoff').text(state);
+     $('#dondoff').text(state);
+  }
+  if(info.id == PLTLabsMessageHelper.SIGNAL_STRENGTH_EVENT){
+     $('#rssi').text(info.properties['proximity']);
   }
   if(info.id == PLTLabsMessageHelper.BUTTON_EVENT){
     $('#buttons').text(info.properties['buttonName']);

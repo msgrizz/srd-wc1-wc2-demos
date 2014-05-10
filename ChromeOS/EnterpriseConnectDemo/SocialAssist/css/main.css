@@ -1,3 +1,7 @@
+html {
+  overflow: auto;
+}
+
 .sensor-data{
     font-weight: bold;
     color: #880000;
@@ -75,7 +79,7 @@
 
 
 #sensorpane{
-    height:500px;
+    height:580px;
     background-color: #FE481A;
     border:1px solid #000000;
 }
@@ -86,7 +90,7 @@
     font-size: large;
 }
 
-#sensortable img{
+#accordion img{
     height: 80px;
     margin-left: auto;
     margin-right: auto;
