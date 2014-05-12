@@ -52,8 +52,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
     /// </summary>
     public enum PLTMode
     {
-        Periodic,
-        On_Change
+        Off,
+        On_Change,
+        Periodic
     }
 
     // OK, lets define data types for all the status objects (PLTInfo data) that come from head track API

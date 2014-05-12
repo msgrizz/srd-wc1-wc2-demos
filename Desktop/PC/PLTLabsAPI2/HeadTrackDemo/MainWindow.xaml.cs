@@ -23,6 +23,9 @@ namespace HeadTrackDemo
     {
         PLTLabsAPI2 m_pltlabsapi;
         private PLTConnection m_pltConnection;
+        private Plantronics.Innovation.BRLibrary.BladeRunnerDevice m_myMotionTrackingDevice = null;
+        private int m_service = 0;
+        private bool m_registeredForHeadTracking = false;
 
         public MainWindow()
         {
@@ -37,8 +40,6 @@ namespace HeadTrackDemo
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to instantiate PLTLabsAPI object");
 
                 m_pltlabsapi = new PLTLabsAPI2(this);
-
-                ConnectToPlantronicsDevice();
             }
             catch (Exception exc)
             {
@@ -86,7 +87,8 @@ namespace HeadTrackDemo
 
                 // lets register for headtracking service
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to register for head tracking data.");
-                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.On_Change);
+                //m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.On_Change);
+                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.Periodic, 100);
 
                 //m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Offset_Raw);
                 m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Offset_Calibrated);
@@ -98,7 +100,7 @@ namespace HeadTrackDemo
                 //m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Format_Quaternion);
                 m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Format_Orientation);
 
-                m_pltlabsapi.subscribe(PLTService.SENSOR_CAL_STATE_SVC, PLTMode.On_Change);
+                m_pltlabsapi.subscribe(PLTService.SENSOR_CAL_STATE_SVC, PLTMode.Periodic, 2000);
 
                 // check we subcribed ok...
                 DebugPrintSubscribedServices();
@@ -138,29 +140,94 @@ namespace HeadTrackDemo
             }
         }
 
-        public void ConnectToPlantronicsDevice()
-        {
-            if (m_pltlabsapi == null) return;
+        //public void ConnectToPlantronicsDevice()
+        //{
+        //    if (m_pltlabsapi == null) return;
 
-            PLTDevice[] availableDevices = m_pltlabsapi.availableDevices();
+        //    PLTDevice[] availableDevices = m_pltlabsapi.availableDevices();
 
-            DebugListAvailableDevices(availableDevices);
+        //    DebugListAvailableDevices(availableDevices);
 
-            if (availableDevices.Count()<1) return;
+        //    if (availableDevices.Count()<1) return;
 
-            if (!m_pltlabsapi.getIsConnected(availableDevices[0]))
-            {
-                DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to open connection to device: " + availableDevices[0].m_ProductName);
-                m_pltlabsapi.openConnection(availableDevices[0]);  // PC will only ever show 1 call control device
-                // even if you have multiple Plantronics devices attached to PC. Change call control device
-                // in Spokes 3.0 settings (system tray)
-            }
-        }
+        //    if (!m_pltlabsapi.getIsConnected(availableDevices[0]))
+        //    {
+        //        DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to open connection to device: " + availableDevices[0].m_ProductName);
+        //        m_pltlabsapi.openConnection(availableDevices[0]);  // PC will only ever show 1 call control device
+        //        // even if you have multiple Plantronics devices attached to PC. Change call control device
+        //        // in Spokes 3.0 settings (system tray)
+        //    }
+        //}
 
         // Plantronics device was added to system
         public void DeviceAdded(PLTDevice pltDevice)
         {
-            ConnectToPlantronicsDevice();
+            //ConnectToPlantronicsDevice();
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "DeviceAdded = " 
+                + pltDevice.m_device.DeviceAddress + ", " + pltDevice.m_device.FriendlyName);
+        }
+
+        // Plantronics device was removed from system
+        public void DeviceRemoved(PLTDevice pltDevice)
+        {
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "DeviceRemoved = "
+                + pltDevice.m_device.DeviceAddress + ", " + pltDevice.m_device.FriendlyName);
+        }
+
+        // Plantronics device capabilities discovered
+        public void NotifyDeviceServices(PLTDevice pltDevice)
+        {
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "NotifyDeviceServices = "
+                + pltDevice.m_device.DeviceAddress
+                + ", cmds=" + pltDevice.m_device.SupportedCommands.Count()
+                + ", stgs=" + pltDevice.m_device.SupportedSettings.Count()
+                + ", evts=" + pltDevice.m_device.SupportedEvents.Count()
+                );
+
+            // ok, so - what service is my app waiting for?
+
+            // have we a device that supports motion-tracking?
+            if (pltDevice.m_device != null)
+            {
+                if (pltDevice.m_device.SupportedCommands.Count() > 0)
+                {
+                    foreach (int commandid in pltDevice.m_device.SupportedCommands)
+                    {
+                        // todo, match this as hex? avoid hard-coded numbers?
+                        if (commandid == 0xFF00)
+                        {
+                            if (!m_pltlabsapi.getIsConnected(pltDevice))
+                            {
+                                m_pltlabsapi.openConnection(pltDevice);
+                            }
+
+                            m_myMotionTrackingDevice = pltDevice.m_device;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void NotifyDeviceInfoUpdated(PLTDevice pltDevice, PLTDeviceInfoChange whatChanged)
+        {
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "NotifyDeviceInfoUpdated = "
+                + pltDevice.m_device.DeviceAddress
+                + " - " + DebugChange(whatChanged, pltDevice));
+        }
+
+        private object DebugChange(PLTDeviceInfoChange whatChanged, PLTDevice device)
+        {
+            string retval = "";
+            switch (whatChanged)
+            {
+                case PLTDeviceInfoChange.nothing:
+                    retval = "Nothing changed.";
+                    break;
+                case PLTDeviceInfoChange.name:
+                    retval = "Name is now: " + device.m_device.FriendlyName;
+                    break;
+            }
+            return retval;
         }
 
         public void infoUpdated(PLTConnection pltConnection, PLTInfo pltInfo)
@@ -223,8 +290,23 @@ namespace HeadTrackDemo
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (m_pltlabsapi!=null)
-            m_pltlabsapi.Shutdown();
+            if (m_pltlabsapi != null)
+            {
+                if (m_pltConnection != null) // && m_registeredForHeadTracking)
+                {
+                    if (m_pltConnection.isSubscribed(PLTService.MOTION_TRACKING_SVC))
+                    {
+                        m_pltlabsapi.unsubscribe(PLTService.MOTION_TRACKING_SVC);
+                    }
+                    if (m_pltConnection.isSubscribed(PLTService.SENSOR_CAL_STATE_SVC))
+                    {
+                        m_pltlabsapi.unsubscribe(PLTService.SENSOR_CAL_STATE_SVC);
+                    }
+                    // TODO, add the rest!
+                }
+                m_pltlabsapi.Shutdown();
+                m_pltlabsapi = null;
+            }
         }
     }
 }

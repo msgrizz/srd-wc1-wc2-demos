@@ -48,6 +48,13 @@ using System.Timers;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.4:
+ * Date: 12th May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Have now incorporated BladeRunner PC API (BRLibrary.DLL). This allows
+ *     the Innovation API to be used with WC1 rev2 and other Innovation device platforms.
+ *
  * Version 1.0.0.3:
  * Date: 1st November 2013
  * Changed by: Lewis Collins
@@ -88,7 +95,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
     {
         QuaternionProcessor m_quatproc;
         internal PLTLabsCallbackHandler m_callbackhandler;
-        private bool m_isConnectedToBladeRunner = false;
+        //private bool m_isConnectedToBladeRunner = false;
 
         // List of available devices (PC Spokes 3.0 there will be only 1 active call control device)
         List<PLTDevice> m_availableDevices = new List<PLTDevice>();
@@ -118,12 +125,13 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         private HIDDevice myDevice = null;
         private bool m_devicenotified = false;
 
-        // NEW, a timer to wait for all host negotiates to complete
-        // before trying to register for head tracking data
-        Timer m_hostNegotiateTimer;
-        bool m_registeredForHeadTracking = false;
-        public bool m_triggerHTregister = false;
-        private Object m_triggerHTregisterLock = new Object();
+        //// remove nasty hack
+        //// NEW, a timer to wait for all host negotiates to complete
+        //// before trying to register for head tracking data
+        //Timer m_hostNegotiateTimer;
+        //bool m_registeredForHeadTracking = false;
+        //public bool m_triggerHTregister = false;
+        //private Object m_triggerHTregisterLock = new Object();
 
         /// <summary>
         /// SDK_VERSION defines the current version of the PLTLabsAPI DLL
@@ -147,27 +155,27 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             m_quatproc = new QuaternionProcessor(this);
 
             // New BladeRunner connect code
-            m_hostNegotiateTimer = new Timer();
-            m_hostNegotiateTimer.Interval = 7000;
-            m_hostNegotiateTimer.Elapsed += m_hostNegotiateTimer_Elapsed;
+            //m_hostNegotiateTimer = new Timer();
+            //m_hostNegotiateTimer.Interval = 7000;
+            //m_hostNegotiateTimer.Elapsed += m_hostNegotiateTimer_Elapsed;
 
-            myDevice = new HIDDevice();
-            if (myDevice.ConnectFirstPlantronicsSupportingBladeRunner())
-            {
-                Console.WriteLine("Successfully connected to a BladeRunner device:\r\nHID Path = " + myDevice.devicePathName + "\r\n");
+            //myDevice = new HIDDevice();
+            //if (myDevice.ConnectFirstPlantronicsSupportingBladeRunner())
+            //{
+            //    Console.WriteLine("Successfully connected to a BladeRunner device:\r\nHID Path = " + myDevice.devicePathName + "\r\n");
 
-                m_isConnectedToBladeRunner = true;
+            //    m_isConnectedToBladeRunner = true;
 
-                BRendpoint = new BladeRunnerEndpoint(myDevice, this);
+                BRendpoint = new BladeRunnerEndpoint(this);
 
-                BRendpoint.DiscoverDevices();
+                //BRendpoint.DiscoverDevices();
 
-                RestartHostNegotiateTimer();
-            }
-            else
-            {
-                Console.WriteLine("Sorry, no Plantronics device supporting BladeRunner was found.\r\n");
-            }
+                //startHostNegotiateTimer();
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Sorry, no Plantronics device supporting BladeRunner was found.\r\n");
+            //}
 
             //m_spokes = Spokes.Instance;
 
@@ -215,29 +223,30 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             m_constructordone = true;
         }
 
-        void m_hostNegotiateTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            // host negotatation was complete...
-            if (!m_registeredForHeadTracking)
-            {
-                Console.WriteLine("shall we register for HT?");
-                Console.WriteLine("yes, lets...");
-                lock (m_triggerHTregisterLock)
-                {
-                    m_triggerHTregister = true;
-                }
-                //NotifyDevice();
-                m_availableDevices.Add(new PLTDevice(myDevice));
-                openConnection(m_availableDevices[0]);
-                m_registeredForHeadTracking = true; // todo actually it is not yet ;-)
-            }
-        }
+        // removing old nasty hack
+        //void m_hostNegotiateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    // host negotatation was complete...
+        //    if (!m_registeredForHeadTracking)
+        //    {
+        //        Console.WriteLine("shall we register for HT?");
+        //        Console.WriteLine("yes, lets...");
+        //        lock (m_triggerHTregisterLock)
+        //        {
+        //            m_triggerHTregister = true;
+        //        }
+        //        //NotifyDevice();
+        //        m_availableDevices.Add(new PLTDevice(myDevice));
+        //        openConnection(m_availableDevices[0]);
+        //        m_registeredForHeadTracking = true; // todo actually it is not yet ;-)
+        //    }
+        //}
 
-        private void RestartHostNegotiateTimer()
-        {
-            m_hostNegotiateTimer.Stop();
-            m_hostNegotiateTimer.Start();
-        }
+        //private void RestartHostNegotiateTimer()
+        //{
+        //    m_hostNegotiateTimer.Stop();
+        //    m_hostNegotiateTimer.Start();
+        //}
 
         //void m_spokes_UnDocked(object sender, DockedStateArgs e)
         //{
@@ -565,9 +574,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
             //// unregister for raw data received event
             //m_spokes.RawDataReceived -= m_spokes_RawDataReceived;
-            //m_isConnectToDevice = false;
-            //m_activeConnection = null;
-            //m_callbackhandler.ConnectionClosed(aConnection.m_device);
+            m_isConnectToDevice = false;
+            m_activeConnection = null;
+            m_callbackhandler.ConnectionClosed(aConnection.m_device);
         }
 
         /// <summary>
@@ -580,10 +589,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             return m_isConnectToDevice;
         }
 
-        bool IsConnectedToSpokes()
-        {
-            return m_isConnectedToBladeRunner;
-        }
+        //bool IsConnectedToSpokes()
+        //{
+        //    return m_isConnectedToBladeRunner;
+        //}
 
         /// <summary>
         /// Call this method to initiate a calibration process of the
@@ -743,9 +752,13 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         /// </summary>
         public void Shutdown()
         {
-            m_quatproc.Stop();
+            if (myDevice != null) myDevice.Disconnect();
 
-            if (m_isConnectedToBladeRunner && myDevice != null) myDevice.Disconnect();
+            m_quatproc.Stop();
+            m_quatproc = null;
+
+            BRendpoint.Shutdown();
+            BRendpoint = null;
 
             //m_spokes.Attached -= m_spokes_Attached;
             //m_spokes.Detached -= m_spokes_Detached;
@@ -871,22 +884,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 // MOTION_STATE_SVC
                 // TODO: I don't think this data is available
 
-                // SENSOR_CAL_STATE_SVC data for sensor cal state service...
-                subscr =
-                    m_activeConnection.getSubscription(PLTService.SENSOR_CAL_STATE_SVC);
-                if (subscr != null)
-                {
-                    PLTSensorCal data = new PLTSensorCal();
-                    data.m_isgyrocal = headsetData.gyrocalib == 3;
-                    data.m_ismagnetometercal = headsetData.magnetometercalib == 3;
 
-                    subscr.LastData = data;
-
-                    if (subscr.m_mode == PLTMode.On_Change)
-                    {
-                        m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.SENSOR_CAL_STATE_SVC, data));
-                    }
-                }
 
                 // PEDOMETER_SVC
                 subscr =
@@ -955,19 +953,17 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             }
         }
 
-        public void HandleBRMessage(HIDDevice.MsgReceivedArgs e)
+        public void HandleBRMessage(MsgReceivedArgs e)
         {
-            //switch (e.
+            // no BR-level action needed
         }
 
-        void BladeRunnerHandler.HandleBRMessage(HIDDevice.MsgReceivedArgs e)
+        void BladeRunnerHandler.HandleBRMessage(MsgReceivedArgs e)
         {
         }
 
 
-        public void HandleDeckard(Plantronics.Innovation.BRLibrary.Deckard.DeckardCommand deckardcommand,
-            List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload_received,
-            EBRMessageType brtype, string addresshex)
+        public void HandleDeckard(DeckardMessage deckardmessage, BladeRunnerDevice device)
         {
             // TODO
             // here interpret the deckard messages and
@@ -978,106 +974,305 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             // working end to end
 
             //
-            switch (deckardcommand.id)
+            switch (deckardmessage.deckardCommand.id)
             {
                 case "0x0101":
                     // likely the result of a host negatiate...
-                    if (!m_registeredForHeadTracking)
-                    {
-                        RestartHostNegotiateTimer();
-                        Console.WriteLine("Still probing devices...");
-                    }
+                    //if (!m_registeredForHeadTracking)
+                    //{
+                    //    RestartHostNegotiateTimer();
+                    //    Console.WriteLine("Still probing devices...");
+                    //}
                     break;
                 case "0x0C00":
                     // device was connected
 
                     break;
                 case "0x0A00":
-                    string ProductName = payload_received[0].stringValue;
+                    string ProductName = deckardmessage.message_received.payload_received[0].stringValue;
                     Console.WriteLine("ProductName: " + ProductName);
                     break;
                 case "0x0200":
-                    bool isworn = payload_received[0].boolValue;
+                    bool isworn = deckardmessage.message_received.payload_received[0].boolValue;
                     Console.WriteLine("Is Worn?: " + isworn);
                     break;
-                case "0xFF0A":
+                case "0xFF1A":
                     Console.WriteLine(">>> HEAD TRACKING: ");
 
-                    for (int i = 0; i < payload_received.Count(); i++)
+                    if (deckardmessage.message_received.payload_received.Count()>0)
                     {
-                        Console.Write(deckardcommand.payload_out[i].name + ": ");
-                        switch (deckardcommand.payload_out[i].mType)
+                        //        Head orientation                0x0000<br/>
+                        //        Pedometer                       0x0002<br/>
+                        //        Free Fall                       0x0003<br/>
+                        //        Taps                            0x0004<br/>
+                        //        Magnetometer Calibration Status 0x0005<br/>
+                        //        Gyroscope Calibration Status    0x0006<br/>
+                        //        Versions                        0x0007<br/>
+                        //        Humidity                        0x0008<br/>
+                        //        Light                           0x0009<br/>
+                        //        Optical proximity               0x0010<br/>
+                        //        Ambient Temp 1                  0x0011<br/>
+                        //        Ambient Temp 2                  0x0012<br/>
+                        //        Skin Temp                       0x0013<br/>
+                        //        Skin Conductivity               0x0014<br/>
+                        //        Ambient Pressure                0x0015<br/>
+                        //        Heart Rate                      0x0016<br/>
+
+                        // ok, which service is this for?
+                        int serviceid = deckardmessage.message_received.payload_received[0].uint16Value;
+                        PLTServiceSubscription subscr = null;
+                        bool calib, freefall;
+                        switch (serviceid)
                         {
-                            case Deckard.BRType.BR_TYPE_UNSIGNED_INT:
-                                Console.WriteLine(payload_received[i].int32Value);
-                                break;
-                            case Deckard.BRType.BR_TYPE_BYTE_ARRAY:
-                                for (int j = 0; j < payload_received[i].barray.Count(); j++)
-                                {
-                                    Console.Write(payload_received[i].barray[j] + ", ");
-                                }
-                                Console.WriteLine();
-                                if (m_activeConnection != null) // todo only do this if subscribed to relevant service?
+                            case 0:
+                                // Head orientation
+                                subscr =
+                                    m_activeConnection.getSubscription(PLTService.MOTION_TRACKING_SVC);
+                                if (subscr != null)
                                 {
                                     // ok, let's try to break out those head tracking quatenions...
-                                    //m_quatproc.ProcessByteArray(payload_received[i].barray);
-                                    m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.DEBUGINFO_SVC, payload_received[i].barray));
+                                    m_quatproc.ProcessByteArray(deckardmessage.message_received.payload_received[2].barray);
                                 }
                                 break;
+                            case 3:
+                                // Free fall
+                                subscr =
+                                    m_activeConnection.getSubscription(PLTService.FREE_FALL_SVC);
+                                if (subscr != null)
+                                {
+                                    freefall = deckardmessage.message_received.payload_received[2].barray[1] == 1;
+
+                                    PLTFreeFall data = new PLTFreeFall();
+                                    data.m_isinfreefall = freefall;
+
+                                    subscr.LastData = data;
+
+                                    if (subscr.m_mode == PLTMode.On_Change)
+                                    {
+                                        m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.FREE_FALL_SVC, data));
+                                    }
+                                }
+                                break;
+                            case 5:
+                                // magno calib
+                                calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+
+                                // SENSOR_CAL_STATE_SVC data for sensor cal state service...
+                                subscr =
+                                    m_activeConnection.getSubscription(PLTService.SENSOR_CAL_STATE_SVC);
+                                if (subscr != null)
+                                {
+                                    PLTSensorCal data = new PLTSensorCal();
+                                    data.m_isgyrocal = subscr.LastData != null ? ((PLTSensorCal)subscr.LastData).m_isgyrocal : false;
+                                    data.m_ismagnetometercal = calib;
+
+                                    subscr.LastData = data;
+
+                                    if (subscr.m_mode == PLTMode.On_Change)
+                                    {
+                                        m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.SENSOR_CAL_STATE_SVC, data));
+                                    }
+                                }
+                                break;
+                            case 6:
+                                // gyro calib
+                                calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+                                // SENSOR_CAL_STATE_SVC data for sensor cal state service...
+                                subscr =
+                                    m_activeConnection.getSubscription(PLTService.SENSOR_CAL_STATE_SVC);
+                                if (subscr != null)
+                                {
+                                    PLTSensorCal data = new PLTSensorCal();
+                                    data.m_isgyrocal = calib;
+                                    data.m_ismagnetometercal = subscr.LastData != null ? ((PLTSensorCal)subscr.LastData).m_ismagnetometercal : false;
+
+                                    subscr.LastData = data;
+
+                                    if (subscr.m_mode == PLTMode.On_Change)
+                                    {
+                                        m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.SENSOR_CAL_STATE_SVC, data));
+                                    }
+                                }
+                                break;
+
+
+                            //for (int i = 0; i < deckardmessage.message_received.payload_received.Count(); i++)
+                            //{
+                            //    Console.Write(deckardmessage.deckardCommand.payload_out[i].name + ": ");
+                            //    switch (deckardmessage.deckardCommand.payload_out[i].mType)
+                            //    {
+                            //        case Deckard.BRType.BR_TYPE_UNSIGNED_INT:
+                            //            Console.WriteLine(deckardmessage.message_received.payload_received[i].int32Value);
+                            //            break;
+                            //        case Deckard.BRType.BR_TYPE_BYTE_ARRAY:
+                            //            for (int j = 0; j < deckardmessage.message_received.payload_received[i].barray.Count(); j++)
+                            //            {
+                            //                Console.Write(deckardmessage.message_received.payload_received[i].barray[j] + ", ");
+                            //            }
+                            //            Console.WriteLine();
+                            //            if (m_activeConnection != null) // todo only do this if subscribed to relevant service?
+                            //            {
+                            //                // ok, let's try to break out those head tracking quatenions...
+                            //                m_quatproc.ProcessByteArray(deckardmessage.message_received.payload_received[i].barray);
+                            //                //m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.DEBUGINFO_SVC, payload_received[i].barray));
+                            //            }
+                            //            break;
+                            //    }
+                            //}
                         }
                     }
-
                     break;
                 default:
-                    Console.WriteLine(">> UNKNOWN Deckard received, ID was: (" + deckardcommand.id + ").");
+                    Console.WriteLine(">> UNKNOWN Deckard received, ID was: (" + deckardmessage.deckardCommand.id + ").");
                     break;
             }
         }
 
-        internal void RegisterForHeadTracking()
+        public void NotifyDeviceServices(BladeRunnerDevice device)
         {
-            // device connected, ok lets query it's services
-            // send a <setting name="Get device info" id="0xFF18"> to the received port
+            // Inform connected app about this device's services (from device BladeRunner meta data)
+            if (m_callbackhandler != null)
+            {
+                m_callbackhandler.NotifyDeviceServices(new PLTDevice(device));
+            }
+        }
 
-            // TODO move a lot of this logic into BladeRunnerEndpoint to make discovery
-            // of device info and services more automatic
-            // plus implement the ***send queue*** with ack checking before sending next command etc
-            // as recommended by David Hudson
+        //public void RegisterForHeadTracking(string deviceaddress)
+        //{
+        //    // device connected, ok lets query it's services
+        //    // send a <setting name="Get device info" id="0xFF18"> to the received port
 
-            //// work out target device address (connected address + port)
-            //byte port = payload_received[0].byteValue;
-            //string targetaddress = BladeRunnerEndpoint.AppendPortToEndOfAddress(addresshex, port);
+        //    // TODO move a lot of this logic into BladeRunnerEndpoint to make discovery
+        //    // of device info and services more automatic
+        //    // plus implement the ***send queue*** with ack checking before sending next command etc
+        //    // as recommended by David Hudson
 
-            //prepare query device name command
-            BRendpoint.SendBladeRunnerMessage(
-                EBRMessageType.eBR_GET_SETTING,
-                "1500000",
-                //targetaddress,
-                "0x0A00",
-                null, true);
+        //    //// work out target device address (connected address + port)
+        //    //byte port = payload_received[0].byteValue;
+        //    //string targetaddress = BladeRunnerEndpoint.AppendPortToEndOfAddress(addresshex, port);
 
-            //// prepare query services command
-            //BRendpoint.SendBladeRunnerMessage(
-            //    EBRMessageType.eBR_GET_SETTING,
-            //    targetaddress,
-            //    "0xFF18",
-            //    null, true);
+        //    ////prepare query device name command
+        //    //BRendpoint.SendBladeRunnerMessage(
+        //    //    EBRMessageType.eBR_GET_SETTING,
+        //    //    "1500000",
+        //    //    //targetaddress,
+        //    //    "0x0A00");
 
+        //    //// prepare query services command
+        //    //BRendpoint.SendBladeRunnerMessage(
+        //    //    EBRMessageType.eBR_GET_SETTING,
+        //    //    targetaddress,
+        //    //    "0xFF18");
+
+        //    // prepare subscribe to headtracking service command
+        //    List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload
+        //        = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+        //    payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // want head tracking
+        //    payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // characteristic
+        //    payload.Add(new Deckard.BRProtocolElement((UInt16)1)); // 2 = periodic, 1 = onchange
+        //    payload.Add(new Deckard.BRProtocolElement((UInt16)50)); // period in ms
+        //    BRendpoint.SendBladeRunnerMessage(
+        //        EBRMessageType.eBR_COMMAND,
+        //        deviceaddress,
+        //        "0xFF0A",
+        //        payload);
+
+        //    //for (int i = 2; i < 17; i++)
+        //    //{
+        //    //    // subscribe other services
+        //    //    payload
+        //    //        = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+        //    //    payload.Add(new Deckard.BRProtocolElement((UInt16)i)); // want head tracking
+        //    //    payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // characteristic
+        //    //    payload.Add(new Deckard.BRProtocolElement((UInt16)1)); // 2 = periodic, 1 = onchange
+        //    //    payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // period in ms
+        //    //    BRendpoint.SendBladeRunnerMessage(
+        //    //        EBRMessageType.eBR_COMMAND,
+        //    //        deviceaddress,
+        //    //        "0xFF0A",
+        //    //        payload);
+        //    //}
+
+        //    //m_registeredForHeadTracking = true;
+        //}
+
+        public void DeviceAdded(BladeRunnerDevice device)
+        {
+            if (m_callbackhandler != null)
+            {
+                m_callbackhandler.DeviceAdded(new PLTDevice(device));
+            }
+        }
+
+        public void DeviceRemoved(BladeRunnerDevice device)
+        {
+            if (m_callbackhandler != null)
+            {
+                m_callbackhandler.DeviceRemoved(new PLTDevice(device));
+
+                // Hack, always disconnect client at this point
+                m_callbackhandler.ConnectionClosed(new PLTDevice(device));
+
+                m_isConnectToDevice = false;
+                m_activeConnection = null;
+            }
+        }
+
+        public void NotifyDeviceInfoUpdated(BladeRunnerDevice device, DeviceInfoChange whatChanged)
+        {
+            if (m_callbackhandler != null)
+            {
+                m_callbackhandler.NotifyDeviceInfoUpdated(new PLTDevice(device), (PLTDeviceInfoChange)whatChanged);
+            }
+        }
+
+        //public List<HidInformation> GetDevicesList()
+        //{
+        //    List<HidInformation> devices = BRendpoint.GetDevicesList();
+        //    return devices;
+        //}
+
+        public void RegisterForDeviceSensorService(BladeRunnerDevice device, int service = 0, int servicemode = 1, int periodmillis = 50, int characteristic = -1)
+        {
+            //if (service == 1 || service > 6) return; // for now, invalid service id
+
+            if (periodmillis < 50) periodmillis = 50;
+            if (characteristic == -1) characteristic = service;
+
+            //// turn off other services:
+            //for (int i = 0; i < 7; i++)
+            //{
+            //    if ((i != service) && i != 1)
+            //    {
+            //        // turn on requested service
+            //        // prepare subscribe to headtracking service command
+            //        List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload
+            //            = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+            //        payload.Add(new Deckard.BRProtocolElement((UInt16)i)); // want head tracking
+            //        payload.Add(new Deckard.BRProtocolElement((UInt16)i)); // characteristic
+            //        payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // 2 = periodic, 1 = onchange, 0 = off
+            //        payload.Add(new Deckard.BRProtocolElement((UInt16)periodmillis)); // period in ms
+            //        BRendpoint.SendBladeRunnerMessage(
+            //            EBRMessageType.eBR_COMMAND,
+            //            deviceaddress,
+            //            "0xFF0A",
+            //            payload, 2);
+            //    }
+            //}
+
+            // turn on requested service:
             // prepare subscribe to headtracking service command
-            List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload
+            List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload2
                 = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
-            payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // want head tracking
-            payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // characteristic
-            payload.Add(new Deckard.BRProtocolElement((UInt16)1)); // 2 = periodic, 1 = onchange
-            payload.Add(new Deckard.BRProtocolElement((UInt16)0)); // period in ms
-            BRendpoint.SendBladeRunnerMessage(
+            payload2.Add(new Deckard.BRProtocolElement((UInt16)service)); // want head tracking
+            payload2.Add(new Deckard.BRProtocolElement((UInt16)characteristic)); // characteristic
+            payload2.Add(new Deckard.BRProtocolElement((UInt16)servicemode)); // 2 = periodic, 1 = onchange, 0 = off
+            payload2.Add(new Deckard.BRProtocolElement((UInt16)periodmillis)); // period in ms
+            BRendpoint.SendBladeRunnerMessage(device,
                 EBRMessageType.eBR_COMMAND,
-                "1500000",
-                //targetaddress,
+                device.DeviceAddress,
                 "0xFF0A",
-                payload, true);
-
-            m_registeredForHeadTracking = true;
+                payload2, 2);
         }
     }
 
@@ -1098,5 +1293,11 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         void infoUpdated(PLTConnection pltConnection, PLTInfo pltInfo);
 
         void DeviceAdded(PLTDevice pltDevice);
+
+        void DeviceRemoved(PLTDevice pltDevice);
+
+        void NotifyDeviceServices(PLTDevice pltDevice);
+
+        void NotifyDeviceInfoUpdated(PLTDevice pltDevice, PLTDeviceInfoChange whatChanged);
     }
 }

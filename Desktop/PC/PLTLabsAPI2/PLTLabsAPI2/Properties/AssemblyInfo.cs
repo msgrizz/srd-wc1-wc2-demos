@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Plantronics")]
 [assembly: AssemblyProduct("PLTLabsAPI")]
-[assembly: AssemblyCopyright("Copyright © Plantronics 2013")]
+[assembly: AssemblyCopyright("Copyright © Plantronics 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

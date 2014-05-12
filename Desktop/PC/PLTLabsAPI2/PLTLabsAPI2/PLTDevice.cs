@@ -18,7 +18,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         /// The Product Name of the device
         /// </summary>
         public string m_ProductName = "";
-        private HIDDevice m_HIDDevice;
+        //private HIDDevice m_HIDDevice;
+        public BladeRunnerDevice m_device;
 
         // NOTE: commenting out below, because this is not currently available in
         // Spokes 3.0 SDK / Spokes Wrapper
@@ -31,10 +32,17 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         ///// </summary>
         //public string m_ProductHeadsetSerial = "";
 
-        public PLTDevice(HIDDevice aDevice)
+        public PLTDevice(BladeRunnerDevice aDevice)//HIDDevice aDevice)
         {
             m_ProductName = "";
-            m_HIDDevice = aDevice;
+            //m_HIDDevice = aDevice;
+            m_device = aDevice;
         }
+    }
+
+    public enum PLTDeviceInfoChange
+    {
+        nothing,
+        name
     }
 }
