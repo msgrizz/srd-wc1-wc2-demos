@@ -18,6 +18,24 @@ namespace HeadTrackDemo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// 
+    /// Example application to show how to integrate with PLTLabsAPI
+    /// (Innovation API) for Wearable Concept 1, etc.
+    /// 
+    /// Lewis Collins, Plantronics, 2014
+    /// 
+    /// VERSION HISTORY:
+    /// ********************************************************************************
+    /// Version 1.0.0.4:
+    /// Date: 22nd May 2014
+    /// Changed by: Lewis Collins
+    /// Changes:
+    ///   - Removed detect motion tracking code, this is now done in the PLTLabsAPI
+    ///     automatically
+    ///   - Added Zero Angles button
+    ///     
+    /// Prior versions not tracked
+    /// 
     /// </summary>
     public partial class MainWindow : Window, PLTLabsCallbackHandler
     {
@@ -83,6 +101,8 @@ namespace HeadTrackDemo
 
             if (pltConnection != null)
             {
+                m_myMotionTrackingDevice = pltConnection.m_device.m_device;
+
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, "Success! Connection was opened!: " + pltConnection.m_device.m_ProductName);
 
                 // lets register for headtracking service
@@ -183,29 +203,6 @@ namespace HeadTrackDemo
                 + ", stgs=" + pltDevice.m_device.SupportedSettings.Count()
                 + ", evts=" + pltDevice.m_device.SupportedEvents.Count()
                 );
-
-            // ok, so - what service is my app waiting for?
-
-            // have we a device that supports motion-tracking?
-            if (pltDevice.m_device != null)
-            {
-                if (pltDevice.m_device.SupportedCommands.Count() > 0)
-                {
-                    foreach (int commandid in pltDevice.m_device.SupportedCommands)
-                    {
-                        // todo, match this as hex? avoid hard-coded numbers?
-                        if (commandid == 0xFF00)
-                        {
-                            if (!m_pltlabsapi.getIsConnected(pltDevice))
-                            {
-                                m_pltlabsapi.openConnection(pltDevice);
-                            }
-
-                            m_myMotionTrackingDevice = pltDevice.m_device;
-                        }
-                    }
-                }
-            }
         }
 
         public void NotifyDeviceInfoUpdated(PLTDevice pltDevice, PLTDeviceInfoChange whatChanged)
@@ -244,9 +241,9 @@ namespace HeadTrackDemo
                     //    "raw q2: " + trackingdata.m_rawquaternion[2] + "\r\n" +
                     //    "raw q3: " + trackingdata.m_rawquaternion[3]);
                     DebugPrint(MethodInfo.GetCurrentMethod().Name, "Motion Tracking Update received:\r\n" +
-                        "heading: " + trackingdata.m_orientation[0] + "\r\n" +
-                        "pitch: " + trackingdata.m_orientation[1] + "\r\n" +
-                        "roll: " + trackingdata.m_orientation[2]);
+                        "heading: " + (int)trackingdata.m_orientation[0] + "\r\n" +
+                        "pitch: " + (int)trackingdata.m_orientation[1] + "\r\n" +
+                        "roll: " + (int)trackingdata.m_orientation[2]);
                     break;
                 case PLTService.SENSOR_CAL_STATE_SVC:
                     PLTSensorCal sensorcaldata = (PLTSensorCal)pltInfo.m_data;
@@ -307,6 +304,11 @@ namespace HeadTrackDemo
                 m_pltlabsapi.Shutdown();
                 m_pltlabsapi = null;
             }
+        }
+
+        private void zero_angles_button_Click(object sender, RoutedEventArgs e)
+        {
+            m_pltlabsapi.calibrateService(PLTService.MOTION_TRACKING_SVC);
         }
     }
 }

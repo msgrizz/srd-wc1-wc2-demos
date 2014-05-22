@@ -48,6 +48,19 @@ using System.Timers;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.6:
+ * Date: 22nd May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Added auto-detect of 0xFF00 Configure Services deckard command
+ *     to trigger automatic open connection of the API to connected app.
+ *
+ * Version 1.0.0.5:
+ * Date: 21st May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Included Deckard XML into the library release output
+ *
  * Version 1.0.0.4:
  * Date: 12th May 2014
  * Changed by: Lewis Collins
@@ -754,6 +767,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         {
             if (myDevice != null) myDevice.Disconnect();
 
+            
+
             m_quatproc.Stop();
             m_quatproc = null;
 
@@ -965,6 +980,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
         public void HandleDeckard(DeckardMessage deckardmessage, BladeRunnerDevice device)
         {
+            PLTServiceSubscription subscr = null;
             // TODO
             // here interpret the deckard messages and
             // translate them into relevant service updates and service
@@ -995,6 +1011,23 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 case "0x0200":
                     bool isworn = deckardmessage.message_received.payload_received[0].boolValue;
                     Console.WriteLine("Is Worn?: " + isworn);
+                    // Wearing state update
+                    subscr =
+                        m_activeConnection.getSubscription(PLTService.WEARING_STATE_SVC);
+                    if (subscr != null)
+                    {
+                        lock (m_lastwornstateLock)
+                        {
+                            subscr.LastData = m_lastwornstate;
+                        }
+    
+                        // if it is an on change subscription, beam to connected app now
+                        // otherwise will happen in the PLTConnection's periodic timer
+                        if (subscr.m_mode == PLTMode.On_Change)
+                        {
+                            m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.WEARING_STATE_SVC, subscr.LastData));
+                        }
+                    }
                     break;
                 case "0xFF1A":
                     Console.WriteLine(">>> HEAD TRACKING: ");
@@ -1020,7 +1053,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
                         // ok, which service is this for?
                         int serviceid = deckardmessage.message_received.payload_received[0].uint16Value;
-                        PLTServiceSubscription subscr = null;
+                        subscr = null;
                         bool calib, freefall;
                         switch (serviceid)
                         {
@@ -1130,6 +1163,22 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
         public void NotifyDeviceServices(BladeRunnerDevice device)
         {
+            // Let's see if attached devices supports Motion Tracking!
+            foreach (int commandid in device.SupportedCommands)
+            {
+                // does the id match the Configure services id: 0xFF00
+                if (commandid == 0xFF00)
+                {
+                    //Found a device with Motion Tracking - lets open the connection to it...
+                    PLTDevice aDevice = new PLTDevice(device);
+                    if (!getIsConnected(aDevice))
+                    {
+                        // open the API connection to this device
+                        openConnection(aDevice);
+                    }
+                }
+            }
+
             // Inform connected app about this device's services (from device BladeRunner meta data)
             if (m_callbackhandler != null)
             {
@@ -1274,6 +1323,20 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 "0xFF0A",
                 payload2, 2);
         }
+
+        //internal void RegisterForDeviceWearingStateService(BladeRunnerDevice device, bool enable)
+        //{
+        //    // turn on requested service:
+        //    // prepare subscribe to wearing state sensor service command
+        //    List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload2
+        //        = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+        //    payload2.Add(new Deckard.BRProtocolElement((bool)enable)); // enable or disable
+        //    BRendpoint.SendBladeRunnerMessage(device,
+        //        EBRMessageType.eBR_COMMAND,
+        //        device.DeviceAddress,
+        //        "0x0214",
+        //        payload2, 2);            
+        //}
     }
 
     // 

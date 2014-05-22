@@ -241,6 +241,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                         m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 6,
                             (int)aMode, aPeriodmilliseconds);
                     break;
+                //case PLTService.WEARING_STATE_SVC:
+                //    if (m_pltlabsapi != null)
+                //        m_pltlabsapi.RegisterForDeviceWearingStateService(m_device.m_device, true);
+                    break;
             }
         }
 
