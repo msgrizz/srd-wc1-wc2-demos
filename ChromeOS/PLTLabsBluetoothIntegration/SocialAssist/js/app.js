@@ -30,8 +30,7 @@ var connectedToDevice = false;
 var connectedToSensorPort = false;
 var connectingToSensorPort = false;
 var deviceMetadata = null;
-var lastQuaternion = [1, 0, 0, 0]
-var calibrtionQuaternion = [1, 0, 0, 0];
+
 var sensorPortAddress = new ArrayBuffer(PLTLabsMessageHelper.BR_ADDRESS_SIZE);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
@@ -57,41 +56,14 @@ ringtone.addEventListener('ended', function() {this.currentTime = 0;if(ringing){
 var sendHeadtrackingData = false;
 var currentGPSIndex = null;
 
+
+
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 $(function() {
   $( "#accordion" ).accordion();
 });
-
-
-function multipliedQuaternions(q, p) {
-
-  var mulQuat = [0, 0, 0, 0];
-  var m = [p[0], p[1], p[2], p[3]];
-    
-    var quatmat = 
-    [ [ p[0], -p[1], -p[2], -p[3] ],
-      [ p[1], p[0], -p[3], p[2] ],
-      [ p[2], p[3], p[0], -p[1] ],
-      [ p[3], -p[2], p[1], p[0] ]
-    ];
-    
-    for (var i = 0; i < 4; i++) {
-        for (var j = 0; j < 4; j++) {
-            //double *qq = (double *)&q;
-            mulQuat[i] += quatmat[i][j] * q[j];
-        }
-    }
-    
-    return [ mulQuat[0], mulQuat[1], mulQuat[2], mulQuat[3] ];
-}
-
-function inverseQuaternion(q) {
-
-  return [q[0], -q[1], -q[2], -q[3]];
-}
-
 
 
 
@@ -140,7 +112,6 @@ function init(){
 		});
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
-  
 }
 
 
@@ -154,8 +125,6 @@ function findPLTDevices(){
 function disconnectPLT(){
  PLTLabsAPI.closeConnection(connectionClosed);
  deviceMetadata = null;
- lastQuaternion = [1, 0, 0, 0];
- calibrtionQuaternion = [1, 0, 0, 0];
  connectedToSensorPort = false;
  connectedToDevice = false;
 }
@@ -180,8 +149,7 @@ function devicesFound(deviceList){
   devices = JSON.parse(JSON.stringify(deviceList));
   for(i = 0; i < deviceList.length; i++){
     var d = deviceList[i];
-    log('Device ' + i + ' + : ' + d.name);
-    //if(d.connected == true && d.name == "PLT_WC1"){
+    //log('Device ' + i + ' + : ' + d.name);
     if(d.connected == true && d.name.indexOf("PLT_") != -1) {
       log('using: ' + d.name);
       PLTLabsAPI.openConnection(d, connectionOpened);
@@ -215,10 +183,60 @@ function connectionOpened(address){
     var options = new Object();
     options.events = eventSubscriptions;
     PLTLabsAPI.subscribeToEvents(options, onEvent);
+    PLTLabsAPI.subscribeToSettings(onSettings);
     enableButtonPressEvents();
+    getSettings();
     connectedToDevice = true;
     $('#chkProximity').attr("disabled",false);
   }
+}
+
+function onSettings(info){
+  
+    log('onSetttings: settings info ' + JSON.stringify(info));
+    
+     switch (info.id){
+      case PLTLabsMessageHelper.BATTERY_LEVEL_INFO_SETTING:
+	var charge = info.properties["chargeLevel"] + 0.0;
+	var levels = info.properties["numberOfChargeLevels"] + 0.0;
+	var totalCharge = (charge/levels) + "%"
+	$('#batteryLevel').text('WORK IN PROGRESS');
+	break;
+      case PLTLabsMessageHelper.PRODUCT_NAME_SETTING:
+	$('#productName').text(info.properties["name"]);
+	break;
+      case PLTLabsMessageHelper.FIRMWARE_VERSION_SETTING:
+	var version = info.properties["buildTarget"] + "." + info.properties["releaseNumber"];
+	$('#firmwareVersion').text(version);
+	break;
+      case PLTLabsMessageHelper.DECKARD_VERSION_SETTING:
+	var isReleaseVersion = info.properties["releaseVersion"];
+	var version = info.properties["majorVersion"] + "." + info.properties["minorVersion"] + "(" + info.properties['maintenanceVersion'] + ')' + (isReleaseVersion ? 'Production' : 'Beta');  
+	$('#deckardVersion').text(version);
+	break;
+     }
+    
+}
+
+function getSettings(){
+  var packet = PLTLabsMessageHelper.createGetProductNameSetting();
+  log('getSettings: getting product name');
+  PLTLabsAPI.sendSetting(packet);
+  
+  packet = PLTLabsMessageHelper.createGetFirmwareVersionSetting();
+  log('getSettings: getting firmware version');
+  PLTLabsAPI.sendSetting(packet);
+  
+  packet = PLTLabsMessageHelper.createGetDeckardVersionSetting();
+  log('getSettings: getting Plantronics M2M messaging version');
+  PLTLabsAPI.sendSetting(packet);
+  
+  packet = PLTLabsMessageHelper.createGetBatteryInfoSetting();
+  log('getSettings: getting device battery information');
+  PLTLabsAPI.sendSetting(packet);
+  
+  $('#bdAddress').text(PLTLabsAPI.socket.device.address);
+  
 }
 
 //PLT checkbox functions 
@@ -287,9 +305,7 @@ function onEvent(info){
       case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
 
       var q = info.properties["quaternion"];
-      lastQuaternion = [q['w'], q['x'], q['y'], q['z']];
-
-      var c = convertQuaternianToCoordinates(q); 
+      var c = PLTLabsMessageHelper.convertQuaternianToCoordinates(q); 
       $('#roll').text(c.roll);
       $('#pitch').text(c.pitch);
       $('#heading').text(c.heading);
@@ -332,74 +348,7 @@ function onEvent(info){
   }
 
 
-// Pass the obj.quaternion that you want to convert here:
-//*********************************************************
-function quatToEuler (q1) {
-  var pitchYawRoll = {"x":0, "y":0, "z":0};
-     sqw = q1.w*q1.w;
-     sqx = q1.x*q1.x;
-     sqy = q1.y*q1.y;
-     sqz = q1.z*q1.z;
-     unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-     test = q1.x*q1.y + q1.z*q1.w;
-    if (test > 0.499*unit) { // singularity at north pole
-        heading = 2 * Math.atan2(q1.x,q1.w);
-        attitude = Math.PI/2;
-        bank = 0;
-        //return;
-    }
-    if (test < -0.499*unit) { // singularity at south pole
-        heading = -2 * Math.atan2(q1.x,q1.w);
-        attitude = -Math.PI/2;
-        bank = 0;
-        //return;
-    }
-    else {
-        heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
-        attitude = Math.asin(2*test/unit);
-        bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
-    }
-    pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
-    pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
-    pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
 
-    return pitchYawRoll;
-}        
-
-// Then, if I want the specific yaw (rotation around y), I pass the results of
-// pitchYawRoll.y into the following to get back the angle in radians which is
-// what can be set to the object's rotation.
-
-//*********************************************************
-function eulerToAngle(rot) {
-    var ca = 0;
-    if (rot > 0)
-        { ca = (Math.PI*2) - rot; } 
-    else 
-        { ca = -rot }
-
-    return Math.round((ca / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
-}
-
-
-//converts a quaternion into a set of Euler angles 
-function convertQuaternianToCoordinates(q){
-  
-  var p = quatToEuler(q);
-  log("q2e -> " + JSON.stringify(p));
-  //var pitch = eulerToAngle(p.x);
-  pitch = convertToPitch(q);
-  return {"pitch" :pitch, "roll" :eulerToAngle(p.z), "heading" : eulerToAngle(p.y)};
-}
-
-//I am sure there is a more elegant way to do this - but hack it is
-function convertToPitch(q){
-  var p = (2 * q.y * q.z) + (2 * q.w * q.x);
-  var r2d = 180 / Math.PI;   // radians to degrees 
-  var pitch = r2d * Math.asin(p);
-  return Math.round(pitch);//{"psi" : Math.round(psi), "theta" : Math.round(theta), "phi" : Math.round(phi)};
-  
-}
 
 function enableButtonPressEvents(){
   eventSubscriptions.push(PLTLabsMessageHelper.BUTTON_EVENT);

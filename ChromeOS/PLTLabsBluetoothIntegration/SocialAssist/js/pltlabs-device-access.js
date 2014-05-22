@@ -2,9 +2,7 @@
 //Author - Cary Bran - cary.bran@plantronics.com
 //This library is to enable experimental device data access
 //using the Google Chrome Bluetooth APIs 
-
-var readIntervalId = null; 
-var connectIntervalId = null;
+ 
 var deviceRoute = new ArrayBuffer(4);
 //initialize the address array to 0x0
 var address = new Uint8Array(deviceRoute);
@@ -115,6 +113,18 @@ PLTLabsAPI.subscribeToEvents = function(options, callback){
   
 };
 
+PLTLabsAPI.subscribeToSettings = function(callback){
+  if(!this.connected){
+   throw new PLTLabsException("subscribeToSettings: a connection must be established first before subscribing to services");
+  }
+  if(!callback || !typeof(callback) == "function"){
+    throw new PLTLabsException("subscribeToSettings: this method requires a callback function");
+  }
+  
+  onSettingsCallback = callback;
+
+}
+
 //returns device metadata when it arrive to the callback
 //callback parameter must be a function with a single argument
 PLTLabsAPI.subscribeToDeviceMetadata = function(callback){
@@ -133,6 +143,15 @@ PLTLabsAPI.sendCommand = function(command){
   
   PLTLabsAPI.sendBladerunnerPacket(command);
   //log('sendCommand: command packet has been sent to device');
+};
+
+PLTLabsAPI.sendSetting = function(setting){
+  if(!setting){
+    log('sendSetting: empty setting ignoring'); 
+  }
+  
+  PLTLabsAPI.sendBladerunnerPacket(setting);
+  log('sendSetting: setting packet has been sent to device');
 };
 
 //Attempts to send a blade runner packet over the bluetooth socket connection, if error occurs will log it out.
@@ -188,6 +207,11 @@ var findPLTLabsDevices = function(){
 //Handle the device connect event and set up the device connection
 //and the socket read interval
 var onConnectDeviceHandler = function(_socket){
+   if(PLTLabsAPI.socket && (PLTLabsAPI.socket.id == _socket.id)){
+      //same socket as the one we currently have - return
+      return;
+   }
+   
    if(_socket){  
       log("onConnectDeviceHandler: socket id " + _socket.id + " for device obtained, setting up socket communications");
       chrome.bluetoothSocket.setPaused(_socket.id , false);
@@ -345,10 +369,12 @@ var parseBladerunnerData = function(info){
     //  log('parseBladerunnerData: Protocol Version Type Message');
       break;
      case PLTLabsMessageHelper.GET_REQUEST_TYPE:
-    //  log('Get Request Type Message');
+      log('parseBladerunnerData: Recieved get settings message');
       break;
      case PLTLabsMessageHelper.GET_RESULT_SUCCESS_TYPE:
-    //  log('Get Result Success Type Message');
+      log('parseBladerunnerData: Received get settings success message');
+      var setting = PLTLabsMessageHelper.parseSetting(info);
+      onSettingsCallback(setting);
       break;
      case PLTLabsMessageHelper.GET_RESULT_EXCEPTION_TYPE:
         //log('parseBladerunnerData: Exception Type Message');
@@ -407,39 +433,6 @@ var parseBladerunnerData = function(info){
 
 };
 
-function inverseQuaternion(q){
-  return { "w": -q.w, "x": -q.x, "y": -q.y, "z": -q.z}
-}
-
-function multiplyQuaternions(q, p){
-   var quaternianMatrix =[[p.w, -p.x, -p.y, -p.z],
-                          [ p.x, p.w, -p.z, p.y ],
-                          [ p.y, p.z, p.w, -p.x ],
-                          [p.z, -p.y, p.x, p.w ]];
-   var multipliedQuaternion = { "w": 0, "x": 0, "y": 0, "z": 0}
-   
-  for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
-            switch(j){
-              case 0:
-                multipliedQuaternion.w += quaternianMatrix[i][j] * q.w;
-                break;
-              case 1:
-                multipliedQuaternion.x += quaternianMatrix[i][j] * q.x;
-                break;
-              case 2:
-                multipliedQuaternion.y += quaternianMatrix[i][j] * q.y;
-                break;
-              case 3:
-                multipliedQuaternion.z += quaternianMatrix[i][j] * q. z;
-                break;
-            }
-        }
-    }
-    
-return multipliedQuaternion;
-  
-}
 
 //manages the connection state for the PLTLabs api
 var connectedEvent = function(event){
@@ -503,6 +496,15 @@ PLTLabsMessageHelper.BR_MESSAGE_BOOL_SIZE = 1;
 
 //WC1 and Bangle sensor port
 PLTLabsMessageHelper.SENSOR_PORT = 5;
+
+
+//device settings
+PLTLabsMessageHelper.PRODUCT_NAME_SETTING = 0x0A00;
+PLTLabsMessageHelper.FIRMWARE_VERSION_SETTING = 0x0A04;
+PLTLabsMessageHelper.BATTERY_LEVEL_INFO_SETTING = 0x0A1A;
+PLTLabsMessageHelper.DECKARD_VERSION_SETTING = 0x0AFE;
+
+
 
 //device events
 PLTLabsMessageHelper.TEST_INTERFACE_ENABLE_DISABLE_EVENT = 0x1000;
@@ -697,32 +699,6 @@ PLTLabsMessageHelper.createEnableButtonEventsCommand = function(options){
 }
   
 //Wearble Concept 1 Device Commands
-/*
--SERVICE IDs
-Head orientation                   0x0000
-Pedometer                          0x0002
-Free Fall                          0x0003
-Taps                               0x0004
-Magnetometer Calibration Status    0x0005
-Gyroscope Calibration Status       0x0006
-Versions                           0x0007
-Humidity                           0x0008
-Light                              0x0009
-Optical proximity                  0x0010
-Ambient Temp 1                     0x0011
-Ambient Temp 2                     0x0012
-Skin Temp                          0x0013
-Skin Conductivity                  0x0014
-Ambient Pressure                   0x0015
-Heart Rate                         0x0016
-UI                                 0x00A0
-
-Modes:
-The update mode for the service.
-0 = off,
-1 = on-change,
-2 = periodic
-*/
 //Enable head tracking
 PLTLabsMessageHelper.createHeadTrackingOnChangeCommand = function(options){
   options.serviceId = this.HEAD_ORIENTATION_SERVICE_ID; // head tracking
@@ -771,51 +747,36 @@ PLTLabsMessageHelper.createWC1Command = function(options){
   
 }
 
-PLTLabsMessageHelper.createCalibrateCommand = function(options){
-  options.messageType = this.PERFORM_COMMAND_TYPE;
-  options.messageType = this.CALIBRATE_SERVICES;
-  
-  var data;
-  var data_view;
-  //service Id = 2 bytes
-  //characteristic = 2 bytes
-  switch(options.serviceId){
-    case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
-      //quaternions = 8 bytes + 2 bytes for the size of the array
-      //TODO - write transformation routine to calibrate the quaternions
-      var q = options.quaternion;
-      var inverseQ = inverseQuaternion(q);
-      var calQ = multiplyQuaternions(q, inverseQ);
-      data = new ArrayBuffer(14);
-      data_view = new Uint8Array(data);
-      data_view[1] = options.serviceId;
-      data_view[5] = 0x10; // size of the array
-      data_view[6] = calQ.w >> 8; //high-bit part of the quaternion
-      data_view[7] = calQ.w & 0xFF; //low bit
-      data_view[8] = calQ.x >> 8; //high-bit part of the quaternion
-      data_view[9] = calQ.x & 0xFF; //low bit
-      data_view[10] = calQ.y >> 8; //high-bit part of the quaternion
-      data_view[11] = calQ.y & 0xFF; //low bit
-      data_view[12] = calQ.z >> 8; //high-bit part of the quaternion
-      data_view[13] = calQ.z & 0xFF; //low bit
-      break;
-    case PLTLabsMessageHelper.PEDOMETER_SERVICE_ID:
-    case PLTLabsMessageHelper.FREE_FALL_SERVICE_ID:
-    case PLTLabsMessageHelper.TAPS_SERVICE_ID:
-      //one byte array - alloccate  3 bytes - 2 for the array length descriptor, one for the value to send
-      data = new ArrayBuffer(7);
-      data_view = new Uint8Array(data);
-      data_view[1] = options.serviceId;
-      data_view[5] = 0x1; // size of the array
-      data_view[6] = 0x1; // reset bit
-      break;
-  }
-  
-  if (data) {
-    options.messageData = data;
-    return this.createMessage(options);
-  }
+//Settings 
+PLTLabsMessageHelper.createGetProductNameSetting = function(){
+  var options = {"address":deviceRoute};
+  options.messageType = this.GET_REQUEST_TYPE;
+  options.messageId = this.PRODUCT_NAME_SETTING;
+  return this.createMessage(options);
 }
+
+PLTLabsMessageHelper.createGetFirmwareVersionSetting = function(){
+  var options = {"address":deviceRoute};
+  options.messageType = this.GET_REQUEST_TYPE;
+  options.messageId = this.FIRMWARE_VERSION_SETTING;
+  return this.createMessage(options);
+}
+
+PLTLabsMessageHelper.createGetDeckardVersionSetting = function(){
+  var options = {"address":deviceRoute};
+  options.messageType = this.GET_REQUEST_TYPE;
+  options.messageId = this.DECKARD_VERSION_SETTING;
+  return this.createMessage(options);
+}
+
+PLTLabsMessageHelper.createGetBatteryInfoSetting = function(){
+  var options = {"address":deviceRoute};
+  options.messageType = this.GET_REQUEST_TYPE;
+  options.messageId = this.BATTERY_LEVEL_INFO_SETTING;
+  return this.createMessage(options);
+}
+
+
 
 //build and returns a message
 PLTLabsMessageHelper.createMessage = function(options){
@@ -929,6 +890,48 @@ PLTLabsMessageHelper.parseMetadata = function(message){
 } 
 
 
+//function responsible for converting PLTLabs byte array messages into
+//settings get success objects - expect and info object as a parameter
+PLTLabsMessageHelper.parseSetting = function(info){
+  var message = info.data;
+  var data_view = new Uint8Array(message, this.BR_HEADER_SIZE);
+  var settingId = this.parseShortArray(0, data_view, 2);
+  
+  var setting = {"id": settingId[0], "socketId": info.socketId};
+  setting.properties = {};
+  
+  switch (setting.id) {
+    case this.PRODUCT_NAME_SETTING:
+      setting.name = "Product Name";
+      var nameLength = this.parseShortArray(2, data_view, (2 + this.BR_MESSAGE_ID_SIZE));
+      setting.properties['name'] = this.parseString((2+ this.BR_MESSAGE_ID_SIZE), data_view,(2 + this.BR_MESSAGE_ID_SIZE + (nameLength[0] *2)));
+      break;
+    case this.FIRMWARE_VERSION_SETTING:
+      setting.name = "Firmware Version";
+      setting.properties['buildTarget'] = this.parseShort((2+ this.BR_MESSAGE_ID_SIZE), data_view) ;
+      setting.properties['releaseNumber'] = this.parseShort((4+ this.BR_MESSAGE_ID_SIZE), data_view) ;
+      break;
+    case this.DECKARD_VERSION_SETTING:
+      setting.name = "Plantronics Messaging Version";
+      setting.properties['releaseVersion'] = this.byteToBool(data_view[2]);
+      setting.properties['majorVersion'] = this.parseShort(3, data_view);
+      setting.properties['minorVersion'] = this.parseShort(5, data_view);
+      setting.properties['maintenanceVersion'] = this.parseShort(7, data_view);
+      break;
+    case this.BATTERY_LEVEL_INFO_SETTING:
+      setting.name = "Battery Level";
+      setting.properties['chargeLevel'] = data_view[2];
+      setting.properties['numberOfChargeLevels'] = data_view[3];
+      setting.properties['isCharging'] = this.byteToBool(data_view[4]);
+      setting.properties['minutesOfTalkTime'] = this.parseShort(5, data_view);
+      setting.properties['isTalkTimeHighEstimate'] = this.byteToBool(data_view[7]);
+      break;
+      
+  }
+  
+  return setting
+}
+
 //function responsible for converting PLTLabs byte array messages
 //into event objects - expects info object as parameter
 PLTLabsMessageHelper.parseEvent = function(info){
@@ -936,9 +939,7 @@ PLTLabsMessageHelper.parseEvent = function(info){
   var data_view = new Uint8Array(message, this.BR_HEADER_SIZE);
   var eventId = this.parseShortArray(0, data_view, 2);
   //todo -fix array/json insert of property
-  var event = new Object();
-  event.id = eventId[0];
-  event.socketId = info.socketId;
+  var event = {"id": eventId[0], "socketId": info.socketId};
   event.properties = {};
   switch(event.id){
     case this.WEARING_STATE_CHANGED_EVENT:
@@ -1042,11 +1043,77 @@ PLTLabsMessageHelper.parseEvent = function(info){
   return event;
 }
 
-PLTLabsMessageHelper.convertToQuaternion = function(serviceData){
-  var w = serviceData[0];
-  var x = serviceData[1];
-  var y = serviceData[2];
-  var z = serviceData[3];
+
+
+// Pass the obj.quaternion that you want to convert here:
+//*********************************************************
+PLTLabsMessageHelper.quaternianToEuler = function(q1) {
+  var pitchYawRoll = {"x":0, "y":0, "z":0};
+     sqw = q1.w*q1.w;
+     sqx = q1.x*q1.x;
+     sqy = q1.y*q1.y;
+     sqz = q1.z*q1.z;
+     unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+     test = q1.x*q1.y + q1.z*q1.w;
+    if (test > 0.499*unit) { // singularity at north pole
+        heading = 2 * Math.atan2(q1.x,q1.w);
+        attitude = Math.PI/2;
+        bank = 0;
+        //return;
+    }
+    if (test < -0.499*unit) { // singularity at south pole
+        heading = -2 * Math.atan2(q1.x,q1.w);
+        attitude = -Math.PI/2;
+        bank = 0;
+        //return;
+    }
+    else {
+        heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
+        attitude = Math.asin(2*test/unit);
+        bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
+    }
+    pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
+    pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
+    pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
+
+    return pitchYawRoll;
+}        
+
+// Then, if I want the specific yaw (rotation around y), I pass the results of
+// pitchYawRoll.y into the following to get back the angle in radians which is
+// what can be set to the object's rotation.
+
+//*********************************************************
+PLTLabsMessageHelper.eulerToAngle = function(r) {
+    var c = 0;
+    if (r > 0){
+      c = (Math.PI*2) - r;
+    } 
+    else {
+      c = -r
+    }
+    return Math.round((c / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
+}
+
+//converts a quaternion into a set of Euler angles 
+PLTLabsMessageHelper.convertQuaternianToCoordinates = function(q){
+  var e = this.quaternianToEuler(q);
+  //log("q2e -> " + JSON.stringify(p));
+  p = this.convertToPitch(q);
+  return {"pitch" :p, "roll" :this.eulerToAngle(e.z), "heading" : this.eulerToAngle(e.y)};
+
+}
+
+PLTLabsMessageHelper.convertToPitch = function(q){
+  var p = (2 * q.y * q.z) + (2 * q.w * q.x);
+  var pitch = (180 / Math.PI) * Math.asin(p);
+  return Math.round(pitch);
+}
+PLTLabsMessageHelper.convertToQuaternion = function(s){
+  var w = s[0];
+  var x = s[1];
+  var y = s[2];
+  var z = s[3];
 
   if (w > 32767) w -= 65536;
   if (x > 32767) x -= 65536;
@@ -1150,18 +1217,36 @@ PLTLabsMessageHelper.parseByteArray = function(index, buffer, bounds){
   return result;
 }
 PLTLabsMessageHelper.byteToBool = function(byte){
-  return byte == 0x1;
+  return byte == 1;
 }
 
 PLTLabsMessageHelper.boolToByte = function(bool){
-  return bool ? 0x1 : 0x0;
+  return bool ? 1 : 0;
 }
-PLTLabsMessageHelper.parseShortArray = function(index, buffer, bounds){
-   var result = new Array();
+
+PLTLabsMessageHelper.parseString = function(index, buffer, bounds){
+  log("parsing string");
+  var result = "";
    for(index; index < bounds; index+=2){
     var val = buffer[index] << 8;
     val += (buffer[index+1] & 0xFF);
-    result.push(val);
+    result += String.fromCharCode(val);
+  }
+  return result.toString();
+}
+
+//assumes two bytes == a short so will start at the index specifed
+//and parse the index + 1 bytes in the buffer
+PLTLabsMessageHelper.parseShort = function(index, buffer){
+    var val = buffer[index] << 8;
+    val += (buffer[index+1] & 0xFF);
+    return val;
+}
+
+PLTLabsMessageHelper.parseShortArray = function(index, buffer, bounds){
+   var result = new Array();
+   for(index; index < bounds; index+=2){
+    result.push(this.parseShort(index, buffer));
   }
   return result;
 }
