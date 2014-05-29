@@ -1271,80 +1271,81 @@ public class Device {
 			Log.v(FN(), "SERVICE_PROXIMITY");
 			service = SERVICE_PROXIMITY;
 			SignalStrengthEvent signalStrengthEvent = (SignalStrengthEvent)event;
-
 			ProximityInfo cachedInfo = (ProximityInfo)getCachedInfo(service);
 			int connectionID = signalStrengthEvent.getConnectionId();
 
-			// check if we're waiting on a signal strength query
-			ProximityInfo queryInfo = null;
-			if (connectionID == _remotePort) {
-				//Log.i(FN(), "REMOTE");
-				if (_waitingForRemoteSignalStrengthEvent) {
-					//Log.i(FN(), "SET REMOTE INFO");
-					_remoteQuerySignalStrengthEvent = signalStrengthEvent;
-
-					if (_localQuerySignalStrengthEvent != null) {
-						//Log.i(FN(), "WE GOT LOCAL. DONE.");
-						// we're got both.
-						queryInfo = new ProximityInfo(Info.REQUEST_TYPE_QUERY, timestamp, null, _localQuerySignalStrengthEvent.getNearFar().byteValue(), _remoteQuerySignalStrengthEvent.getNearFar().byteValue());
-					}
-				}
-			}
-			else {
-				//Log.i(FN(), "LOCAL");
-				if (_waitingForLocalSignalStrengthEvent) {
-					//Log.i(FN(), "SET LOCAL INFO");
-					_localQuerySignalStrengthEvent = signalStrengthEvent;
-
+			if (signalStrengthEvent.getNearFar() != ProximityInfo.PROXIMITY_UNKNOWN) {
+				// check if we're waiting on a signal strength query
+				ProximityInfo queryInfo = null;
+				if (connectionID == _remotePort) {
+					//Log.i(FN(), "REMOTE");
 					if (_waitingForRemoteSignalStrengthEvent) {
-						//Log.i(FN(), "WAITING ON REMOTE, TOO");
-						if (_remoteQuerySignalStrengthEvent != null) {
+						//Log.i(FN(), "SET REMOTE INFO");
+						_remoteQuerySignalStrengthEvent = signalStrengthEvent;
+
+						if (_localQuerySignalStrengthEvent != null) {
+							//Log.i(FN(), "WE GOT LOCAL. DONE.");
 							// we're got both.
-							//Log.i(FN(), "WE GOT REMOTE. DONE.");
 							queryInfo = new ProximityInfo(Info.REQUEST_TYPE_QUERY, timestamp, null, _localQuerySignalStrengthEvent.getNearFar().byteValue(), _remoteQuerySignalStrengthEvent.getNearFar().byteValue());
 						}
 					}
-					else {
-						//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
-						// not waiting on remote. we've got just the one.
-						byte queryRemoteProximity = ProximityInfo.PROXIMITY_UNKNOWN;
-						if (cachedInfo != null) {
-							queryRemoteProximity = cachedInfo.getRemoteProximity();
+				}
+				else {
+					//Log.i(FN(), "LOCAL");
+					if (_waitingForLocalSignalStrengthEvent) {
+						//Log.i(FN(), "SET LOCAL INFO");
+						_localQuerySignalStrengthEvent = signalStrengthEvent;
+
+						if (_waitingForRemoteSignalStrengthEvent) {
+							//Log.i(FN(), "WAITING ON REMOTE, TOO");
+							if (_remoteQuerySignalStrengthEvent != null) {
+								// we're got both.
+								//Log.i(FN(), "WE GOT REMOTE. DONE.");
+								queryInfo = new ProximityInfo(Info.REQUEST_TYPE_QUERY, timestamp, null, _localQuerySignalStrengthEvent.getNearFar().byteValue(), _remoteQuerySignalStrengthEvent.getNearFar().byteValue());
+							}
 						}
+						else {
+							//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
+							// not waiting on remote. we've got just the one.
+							byte queryRemoteProximity = ProximityInfo.PROXIMITY_UNKNOWN;
+							if (cachedInfo != null) {
+								queryRemoteProximity = cachedInfo.getRemoteProximity();
+							}
 
-						queryInfo = new ProximityInfo(Info.REQUEST_TYPE_QUERY, timestamp, null, _localQuerySignalStrengthEvent.getNearFar().byteValue(), queryRemoteProximity);
+							queryInfo = new ProximityInfo(Info.REQUEST_TYPE_QUERY, timestamp, null, _localQuerySignalStrengthEvent.getNearFar().byteValue(), queryRemoteProximity);
+						}
 					}
 				}
-			}
 
-			if (queryInfo != null) {
-				//Log.i(FN(), "QUERYINFO: " + queryInfo);
+				if (queryInfo != null) {
+					//Log.i(FN(), "QUERYINFO: " + queryInfo);
 
-				ArrayList<InfoListener> queryListeners = _queryListeners.get(new Integer(service));
-				if (queryListeners != null) {
-					Iterator i = queryListeners.iterator();
-					while (i.hasNext()) {
-						((InfoListener)i.next()).onInfoReceived(queryInfo);
+					ArrayList<InfoListener> queryListeners = _queryListeners.get(new Integer(service));
+					if (queryListeners != null) {
+						Iterator i = queryListeners.iterator();
+						while (i.hasNext()) {
+							((InfoListener)i.next()).onInfoReceived(queryInfo);
+						}
+						_queryListeners.remove(new Integer(service));
+
+						_cachedInfo.put(new Integer(service), queryInfo);
 					}
-					_queryListeners.remove(new Integer(service));
 
-					_cachedInfo.put(new Integer(service), queryInfo);
-				}
+					_waitingForRemoteSignalStrengthEvent = false;
+					_waitingForLocalSignalStrengthEvent = false;
+					_localQuerySignalStrengthEvent = null;
+					_remoteQuerySignalStrengthEvent = null;
 
-				_waitingForRemoteSignalStrengthEvent = false;
-				_waitingForLocalSignalStrengthEvent = false;
-				_localQuerySignalStrengthEvent = null;
-				_remoteQuerySignalStrengthEvent = null;
+					if (_subscriptions != null) {
+						internalSubscription = _subscriptions.get(new Integer(SERVICE_PROXIMITY));
+						if (internalSubscription == null) {
+							// looks like this was just a query (without otherwise being subscribed)
+							// turn off signal strength events
 
-				if (_subscriptions != null) {
-					internalSubscription = _subscriptions.get(new Integer(SERVICE_PROXIMITY));
-					if (internalSubscription == null) {
-						// looks like this was just a query (without otherwise being subscribed)
-						// turn off signal strength events
-
-						configureSignalStrengthEvents(false, 0);
-						if (_remotePort > 0) {
-							configureSignalStrengthEvents(false, _remotePort);
+							configureSignalStrengthEvents(false, 0);
+							if (_remotePort > 0) {
+								configureSignalStrengthEvents(false, _remotePort);
+							}
 						}
 					}
 				}
