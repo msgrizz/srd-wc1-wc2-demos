@@ -12,7 +12,7 @@ public class WearingStateInfo extends Info {
 	private boolean 	_isBeingWorn;
 
 
-	public WearingStateInfo(int requestType, Date timestamp, Calibration calibration, boolean isBeingWorn) {
+	public WearingStateInfo(byte requestType, Date timestamp, Calibration calibration, boolean isBeingWorn) {
 		super(requestType, timestamp, calibration);
 		_isBeingWorn = isBeingWorn;
 	}
@@ -24,6 +24,6 @@ public class WearingStateInfo extends Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", isBeingWorn=" + (_isBeingWorn ? "yes" : "no");
+				+ ", isBeingWorn=" + (_isBeingWorn ? "true" : "false");
 	}
 }

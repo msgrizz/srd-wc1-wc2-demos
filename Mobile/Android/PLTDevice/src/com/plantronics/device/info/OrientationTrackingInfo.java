@@ -13,12 +13,12 @@ public class OrientationTrackingInfo extends Info {
 	private Quaternion		_rawQuaternion;
 
 
-	public OrientationTrackingInfo(int requestType, Date timestamp, Calibration calibration, Quaternion rawQuaternion) {
+	public OrientationTrackingInfo(byte requestType, Date timestamp, Calibration calibration, Quaternion rawQuaternion) {
 		super(requestType, timestamp, calibration);
 		_rawQuaternion = rawQuaternion;
 	}
 
-	public OrientationTrackingInfo(int requestType, Date timestamp, Calibration calibration, EulerAngles eulerAngles) {
+	public OrientationTrackingInfo(byte requestType, Date timestamp, Calibration calibration, EulerAngles eulerAngles) {
 		super(requestType, timestamp, calibration);
 		_rawQuaternion = new Quaternion(eulerAngles);
 	}

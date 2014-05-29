@@ -12,7 +12,7 @@ public class GyroscopeCalInfo extends Info {
 	private boolean 	_isCalibrated;
 
 
-	public GyroscopeCalInfo(int requestType, Date timestamp, Calibration calibration, boolean isCalibrated) {
+	public GyroscopeCalInfo(byte requestType, Date timestamp, Calibration calibration, boolean isCalibrated) {
 		super(requestType, timestamp, calibration);
 		_isCalibrated = isCalibrated;
 	}
@@ -24,6 +24,6 @@ public class GyroscopeCalInfo extends Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", isCalibrated=" + (_isCalibrated ? "yes" : "no");
+				+ ", isCalibrated=" + (_isCalibrated ? "true" : "false");
 	}
 }

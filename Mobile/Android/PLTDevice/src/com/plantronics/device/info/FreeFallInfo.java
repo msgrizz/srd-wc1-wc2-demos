@@ -12,7 +12,7 @@ public class FreeFallInfo extends Info {
 	private boolean 	_isInFreeFall;
 
 
-	public FreeFallInfo(int requestType, Date timestamp, Calibration calibration, boolean isInFreeFall) {
+	public FreeFallInfo(byte requestType, Date timestamp, Calibration calibration, boolean isInFreeFall) {
 		super(requestType, timestamp, calibration);
 		_isInFreeFall = isInFreeFall;
 	}
@@ -30,6 +30,6 @@ public class FreeFallInfo extends Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", isInFreeFall=" + (_isInFreeFall ? "yes" : "no");
+				+ ", isInFreeFall=" + (_isInFreeFall ? "true" : "false");
 	}
 }
