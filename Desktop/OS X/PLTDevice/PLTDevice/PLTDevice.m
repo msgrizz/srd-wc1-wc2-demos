@@ -10,7 +10,6 @@
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
 #import "PLTDeviceWatcher.h"
-//#import <ExternalAccessory/ExternalAccessory.h>
 #import "PLTInfo_Internal.h"
 #import "PLTWearingStateInfo_Internal.h"
 #import "PLTProximityInfo_Internal.h"
@@ -21,12 +20,10 @@
 #import "PLTMagnetometerCalibrationInfo_Internal.h"
 #import "PLTGyroscopeCalibrationInfo_Internal.h"
 
-#import <IOBluetooth/IOBluetooth.h>
 #import "BRDevice.h"
 #import "BRRemoteDevice.h"
 #import "BRSubscribeToServiceCommand.h"
 #import "BRSubscribeToSignalStrengthCommand.h"
-
 #import "BROrientationTrackingEvent.h"
 #import "BRTapsEvent.h"
 #import "BRFreeFallEvent.h"
@@ -35,7 +32,6 @@
 #import "BRGyroscopeCalStatusEvent.h"
 #import "BRWearingStateEvent.h"
 #import "BRSignalStrengthEvent.h"
-
 #import "BRSettingResponse.h"
 #import "BRServiceDataSettingRequest.h"
 #import "BRDeviceInfoSettingRequest.h"
@@ -57,6 +53,10 @@
 #import "BRProductNameSettingResponse.h"
 
 #import "NSData+HexStrings.h"
+#import "NSArray+PrettyPrint.h"
+
+#import <IOBluetooth/IOBluetooth.h>
+//#import <ExternalAccessory/ExternalAccessory.h>
 
 
 NSString *const PLTDeviceAvailableNotification =							@"PLTDeviceAvailableNotification";
@@ -248,13 +248,13 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	if (subscriber != nil) {
 		switch (service) {
 			case PLTServiceWearingState:
-				case PLTServiceProximity:
-				case PLTServiceOrientationTracking:
-				case PLTServicePedometer:
-				case PLTServiceFreeFall:
-				case PLTServiceTaps:
-				case PLTServiceMagnetometerCalStatus:
-				case PLTServiceGyroscopeCalibrationStatus:
+			case PLTServiceProximity:
+			case PLTServiceOrientationTracking:
+			case PLTServicePedometer:
+			case PLTServiceFreeFall:
+			case PLTServiceTaps:
+			case PLTServiceMagnetometerCalStatus:
+			case PLTServiceGyroscopeCalibrationStatus:
 				// cool.
 				break;
 			default:
@@ -369,9 +369,88 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	return nil;
 }
 
-- (void)unsubscribe:(id <PLTDeviceSubscriber>)aSubscriber fromService:(PLTService)theService
+- (void)unsubscribe:(id <PLTDeviceSubscriber>)subscriber fromService:(PLTService)service
 {
-	NSLog(@"unsubscribe: %@ fromService: %lu", aSubscriber, theService);
+	NSLog(@"unsubscribe: %@ fromService: %lu", subscriber, service);
+	
+	if (subscriber) {
+		switch (service) {
+			case PLTServiceWearingState:
+			case PLTServiceProximity:
+			case PLTServiceOrientationTracking:
+			case PLTServicePedometer:
+			case PLTServiceFreeFall:
+			case PLTServiceTaps:
+			case PLTServiceMagnetometerCalStatus:
+			case PLTServiceGyroscopeCalibrationStatus:
+				// cool.
+				break;
+			default:
+				NSLog(@"Invalid service: %lu", service);
+				// TODO: Raise exception.
+				return;
+		}
+		
+		NSMutableArray *subscribersToNotify = [NSMutableArray array];
+		PLTSubscription *oldSubscription;
+		BOOL execCommand = NO;
+		
+		PLTSubscription *sub = self.subscriptions[@(service)];
+		// 1.
+		if (!sub) {
+			// done!
+		}
+		else {
+			if (![sub.subscribers containsObject:subscriber]) {
+				// done!
+			}
+			else {
+				oldSubscription = sub;
+				[subscribersToNotify addObject:subscriber];
+				
+				if ([sub.subscribers count] > 1) {
+					[sub removeSubscriber:subscriber];
+				}
+				else {
+					[self.subscriptions removeObjectForKey:@(service)];
+					execCommand = YES;
+				}
+			}
+		}
+		
+		if (execCommand) {
+			if (service == PLTServiceWearingState) {
+				// wearing state events cant be turned off.
+				if (self.wearingStateTimer) {
+					[self.wearingStateTimer invalidate];
+					self.wearingStateTimer = nil;
+				}
+			}
+			else if(service == PLTServiceProximity) {
+				if (self.signalStrengthTimer) {
+					[self.signalStrengthTimer invalidate];
+					self.signalStrengthTimer = nil;
+				}
+				
+				[self configureSignalStrengthEventsEnabled:NO connectionID:0];
+				if (self.remotePort > 0) {
+					[self configureSignalStrengthEventsEnabled:NO connectionID:self.remotePort];
+				}
+			}
+			else {
+				BRSubscribeToServiceCommand *command = [BRSubscribeToServiceCommand commandWithServiceID:service mode:BRServiceSubscriptionModeOff period:0];
+				[self.brSensorsDevice sendMessage:command];
+			}
+		}
+		
+		for (id<PLTDeviceSubscriber> s in subscribersToNotify) {
+			[s PLTDevice:self didChangeSubscription:oldSubscription toSubscription:nil];
+		}
+	}
+	else {
+		NSLog(@"Listener is null!");
+		// TODO: Raise exception.
+	}
 }
 
 - (void)unsubscribeFromAll:(id <PLTDeviceSubscriber>)aSubscriber
@@ -610,9 +689,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	self.supportedServices = [@[@(PLTServiceWearingState), @(PLTServiceProximity)] mutableCopy];
 	[(NSMutableArray *)self.supportedServices addObjectsFromArray:info.supportedServices];
 	
-	NSLog(@"self.hardwareVersion: %@", self.hardwareVersion);
-	NSLog(@"self.firmwareVersion: %@", self.firmwareVersion);
-	NSLog(@"self.supportedServices: %@", self.supportedServices);
+//	NSLog(@"self.hardwareVersion: %@", self.hardwareVersion);
+//	NSLog(@"self.firmwareVersion: %@", self.firmwareVersion);
+//	NSLog(@"self.supportedServices: %@", self.supportedServices);
 	
 	// connection is now "open" for clients
 	
@@ -813,8 +892,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		
 		PLTSubscription *subscription = self.subscriptions[@(service)];
 		if (subscription) {
+			subscribers = subscription.subscribers;
 			if (subscription.mode == PLTSubscriptionModeOnChange) {
-				subscribers = self.subscriptions[@(service)];
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
 			}
 			else {
 				self.cachedInfo[@(service)] = info; // cachedInfo is usually set at the bottom, but we just set into to nil.
@@ -826,86 +906,89 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	else if ([event isKindOfClass:[BRSignalStrengthEvent class]]) {
 		service = PLTServiceProximity;
 		BRSignalStrengthEvent *e = (BRSignalStrengthEvent *)event;
-		
 		PLTProximityInfo *cachedInfo = (PLTProximityInfo *)self.cachedInfo[@(service)];
 		uint8_t connectionID = e.connectionID;
 		
-		// check if we're waiting on a signal strength query
-		PLTProximityInfo *queryInfo = nil;
-		if (connectionID == self.remotePort) {
-			//Log.i(FN(), "REMOTE");
-			if (self.waitingForRemoteSignalStrengthEvent) {
-				//Log.i(FN(), "SET REMOTE INFO");
-				self.remoteQuerySignalStrengthEvent = e;
-				
-				if (self.localQuerySignalStrengthEvent) {
-					//Log.i(FN(), "WE GOT LOCAL. DONE.");
-					// we're got both.
-					queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-															   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
-				}
-			}
-		}
-		else {
-			//Log.i(FN(), "LOCAL");
-			if (self.waitingForLocalSignalStrengthEvent) {
-				//Log.i(FN(), "SET LOCAL INFO");
-				self.localQuerySignalStrengthEvent = e;
-				
+		// if temporarily turning on signal strength events, it can take several "unknown" distance events before a near/far value is generated.
+		// wait until then to return distance query.
+		if (e.distance != PLTProximityUnknown) {
+			// check if we're waiting on a signal strength query
+			PLTProximityInfo *queryInfo = nil;
+			if (connectionID == self.remotePort) {
+				//Log.i(FN(), "REMOTE");
 				if (self.waitingForRemoteSignalStrengthEvent) {
-					//Log.i(FN(), "WAITING ON REMOTE, TOO");
-					if (self.remoteQuerySignalStrengthEvent) {
+					//Log.i(FN(), "SET REMOTE INFO");
+					self.remoteQuerySignalStrengthEvent = e;
+					
+					if (self.localQuerySignalStrengthEvent) {
+						//Log.i(FN(), "WE GOT LOCAL. DONE.");
 						// we're got both.
-						//Log.i(FN(), "WE GOT REMOTE. DONE.");
 						queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
 																   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
 					}
 				}
-				else {
-					//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
-					// not waiting on remote. we've got just the one.
-					PLTProximity cachedRemoteProximity = PLTProximityUnknown;
-					if (cachedInfo) {
-						cachedRemoteProximity = cachedInfo.remoteProximity;
+			}
+			else {
+				//Log.i(FN(), "LOCAL");
+				if (self.waitingForLocalSignalStrengthEvent) {
+					//Log.i(FN(), "SET LOCAL INFO");
+					self.localQuerySignalStrengthEvent = e;
+					
+					if (self.waitingForRemoteSignalStrengthEvent) {
+						//Log.i(FN(), "WAITING ON REMOTE, TOO");
+						if (self.remoteQuerySignalStrengthEvent) {
+							// we're got both.
+							//Log.i(FN(), "WE GOT REMOTE. DONE.");
+							queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
+																	   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
+						}
+					}
+					else {
+						//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
+						// not waiting on remote. we've got just the one.
+						PLTProximity cachedRemoteProximity = PLTProximityUnknown;
+						if (cachedInfo) {
+							cachedRemoteProximity = cachedInfo.remoteProximity;
+						}
+						
+						queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
+																   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:cachedRemoteProximity];
+					}
+				}
+			}
+			
+			if (queryInfo) {
+				//Log.i(FN(), "QUERYINFO: " + queryInfo);
+				
+				NSArray *querySubscribers = self.querySubscribers[@(service)];
+				if (querySubscribers) {
+					for (id<PLTDeviceSubscriber> s in querySubscribers) {
+						[s PLTDevice:self didUpdateInfo:queryInfo];
 					}
 					
-					queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-															   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:cachedRemoteProximity];
+					[self.querySubscribers removeObjectForKey:@(service)];
+					self.cachedInfo[@(service)] = queryInfo;
+				}
+				
+				self.waitingForRemoteSignalStrengthEvent = NO;
+				self.waitingForLocalSignalStrengthEvent = NO;
+				self.localQuerySignalStrengthEvent = nil;
+				self.remoteQuerySignalStrengthEvent = nil;
+				
+				
+				PLTSubscription *subscription = self.subscriptions[@(service)];
+				if (!subscription) {
+					// looks like this was just a query (without otherwise being subscribed)
+					// turn off signal strength events
+					
+					[self configureSignalStrengthEventsEnabled:NO connectionID:0];
+					if (self.remotePort > 0) {
+						[self configureSignalStrengthEventsEnabled:NO connectionID:self.remotePort];
+					}
 				}
 			}
 		}
 		
-		if (queryInfo) {
-			//Log.i(FN(), "QUERYINFO: " + queryInfo);
-			
-			NSArray *querySubscribers = self.querySubscribers[@(service)];
-			if (querySubscribers) {
-				for (id<PLTDeviceSubscriber> s in querySubscribers) {
-					[s PLTDevice:self didUpdateInfo:queryInfo];
-				}
-				
-				[self.querySubscribers removeObjectForKey:@(service)];
-				self.cachedInfo[@(service)] = queryInfo;
-			}
-			
-			self.waitingForRemoteSignalStrengthEvent = NO;
-			self.waitingForLocalSignalStrengthEvent = NO;
-			self.localQuerySignalStrengthEvent = nil;
-			self.remoteQuerySignalStrengthEvent = nil;
-			
-			
-			PLTSubscription *subscription = self.subscriptions[@(service)];
-			if (!subscription) {
-				// looks like this was just a query (without otherwise being subscribed)
-				// turn off signal strength events
-				
-				[self configureSignalStrengthEventsEnabled:NO connectionID:0];
-				if (self.remotePort > 0) {
-					[self configureSignalStrengthEventsEnabled:NO connectionID:self.remotePort];
-				}
-			}
-		}
-
 		// process events are normal (not query)
 		// this code could be slimmed down a bit (combined with above), but it's simpler to understand as-is
 		
@@ -1267,7 +1350,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 - (NSString *)description
 {
 	return [NSString stringWithFormat:@"<PLTDevice: %p> address=%@, model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion%@, supportedServices=%@, isConnectionOpen=%@",
-			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, self.supportedServices, (self.isConnectionOpen ? @"YES" : @"NO")];
+			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];
 }
 
 @end

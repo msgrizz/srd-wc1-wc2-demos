@@ -38,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTWearingStateInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisBeingWorn: %@\n}",
+	return [NSString stringWithFormat:@"<PLTWearingStateInfo: %p> requestType=%u, timestamp=%@, isBeingWorn=%@",
 			self, self.requestType, self.timestamp, (self.isBeingWorn ? @"YES" : @"NO")];
 }
 

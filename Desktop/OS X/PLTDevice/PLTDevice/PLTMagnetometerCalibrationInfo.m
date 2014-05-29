@@ -38,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTMagnetometerCalibrationInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisCalibrated: %@\n}",
+	return [NSString stringWithFormat:@"<PLTMagnetometerCalibrationInfo: %p> requestTyp=%lu, timestamp=%@, isCalibrated=%@",
 			self, self.requestType, self.timestamp, (self.isCalibrated ? @"YES" : @"NO")];
 }
 

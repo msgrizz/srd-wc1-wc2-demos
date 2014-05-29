@@ -60,7 +60,7 @@ NSString *NSStringFromTapDirection(PLTTapDirection direction)
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTTapsInfo: %p> {\n\trequestType: %lu\n\ttimestamp: %@\n\tdirection: %u\n\tcount: %lu\n}",
+	return [NSString stringWithFormat:@"<PLTTapsInfo: %p> requestType=%lu, timestamp=%@, direction=%u, count=%lu}",
 			self, self.requestType, self.timestamp, self.direction, (unsigned long)self.count];
 }
 

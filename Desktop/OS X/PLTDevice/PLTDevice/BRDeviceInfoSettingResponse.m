@@ -90,7 +90,7 @@
 	uint16_t services[len];
 	[[self.payload subdataWithRange:NSMakeRange(offset, len)] getBytes:&services length:len];
 	
-	for (int s=1; s<(len/2); s++) {
+	for (int s=0; s<(len/2); s++) {
 		[(NSMutableArray *)self.supportedServices addObject:@(htons(services[s]))];
 	}
 }

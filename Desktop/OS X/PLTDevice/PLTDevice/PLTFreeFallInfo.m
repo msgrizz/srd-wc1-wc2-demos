@@ -38,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTFreeFallInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisInFreeFall: %@\n}",
+	return [NSString stringWithFormat:@"<PLTFreeFallInfo: %p> requestType=%lu, timestamp=%@, isInFreeFall=%@",
 			self, self.requestType, self.timestamp, (self.isInFreeFall ? @"YES" : @"NO")];
 }
 

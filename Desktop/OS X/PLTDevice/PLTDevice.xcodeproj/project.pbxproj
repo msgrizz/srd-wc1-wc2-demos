@@ -10,11 +10,8 @@
 		422A5B4418CEAB4C007E7564 /* BRHostVersionNegotiateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A5B4218CEAB4C007E7564 /* BRHostVersionNegotiateMessage.m */; };
 		422A5B4A18CED8B1007E7564 /* NSArray+PrettyPrint.m in Sources */ = {isa = PBXBuildFile; fileRef = 422A5B4818CED8B1007E7564 /* NSArray+PrettyPrint.m */; };
 		4246356E1925B1B900B42016 /* BRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E60A818BEE1A5003563D6 /* BRMessage.m */; };
-		4254150F1925BF3000BEFA0B /* BROutgoingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4254150D1925BF2F00BEFA0B /* BROutgoingMessage.h */; };
 		425415101925BF3000BEFA0B /* BROutgoingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4254150E1925BF3000BEFA0B /* BROutgoingMessage.m */; };
-		425415131925BF3F00BEFA0B /* BRIncomingMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 425415111925BF3F00BEFA0B /* BRIncomingMessage.h */; };
 		425415141925BF3F00BEFA0B /* BRIncomingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 425415121925BF3F00BEFA0B /* BRIncomingMessage.m */; };
-		425415191927424F00BEFA0B /* BRCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = 425415171927424F00BEFA0B /* BRCommand.h */; };
 		4254151A1927424F00BEFA0B /* BRCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 425415181927424F00BEFA0B /* BRCommand.m */; };
 		427B968318CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B968118CFE37E00CB6A9E /* BRCalibratePedometerServiceCommand.m */; };
 		427B968718CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 427B968518CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m */; };
@@ -79,15 +76,10 @@
 		42EEBB0B1906F51700116CC4 /* BRCloseSessionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EEBB091906F51700116CC4 /* BRCloseSessionMessage.m */; };
 		42F016D31925644900897713 /* BRRemoteDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F016D11925644900897713 /* BRRemoteDevice.m */; };
 		42F016D719256DAB00897713 /* BRDeviceProtocolVersionMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F016D519256DAB00897713 /* BRDeviceProtocolVersionMessage.m */; };
-		42F11A931935AF8B003A3427 /* PLTPedometerCalibration.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11A911935AF8B003A3427 /* PLTPedometerCalibration.h */; };
 		42F11A941935AF8B003A3427 /* PLTPedometerCalibration.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F11A921935AF8B003A3427 /* PLTPedometerCalibration.m */; };
-		42F11A971936DB3C003A3427 /* BRGenesGUIDSettingResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11A951936DB3C003A3427 /* BRGenesGUIDSettingResponse.h */; };
 		42F11A981936DB3C003A3427 /* BRGenesGUIDSettingResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F11A961936DB3C003A3427 /* BRGenesGUIDSettingResponse.m */; };
-		42F11A9B1936DB55003A3427 /* BRGenesGUIDSettingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11A991936DB55003A3427 /* BRGenesGUIDSettingRequest.h */; };
 		42F11A9C1936DB55003A3427 /* BRGenesGUIDSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F11A9A1936DB55003A3427 /* BRGenesGUIDSettingRequest.m */; };
-		42F11A9F1936E181003A3427 /* BRProductNameSettingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11A9D1936E181003A3427 /* BRProductNameSettingRequest.h */; };
 		42F11AA01936E181003A3427 /* BRProductNameSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F11A9E1936E181003A3427 /* BRProductNameSettingRequest.m */; };
-		42F11AA31936E196003A3427 /* BRProductNameSettingResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11AA11936E196003A3427 /* BRProductNameSettingResponse.h */; };
 		42F11AA41936E196003A3427 /* BRProductNameSettingResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F11AA21936E196003A3427 /* BRProductNameSettingResponse.m */; };
 		42F1C96E18C5AAB500A75592 /* BRSignalStrengthSettingResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F1C96C18C5AAB500A75592 /* BRSignalStrengthSettingResponse.m */; };
 		42F1C97218C5B57700A75592 /* BRDeviceInfoSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F1C97018C5B57700A75592 /* BRDeviceInfoSettingRequest.m */; };
@@ -105,6 +97,20 @@
 		42F2317618CC011100E08B93 /* BRDeviceConnectedEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F2317418CC011100E08B93 /* BRDeviceConnectedEvent.m */; };
 		42F2317A18CC029300E08B93 /* BRMetadataMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F2317818CC029300E08B93 /* BRMetadataMessage.m */; };
 		42F2317E18CC030200E08B93 /* BRDeviceDisconnectedEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42F2317C18CC030200E08B93 /* BRDeviceDisconnectedEvent.m */; };
+		42FEA68F193704B200B735E9 /* PLTDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E609818BEE0F7003563D6 /* PLTDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA690193704B500B735E9 /* PLTConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E604818BEE06F003563D6 /* PLTConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA691193704B800B735E9 /* PLTCalibration.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E604618BEE06F003563D6 /* PLTCalibration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA692193704BF00B735E9 /* PLTInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E605818BEE06F003563D6 /* PLTInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA693193704C300B735E9 /* PLTProximityInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E606618BEE06F003563D6 /* PLTProximityInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA694193704C600B735E9 /* PLTWearingStateInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E606C18BEE06F003563D6 /* PLTWearingStateInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA695193704C900B735E9 /* PLTOrientationTrackingInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E606018BEE06F003563D6 /* PLTOrientationTrackingInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA696193704CC00B735E9 /* PLTTapsInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E606918BEE06F003563D6 /* PLTTapsInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA697193704CF00B735E9 /* PLTFreeFallInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E605218BEE06F003563D6 /* PLTFreeFallInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA698193704D200B735E9 /* PLTPedometerInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E606318BEE06F003563D6 /* PLTPedometerInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA699193704D500B735E9 /* PLTMagnetometerCalibrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E605B18BEE06F003563D6 /* PLTMagnetometerCalibrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA69A193704D800B735E9 /* PLTGyroscopeCalibrationInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E605518BEE06F003563D6 /* PLTGyroscopeCalibrationInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA6E2193706DF00B735E9 /* PLTOrientationTrackingCalibration.h in Headers */ = {isa = PBXBuildFile; fileRef = 429E605D18BEE06F003563D6 /* PLTOrientationTrackingCalibration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42FEA6E3193706E100B735E9 /* PLTPedometerCalibration.h in Headers */ = {isa = PBXBuildFile; fileRef = 42F11A911935AF8B003A3427 /* PLTPedometerCalibration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -697,14 +703,20 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42F11A931935AF8B003A3427 /* PLTPedometerCalibration.h in Headers */,
-				425415191927424F00BEFA0B /* BRCommand.h in Headers */,
-				42F11A9F1936E181003A3427 /* BRProductNameSettingRequest.h in Headers */,
-				4254150F1925BF3000BEFA0B /* BROutgoingMessage.h in Headers */,
-				42F11A9B1936DB55003A3427 /* BRGenesGUIDSettingRequest.h in Headers */,
-				425415131925BF3F00BEFA0B /* BRIncomingMessage.h in Headers */,
-				42F11A971936DB3C003A3427 /* BRGenesGUIDSettingResponse.h in Headers */,
-				42F11AA31936E196003A3427 /* BRProductNameSettingResponse.h in Headers */,
+				42FEA68F193704B200B735E9 /* PLTDevice.h in Headers */,
+				42FEA690193704B500B735E9 /* PLTConfiguration.h in Headers */,
+				42FEA691193704B800B735E9 /* PLTCalibration.h in Headers */,
+				42FEA6E2193706DF00B735E9 /* PLTOrientationTrackingCalibration.h in Headers */,
+				42FEA6E3193706E100B735E9 /* PLTPedometerCalibration.h in Headers */,
+				42FEA692193704BF00B735E9 /* PLTInfo.h in Headers */,
+				42FEA693193704C300B735E9 /* PLTProximityInfo.h in Headers */,
+				42FEA694193704C600B735E9 /* PLTWearingStateInfo.h in Headers */,
+				42FEA695193704C900B735E9 /* PLTOrientationTrackingInfo.h in Headers */,
+				42FEA696193704CC00B735E9 /* PLTTapsInfo.h in Headers */,
+				42FEA697193704CF00B735E9 /* PLTFreeFallInfo.h in Headers */,
+				42FEA698193704D200B735E9 /* PLTPedometerInfo.h in Headers */,
+				42FEA699193704D500B735E9 /* PLTMagnetometerCalibrationInfo.h in Headers */,
+				42FEA69A193704D800B735E9 /* PLTGyroscopeCalibrationInfo.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,6 +1073,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PLTDevice/PLTDevice-Prefix.pch";
 				INFOPLIST_FILE = "PLTDevice/PLTDevice-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1076,6 +1089,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PLTDevice/PLTDevice-Prefix.pch";
 				INFOPLIST_FILE = "PLTDevice/PLTDevice-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};

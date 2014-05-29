@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PLTInfo.h"
 #import "PLTCalibration.h"
 #import "PLTOrientationTrackingCalibration.h"
-#import "PLTPedometerInfo.h"
-#import "PLTWearingStateInfo.h"
+#import "PLTPedometerCalibration.h"
+#import "PLTInfo.h"
 #import "PLTProximityInfo.h"
+#import "PLTWearingStateInfo.h"
 #import "PLTOrientationTrackingInfo.h"
 #import "PLTTapsInfo.h"
 #import "PLTPedometerInfo.h"

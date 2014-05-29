@@ -38,8 +38,8 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTPedometerInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tsteps: %u\n}",
-			self, self.requestType, self.timestamp, self.steps];
+	return [NSString stringWithFormat:@"<PLTPedometerInfo: %p> requestType=%lu, timestamp=%@, steps=%lu",
+			self, self.requestType, self.timestamp, (unsigned long)self.steps];
 }
 
 @end

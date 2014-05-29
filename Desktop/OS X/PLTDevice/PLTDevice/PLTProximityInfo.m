@@ -36,7 +36,7 @@ NSString *NSStringFromProximity(PLTProximity proximity)
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType  calibration:(PLTCalibration *)calibration timestamp:(NSDate *)timestamp
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
 		   localProximity:(PLTProximity)localProximity remoteProximity:(PLTProximity)remoteProximity
 {
 	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
@@ -54,7 +54,7 @@ NSString *NSStringFromProximity(PLTProximity proximity)
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTProximityInfo: %p> {\n\trequestType: %lu\n\ttimestamp: %@\n\tlocalProximity: %lu\n\tremoteProximity: %lu\n}",
+	return [NSString stringWithFormat:@"<PLTProximityInfo: %p> requestType=%lu, timestamp=%@, localProximity=%lu, remoteProximity=%lu",
 			self, self.requestType, self.timestamp, self.localProximity, self.remoteProximity];
 }
 
