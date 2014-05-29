@@ -32,8 +32,8 @@ NSString *NSStringFromTapDirection(PLTTapDirection direction)
 
 @interface PLTTapsInfo()
 
-@property(nonatomic, readwrite)	NSUInteger		taps;
-@property(nonatomic, readwrite)	PLTTapDirection	direction;
+@property(nonatomic,readwrite)	PLTTapDirection	direction;
+@property(nonatomic,readwrite)	NSUInteger		count;
 
 @end
 
@@ -42,11 +42,12 @@ NSString *NSStringFromTapDirection(PLTTapDirection direction)
 
 #pragma mark - SDK Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp taps:(NSUInteger)taps direction:(PLTTapDirection)direction
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+				direction:(PLTTapDirection)direction count:(NSUInteger)count
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
-	self.taps = taps;
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
 	self.direction = direction;
+	self.count = count;
 	return self;
 }
 
@@ -54,13 +55,13 @@ NSString *NSStringFromTapDirection(PLTTapDirection direction)
 
 - (BOOL)isEqual:(PLTTapsInfo *)info
 {
-	return ((info.taps==self.taps) && (info.direction==self.direction));
+	return ((info.direction==self.direction) && (info.count==self.count));
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTTapsInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\ttaps: %u\n\tdirection: %u\n}",
-			self, self.requestType, self.timestamp, self.taps, self.direction];
+	return [NSString stringWithFormat:@"<PLTTapsInfo: %p> {\n\trequestType: %lu\n\ttimestamp: %@\n\tdirection: %u\n\tcount: %lu\n}",
+			self, self.requestType, self.timestamp, self.direction, (unsigned long)self.count];
 }
 
 @end

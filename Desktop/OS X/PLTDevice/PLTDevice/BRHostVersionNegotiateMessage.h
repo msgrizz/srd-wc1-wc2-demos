@@ -6,13 +6,15 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BROutgoingMessage.h"
 
 
-@interface BRHostVersionNegotiateMessage : BRMessage
+@interface BRHostVersionNegotiateMessage : BROutgoingMessage
 
-+ (BRHostVersionNegotiateMessage *)messageWithAddress:(uint32_t)address;
++ (BRHostVersionNegotiateMessage *)messageWithMinimumVersion:(uint8_t)minimumVersion maximumVersion:(uint8_t)maximumVersion;
 
-@property(nonatomic,assign) uint32_t   address;
+@property(nonatomic,readonly) uint8_t	minimumVersion;
+@property(nonatomic,readonly) uint8_t	maximumVersion;
+
 
 @end

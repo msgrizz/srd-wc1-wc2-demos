@@ -7,7 +7,6 @@
 //
 
 #import "BREvent.h"
-#import "PLTGyroscopeCalibrationInfo.h" // this is not cool.
 
 
 @interface BRGyroscopeCalStatusEvent : BREvent

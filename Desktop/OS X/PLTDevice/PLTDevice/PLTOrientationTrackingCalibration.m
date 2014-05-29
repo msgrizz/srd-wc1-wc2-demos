@@ -11,9 +11,6 @@
 
 @interface PLTOrientationTrackingCalibration()
 
-//@property(nonatomic, assign)	PLTEulerAngles	referenceEulerAngles;
-@property(nonatomic, assign)	PLTQuaternion	referenceQuaternion;
-
 - (id)initWithReferenceEulerAngles:(PLTEulerAngles)referenceEulerAngles;
 - (id)initWithReferenceQuaternion:(PLTQuaternion)referenceQuaternion;
 
@@ -64,7 +61,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTOrientationTrackingCalibration: %p> {\n\treferenceEulerAngles: %@\n\treferenceQuaternion: %@\n}",
+	return [NSString stringWithFormat:@"<PLTOrientationTrackingCalibration: %p> referenceEulerAngles=%@, referenceQuaternion=%@",
 			self, NSStringFromEulerAngles(self.referenceEulerAngles), NSStringFromQuaternion(self.referenceQuaternion)];
 }
 

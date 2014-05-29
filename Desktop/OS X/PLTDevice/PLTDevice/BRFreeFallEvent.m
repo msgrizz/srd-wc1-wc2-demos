@@ -7,6 +7,7 @@
 //
 
 #import "BRFreeFallEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRFreeFallEvent ()
@@ -22,8 +23,10 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t ff;
-    [[self.data subdataWithRange:NSMakeRange(15, sizeof(uint8_t))] getBytes:&ff length:sizeof(uint8_t)];
+    [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint8_t))] getBytes:&ff length:sizeof(uint8_t)];
     self.isInFreeFall = ff;
 }
 

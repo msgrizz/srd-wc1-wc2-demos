@@ -14,7 +14,8 @@
 @interface PLTInfo()
 
 //@property(readwrite, strong)	PLTDevice			*device;
-@property(nonatomic, readwrite, strong)	NSDate				*timestamp;
+@property(nonatomic,strong,readwrite)	NSDate				*timestamp;
+@property(nonatomic,strong,readwrite)	PLTCalibration		*calibration;
 
 @end
 
@@ -23,11 +24,12 @@
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
 {
 	self = [super init];
 	self.requestType = requestType;
 	self.timestamp = timestamp;
+	self.calibration = calibration;
 	return self;
 }
 
@@ -35,8 +37,8 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n}",
-			self, self.requestType, self.timestamp];
+	return [NSString stringWithFormat:@"<PLTInfo: %p> requestType=%d, timestamp=%@, calibration=%@",
+			self, self.requestType, self.timestamp, self.calibration];
 }
 
 @end

@@ -6,13 +6,14 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRCommand.h"
 
 
-@interface BRSubscribeToSignalStrengthCommand : BRMessage
+@interface BRSubscribeToSignalStrengthCommand : BRCommand
 
-+ (BRSubscribeToSignalStrengthCommand *)commandWithSubscription:(BOOL)subscribe;
++ (BRSubscribeToSignalStrengthCommand *)commandWithSubscription:(BOOL)subscribe connectionID:(int)conncetionID;
 
 @property(nonatomic,readonly) BOOL subscribe;
+@property(nonatomic,readonly) int conncetionID;
 
 @end

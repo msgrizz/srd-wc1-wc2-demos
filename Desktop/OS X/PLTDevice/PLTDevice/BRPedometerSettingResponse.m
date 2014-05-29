@@ -7,11 +7,12 @@
 //
 
 #import "BRPedometerSettingResponse.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRPedometerSettingResponse ()
 
-@property(nonatomic,assign,readwrite) uint16_t steps;
+@property(nonatomic,assign,readwrite) uint32_t steps;
 
 @end
 
@@ -22,9 +23,11 @@
 
 - (void)parseData
 {
-    uint16_t steps;
-    [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint16_t))] getBytes:&steps length:sizeof(uint16_t)];
-    steps = ntohs(steps);
+	[super parseData];
+	
+    uint32_t steps;
+    [[self.payload subdataWithRange:NSMakeRange(8, sizeof(uint32_t))] getBytes:&steps length:sizeof(uint32_t)];
+    steps = ntohl(steps);
     self.steps = steps;
 }
 

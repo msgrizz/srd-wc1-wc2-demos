@@ -31,11 +31,7 @@ NSString *NSStringFromQuaternion(PLTQuaternion quaternion);
 
 @interface PLTOrientationTrackingInfo : PLTInfo
 
-@property(readonly)	PLTEulerAngles	eulerAngles;
-@property(readonly)	PLTQuaternion	quaternion;
-@property(readonly)	PLTEulerAngles	rawEulerAngles;
-@property(readonly)	PLTQuaternion	rawQuaternion;
-@property(readonly)	PLTEulerAngles	referenceEulerAngles;
-@property(readonly)	PLTQuaternion	referenceQuaternion;
+@property(nonatomic,readonly)	PLTEulerAngles	eulerAngles;
+@property(nonatomic,readonly)	PLTQuaternion	quaternion;
 
 @end

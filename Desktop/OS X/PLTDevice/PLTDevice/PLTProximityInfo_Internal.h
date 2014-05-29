@@ -11,6 +11,7 @@
 
 @interface PLTProximityInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp pcProximity:(PLTProximity)pcProximity mobileProximity:(PLTProximity)mobileProximity;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+		   localProximity:(PLTProximity)localProximity remoteProximity:(PLTProximity)remoteProximity;
 
 @end

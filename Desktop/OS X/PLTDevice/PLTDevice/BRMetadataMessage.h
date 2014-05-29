@@ -1,17 +1,17 @@
 //
-//  BRMetadata.h
+//  BRMetadataMessage.h
 //  PLTDevice
 //
 //  Created by Morgan Davis on 3/8/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRIncomingMessage.h"
 
 
-@interface BRMetadata : BRMessage
+@interface BRMetadataMessage : BRIncomingMessage
 
-+ (BRMetadata *)metadataWithData:(NSData *)data;
+//+ (BRMetadataMessage *)messageWithData:(NSData *)data;
 
 @property(nonatomic,readonly) NSArray   *commands;
 @property(nonatomic,readonly) NSArray   *settings;

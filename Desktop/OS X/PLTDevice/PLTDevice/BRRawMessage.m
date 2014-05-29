@@ -7,17 +7,39 @@
 //
 
 #import "BRRawMessage.h"
+#import "BRMessage_Private.h"
+
+
+@interface BRRawMessage ()
+
+@property(nonatomic,assign)	BRMessageType	typeOverride;
+@property(nonatomic,strong)	NSData			*payloadOverride;
+
+@end
 
 
 @implementation BRRawMessage
 
 #pragma mark - Public
 
-+ (BRRawMessage *)messageWithData:(NSData *)data
++ (BRRawMessage *)messageWithType:(BRMessageType)type payload:(NSData *)payload
 {
     BRRawMessage *message = [[BRRawMessage alloc] init];
-    message.data = data;
+	message.typeOverride = type;
+    message.payloadOverride = payload;
     return message;
+}
+
+#pragma mark - Private
+
+- (BRMessageType)type
+{
+	return self.typeOverride;
+}
+
+- (NSData *)payload
+{
+	return self.payloadOverride;
 }
 
 @end

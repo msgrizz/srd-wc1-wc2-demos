@@ -21,11 +21,9 @@
 
 #pragma BRMessage
 
-- (NSData *)data;
+- (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
-                           10,                          // length
-                           BRMessageTypeSettingRequest, // message type
+    NSString *hexString = [NSString stringWithFormat:@"%04X %04X %04X",
                            0xFF13,                      // deckard id
                            self.serviceID,          
                            0x0000];                     // characteristic

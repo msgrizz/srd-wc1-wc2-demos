@@ -10,5 +10,6 @@
 
 @interface PLTGyroscopeCalibrationInfo()
 
-- (id)initWithCalibrationStatus:(BOOL)isCalibrated;- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibrationStatus:(BOOL)isCalibrated;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+		calibrationStatus:(BOOL)isCalibrated;
 @end

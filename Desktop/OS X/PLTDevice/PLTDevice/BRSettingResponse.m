@@ -7,43 +7,25 @@
 //
 
 #import "BRSettingResponse.h"
-
-
-@interface BRSettingResponse ()
-
-@property(nonatomic,strong,readwrite)   NSData  *data;
-
-@end
+#import "BRIncomingMessage_Private.h"
 
 
 @implementation BRSettingResponse
 
-@dynamic data;
+#pragma mark - Public
 
-- (void)setData:(NSData *)data
++ (BRSettingResponse *)settingResponseWithData:(NSData *)data;
 {
-    _data = data;
-    [self parseData];
-}
-
-- (NSData *)data
-{
-    return _data;
+    BRSettingResponse *response = [[[super class] alloc] init];
+	response.data = data;
+    return response;
 }
 
 #pragma mark - Private
 
-+ (BRSettingResponse *)settingResponseWithData:(NSData *)data;
+- (BRMessageType)type
 {
-    BRSettingResponse *response = [[[super class] alloc] initWithData:data];
-    return response;
-}
-
-- (id)initWithData:(NSData *)data
-{
-    self = [super init];
-    self.data = data;
-    return self;
+	return BRMessageTypeSettingResultSuccess;
 }
 
 @end

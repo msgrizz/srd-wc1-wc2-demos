@@ -26,8 +26,8 @@ NSString *NSStringFromProximity(PLTProximity proximity)
 
 @interface PLTProximityInfo()
 
-@property(nonatomic, readwrite)	PLTProximity	pcProximity;
-@property(nonatomic, readwrite)	PLTProximity	mobileProximity;
+@property(nonatomic,readwrite)	PLTProximity	localProximity;
+@property(nonatomic,readwrite)	PLTProximity	remoteProximity;
 
 @end
 
@@ -36,11 +36,12 @@ NSString *NSStringFromProximity(PLTProximity proximity)
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp pcProximity:(PLTProximity)pcProximity mobileProximity:(PLTProximity)mobileProximity
+- (id)initWithRequestType:(PLTInfoRequestType)requestType  calibration:(PLTCalibration *)calibration timestamp:(NSDate *)timestamp
+		   localProximity:(PLTProximity)localProximity remoteProximity:(PLTProximity)remoteProximity
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
-	self.pcProximity = pcProximity;
-	self.mobileProximity = mobileProximity;
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
+	self.localProximity = localProximity;
+	self.remoteProximity = remoteProximity;
 	return self;
 }
 
@@ -48,13 +49,13 @@ NSString *NSStringFromProximity(PLTProximity proximity)
 
 - (BOOL)isEqual:(PLTProximityInfo *)info
 {
-	return ((info.pcProximity==self.pcProximity) && (info.mobileProximity==self.mobileProximity));
+	return ((info.localProximity==self.localProximity) && (info.remoteProximity==self.remoteProximity));
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTProximityInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tpcProximity: %u\n\tmobileProximity: %u\n}",
-			self, self.requestType, self.timestamp, self.pcProximity, self.mobileProximity];
+	return [NSString stringWithFormat:@"<PLTProximityInfo: %p> {\n\trequestType: %lu\n\ttimestamp: %@\n\tlocalProximity: %lu\n\tremoteProximity: %lu\n}",
+			self, self.requestType, self.timestamp, self.localProximity, self.remoteProximity];
 }
 
 @end

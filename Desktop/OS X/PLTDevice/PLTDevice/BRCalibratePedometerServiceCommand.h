@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRCommand.h"
 
 
-@interface BRCalibratePedometerServiceCommand : BRMessage
+@interface BRCalibratePedometerServiceCommand : BRCommand
 
-+ (BRCalibratePedometerServiceCommand *)command;
+//+ (BRCalibratePedometerServiceCommand *)command;
 
 @end

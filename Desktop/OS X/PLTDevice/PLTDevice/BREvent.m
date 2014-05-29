@@ -7,41 +7,25 @@
 //
 
 #import "BREvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @implementation BREvent
 
-@dynamic data;
+#pragma mark - Public
 
-- (void)setData:(NSData *)data
++ (BREvent *)eventWithData:(NSData *)data
 {
-    _data = data;
-    [self parseData];
-}
-
-- (NSData *)data
-{
-    return _data;
+    BREvent *event = [[[super class] alloc] init];
+	event.data = data;
+    return event;
 }
 
 #pragma mark - Private
 
-+ (BREvent *)eventWithData:(NSData *)data
+- (BRMessageType)type
 {
-    BREvent *event = [[[super class] alloc] initWithData:data];
-    return event;
-}
-
-- (id)initWithData:(NSData *)data
-{
-    self = [super init];
-    self.data = data;
-    return self;
-}
-
-- (void)parseData
-{
-    
+	return BRMessageTypeEvent;
 }
 
 @end

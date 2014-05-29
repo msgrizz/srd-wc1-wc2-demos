@@ -7,6 +7,7 @@
 //
 
 #import "BRMagnetometerCalStatusSettingResponse.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRMagnetometerCalStatusSettingResponse ()
@@ -22,6 +23,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t cal;
     [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint8_t))] getBytes:&cal length:sizeof(uint8_t)];
     self.isCalibrated = cal;

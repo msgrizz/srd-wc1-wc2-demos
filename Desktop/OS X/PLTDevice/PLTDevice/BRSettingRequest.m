@@ -9,11 +9,11 @@
 #import "BRSettingRequest.h"
 
 
-@interface BRSettingRequest ()
-
-@property(nonatomic,strong,readwrite)   NSData  *data;
-
-@end
+//@interface BRSettingRequest ()
+//
+//@property(nonatomic,strong,readwrite)   NSData  *data;
+//
+//@end
 
 
 @implementation BRSettingRequest
@@ -26,9 +26,11 @@
     return request;
 }
 
-- (void)parseData
+#pragma mark - Private
+
+- (BRMessageType)type
 {
-    
+	return BRMessageTypeSettingRequest;
 }
 
 @end

@@ -11,6 +11,6 @@
 
 @interface BRPedometerSettingResponse : BRSettingResponse
 
-@property(nonatomic,readonly) uint16_t steps;
+@property(nonatomic,readonly) uint32_t steps;
 
 @end

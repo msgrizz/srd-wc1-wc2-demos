@@ -6,13 +6,15 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRCommand.h"
 
 
-@interface BRCloseSessionMessage : BRMessage
+@interface BRCloseSessionMessage : BRCommand
 
-+ (BRCloseSessionMessage *)messageWithAddress:(uint32_t)address;
+//+ (BRCloseSessionMessage *)message;
 
-@property(nonatomic,assign) uint32_t   address;
+//+ (BRCloseSessionMessage *)messageWithAddress:(uint32_t)address;
+
+//@property(nonatomic,assign) uint32_t   address;
 
 @end

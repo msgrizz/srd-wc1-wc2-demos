@@ -11,16 +11,19 @@
 
 typedef NS_ENUM(NSUInteger, PLTInfoRequestType) {
 	PLTInfoRequestTypeSubscription = 0,
-	PLTInfoRequestTypeQuery = 1
+	PLTInfoRequestTypeQuery = 1,
+	PLTInfoRequestTypeCached = 2
 };
 
 
 @class PLTDevice;
+@class PLTCalibration;
 
 @interface PLTInfo : NSObject
 
 //@property(readonly)	PLTDevice			*device;
-@property(readonly)	PLTInfoRequestType	requestType;
-@property(readonly) NSDate				*timestamp;
+@property(nonatomic,readonly)	PLTInfoRequestType	requestType;
+@property(nonatomic,readonly)	NSDate				*timestamp;
+@property(nonatomic,readonly)	PLTCalibration		*calibration;
 
 @end

@@ -7,11 +7,12 @@
 //
 
 #import "BRDeviceConnectedEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRDeviceConnectedEvent ()
 
-@property(nonatomic,assign,readwrite) uint32_t  address;
+//@property(nonatomic,assign,readwrite) uint32_t  address;
 @property(nonatomic,assign,readwrite) uint8_t   port;
 
 @end
@@ -23,6 +24,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
 //    uint32_t address;
 //    [[self.data subdataWithRange:NSMakeRange(8, sizeof(uint32_t)-1)] getBytes:&address length:sizeof(uint32_t)-1];
 //    self.address = address;
@@ -36,8 +39,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRDeviceConnectedEvent %p> address=0x%07X, port=%d",
-            self, self.address, self.port];
+    return [NSString stringWithFormat:@"<BRDeviceConnectedEvent %p> port=%d",
+            self, self.port];
 }
 
 @end

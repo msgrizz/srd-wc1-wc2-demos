@@ -16,7 +16,7 @@
 
 + (BRSubscribeToServiceCommand *)commandWithServiceID:(uint16_t)serviceID mode:(uint16_t)mode period:(uint16_t)period
 {
-    BRSubscribeToServiceCommand *command = [[BRSubscribeToServiceCommand alloc] init];
+	BRSubscribeToServiceCommand *command = [[super alloc] init];
     command.serviceID = serviceID;
     command.mode = mode;
     command.period = period;
@@ -25,11 +25,9 @@
 
 #pragma mark BRMessage
 
-- (NSData *)data;
+- (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%01X %04X %04d %04X %04X %04X",
-                           0xE,                     // length
-                           BRMessageTypeCommand,    // message type
+    NSString *hexString = [NSString stringWithFormat:@"%04X %04d %04X %04X %04X",
                            0xFF0A,                  // deckard id
                            self.serviceID,
                            0,                       // characteristic
@@ -39,11 +37,25 @@
     return [NSData dataWithHexString:hexString];
 }
 
+//- (NSData *)data;
+//{
+//    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%01X %04X %04d %04X %04X %04X",
+//                           0xE,                     // length
+//                           BRMessageTypeCommand,    // message type
+//                           0xFF0A,                  // deckard id
+//                           self.serviceID,
+//                           0,                       // characteristic
+//                           self.mode,
+//                           self.period];
+//    
+//    return [NSData dataWithHexString:hexString];
+//}
+
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"BRSubscribeToServicesCommandRequest %p serviceID=%02d, mode=%02d, period=%02d",
+    return [NSString stringWithFormat:@"<BRSubscribeToServicesCommandRequest %p> serviceID=%02d, mode=%02d, period=%02d",
             self, self.serviceID, self.mode, self.period];
 }
             

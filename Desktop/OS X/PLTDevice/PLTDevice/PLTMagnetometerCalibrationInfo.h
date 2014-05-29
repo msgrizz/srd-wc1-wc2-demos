@@ -11,6 +11,6 @@
 
 @interface PLTMagnetometerCalibrationInfo : PLTInfo
 
-@property(readonly)	BOOL	isCalibrated;
+@property(nonatomic,readonly)	BOOL	isCalibrated;
 
 @end

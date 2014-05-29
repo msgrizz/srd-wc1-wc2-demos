@@ -1,21 +1,23 @@
 //
-//  BRMetadata.m
+//  BRMetadataMessage.m
 //  PLTDevice
 //
 //  Created by Morgan Davis on 3/8/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMetadata.h"
+#import "BRMetadataMessage.h"
 #import "NSArray+PrettyPrint.h"
+#import "BRIncomingMessage_Private.h"
 
 
-@interface BRMetadata () {
-    NSData      *_data;
-}
-
-- (id)initWithData:(NSData *)data;
-- (void)parseData;
+@interface BRMetadataMessage ()
+//{
+//    NSData      *_data;
+//}
+//
+//- (id)initWithData:(NSData *)data;
+//- (void)parseData;
 
 @property(nonatomic,strong,readwrite) NSArray   *commands;
 @property(nonatomic,strong,readwrite) NSArray   *settings;
@@ -24,38 +26,41 @@
 @end
 
 
-@implementation BRMetadata
+@implementation BRMetadataMessage
 
-@dynamic data;
-
-- (void)setData:(NSData *)data
-{
-    _data = data;
-    [self parseData];
-}
-
-- (NSData *)data
-{
-    return _data;
-}
+//@dynamic data;
+//
+//- (void)setData:(NSData *)data
+//{
+//    _data = data;
+//    [self parseData];
+//}
+//
+//- (NSData *)data
+//{
+//    return _data;
+//}
 
 #pragma mark - Private
 
-+ (BRMetadata *)metadataWithData:(NSData *)data;
++ (BRMetadataMessage *)messageWithData:(NSData *)data;
 {
-    BRMetadata *md = [[[super class] alloc] initWithData:data];
-    return md;
+    BRMetadataMessage *message = [[[super class] alloc] init];
+	message.data = data;
+    return message;
 }
 
-- (id)initWithData:(NSData *)data
-{
-    self = [super init];
-    self.data = data;
-    return self;
-}
+//- (id)initWithData:(NSData *)data
+//{
+//    self = [super init];
+//    self.data = data;
+//    return self;
+//}
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint16_t payloadOffset = 6;
     
     uint16_t len;
@@ -98,10 +103,16 @@
 
 #pragma mark - NSObject
 
+//- (NSString *)description
+//{
+//    return [NSString stringWithFormat:@"<BRMetadata %p> commands=%@, settings=%@, events=%@",
+//            self, [self.commands hexDescriptionFromShortIntegerArray], [self.settings hexDescriptionFromShortIntegerArray], [self.events hexDescriptionFromShortIntegerArray]];
+//}
+
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRMetadata %p> commands=%@, settings=%@, events=%@",
-            self, [self.commands hexDescriptionFromShortIntegerArray], [self.settings hexDescriptionFromShortIntegerArray], [self.events hexDescriptionFromShortIntegerArray]];
+    return [NSString stringWithFormat:@"<BRMetadata %p> commands=(%lu), settings=(%lu), events=(%lu)",
+            self, [self.commands count], [self.settings count], [self.events count]];
 }
 
 @end

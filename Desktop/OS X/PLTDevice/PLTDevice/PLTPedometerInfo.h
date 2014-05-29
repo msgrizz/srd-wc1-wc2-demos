@@ -10,6 +10,6 @@
 
 @interface PLTPedometerInfo : PLTInfo
 
-@property(readonly)	NSUInteger	steps;
+@property(nonatomic,readonly)	NSUInteger	steps;
 
 @end

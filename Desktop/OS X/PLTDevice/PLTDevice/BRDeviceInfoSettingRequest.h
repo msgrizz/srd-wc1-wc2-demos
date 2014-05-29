@@ -8,6 +8,7 @@
 
 #import "BRSettingRequest.h"
 
+
 @interface BRDeviceInfoSettingRequest : BRSettingRequest
 
 @end

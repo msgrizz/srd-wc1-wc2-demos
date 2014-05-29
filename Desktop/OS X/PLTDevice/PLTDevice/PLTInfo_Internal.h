@@ -11,7 +11,7 @@
 
 @interface PLTInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration;
 
 @property(nonatomic, readwrite)	PLTInfoRequestType	requestType;
 

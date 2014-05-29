@@ -6,12 +6,12 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BROutgoingMessage.h"
 
 
-@interface BRSettingRequest : BRMessage
+@interface BRSettingRequest : BROutgoingMessage
 
 + (BRSettingRequest *)request;
-- (void)parseData;
+//- (void)parseData;
 
 @end

@@ -11,6 +11,6 @@
 
 @interface PLTWearingStateInfo : PLTInfo
 
-@property(readonly)	BOOL	isBeingWorn;
+@property(nonatomic,readonly)	BOOL	isBeingWorn;
 
 @end

@@ -14,11 +14,9 @@
 
 #pragma BRMessage
 
-- (NSData *)data;
+- (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 00 00 00 0%1X %04X",
-                           6,                       // length
-                           BRMessageTypeSettingRequest, // message type
+    NSString *hexString = [NSString stringWithFormat:@"%04X",
                            0x0202];                 // deckard id
     return [NSData dataWithHexString:hexString];
 }

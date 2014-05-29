@@ -11,8 +11,6 @@
 
 @interface BRRawMessage : BRMessage
 
-+ (BRRawMessage *)messageWithData:(NSData *)data;
-
-@property(nonatomic,strong,readwrite)   NSData  *data;
++ (BRRawMessage *)messageWithType:(BRMessageType)type payload:(NSData *)payload;
 
 @end

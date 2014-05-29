@@ -20,7 +20,7 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 
 - (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
 - (void)bluetoothDeviceDidDisconnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
-- (void)postNewDeviceNotification:(PLTDevice *)device;
+- (void)postDeviceAvailableNotification:(PLTDevice *)device;
 - (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device;
 
 @property(nonatomic, strong)	NSMutableArray	*devices;
@@ -82,7 +82,7 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 		PLTDevice *device = [[PLTDevice alloc] initWithBluetoothAddress:btDevice.addressString];
 		if (![self.devices containsObject:device]) {
 			[self.devices addObject:device];
-			[self postNewDeviceNotification:device];
+			[self postDeviceAvailableNotification:device];
 		}
     }
 }
@@ -95,7 +95,7 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 		NSMutableIndexSet *toRemove = [NSMutableIndexSet indexSet];
 		for (NSUInteger i=0; i<[self.devices count]; i++) {
 			PLTDevice *d = self.devices[i];
-			if ([d.bluetoothDevice.addressString isEqualToString:btDevice.addressString]) {
+			if ([d.address isEqualToString:btDevice.addressString]) {
 				[toRemove addIndex:i];
 				[d closeConnection];
 			}
@@ -104,12 +104,12 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 	}
 }
 		  
-- (void)postNewDeviceNotification:(PLTDevice *)device
+- (void)postDeviceAvailableNotification:(PLTDevice *)device
 {
-	NSLog(@"postNewDeviceNotification: %@", device);
+	NSLog(@"postDeviceAvailableNotification: %@", device);
 	
 	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
-	[[NSNotificationCenter defaultCenter] postNotificationName:PLTNewDeviceAvailableNotification object:nil userInfo:userInfo];
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceAvailableNotification object:nil userInfo:userInfo];
 }
 
 - (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device
