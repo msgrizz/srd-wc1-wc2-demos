@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>PLTLabs BT Test</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon(s) in the root directory -->
+        <link rel="stylesheet" href="css/humanity/jquery-ui-1.10.4.custom.css" />
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+       <div class="applicationContainer">
+        <div id="connectBar">
+            <span>
+            <img src="img/pltlabslogo.jpg" />
+            <span class="name">Plantronics Bluetooth API Demo<br>
+                <span class="user-name" id="user-name"></span>   
+            </span>
+            
+            </span>
+        </div>
+         <div id="incoming-call">
+            <img src="img/incoming.png"/>
+            <h3></h3>
+            <input type="button" id="butAnswerCall" value="Answer"/>
+        </div>
+        <div id="controlPanel">
+            <div id="accordion">
+                <h3>Device</h3>
+                <div>
+                    <table width="800px">
+                        <tr>
+                            <td><span>Connect to Plantronics Device</span></td>
+                            <td>
+                                <input type="checkbox" name="chkPLTDevice" id="chkPLTDevice" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Product Name:</span></td>
+                            <td><span class="sensor-data" id="productName"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span>Bluetooth Address:</span></td>
+                            <td><span class="sensor-data" id="bdAddress"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span>Firmware Version:</span></td>
+                            <td><span class="sensor-data" id="firmwareVersion"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span>PLT Labs M2M Messaging Version:</span></td>
+                            <td><span class="sensor-data" id="deckardVersion"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span>Battery Level:</span></td>
+                            <td><span class="sensor-data" id="batteryLevel"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <h3>PLT CI Features</h3>
+                 <div>
+                    <table width="800px">
+                        <tr>
+                            <td><img src="img/headtracking.jpg"/></td>
+                            <td><input type="checkbox" name="chkProximity" id="chkProximity" />
+                                <label for="chkProximity">Enable Proximity</label><br>
+                            </td>
+                            <td><span>RSSI: </span><span class="sensor-data" id="rssi"></span><br></td>
+                        </tr>
+                        <tr>
+                            <td><img src="img/dondoff.jpg"/></td>
+                            <td>
+                              <span>On/Off Ear</span><br>
+                            </td>
+                            <td><span>Wear State: </span><span class="sensor-data" id="dondoff"></span></td>
+                           </tr>
+                        <tr>
+                            <td><img src="img/button.jpg"/></td>
+                            <td>
+                              <span>Button Events</span><br>
+                            </td>
+                            <td><span>Button Pressed: </span><span class="sensor-data" id="buttons"></span></td>
+                        </tr>
+                    </table>      
+                 </div>
+                 <h3>WC 1 Features</h3>
+                 <div>
+                    <table width="800px">
+                        <tbody>
+                            <tr>
+                                <td><img src="img/pedometer.jpg"/></td>
+                                <td width="300"><input type="checkbox" name="chkPedo" id="chkPedo" />
+                                    <label for="chkPedo">Enable Pedometer</label><br>
+                                </td>
+                              <td width="300"><span class="sensor-data" id="steps">0</span><span> steps</span>
+                                    <br>
+                                </td>
+                             </tr>
+                             <tr>
+                                <td><img src="img/freefall.jpg"/></td>
+                                <td><input type="checkbox" name="chkFF" id="chkFF" />
+                                    <label for="chkFF">Enable Free Fall</label><br>
+                                </td>
+                                <td><span>Freefall: </span><span class="sensor-data" id="freefall">false</span></td>
+                            </tr>
+                            <tr>
+                                <td><img src="img/tap.jpg"/></td>
+                                <td><input type="checkbox" name="chkTap" id="chkTap" />
+                                    <label for="chkTap">Enable Taps</label><br>
+                                </td>
+                                <td><span>Taps: </span><span class="sensor-data" id="taps"></span></td>
+                            </tr>
+                            <tr>
+                                <td><img src="img/headtracking.jpg"/></td>
+                                <td><input type="checkbox" name="chkHT" id="chkHT" />
+                                    <label for="chkHT">Enable Head Tracking</label><br>
+                                </td>
+                                <td><span>Roll: </span><span class="sensor-data" id="roll"></span><br>
+                                    <span>Pitch: </span><span class="sensor-data" id="pitch"></span><br>
+                                    <span>Heading: </span><span class="sensor-data" id="heading"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>Web RTC Demo</h3>
+                <div>
+                     <table width="800px">
+                        <tbody>
+                            <tr>
+                                <td>
+                                  <span>WebRTC Server:</span>
+                                </td>
+                                <td>
+                                    <input type="radio" name="server" id="server" value="10.0.1.51"/><span>Intranet</span><br>
+                                    <input type="radio" name="server" id="server" value="23.23.249.221"/><span>EC2</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                  <span>Call Peer:</span>
+                                </td>
+                                <td>
+                                    <input type="button" id="btnCall" value="Call For Help"/>
+                                    <input type="button" id="btnHangUp" value="Hang Up"/><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                  <input type="checkbox" id="chkSendCoordinates" name="chkSendCoordinates" />
+                                  <label for="chkSendCoordinates">Send my location</label>
+                                </td>
+                                <td>
+                                  <select id="coordinates" name="coordinates">
+                                    <option value="0">Pike Place</option>
+                                    <option value="1">Gator Adventure</option>
+                                    <option value="2" selected="1">Times Square</option>
+                                  </select>      
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                   <div id="video-container">
+                                    <video id="remote-video" autoplay></video>
+                                  </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                     </table>
+                </div>
+            </div>
+        </div>   
+       </div>
+      <script src="js/vendor/jquery-1.10.2.min.js"></script>
+      <script src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>
+      <script src="js/vendor/peer.js"></script>
+      <script src="js/pltlabs-device-access.js"></script> 
+      <script src="js/app.js"></script>
+      
+    </body>
+</html>

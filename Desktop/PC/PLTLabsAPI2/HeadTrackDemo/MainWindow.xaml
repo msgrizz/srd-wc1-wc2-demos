@@ -9,5 +9,6 @@
         <Label Content="Label" Height="28" HorizontalAlignment="Left" Margin="114,34,0,0" Name="DeviceLbl" VerticalAlignment="Top" />
         <TextBox Height="291" HorizontalAlignment="Left" Margin="12,119,0,0" Name="applogtextbox" VerticalAlignment="Top" Width="796" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
         <Label Content="App Log Info:" Height="28" HorizontalAlignment="Left" Margin="12,85,0,0" Name="label3" VerticalAlignment="Top" />
+        <Button Content="Zero Angles" Height="23" HorizontalAlignment="Left" Margin="733,12,0,0" Name="zero_angles_button" VerticalAlignment="Top" Width="75" Click="zero_angles_button_Click" />
     </Grid>
 </Window>

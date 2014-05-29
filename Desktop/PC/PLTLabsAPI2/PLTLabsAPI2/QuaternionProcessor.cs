@@ -345,7 +345,7 @@ namespace Plantronics.Innovation.Util
 
                     m_odppayloads.Enqueue(sb.ToString());
                     _go = true;
-                    //Monitor.Pulse(_locker);
+                    Monitor.Pulse(_locker);
                 }
                 catch(Exception)
                 {

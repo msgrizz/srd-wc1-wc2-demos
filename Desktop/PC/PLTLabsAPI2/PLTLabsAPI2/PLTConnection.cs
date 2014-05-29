@@ -68,7 +68,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                     // TODO add to Spokes knowledge of which device
                     // has motion tracking. For now just assume all
                     // devices do.
-                    m_pltlabsapi.RegisterForHeadTracking();
+                    //m_pltlabsapi.RegisterForHeadTracking();
                     doSubscribe = true;
                     break;
                 case PLTService.MOTION_STATE_SVC:
@@ -162,6 +162,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                     m_subscribedServices.Add(subscr);
                 }
 
+                // NEW LC 25-02-2014 - send bladerunner command to subscribe to service:
+                SendBladeRunnerSubscribeCommand(true, aService, aMode, aPeriodmilliseconds);
+
                 // NOTE: for SOME services we want to ship the last known value right
                 // away to connected app, because for those services such as wearing sensor
                 // the last known value will be the "initial" value. (Does not apply to
@@ -176,6 +179,75 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
         }
 
+        /// <summary>
+        /// Internal method to send either a subscribe or unsubscribe BladeRunner command
+        /// to the BladeRunner device that represents this PLTConnection.
+        /// </summary>
+        /// <param name="subscribe"></param>
+        /// <param name="aService"></param>
+        /// <param name="aMode"></param>
+        /// <param name="aPeriodmilliseconds"></param>
+        private void SendBladeRunnerSubscribeCommand(bool subscribe, PLTService aService, PLTMode aMode = PLTMode.On_Change
+            , int aPeriodmilliseconds = 50)
+        {
+            if (!subscribe) aMode = PLTMode.Off; // unsubscribe!
+            switch (aService)
+            {
+                case PLTService.MOTION_TRACKING_SVC:
+                    //        Head orientation                0x0000<br/>
+                    //        Pedometer                       0x0002<br/>
+                    //        Free Fall                       0x0003<br/>
+                    //        Taps                            0x0004<br/>
+                    //        Magnetometer Calibration Status 0x0005<br/>
+                    //        Gyroscope Calibration Status    0x0006<br/>
+                    //        Versions                        0x0007<br/>
+                    //        Humidity                        0x0008<br/>
+                    //        Light                           0x0009<br/>
+                    //        Optical proximity               0x0010<br/>
+                    //        Ambient Temp 1                  0x0011<br/>
+                    //        Ambient Temp 2                  0x0012<br/>
+                    //        Skin Temp                       0x0013<br/>
+                    //        Skin Conductivity               0x0014<br/>
+                    //        Ambient Pressure                0x0015<br/>
+                    //        Heart Rate                      0x0016<br/>
+                            //The update mode for the service.<br/>
+                            //    0 = off,<br/>
+                            //    1 = on-change,<br/>
+                            //    2 = periodic<br/>
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 0,
+                            (int)aMode, aPeriodmilliseconds);
+                    break;
+                case PLTService.PEDOMETER_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 2,
+                            (int)aMode, aPeriodmilliseconds);
+                    break;
+                case PLTService.FREE_FALL_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 3,
+                            (int)aMode, aPeriodmilliseconds);
+                    break;
+                case PLTService.TAP_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 4,
+                            (int)aMode, aPeriodmilliseconds);
+                    break;
+                case PLTService.SENSOR_CAL_STATE_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 5,
+                            (int)aMode, aPeriodmilliseconds);
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 6,
+                            (int)aMode, aPeriodmilliseconds);
+                    break;
+                //case PLTService.WEARING_STATE_SVC:
+                //    if (m_pltlabsapi != null)
+                //        m_pltlabsapi.RegisterForDeviceWearingStateService(m_device.m_device, true);
+                    break;
+            }
+        }
+
         // Pass lastSubscriptionData to contain reference to last value for this subscription
         // or NULL where no value is available (for instance with wearing sensor before
         // a subcription has been made).
@@ -185,74 +257,77 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 m_callbackhandler != null && m_pltlabsapi.m_activeConnection != null
                 && aSubscription != null)
             {
-                // now work out if we should send the last known value (applies to some services
-                // e.g. wearing sensor, so app can receive initial value)
-                switch (aService)
+                if (aSubscription.LastData != null)
                 {
-                    case PLTService.MOTION_TRACKING_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTMotionTrackingData)aSubscription.LastData));
-                        break;
-                    case PLTService.MOTION_STATE_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTMoving)aSubscription.LastData));
-                        break;
-                    case PLTService.SENSOR_CAL_STATE_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTSensorCal)aSubscription.LastData));
-                        break;
-                    case PLTService.PEDOMETER_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTPedometerCount)aSubscription.LastData));
-                        break;
-                    case PLTService.TAP_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTTapInfo)aSubscription.LastData));
-                        break;
-                    case PLTService.WEARING_STATE_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTWearingState)aSubscription.LastData));
-                        break;
-                    case PLTService.FREE_FALL_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTFreeFall)aSubscription.LastData));
-                        break;
-                    case PLTService.PROXIMITY_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTProximityType)aSubscription.LastData));
-                        break;
-                    case PLTService.CALLERID_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTCallerId)aSubscription.LastData));
-                        break;
-                    case PLTService.CALLSTATE_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTCallStateInfo)aSubscription.LastData));
-                        break;
-                    case PLTService.DOCKSTATE_SVC:
-                        m_pltlabsapi.
-                            m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTDock)aSubscription.LastData));
-                        break;
-                    case PLTService.CHARGESTATE_SVC:
-                        m_pltlabsapi.m_callbackhandler.infoUpdated(
-                                m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTBatteryState)aSubscription.LastData));
-                        break;
-                    //case PLTService.TEMPERATURE_SVC:
-                    //    m_pltlabsapi.
-                    //        m_callbackhandler.infoUpdated(
-                    //            m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTTemperature)aSubscription.LastData));
-                    //    break;
+                    // now work out if we should send the last known value (applies to some services
+                    // e.g. wearing sensor, so app can receive initial value)
+                    switch (aService)
+                    {
+                        case PLTService.MOTION_TRACKING_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTMotionTrackingData)aSubscription.LastData));
+                            break;
+                        case PLTService.MOTION_STATE_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTMoving)aSubscription.LastData));
+                            break;
+                        case PLTService.SENSOR_CAL_STATE_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTSensorCal)aSubscription.LastData));
+                            break;
+                        case PLTService.PEDOMETER_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTPedometerCount)aSubscription.LastData));
+                            break;
+                        case PLTService.TAP_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTTapInfo)aSubscription.LastData));
+                            break;
+                        case PLTService.WEARING_STATE_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTWearingState)aSubscription.LastData));
+                            break;
+                        case PLTService.FREE_FALL_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTFreeFall)aSubscription.LastData));
+                            break;
+                        case PLTService.PROXIMITY_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTProximityType)aSubscription.LastData));
+                            break;
+                        case PLTService.CALLERID_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTCallerId)aSubscription.LastData));
+                            break;
+                        case PLTService.CALLSTATE_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTCallStateInfo)aSubscription.LastData));
+                            break;
+                        case PLTService.DOCKSTATE_SVC:
+                            m_pltlabsapi.
+                                m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTDock)aSubscription.LastData));
+                            break;
+                        case PLTService.CHARGESTATE_SVC:
+                            m_pltlabsapi.m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTBatteryState)aSubscription.LastData));
+                            break;
+                        //case PLTService.TEMPERATURE_SVC:
+                        //    m_pltlabsapi.
+                        //        m_callbackhandler.infoUpdated(
+                        //            m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTTemperature)aSubscription.LastData));
+                        //    break;
+                    }
                 }
             }
         }
@@ -277,6 +352,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                     m_subscribedServices.Remove(subscr);
                 }
             }
+
+            SendBladeRunnerSubscribeCommand(false, aService);
         }
 
         internal PLTService[] getSubscribed()
@@ -296,7 +373,7 @@ namespace Plantronics.Innovation.PLTLabsAPI2
             return retval;
         }
 
-        internal bool isSubscribed(PLTService pLTService)
+        public bool isSubscribed(PLTService pLTService)
         {
             bool retval = false;
             lock (m_subscribedServicesLock)
