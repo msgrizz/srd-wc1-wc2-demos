@@ -8,10 +8,8 @@
 
 #import "MainWindowController.h"
 
-
-
-
 #import "BRDevice.h"
+#import "BRRemoteDevice.h"
 #import "NSData+HexStrings.h"
 #import "BRMessage.h"
 #import "BRSubscribeToServiceCommand.h"
@@ -37,6 +35,8 @@
 #import "BRCalibratePedometerServiceCommand.h"
 #import "BRServiceCalibrationSettingRequest.h"
 
+#import "BRDeviceConnectedEvent.h"
+
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
 #import <IOBluetooth/IOBluetooth.h>
@@ -44,6 +44,36 @@
 #import "BRRawMessage.h"
 
 
+typedef struct {
+	double x;
+	double y;
+	double z;
+} BREulerAngles;
+
+double BRR2D(double d)
+{
+	return d * (180.0/M_PI);
+}
+
+BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
+{
+	double q0 = q.w;
+	double q1 = q.x;
+	double q2 = q.y;
+	double q3 = q.z;
+	
+	double m22 = 2*pow(q0,2) + 2*pow(q2,2) - 1;
+	double m21 = 2*q1*q2 - 2*q0*q3;
+	double m13 = 2*q1*q3 - 2*q0*q2;
+	double m23 = 2*q2*q3 + 2*q0*q1;
+	double m33 = 2*pow(q0,2) + 2*pow(q3,2) - 1;
+	
+	double psi = -BRR2D(atan2(m21,m22));
+	double theta = BRR2D(asin(m23));
+	double phi = -BRR2D(atan2(m13, m33));
+	
+    return (BREulerAngles){ psi, theta, phi };
+}
 
 
 @interface MainWindowController () <BRDeviceDelegate>
@@ -61,7 +91,7 @@
 - (void)disableUI;
 
 @property(nonatomic,retain) BRDevice *device;
-@property(nonatomic,retain) BRDevice *sensorsDevice;
+@property(nonatomic,retain) BRRemoteDevice *sensorsDevice;
 
 @property(nonatomic,assign) IBOutlet NSButton               *closeConnectionButton;
 @property(nonatomic,assign) IBOutlet NSButton               *queryWearingStateButton;
@@ -92,15 +122,15 @@
 
 - (IBAction)openConnectionButton:(id)sender
 {
-    NSArray *devices = [PLTDevice availableDevices];
-    if ([devices count]) {
-        NSString *macString = ((PLTDevice *)devices[0]).bluetoothDevice.addressString;
-        //NSString *macString = @"48:C1:AC:9B:DA:6F"; // WC1 fresh
-        //NSString *macString = @"48:C1:AC:9B:DB:68"; // WC1 stale
-        self.device = [BRDevice deviceWithAddress:macString]; 
-        self.device.delegate = self;
-        [self.device openConnection];
-    }
+	if (!self.device) {
+		NSArray *devices = [PLTDevice availableDevices];
+		if ([devices count]) {
+			NSString *macString = ((PLTDevice *)devices[0]).address;
+			self.device = [BRDevice deviceWithAddress:macString]; 
+			self.device.delegate = self;
+			[self.device openConnection];
+		}
+	}
 }
 
 - (IBAction)closeConnectionButton:(id)sender
@@ -108,68 +138,16 @@
     [self.device closeConnection];
 }
 
-- (IBAction)subscribeToServicesButton:(id)sender
-{
-    BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDTaps
-                                                                                        mode:BRServiceSubscriptionModeOnChange
-                                                                                      period:250];
-    [self.device sendMessage:message];
-    
-//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-//        if (i==1) continue;
-//        
-//        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-//                                                                                            mode:BRServiceSubscriptionModeOnChange
-//                                                                                          period:0];
-//        [self.device sendMessage:message];
-//    }
-}
-
-- (IBAction)unsubscribeFromServicesButton:(id)sender
-{
-    BRCalibratePedometerServiceCommand *cal = [BRCalibratePedometerServiceCommand command];
-    [self.device sendMessage:cal];
-    
-    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-        if (i==1) continue;
-        
-        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-                                                                                            mode:BRServiceSubscriptionModeOff
-                                                                                          period:0];
-        [self.device sendMessage:message];
-    }
-}
-
-- (IBAction)queryDeviceInfoButton:(id)sender
-{
-    BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
-    [self.device sendMessage:request];
-}
-
 - (IBAction)queryWearingStateButton:(id)sender
 {
-//    // 28704 Query services fails on first try
-//    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X",
-//                           10,                          // length
-//                           BRMessageTypeSettingRequest, // message type
-//                           0xFF13,                      // deckard id
-//                           0x0000,                      // serviceID
-//                           0x0000];                     // characteristicID
-    
-    
-//    // 28706 Get Device Info doesn’t return a result
-//    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X",
-//                           6,                           // length
-//                           BRMessageTypeSettingRequest, // message type
-//                           0xFF18];                     // deckard id
-    
-    
-//    BRRawMessage *message = [BRRawMessage messageWithData:[NSData dataWithHexString:hexString]];
-//    [self.device sendMessage:message];
-    
-    
     BRWearingStateSettingRequest *request = (BRWearingStateSettingRequest *)[BRWearingStateSettingRequest request];
     [self.device sendMessage:request];
+}
+
+- (IBAction)subscribeToSignalStrengthButton:(id)sender
+{
+    BRSubscribeToSignalStrengthCommand *command = [BRSubscribeToSignalStrengthCommand commandWithSubscription:YES connectionID:0];
+    [self.device sendMessage:command];
 }
 
 - (IBAction)querySignalStrengthButton:(id)sender
@@ -178,24 +156,74 @@
     [self.device sendMessage:request];
 }
 
+- (IBAction)queryDeviceInfoButton:(id)sender
+{
+    BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
+    [self.sensorsDevice sendMessage:request];
+}
+
 - (IBAction)queryServicesButton:(id)sender
 {
+//	[self performSelectorInBackground:@selector(ya) withObject:nil];
+	
+//	BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:BRServiceIDPedometer];
+//	[self.sensorsDevice sendMessage:request];
+	
+	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
+                                                                                        mode:BRServiceSubscriptionModePeriodic
+                                                                                      period:1000];
+	[self.sensorsDevice sendMessage:message];
+
+	
+//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+//        if (i==1) continue;
+//        
+//		BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:i];
+//		[self.sensorsDevice sendMessage:request];
+//    }
+}
+
+//- (void)ya
+//{
+//	for (;;) {
+//		BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:BRServiceIDOrientationTracking];
+//		[self.sensorsDevice sendMessage:request];
+//		[NSThread sleepForTimeInterval:.2];
+//
+//	}
+//}
+
+- (IBAction)subscribeToServicesButton:(id)sender
+{
+    BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDTaps
+                                                                                        mode:BRServiceSubscriptionModeOnChange
+                                                                                      period:0];
+    [self.sensorsDevice sendMessage:message];
+    
+//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+//        if (i==1) continue;
+//		if (i==BRServiceIDOrientationTracking) continue;
+//        
+//        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+//                                                                                            mode:BRServiceSubscriptionModeOnChange
+//                                                                                          period:0];
+//        [self.sensorsDevice sendMessage:message];
+//    }
+}
+
+- (IBAction)unsubscribeFromServicesButton:(id)sender
+{
+    BRCalibratePedometerServiceCommand *cal = (BRCalibratePedometerServiceCommand *)[BRCalibratePedometerServiceCommand command];
+    [self.device sendMessage:cal];
+    
     for (int i = 0; i <= BRServiceIDGyroCal; i++) {
         if (i==1) continue;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:i];
-            [self.device sendMessage:request];
-        });
-        
-        //[NSThread sleepForTimeInterval:1.0];
+        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+                                                                                            mode:BRServiceSubscriptionModeOff
+                                                                                          period:0];
+        [self.sensorsDevice sendMessage:message];
     }
-}
-
-- (IBAction)subscribeToSignalStrengthButton:(id)sender
-{
-    BRSubscribeToSignalStrengthCommand *command = [BRSubscribeToSignalStrengthCommand commandWithSubscription:YES];
-    [self.device sendMessage:command];
 }
 
 - (void)enableUI
@@ -234,35 +262,45 @@
 
 #pragma mark - BRDeviceDelegate
 
-- (void)BRDeviceDidConnectToHTDevice:(BRDevice *)device
+- (void)BRDeviceDidConnect:(BRDevice *)device
 {
-    NSLog(@"BRDeviceDidConnectToHTDevice:");
+    NSLog(@"BRDeviceDidConnect: %@", device);
     
     self.connectedTextField.stringValue = @"Yeahh boi";
     [self enableUI];
 }
 
-- (void)BRDeviceDidDisconnectFromHTDevice:(BRDevice *)device
+- (void)BRDeviceDidDisconnect:(BRDevice *)device
 {
-    NSLog(@"BRDeviceDidDisconnectFromHTDevice:");
+    NSLog(@"BRDeviceDidDisconnect: %@", device);
     
     [self disableUI];
+	
+	if (device == self.device) {
+		self.device = nil;
+		self.sensorsDevice = nil;
+	}
+	else if (device == self.sensorsDevice) {
+		self.sensorsDevice = nil;
+	}
 }
 
-- (void)BRDevice:(BRDevice *)device didFailConnectToHTDeviceWithError:(int)ioBTError
+- (void)BRDevice:(BRDevice *)device didFailConnectWithError:(int)ioBTError
 {
-    NSLog(@"BRDevice:didFailConnectToHTDeviceWithError: %d", ioBTError);
-}
-
-- (void)BRDevice:(BRDevice *)device didReceiveMetadata:(BRMetadata *)metadata
-{
-    NSLog(@"BRDevice:didReceiveMetadata: %@", metadata);
+    NSLog(@"BRDevice: %@ didFailConnectWithError: %d", device, ioBTError);
+	
+	if (device == self.device) {
+		self.device = nil;
+	}
+	else if (device == self.sensorsDevice) {
+		self.sensorsDevice = nil;
+	}
 }
 
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event
 {
-    NSLog(@"BRDevice:didReceiveEvent: %@", event);
-    
+    NSLog(@"BRDevice: %@ didReceiveEvent: %@", device, event);
+
     if ([event isKindOfClass:[BRWearingStateEvent class]]) {
         BRWearingStateEvent *e = (BRWearingStateEvent *)event;
         self.wearingStateTextField.stringValue = (e.isBeingWorn ? @"Yes" : @"No");
@@ -273,13 +311,14 @@
     }
     else if ([event isKindOfClass:[BROrientationTrackingEvent class]]) {
         BROrientationTrackingEvent *e = (BROrientationTrackingEvent *)event;
-        [self.headingIndicator setDoubleValue:-e.rawEulerAngles.x];
-        [self.pitchIndicator setDoubleValue:e.rawEulerAngles.y];
-        [self.rollIndicator setDoubleValue:e.rawEulerAngles.z];
+		BREulerAngles eulerAngles = BREulerAnglesFromQuaternion(e.quaternion);		
+        [self.headingIndicator setDoubleValue:-eulerAngles.x];
+        [self.pitchIndicator setDoubleValue:eulerAngles.y];
+        [self.rollIndicator setDoubleValue:eulerAngles.z];
     }
     else if ([event isKindOfClass:[BRTapsEvent class]]) {
         BRTapsEvent *e = (BRTapsEvent *)event;
-        if (e.taps) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", e.taps, NSStringFromTapDirection(e.direction)];
+        if (e.count) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", e.count, NSStringFromTapDirection(e.direction)];
         else self.tapsTextField.stringValue = @"-";
     }
     else if ([event isKindOfClass:[BRFreeFallEvent class]]) {
@@ -298,7 +337,7 @@
 
 - (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)response
 {
-    NSLog(@"BRDevice:didReceiveSettingResponse: %@", response);
+    NSLog(@"BRDevice: %@ didReceiveSettingResponse: %@", device, response);
     
     if ([response isKindOfClass:[BRWearingStateSettingResponse class]]) {
         BRWearingStateSettingResponse *r = (BRWearingStateSettingResponse *)response;
@@ -310,13 +349,14 @@
     }
     else if ([response isKindOfClass:[BROrientationTrackingSettingResponse class]]) {
         BROrientationTrackingSettingResponse *r = (BROrientationTrackingSettingResponse *)response;
-        [self.headingIndicator setDoubleValue:-r.rawEulerAngles.x];
-        [self.pitchIndicator setDoubleValue:r.rawEulerAngles.y];
-        [self.rollIndicator setDoubleValue:r.rawEulerAngles.z];
+		BREulerAngles eulerAngles = BREulerAnglesFromQuaternion(r.quaternion);		
+        [self.headingIndicator setDoubleValue:-eulerAngles.x];
+        [self.pitchIndicator setDoubleValue:eulerAngles.y];
+        [self.rollIndicator setDoubleValue:eulerAngles.z];
     }
     else if ([response isKindOfClass:[BRTapsSettingResponse class]]) {
         BRTapsSettingResponse *r = (BRTapsSettingResponse *)response;
-        if (r.taps) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", r.taps, NSStringFromTapDirection(r.direction)];
+        if (r.count) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", r.count, NSStringFromTapDirection(r.direction)];
         else self.tapsTextField.stringValue = @"-";
     }
     else if ([response isKindOfClass:[BRFreeFallSettingResponse class]]) {
@@ -335,7 +375,18 @@
 
 - (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
 {
-    NSLog(@"BRDevice:didRaiseException: %@", exception);
+    NSLog(@"BRDevice: %@ didRaiseException: %@", device, exception);
+}
+
+- (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice
+{
+	NSLog(@"BRDevice: %@ didFindRemoteDevice: %@", device, remoteDevice);
+	
+	if (remoteDevice.port == 0x5) {
+		self.sensorsDevice = remoteDevice;
+		self.sensorsDevice.delegate = self;
+		[self.sensorsDevice openConnection];
+	}
 }
 
 - (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data
@@ -351,13 +402,6 @@
     NSLog(@"<-- %@", hexString);
     self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
 }
-
-
-
-//- (void)BRDevice:(BRDevice *)device didDiscoverAdjacentDevice:(BRDevice *)newDevice
-//{
-//    NSLog(@"BRDevice:didDiscoverAdjacentDevice: %@", newDevice);
-//}
 
 #pragma mark - NSWindowController
 

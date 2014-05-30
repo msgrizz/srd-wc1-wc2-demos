@@ -11,6 +11,7 @@
 
 @interface PLTPedometerInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp steps:(NSUInteger)steps;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+					steps:(NSUInteger)steps;
 
 @end

@@ -11,6 +11,7 @@
 
 @interface PLTWearingStateInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp wearingState:(BOOL)isBeingWorn;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp  calibration:(PLTCalibration *)calibration
+			 wearingState:(BOOL)isBeingWorn;
 
 @end

@@ -12,7 +12,7 @@ public class PedometerInfo extends Info {
 	private int 	_steps;
 
 
-	public PedometerInfo(int requestType, Date timestamp, Calibration calibration, int steps) {
+	public PedometerInfo(byte requestType, Date timestamp, Calibration calibration, int steps) {
 		super(requestType, timestamp, calibration);
 		_steps = steps;
 	}

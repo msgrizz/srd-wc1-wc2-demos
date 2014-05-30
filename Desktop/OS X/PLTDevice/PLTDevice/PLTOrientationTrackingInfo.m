@@ -7,6 +7,7 @@
 //
 
 #import "PLTOrientationTrackingInfo.h"
+#import "PLTOrientationTrackingInfo_Internal.h"
 #import "PLTInfo_Internal.h"
 #import "PLTOrientationTrackingCalibration.h"
 
@@ -100,10 +101,8 @@ NSString *NSStringFromQuaternion(PLTQuaternion quaternion)
 
 @interface PLTOrientationTrackingInfo()
 
-@property(nonatomic, readwrite)	PLTEulerAngles	rawEulerAngles;
-@property(nonatomic, readwrite)	PLTQuaternion	rawQuaternion;
-@property(nonatomic, readwrite)	PLTEulerAngles	referenceEulerAngles;
-@property(nonatomic, readwrite)	PLTQuaternion	referenceQuaternion;
+@property(nonatomic,readwrite)	PLTEulerAngles	eulerAngles;
+@property(nonatomic,readwrite)	PLTQuaternion	quaternion;
 
 @end
 
@@ -112,16 +111,18 @@ NSString *NSStringFromQuaternion(PLTQuaternion quaternion)
 
 @dynamic quaternion;
 @dynamic eulerAngles;
-@dynamic rawEulerAngles;
-@dynamic referenceEulerAngles;
 
 - (PLTQuaternion)quaternion
 {
-	// apply cal
-	
-	PLTQuaternion inverseReferenceQuaternion = InverseQuaternion(self.referenceQuaternion);
-	PLTQuaternion calibratedQuaternion = MultipliedQuaternions(self.rawQuaternion, inverseReferenceQuaternion);
-	return calibratedQuaternion;
+	if (self.calibration) {
+		// apply cal
+		PLTQuaternion inverseReferenceQuaternion = InverseQuaternion(((PLTOrientationTrackingCalibration *)self.calibration).referenceQuaternion);
+		PLTQuaternion calibratedQuaternion = MultipliedQuaternions(self.uncalibratedQuaternion, inverseReferenceQuaternion);
+		return calibratedQuaternion;
+	}
+	else {
+		return self.uncalibratedQuaternion;
+	}
 }
 
 - (PLTEulerAngles)eulerAngles
@@ -129,24 +130,13 @@ NSString *NSStringFromQuaternion(PLTQuaternion quaternion)
 	return EulerAnglesFromQuaternion(self.quaternion);
 }
 
-- (PLTEulerAngles)rawEulerAngles
-{
-	return EulerAnglesFromQuaternion(self.rawQuaternion);
-}
-
-- (PLTEulerAngles)referenceEulerAngles
-{
-	return EulerAnglesFromQuaternion(self.referenceQuaternion);
-}
-
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp
-   rawQuaternion:(PLTQuaternion)rawQuaternion referenceQuaternion:(PLTQuaternion)referenceQuaternion
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTOrientationTrackingCalibration *)calibration
+			   quaternion:(PLTQuaternion)quaternion
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
-	self.rawQuaternion = rawQuaternion;
-	self.referenceQuaternion = referenceQuaternion;
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
+	self.uncalibratedQuaternion = quaternion;
 	return self;
 }
 
@@ -160,12 +150,9 @@ NSString *NSStringFromQuaternion(PLTQuaternion quaternion)
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTOrientationTrackingInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\teulerAngles: %@\n\tquaternion: %@\n\trawEulerAngles: %@"
-			@"\n\trawQuaternion: %@\n\treferenceEulerAngles: %@\n\treferenceQuaternion: %@\n}",
-			self, self.requestType, self.timestamp,
-			NSStringFromEulerAngles(self.eulerAngles), NSStringFromQuaternion(self.quaternion),
-			NSStringFromEulerAngles(self.rawEulerAngles), NSStringFromQuaternion(self.rawQuaternion),
-			NSStringFromEulerAngles(self.referenceEulerAngles), NSStringFromQuaternion(self.referenceQuaternion)];
+	return [NSString stringWithFormat:@"<PLTOrientationTrackingInfo: %p> requestType=%lu, timestamp=%@, calibration=%@, eulerAngles=%@, quaternion=%@",
+			self, self.requestType, self.timestamp, self.calibration,
+			NSStringFromEulerAngles(self.eulerAngles), NSStringFromQuaternion(self.quaternion)];
 }
 
 @end

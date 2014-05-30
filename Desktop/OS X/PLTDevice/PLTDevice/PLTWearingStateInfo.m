@@ -12,7 +12,7 @@
 
 @interface PLTWearingStateInfo()
 
-@property(nonatomic, readwrite)	BOOL	isBeingWorn;
+@property(nonatomic,readwrite)	BOOL	isBeingWorn;
 
 @end
 
@@ -21,9 +21,10 @@
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp wearingState:(BOOL)isBeingWorn
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+			 wearingState:(BOOL)isBeingWorn
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
 	self.isBeingWorn = isBeingWorn;
 	return self;
 }
@@ -37,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTWearingStateInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisBeingWorn: %@\n}",
+	return [NSString stringWithFormat:@"<PLTWearingStateInfo: %p> requestType=%u, timestamp=%@, isBeingWorn=%@",
 			self, self.requestType, self.timestamp, (self.isBeingWorn ? @"YES" : @"NO")];
 }
 

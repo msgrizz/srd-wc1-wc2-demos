@@ -6,10 +6,15 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
+//#import "Configuration.h"
+
 #import "BRDevice.h"
-#import <IOBluetooth/Bluetooth.h>
-#import <IOBluetooth/IOBluetoothUserLib.h>
-#import <IOBluetooth/IOBluetooth.h>
+#import "BRDevice_Private.h"
+#import "BRMessage_Private.h"
+#import "BRIncomingMessage_Private.h"
+#import "BROutgoingMessage_Private.h"
+#import "BRRemoteDevice_Private.h"
+#import "BRRemoteDevice.h"
 #import "BRMessage.h"
 #import "BRSubscribeToServiceCommand.h"
 #import "NSData+HexStrings.h"
@@ -36,32 +41,29 @@
 #import "BRDeviceDisconnectedEvent.h"
 #import "BRServiceSubscriptionChangedEvent.h"
 #import "BRHostVersionNegotiateMessage.h"
-#import "BRMetadata.h"
+#import "BRMetadataMessage.h"
 #import "NSArray+PrettyPrint.h"
 #import "BRCloseSessionMessage.h"
+#import "BRDeviceProtocolVersionMessage.h"
+#import "BRGenesGUIDSettingResponse.h"
+#import "BRProductNameSettingResponse.h"
 
-
-typedef enum {
-    BRDeviceStateDisconnected,
-    BRDeviceStateOpeningRFCOMMChannel,
-    BRDeviceStateOpeningLocalPortConnection,
-    BRDeviceStateOpeningSensorsPortConnection
-    
-    //BRDeviceStateAwaitingMessageResponse
-} BRDeviceState;
+//#if TARGET_OSX
+#import <IOBluetooth/Bluetooth.h>
+#import <IOBluetooth/IOBluetoothUserLib.h>
+#import <IOBluetooth/IOBluetooth.h>
+//#else
+//// iOS external accessory stuff
+//#endif
 
 
 @interface BRDevice ()
 
-- (void)openLocalConnection;
-- (void)openSensorsConnection;
 - (void)parseIncomingData:(NSData *)data;
 
-@property(nonatomic,assign,readwrite)   BOOL                        isConnected;
 @property(nonatomic,assign)             BOOL                        channelOpened;
-@property(nonatomic,strong,readwrite)   NSString                    *BTAddress;
-@property(nonatomic,assign)             BRDeviceState               state;
 @property(nonatomic,strong)             IOBluetoothRFCOMMChannel    *RFCOMMChannel;
+@property(nonatomic,strong,readwrite)	NSMutableDictionary			*remoteDevices;
 
 @end
 
@@ -71,75 +73,78 @@ typedef enum {
 
 #pragma mark - Public
 
-+ (BRDevice *)deviceWithAddress:(NSString *)BTAddress
++ (BRDevice *)deviceWithAddress:(NSString *)bluetoothAddress
 {
-    BRDevice *controller = [[BRDevice alloc] init];
-    controller.BTAddress = BTAddress;
-    return controller;
+    BRDevice *device = [[BRDevice alloc] init];
+    device.bluetoothAddress = bluetoothAddress;
+    return device;
 }
 
 - (void)openConnection
 {
-    NSLog(@"Opening connection to device at address %@...", self.BTAddress);
+    NSLog(@"Opening connection to device at address %@...", self.bluetoothAddress);
     
-    self.state = BRDeviceStateOpeningRFCOMMChannel;
-    
-    IOBluetoothDevice *device = [IOBluetoothDevice deviceWithAddressString:self.BTAddress];
-    IOBluetoothRFCOMMChannel *RFCOMMChannel;
-    IOReturn error = [device openRFCOMMChannelAsync:&RFCOMMChannel withChannelID:5 delegate:self];
-    self.RFCOMMChannel = RFCOMMChannel;
-    if (error != kIOReturnSuccess) {
-        NSLog(@"Error opening RFCOMM channel: %d", error);
-        self.state = BRDeviceStateDisconnected;
-        [self.delegate BRDevice:self didFailConnectToHTDeviceWithError:error];
-    }
+	if (!self.isConnected) {
+		self.state = BRDeviceStateOpeningRFCOMMChannel;
+		self.remoteDevices = [NSMutableDictionary dictionary];
+		
+		IOBluetoothDevice *device = [IOBluetoothDevice deviceWithAddressString:self.bluetoothAddress];
+		IOBluetoothRFCOMMChannel *RFCOMMChannel;
+		self.channelOpened = NO;
+		IOReturn error = [device openRFCOMMChannelAsync:&RFCOMMChannel withChannelID:5 delegate:self];
+		self.RFCOMMChannel = RFCOMMChannel;
+		if (error != kIOReturnSuccess) {
+			NSLog(@"Error opening RFCOMM channel: %d", error);
+			self.state = BRDeviceStateDisconnected;
+			[self.delegate BRDevice:self didFailConnectWithError:error];
+		}
+	}
+	else {
+		NSLog(@"Already connected!");
+	}
 }
 
 - (void)closeConnection
 {
-    NSLog(@"Closing connection (%@)...", self.BTAddress);
+    NSLog(@"Closing connection (%@)...", self.bluetoothAddress);
+	
+#warning check disconnect remote devices
     
-    BRCloseSessionMessage *message = [BRCloseSessionMessage messageWithAddress:0x5000000];
-    [self sendMessage:message];
-    
-    message = [BRCloseSessionMessage messageWithAddress:0x0000000];
+    BRCloseSessionMessage *message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
     [self sendMessage:message];
     
     [self.RFCOMMChannel closeChannel];
+	
+	self.isConnected = NO;
 }
 
 - (void)sendMessage:(BRMessage *)message
 {
-    //NSLog(@"--> %@", [message.data hexStringWithSpaceEvery:2]);
-    [self.delegate BRDevice:self willSendData:message.data];
-    //self.state = BRDeviceStateAwaitingMessageResponse;
-    [self.RFCOMMChannel writeAsync:(void *)[message.data bytes] length:[message.data length] refcon:nil];
+	NSData *messageData = message.data; // message.data computes on each call...
+	
+	if ([message.address integerValue] == 0) {
+		[self.delegate BRDevice:self willSendData:messageData];
+	}
+	else {
+		NSString *portString = [message.address substringToIndex:1];
+		uint8_t port = [portString integerValue];
+		BRRemoteDevice *remoteDevice = self.remoteDevices[@(port)];
+		[remoteDevice BRDevice:self willSendData:messageData];
+	}
+	
+    [self.RFCOMMChannel writeAsync:(void *)[messageData bytes] length:[messageData length] refcon:nil];
 }
 
 #pragma mark - Private
 
-- (void)openLocalConnection
-{
-    NSLog(@"Opening local port connection...");
-    
-    self.state = BRDeviceStateOpeningLocalPortConnection;
-
-    BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x0000000];
-    [self sendMessage:message];
-}
-
-- (void)openSensorsConnection
-{
-    NSLog(@"Opening sensors port connection...");
-    
-    self.state = BRDeviceStateOpeningSensorsPortConnection;
-
-    BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x5000000];
-    [self sendMessage:message];
-}
-
 - (void)parseIncomingData:(NSData *)data
 {
+	NSString *address = [[[data subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] hexStringWithSpaceEvery:0] substringToIndex:6];
+	NSString *portString = [address substringToIndex:2];
+	uint8_t port = [portString integerValue];
+	BRDevice *destinationDevice = self.remoteDevices[@(port)];
+	if (!destinationDevice) destinationDevice = self;
+	
     uint8_t messageType;
     NSData *messageTypeData = [data subdataWithRange:NSMakeRange(5, sizeof(uint8_t))];
     [messageTypeData getBytes:&messageType length:sizeof(uint8_t)];
@@ -147,10 +152,12 @@ typedef enum {
     
     switch (messageType) {
         case BRMessageTypeHostProtocolVersion:
+			NSLog(@"BRMessageTypeHostProtocolVersion");
             // something
             break;
             
         case BRMessageTypeSettingRequest:
+			NSLog(@"BRMessageTypeSettingRequest");
             // something
             break;
             
@@ -174,6 +181,14 @@ typedef enum {
                 case BRSettingResponseIDDeviceInfo:
                     class = [BRDeviceInfoSettingResponse class];
                     break;
+					
+				case BRSettingResponseIDGenesGUID:
+					class = [BRGenesGUIDSettingResponse class];
+					break;
+					
+				case BRSettingResponseIDProductName:
+					class = [BRProductNameSettingResponse class];
+					break;
                     
                 case BRSettingResponseIDSeaviceData: {
                     BRServiceID serviceID;
@@ -212,9 +227,17 @@ typedef enum {
             }
             
             if (class) {
-                [self.delegate BRDevice:self didReceiveSettingResponse:[class settingResponseWithData:data]];
+                //[self.delegate BRDevice:self didReceiveSettingResponse:[class settingResponseWithData:data]];
+				
+				if (destinationDevice == self) {
+					[self.delegate BRDevice:self didReceiveSettingResponse:[class settingResponseWithData:data]];
+				}
+				else {
+					[(BRRemoteDevice *)destinationDevice BRDevice:destinationDevice didReceiveSettingResponse:[class settingResponseWithData:data]];
+				}
             }
             break; }
+			
         case BRMessageTypeSettingResultException:
         case BRMessageTypeCommandResultException: {
             NSLog(@"***** EXCEPTION *****");
@@ -242,28 +265,40 @@ typedef enum {
 //                [self.delegate BRDevice:self didRaiseException:[class exceptionWithData:data]];
 //            }
             break; }
+			
         case BRMessageTypeCommand:
             // something
             break;
+			
         case BRMessageTypeCommandResultSuccess:
             NSLog(@"BRMessageTypeCommandResultSuccess");
             break;
 //        case BRMessageTypeCommandResultException:
 //            NSLog(@"***** COMMAND EXCEPTION *****");
 //            break;
-        case BRMessageTypeDeviceProtocolVersion:
-            NSLog(@"BRMessageTypeDeviceProtocolVersion");
-            break;
+			
+        case BRMessageTypeDeviceProtocolVersion: {
+			BRDeviceProtocolVersionMessage *protocolVersionMessage = (BRDeviceProtocolVersionMessage *)[BRDeviceProtocolVersionMessage messageWithData:data];
+            NSLog(@"BRMessageTypeDeviceProtocolVersion: %@", protocolVersionMessage);
+            break; }
+			
         case BRMessageTypeMetadata: {
-            BRMetadata *metadata = [BRMetadata metadataWithData:data];
-            [self.delegate BRDevice:self didReceiveMetadata:metadata];
-            
-            uint8_t port;
-            NSData *portData = [data subdataWithRange:NSMakeRange(2, sizeof(uint8_t))];
-            [portData getBytes:&port length:sizeof(uint8_t)];
-            if (port==5) {
-                NSLog(@"Connected to sensors device!");
-                [self.delegate BRDeviceDidConnectToHTDevice:self];
+            BRMetadataMessage *metadata = (BRMetadataMessage *)[BRMetadataMessage messageWithData:data];
+			
+			// if port==0, it's our metadata
+			// if other, find remoteDevice and deliver accordingly
+			
+			//if ([metadata.address integerValue] == 0) {
+			if (destinationDevice == self) {
+				self.commands = metadata.commands;
+				self.settings = metadata.settings;
+				self.events = metadata.events;
+				self.isConnected = YES;
+				[self.delegate BRDeviceDidConnect:self];
+				//[self.delegate BRDevice:self didReceiveMetadata:metadata];
+			}
+			else {
+				[(BRRemoteDevice *)destinationDevice BRDevice:self didReceiveMetadata:metadata];
             }
             break; }
             
@@ -276,6 +311,28 @@ typedef enum {
             Class class = nil;
             
             switch (deckardID) {
+					
+				case BREventIDDeviceConnected: {
+					// don't send "normal" events for this.
+                    //class = [BRDeviceConnectedEvent class];
+                    
+                    BRDeviceConnectedEvent *event = (BRDeviceConnectedEvent *)[BRDeviceConnectedEvent eventWithData:data];
+					BRRemoteDevice *remoteDevice = [BRRemoteDevice deviceWithParent:self port:event.port];
+					((NSMutableDictionary *)self.remoteDevices)[@(event.port)] = remoteDevice;
+					[self.delegate BRDevice:self didFindRemoteDevice:remoteDevice];
+					
+                    break; }
+                    
+                case BREventIDDeviceDisconnected: {
+                    //class = [BRDeviceDisconnectedEvent class];
+					
+					BRDeviceDisconnectedEvent *event = (BRDeviceDisconnectedEvent *)[BRDeviceConnectedEvent eventWithData:data];
+					BRRemoteDevice *remoteDevice = self.remoteDevices[@(event.port)];
+					[((NSMutableDictionary *)self.remoteDevices) removeObjectForKey:@(event.port)];
+					[remoteDevice BRDeviceDidDisconnect:remoteDevice];
+					
+                    break; }
+					
                 case BREventIDWearingStateChanged:
                     class = [BRWearingStateEvent class];
                     break;
@@ -319,28 +376,18 @@ typedef enum {
                     class = [BRServiceSubscriptionChangedEvent class];
                     break;
                     
-                case BREventIDDeviceConnected: {
-                    class = [BRDeviceConnectedEvent class];
-                    
-                    BRDeviceConnectedEvent *event = (BRDeviceConnectedEvent *)[BRDeviceConnectedEvent eventWithData:data];
-                    if (event.port == 5) {
-                        [self openSensorsConnection];
-                    }
-//                    BRDevice *newDevice = [BRDevice deviceWithAddress:self.BTAddress];
-//                    [self.delegate BRDevice:self didDiscoverAdjacentDevice:newDevice];
-                    break; }
-                    
-                case BREventIDDeviceDisconnected:
-                    class = [BRDeviceDisconnectedEvent class];
-                    break;
-                    
                 default:
                     NSLog(@"Error: unknown Deckard event 0x%04X", deckardID);
                     break;
                 }
             
             if (class) {
-                [self.delegate BRDevice:self didReceiveEvent:[class eventWithData:data]];
+				if (destinationDevice == self) {
+					[self.delegate BRDevice:self didReceiveEvent:[class eventWithData:data]];
+				}
+				else {
+					[(BRRemoteDevice *)destinationDevice BRDevice:destinationDevice didReceiveEvent:[class eventWithData:data]];
+				}
             }
             
             break; }
@@ -365,7 +412,7 @@ typedef enum {
 
 #pragma mark - IOBluetoothRFCOMMChannelDelegate
 
-- (void)rfcommChannelData:(IOBluetoothRFCOMMChannel*)rfcommChannel data:(void *)dataPointer length:(size_t)dataLength;
+- (void)rfcommChannelData:(IOBluetoothRFCOMMChannel *)rfcommChannel data:(void *)dataPointer length:(size_t)dataLength;
 {
     NSData *data = [NSData dataWithBytes:dataPointer length:dataLength];
     //NSLog(@"<-- %@", [data hexStringWithSpaceEvery:2]);
@@ -374,57 +421,61 @@ typedef enum {
     [self parseIncomingData:data];
 }
 
-- (void)rfcommChannelOpenComplete:(IOBluetoothRFCOMMChannel*)rfcommChannel status:(IOReturn)error
+- (void)rfcommChannelOpenComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel status:(IOReturn)error
 {
     NSLog(@"rfcommChannelOpenComplete: %@, status: %d", rfcommChannel, error);
+	
+	if (!rfcommChannel.isOpen) {
+		// when an invalid BT address is supplied, error is 4. not sure where this comes from.
+		[self.delegate BRDevice:self didFailConnectWithError:error];
+	}
 }
 
-- (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel*)rfcommChannel
+- (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
     NSLog(@"rfcommChannelClosed:");
     self.state = BRDeviceStateDisconnected;
-    [self.delegate BRDeviceDidDisconnectFromHTDevice:self];
+    [self.delegate BRDeviceDidDisconnect:self];
+	self.channelOpened = NO;
+	self.isConnected = NO;
 }
 
-- (void)rfcommChannelControlSignalsChanged:(IOBluetoothRFCOMMChannel*)rfcommChannel
+- (void)rfcommChannelControlSignalsChanged:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
     NSLog(@"rfcommChannelControlSignalsChanged:");
 }
 
-- (void)rfcommChannelFlowControlChanged:(IOBluetoothRFCOMMChannel*)rfcommChannel
+- (void)rfcommChannelFlowControlChanged:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
     NSLog(@"rfcommChannelFlowControlChanged: %d", [rfcommChannel getMTU]);
 }
 
-- (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel*)rfcommChannel refcon:(void*)refcon status:(IOReturn)error
+- (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel refcon:(void*)refcon status:(IOReturn)error
 {
     NSLog(@"rfcommChannelWriteComplete: %d", error);
 }
 
-- (void)rfcommChannelQueueSpaceAvailable:(IOBluetoothRFCOMMChannel*)rfcommChannel
+- (void)rfcommChannelQueueSpaceAvailable:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
     NSLog(@"rfcommChannelQueueSpaceAvailable:");
     
     if (!self.channelOpened) {
         self.channelOpened = YES;
         if (self.state==BRDeviceStateOpeningRFCOMMChannel) {
-            [self openLocalConnection];
+            self.state = BRDeviceStateHostVersionNegotiating;
+			//BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x0000000];
+			BRHostVersionNegotiateMessage *message = (BRHostVersionNegotiateMessage *)[BRHostVersionNegotiateMessage messageWithMinimumVersion:1 maximumVersion:1];
+			[self sendMessage:message];
         }
     }
 }
 
 #pragma mark - NSObject
 
-//- (NSString *)description
-//{
-//    return [NSString stringWithFormat:@"<BRDevice %p> address=0x%07X, isConnected=%@, commands=%@, settings=%@, events=%@, delegate=%@",
-//            self, self.address, (self.isConnected ? @"YES" : @"NO"), self.commands, self.settings, self.events, self.delegate];
-//}
-
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRDevice %p> isConnected=%@, delegate=%@",
-            self, (self.isConnected ? @"YES" : @"NO"), self.delegate];
+    return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%d), delegate=%@",
+            self, self.bluetoothAddress, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], (unsigned long)[self.events count], [self.remoteDevices count], self.delegate];
 }
 
 @end

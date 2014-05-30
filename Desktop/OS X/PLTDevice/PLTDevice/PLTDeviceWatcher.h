@@ -11,14 +11,10 @@
 #import <Foundation/Foundation.h>
 
 
-//extern NSString *const PLTDeviceProtocolString;
-
-
 @interface PLTDeviceWatcher : NSObject
 
 + (PLTDeviceWatcher *)sharedWatcher;
 
 @property(readonly)	NSMutableArray	*devices; // this should probably be an NSArray, but since this class is API internal.... this works.
-@property(readonly)	NSMutableArray	*connectedBluetoothDevices;
 
 @end

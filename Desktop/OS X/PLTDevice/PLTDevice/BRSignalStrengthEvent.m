@@ -7,13 +7,16 @@
 //
 
 #import "BRSignalStrengthEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRSignalStrengthEvent ()
 
 @property(nonatomic,assign,readwrite) uint8_t                   connectionID;
 @property(nonatomic,assign,readwrite) uint8_t                   strength;
-@property(nonatomic,assign,readwrite) BRSignalStrengthDistance  distance;
+//@property(nonatomic,assign,readwrite) BRSignalStrengthDistance  distance;
+#warning temporary
+@property(nonatomic,assign,readwrite) int  distance;
 
 @end
 
@@ -24,6 +27,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t connectionID;
     [[self.data subdataWithRange:NSMakeRange(8, sizeof(uint8_t))] getBytes:&connectionID length:sizeof(uint8_t)];
     self.connectionID = connectionID;

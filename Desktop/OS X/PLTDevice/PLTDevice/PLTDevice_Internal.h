@@ -15,6 +15,6 @@
 
 - (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
 
-@property(nonatomic, retain)	IOBluetoothDevice		*bluetoothDevice;
+//@property(nonatomic, retain)	IOBluetoothDevice		*bluetoothDevice;
 
 @end

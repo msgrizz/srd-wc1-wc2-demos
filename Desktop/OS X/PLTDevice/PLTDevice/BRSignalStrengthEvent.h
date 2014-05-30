@@ -7,13 +7,15 @@
 //
 
 #import "BREvent.h"
-#import "BRSignalStrengthSettingResponse.h"
+//#import "BRSignalStrengthSettingResponse.h"
 
 
 @interface BRSignalStrengthEvent : BREvent
 
 @property(nonatomic,readonly) uint8_t                   connectionID;
 @property(nonatomic,readonly) uint8_t                   strength;
-@property(nonatomic,readonly) BRSignalStrengthDistance  distance;
+//@property(nonatomic,readonly) BRSignalStrengthDistance  distance;
+#warning temporary
+@property(nonatomic,readonly) int  distance;
 
 @end

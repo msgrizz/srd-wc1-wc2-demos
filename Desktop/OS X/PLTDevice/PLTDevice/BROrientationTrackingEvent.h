@@ -6,14 +6,19 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BREvent.h"
-#import "PLTOrientationTrackingInfo.h" // this is not cool.
+
+
+typedef struct {
+	double w;
+	double x;
+	double y;
+	double z;
+} BRQuaternion;
 
 
 @interface BROrientationTrackingEvent : BREvent
 
-@property(nonatomic,readonly) PLTEulerAngles    rawEulerAngles;
-@property(nonatomic,readonly) PLTQuaternion     rawQuaternion;
+@property(nonatomic,readonly) BRQuaternion		quaternion;
 
 @end

@@ -11,6 +11,7 @@
 
 @interface PLTTapsInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp taps:(NSUInteger)taps direction:(PLTTapDirection)direction;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp  calibration:(PLTCalibration *)calibration
+				direction:(PLTTapDirection)direction count:(NSUInteger)count; 
 
 @end

@@ -16,11 +16,11 @@ public class TapsInfo extends Info {
 	public static final int TAP_DIRECTION_Z_UP = 	5;
 	public static final int TAP_DIRECTION_Z_DOWN =	6;
 
-	private int 									_count;
-	private int 									_direction;
+	private byte 									_count;
+	private byte 									_direction;
 
 
-	public TapsInfo(int requestType, Date timestamp, Calibration calibration, int count, int direction) {
+	public TapsInfo(byte requestType, Date timestamp, Calibration calibration, byte count, byte direction) {
 		super(requestType, timestamp, calibration);
 		_count = count;
 		_direction = direction;

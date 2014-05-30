@@ -7,13 +7,11 @@
 //
 
 #import "BREvent.h"
-#import "BRTapsSettingResponse.h"
-#import "PLTTapsInfo.h" // this is not cool.
 
 
 @interface BRTapsEvent : BREvent
 
-@property(nonatomic,readonly) uint8_t           taps;
-@property(nonatomic,readonly) PLTTapDirection   direction;
+@property(nonatomic,readonly) uint8_t       count;
+@property(nonatomic,readonly) uint8_t		direction;
 
 @end

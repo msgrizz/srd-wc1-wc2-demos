@@ -11,6 +11,6 @@
 
 @interface PLTFreeFallInfo : PLTInfo
 
-@property(readonly)	BOOL	isInFreeFall;
+@property(nonatomic,readonly)	BOOL	isInFreeFall;
 
 @end

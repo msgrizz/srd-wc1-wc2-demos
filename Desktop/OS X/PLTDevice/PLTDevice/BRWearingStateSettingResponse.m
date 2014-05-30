@@ -7,6 +7,7 @@
 //
 
 #import "BRWearingStateSettingResponse.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRWearingStateSettingResponse ()
@@ -22,6 +23,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t w;
     [[self.data subdataWithRange:NSMakeRange(8, sizeof(uint8_t))] getBytes:&w length:sizeof(uint8_t)];
     self.isBeingWorn = (BOOL)w;

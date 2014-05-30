@@ -10,17 +10,31 @@
 #import "NSData+HexStrings.h"
 
 
+@interface BRSignalStrengthSettingRequest ()
+
+@property(nonatomic,assign,readwrite) int conncetionID;
+
+@end
+
+
 @implementation BRSignalStrengthSettingRequest
+
+#pragma BRSettingRequest
+
++ (BRSignalStrengthSettingRequest *)requestWithConnectionID:(int)conncetionID
+{
+	BRSignalStrengthSettingRequest *request = [[[super class] alloc] init];
+	request.conncetionID = conncetionID;
+    return request;
+}
 
 #pragma BRMessage
 
-- (NSData *)data;
+- (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 00 00 00 0%1X %04X %02X",
-                           7,                       // length
-                           BRMessageTypeSettingRequest, // message type
-                           0x0800,                  // deckard id
-                           0x02];                   // connection id
+    NSString *hexString = [NSString stringWithFormat:@"%04X %02X",
+                           0x0800,						// deckard id
+                           self.conncetionID];          // connection id
     
     return [NSData dataWithHexString:hexString];
 }

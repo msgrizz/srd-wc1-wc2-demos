@@ -7,12 +7,11 @@
 //
 
 #import "BRSettingResponse.h"
-#import "PLTOrientationTrackingInfo.h" // this is not cool.
+#import "BROrientationTrackingEvent.h"
 
 
 @interface BROrientationTrackingSettingResponse : BRSettingResponse
 
-@property(nonatomic,readonly) PLTEulerAngles    rawEulerAngles;
-@property(nonatomic,readonly) PLTQuaternion     rawQuaternion;
+@property(nonatomic,readonly) BRQuaternion     quaternion;
 
 @end

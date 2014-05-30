@@ -24,7 +24,7 @@ NSString *NSStringFromTapDirection(PLTTapDirection direction);
 
 @interface PLTTapsInfo : PLTInfo
 
-@property(readonly)	NSUInteger		taps;
-@property(readonly)	PLTTapDirection	direction;
+@property(nonatomic,readonly)	PLTTapDirection	direction;
+@property(nonatomic,readonly)	NSUInteger		count;
 
 @end

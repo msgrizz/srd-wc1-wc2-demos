@@ -12,7 +12,7 @@
 
 @interface PLTFreeFallInfo()
 
-@property(nonatomic, readwrite)	BOOL	isInFreeFall;
+@property(nonatomic,readwrite)	BOOL	isInFreeFall;
 
 @end
 
@@ -21,9 +21,10 @@
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp freeFall:(BOOL)isInFreeFall
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+				 freeFall:(BOOL)isInFreeFall
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
 	self.isInFreeFall = isInFreeFall;
 	return self;
 }
@@ -37,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTFreeFallInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisInFreeFall: %@\n}",
+	return [NSString stringWithFormat:@"<PLTFreeFallInfo: %p> requestType=%lu, timestamp=%@, isInFreeFall=%@",
 			self, self.requestType, self.timestamp, (self.isInFreeFall ? @"YES" : @"NO")];
 }
 

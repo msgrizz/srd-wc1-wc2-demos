@@ -12,10 +12,11 @@
 
 @interface PLTOrientationTrackingCalibration : PLTCalibration
 
++ (PLTOrientationTrackingCalibration *)calibrationWithReferenceOrientationTrackingInfo:(PLTOrientationTrackingInfo *)info;
 + (PLTOrientationTrackingCalibration *)calibrationWithReferenceEulerAngles:(PLTEulerAngles)referenceEulerAngles;
 + (PLTOrientationTrackingCalibration *)calibrationWithReferenceQuaternion:(PLTQuaternion)referenceQuaternion;
 
-@property(readonly)	PLTEulerAngles	referenceEulerAngles;
-@property(readonly)	PLTQuaternion	referenceQuaternion;
+@property(nonatomic,assign)	PLTEulerAngles	referenceEulerAngles;
+@property(nonatomic,assign)	PLTQuaternion	referenceQuaternion;
 
 @end

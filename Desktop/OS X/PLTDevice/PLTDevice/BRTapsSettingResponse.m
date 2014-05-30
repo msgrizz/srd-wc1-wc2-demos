@@ -7,12 +7,13 @@
 //
 
 #import "BRTapsSettingResponse.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRTapsSettingResponse ()
 
-@property(nonatomic,assign,readwrite) uint16_t          taps;
-@property(nonatomic,assign,readwrite) PLTTapDirection   direction;
+@property(nonatomic,assign,readwrite) uint8_t   count;
+@property(nonatomic,assign,readwrite) uint8_t   direction;
 
 @end
 
@@ -23,6 +24,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t taps;
     uint8_t direction;
     
@@ -32,7 +35,7 @@
 //    taps = ntohs(taps);
 //    direction = ntohs(direction);
     
-    self.taps = taps;
+    self.count = taps;
     self.direction = direction;
 }
 
@@ -41,7 +44,7 @@
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<BRTapsSettingResponse %p> taps=%lu, direction=%d",
-            self, (unsigned long)self.taps, self.direction];
+            self, (unsigned long)self.count, self.direction];
 }
 
 @end

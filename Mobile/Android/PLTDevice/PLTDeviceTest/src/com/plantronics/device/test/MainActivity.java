@@ -9,6 +9,8 @@
 package com.plantronics.device.test;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,9 +19,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.plantronics.device.*;
-import com.plantronics.device.info.Info;
+import com.plantronics.device.calibration.OrientationTrackingCalibration;
+import com.plantronics.device.info.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends Activity implements PairingListener, ConnectionListener, InfoListener {
 
@@ -151,6 +156,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 		});
 
 		if (!Device.getIsInitialized()) {
+			Log.v(FN(), "Initializing PLTDevice...");
 			Device.initialize(this, new Device.InitializationCallback() {
 				@Override
 				public void onInitialized() {
@@ -184,7 +190,6 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		_context = this;
 
-		// OPTIONAL: If your activity's onPause() called Device.onPause() stop receiving subscribed info while inactive, call Device.onRusume() here to resume subscribed info.
 		if (_device != null) {
 			_device.onResume();
 		}
@@ -197,7 +202,6 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		_context = null;
 
-		// OPTIONAL: If your activity doesnt want to receive subscribed info while inactive, call Device.onPause().
 		if (_device != null) {
 			_device.onPause();
 		}
@@ -221,6 +225,8 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 			if (devices.size() > 0) {
 				_device = devices.get(0);
+				Log.d(FN(), "Got device: " + _device);
+				Log.v(FN(), "Opening connection...");
 				_device.registerConnectionListener(this);
 				_device.openConnection();
 			}
@@ -233,50 +239,55 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
-		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_PERIODIC, 1000);
-//		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 1000);
-//		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
-//		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		//_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
+
+//		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+//		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		//_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+//		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+//		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+//		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+//		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+//		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 	}
 
 	private void changeSubscriptionButton1() {
 		Log.i(FN(), "changeSubscriptionButton1()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 2000);
+		//_device.onPause();
+
+		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
 	}
 
 	private void changeSubscriptionButton2() {
 		Log.i(FN(), "changeSubscriptionButton2()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
 	}
 
 	private void changeSubscriptionButton3() {
 		Log.i(FN(), "changeSubscriptionButton3()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, 15);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
 	}
 
 	private void changeSubscriptionButton4() {
 		Log.i(FN(), "changeSubscriptionButton4()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 	}
 
 	private void changeSubscriptionButton5() {
 		Log.i(FN(), "changeSubscriptionButton5()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, 0);
+		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 	}
 
 	private void unsubscribeButton() {
 		Log.i(FN(), "unsubscribeButton()");
 
-		_device.unsubscribe(this, Device.SERVICE_PROXIMITY);
+		_device.unsubscribe(this, Device.SERVICE_ORIENTATION_TRACKING);
 	}
 
 	private void unsubscribeAllButton() {
@@ -288,10 +299,10 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void queryButton() {
 		Log.i(FN(), "queryButton()");
 
-		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
+//		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
 //		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
 //		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
-//		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
+		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
 //		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
 //		_device.queryInfo(this, Device.SERVICE_TAPS);
 //		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
@@ -313,6 +324,10 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 	public void calibrateButton() {
 		Log.i(FN(), "calibrateButton()");
+
+//		OrientationTrackingInfo oldOrientationInfo = (OrientationTrackingInfo)_device.getCachedInfo(Device.SERVICE_ORIENTATION_TRACKING);
+//		OrientationTrackingCalibration orientationCal = new OrientationTrackingCalibration(oldOrientationInfo.getEulerAngles());
+//		_device.setCalibration(orientationCal, Device.SERVICE_ORIENTATION_TRACKING);
 
 		_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
 
@@ -336,7 +351,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	*******************************************************************************************************/
 
 	public void onConnectionOpen(Device device) {
-		Log.i(FN(), "onConnectionOpen()");
+		Log.i(FN(), "onConnectionOpen(): " + device);
 
 		runOnUiThread(new Runnable() {
 			@Override
@@ -347,7 +362,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	}
 
 	public void onConnectionFailedToOpen(Device device, int error) {
-		Log.i(FN(), "onConnectionFailedToOpen()");
+		Log.i(FN(), "onConnectionFailedToOpen(): " + device);
 
 		if (error == Device.ERROR_CONNECTION_TIMEOUT) {
 			Log.i(FN(), "Open connection timed out.");
@@ -355,7 +370,7 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	}
 
 	public void onConnectionClosed(Device device) {
-		Log.i(FN(), "onConnectionClosed()");
+		Log.i(FN(), "onConnectionClosed(): " + device);
 
 		_device = null;
 
@@ -377,6 +392,46 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 	public void onInfoReceived(Info info) {
 		Log.i(FN(), "onInfoReceived(): " + info);
+
+		if (info.getClass() == OrientationTrackingInfo.class) {
+			OrientationTrackingInfo theInfo = (OrientationTrackingInfo)info;
+			EulerAngles eulerAngles = theInfo.getEulerAngles();
+			int heading = (int)Math.round(-eulerAngles.getX());
+			int pitch = (int)Math.round(eulerAngles.getY());
+			int roll = (int)Math.round(eulerAngles.getZ());
+			Log.i(FN(),"Orientation: {" + heading + ", " + pitch + ", " + roll + "}");
+
+		}
+		else if (info.getClass() == WearingStateInfo.class) {
+			WearingStateInfo theInfo = (WearingStateInfo)info;
+			Log.i(FN(), "Wearing: " + (theInfo.getIsBeingWorn() ? "yes" : "no"));
+		}
+		else if (info.getClass() == ProximityInfo.class) {
+			ProximityInfo theInfo = (ProximityInfo)info;
+			Log.i(FN(), "Local proximity: " + ProximityInfo.getStringForProximity(theInfo.getLocalProximity())
+					+ ", Remote proximity: " + ProximityInfo.getStringForProximity(theInfo.getRemoteProximity()));
+		}
+		else if (info.getClass() == TapsInfo.class) {
+			TapsInfo theInfo = (TapsInfo)info;
+			int count = theInfo.getCount();
+			Log.i(FN(), "Taps: " + count + " in " + TapsInfo.getStringForTapDirection(theInfo.getDirection()));
+		}
+		else if (info.getClass() == PedometerInfo.class) {
+			PedometerInfo theInfo = (PedometerInfo)info;
+			Log.i(FN(), "Steps: " + theInfo.getSteps());
+		}
+		else if (info.getClass() == FreeFallInfo.class) {
+			FreeFallInfo theInfo = (FreeFallInfo)info;
+			Log.i(FN(), "Free fall: " + (theInfo.getIsInFreeFall() ? "yes" : "no"));
+		}
+		else if (info.getClass() == MagnetometerCalInfo.class) {
+			MagnetometerCalInfo theInfo = (MagnetometerCalInfo)info;
+			Log.i(FN(), "Magno cal: " + (theInfo.getIsCalibrated() ? "yes" : "no"));
+		}
+		else if (info.getClass() == GyroscopeCalInfo.class) {
+			GyroscopeCalInfo theInfo = (GyroscopeCalInfo)info;
+			Log.i(FN(), "Gyro cal: " + (theInfo.getIsCalibrated() ? "yes" : "no"));
+		}
 	}
 
 	/* ****************************************************************************************************

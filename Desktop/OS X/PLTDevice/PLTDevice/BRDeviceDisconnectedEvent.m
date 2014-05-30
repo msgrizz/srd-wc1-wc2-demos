@@ -7,6 +7,7 @@
 //
 
 #import "BRDeviceDisconnectedEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRDeviceDisconnectedEvent ()
@@ -22,6 +23,8 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t port;
     [[self.data subdataWithRange:NSMakeRange(8, sizeof(uint8_t))] getBytes:&port length:sizeof(uint8_t)];
     self.port = port;

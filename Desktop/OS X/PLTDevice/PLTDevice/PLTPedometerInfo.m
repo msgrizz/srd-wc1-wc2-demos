@@ -12,7 +12,7 @@
 
 @interface PLTPedometerInfo()
 
-@property(nonatomic, readwrite)	NSUInteger	steps;
+@property(nonatomic,readwrite)	NSUInteger	steps;
 
 @end
 
@@ -21,9 +21,10 @@
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp steps:(NSUInteger)steps
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+					steps:(NSUInteger)steps
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
 	self.steps = steps;
 	return self;
 }
@@ -37,8 +38,8 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTPedometerInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tsteps: %u\n}",
-			self, self.requestType, self.timestamp, self.steps];
+	return [NSString stringWithFormat:@"<PLTPedometerInfo: %p> requestType=%lu, timestamp=%@, steps=%lu",
+			self, self.requestType, self.timestamp, (unsigned long)self.steps];
 }
 
 @end

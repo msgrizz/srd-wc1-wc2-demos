@@ -7,15 +7,16 @@
 //
 
 #import "BRDeviceInfoSettingResponse.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRDeviceInfoSettingResponse ()
 
-@property(nonatomic,strong,readwrite) NSArray   *majorHardwareVersions;
-@property(nonatomic,strong,readwrite) NSArray   *minorHardwareVersions;
-@property(nonatomic,strong,readwrite) NSArray   *majorSoftwareVersions;
-@property(nonatomic,strong,readwrite) NSArray   *minorSoftwareVersions;
-@property(nonatomic,strong,readwrite) NSArray   *supportedServices;
+@property(nonatomic,strong,readwrite) NSMutableArray   *majorHardwareVersions;
+@property(nonatomic,strong,readwrite) NSMutableArray   *minorHardwareVersions;
+@property(nonatomic,strong,readwrite) NSMutableArray   *majorSoftwareVersions;
+@property(nonatomic,strong,readwrite) NSMutableArray   *minorSoftwareVersions;
+@property(nonatomic,strong,readwrite) NSMutableArray   *supportedServices;
 
 @end
 
@@ -26,32 +27,72 @@
 
 - (void)parseData
 {
-    uint16_t payloadOffset = 8;
-    
-    uint16_t majHWLen;
-    [[self.data subdataWithRange:NSMakeRange(payloadOffset, sizeof(uint16_t))] getBytes:&majHWLen length:sizeof(uint16_t)];
-    majHWLen = ntohs(majHWLen);
-    
-    uint8_t majHW[majHWLen];
-    [[self.data subdataWithRange:NSMakeRange(payloadOffset + sizeof(uint16_t), majHWLen)] getBytes:majHW length:sizeof(majHWLen)];
-    
-    for (int v=0; v<majHWLen; v++) {
-        NSLog(@"majHW[%d] = %d", v, majHW[v]);
-    }
-    
-//    uint16_t minHWLen;
-//    [[self.data subdataWithRange:NSMakeRange(payloadOffset + sizeof(uint16_t) + majHWLen, sizeof(uint16_t))] getBytes:&minHWLen length:sizeof(uint16_t)];
-//    minHWLen = ntohs(minHWLen);
-//    
-//    uint16_t majSWLen;
-//    [[self.data subdataWithRange:NSMakeRange(payloadOffset + sizeof(uint16_t) + majHWLen + sizeof(uint16_t) + minHWLen, sizeof(uint16_t))] getBytes:&majSWLen length:sizeof(uint16_t)];
-//    majSWLen = ntohs(majSWLen);
-//    
-//    uint16_t minSWLen;
-//    [[self.data subdataWithRange:NSMakeRange(payloadOffset + sizeof(uint16_t) + majHWLen + sizeof(uint16_t) + minHWLen + sizeof(uint16_t) + majSWLen, sizeof(uint16_t))] getBytes:&minSWLen length:sizeof(uint16_t)];
-//    minSWLen = ntohs(minSWLen);
-
-
+	[super parseData];
+	
+	self.majorHardwareVersions = [NSMutableArray array];
+	self.minorHardwareVersions = [NSMutableArray array];
+	self.majorSoftwareVersions = [NSMutableArray array];
+	self.minorSoftwareVersions = [NSMutableArray array];
+	self.supportedServices = [NSMutableArray array];
+	
+	enum DeviceInfo {
+		DeviceInfoMajorHWVersion = 0,
+		DeviceInfoMinorHWVersion,
+		DeviceInfoMajorSWVersion,
+		DeviceInfoMinorSWVersion,
+		DeviceInfoSupportedServices
+	};
+	
+    uint16_t offset = 2;
+	uint16_t len = 0;
+	uint8_t *vers;
+	
+	for (enum DeviceInfo i = DeviceInfoMajorHWVersion; i < DeviceInfoSupportedServices; i++) {
+		
+		[[self.payload subdataWithRange:NSMakeRange(offset, sizeof(uint16_t))] getBytes:&len length:sizeof(uint16_t)];
+		len = ntohs(len);
+		
+		offset += sizeof(uint16_t);
+		
+		vers = malloc(len);
+		[[self.payload subdataWithRange:NSMakeRange(offset, len)] getBytes:vers length:len];
+		
+		for (int v=0; v<len; v++) {
+			uint8_t version = vers[v];
+			switch (i) {
+				case DeviceInfoMajorHWVersion:
+					[(NSMutableArray *)self.majorHardwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMinorHWVersion:
+					[(NSMutableArray *)self.minorHardwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMajorSWVersion:
+					[(NSMutableArray *)self.majorSoftwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMinorSWVersion:
+					[(NSMutableArray *)self.minorSoftwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoSupportedServices: // suppress compiler warnings
+					break;
+			}
+		}
+		
+		free(vers);
+		
+		offset += len;
+	}
+	
+	[[self.payload subdataWithRange:NSMakeRange(offset, sizeof(uint16_t))] getBytes:&len length:sizeof(uint16_t)];
+	len = ntohs(len);
+	
+	offset += sizeof(uint16_t);
+	
+	uint16_t services[len];
+	[[self.payload subdataWithRange:NSMakeRange(offset, len)] getBytes:&services length:len];
+	
+	for (int s=0; s<(len/2); s++) {
+		[(NSMutableArray *)self.supportedServices addObject:@(htons(services[s]))];
+	}
 }
 
 #pragma mark - NSObject

@@ -5,26 +5,26 @@ package com.plantronics.device;
  */
 public class Subscription {
 
-	private int 		_service;
-	private int 		_mode;
-	private int			_period;
+	private short 		_service;
+	private byte 		_mode;
+	private short		_period;
 
 
-	public Subscription(int service, int mode, int period) {
+	public Subscription(short service, byte mode, short period) {
 		_service = service;
 		_mode = mode;
 		_period = period;
 	}
 
-	public int getService() {
+	public short getService() {
 		return _service;
 	}
 
-	public int getMode() {
+	public byte getMode() {
 		return _mode;
 	}
 
-	public int getPeriod() {
+	public short getPeriod() {
 		return _period;
 	}
 

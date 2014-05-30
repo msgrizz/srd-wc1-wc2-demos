@@ -11,7 +11,7 @@
 
 typedef enum {
     BRMessageTypeHostProtocolVersion =      0x1,
-    BRMessageTypeSettingRequest =               0x2,
+    BRMessageTypeSettingRequest =           0x2,
     BRMessageTypeSettingResultSuccess =     0x3,
     BRMessageTypeSettingResultException =   0x4,
     BRMessageTypeCommand =                  0x5,
@@ -28,7 +28,12 @@ typedef enum {
 
 @interface BRMessage : NSObject
 
-//@property(nonatomic,assign)     short   identifier;
-@property(nonatomic,readonly)   NSData  *data;
++ (BRMessage *)message;
+
+//@property(nonatomic,readonly)	uint32_t		address;
+@property(nonatomic,readonly)	uint16_t		length;
+@property(nonatomic,readonly)	BRMessageType	type;
+@property(nonatomic,readonly)	NSData			*payload;
+@property(nonatomic,readonly)	NSData			*data;
 
 @end

@@ -13,38 +13,40 @@
 @interface BRSubscribeToSignalStrengthCommand ()
 
 @property(nonatomic,assign,readwrite) BOOL subscribe;
+@property(nonatomic,assign,readwrite) int conncetionID;
 
 @end
 
 
 @implementation BRSubscribeToSignalStrengthCommand
 
-+ (BRSubscribeToSignalStrengthCommand *)commandWithSubscription:(BOOL)subscribe
++ (BRSubscribeToSignalStrengthCommand *)commandWithSubscription:(BOOL)subscribe connectionID:(int)conncetionID;
 {
     BRSubscribeToSignalStrengthCommand *command = [[BRSubscribeToSignalStrengthCommand alloc] init];
     command.subscribe = subscribe;
+	command.conncetionID = conncetionID;
     return command;
 }
 
 #pragma BRMessage
 
-- (NSData *)data;
+- (NSData *)payload;
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 00 00 00 0%01X %04X %02X %02X %02X %02X %02X %02X %02X %02X %02X %04X",
-                           0x11,                    // length
-                           BRMessageTypeCommand,    // message type
+    NSString *hexString = [NSString stringWithFormat:@"%04X %02X %02X %02X %02X %02X %02X %02X %02X %02X %04X",
                            0x0800,                  // deckard id
-                           0,                       // connectionID
+                           self.conncetionID,		// connectionID
                            (int)self.subscribe,     // enabled?
                            0,                       // don only
                            0,                       // trend
                            0,                       // rssi audio
                            0,                       // near/far audio
                            0,                       // near/far audio to base (?)
-                           1,                       // sensitivity
-                           70,                      // near threshold
-                           15];                     // timeout
-                           
+                           0,                       // sensitivity (5)
+                           71,                      // near threshold
+						   // this is about 45 days of signal strength monitoring.
+						   // if this SDK is ever adapted to be used for enterprise solutions, this limitation will need to be addressed.
+                           UINT16_MAX];             // timeout
+	
     return [NSData dataWithHexString:hexString];
 }
 

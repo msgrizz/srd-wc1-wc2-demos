@@ -7,41 +7,26 @@
 //
 
 #import "BRException.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @implementation BRException
-
-@dynamic data;
-
-- (void)setData:(NSData *)data
-{
-    _data = data;
-    [self parseData];
-}
-
-- (NSData *)data
-{
-    return _data;
-}
 
 #pragma mark - Private
 
 + (BRException *)exceptionWithData:(NSData *)data
 {
-    BRException *exception = [[[super class] alloc] initWithData:data];
+    BRException *exception = [[[super class] alloc] init];
+	exception.data = data;
     return exception;
 }
 
-- (id)initWithData:(NSData *)data
-{
-    self = [super init];
-    self.data = data;
-    return self;
-}
+#pragma mark - Private
 
-- (void)parseData
+- (BRMessageType)type
 {
-    
+	//return BRMessageTypeSettingResultSuccess;
+	return 0; // whatever
 }
 
 @end

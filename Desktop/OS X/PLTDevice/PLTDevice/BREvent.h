@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "BRIncomingMessage.h"
 
 
 typedef enum {
@@ -19,15 +19,8 @@ typedef enum {
 } BREventID;
 
 
-@interface BREvent : NSObject {
-    
-    NSData      *_data;
-}
+@interface BREvent : BRIncomingMessage
 
 + (BREvent *)eventWithData:(NSData *)data;
-- (id)initWithData:(NSData *)data;
-- (void)parseData;
-
-@property(nonatomic,strong) NSData *data;
 
 @end

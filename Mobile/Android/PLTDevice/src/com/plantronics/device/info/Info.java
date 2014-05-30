@@ -9,16 +9,16 @@ import java.util.Date;
  */
 public class Info
 {
-	public static final int REQUEST_TYPE_SUBSCRIPTION = 0;
-	public static final int REQUEST_TYPE_QUERY =		1;
-	public static final int REQUEST_TYPE_CACHED = 		2;
+	public static final byte REQUEST_TYPE_SUBSCRIPTION = 	0;
+	public static final byte REQUEST_TYPE_QUERY =			1;
+	public static final byte REQUEST_TYPE_CACHED = 			2;
 
-	protected int										_requestType;
-	protected Date 										_timestamp;
-	protected Calibration _calibration;
+	protected byte											_requestType;
+	protected Date 											_timestamp;
+	protected Calibration									_calibration;
 
 
-	public Info(int requestType, Date timestamp, Calibration calibration) {
+	public Info(byte requestType, Date timestamp, Calibration calibration) {
 		_requestType = requestType;
 		_timestamp = timestamp;
 		_calibration = calibration;
@@ -32,7 +32,7 @@ public class Info
 		return _timestamp;
 	}
 
-	public void setRequestType(int requestType) {
+	public void setRequestType(byte requestType) {
 		_requestType = requestType;
 	}
 

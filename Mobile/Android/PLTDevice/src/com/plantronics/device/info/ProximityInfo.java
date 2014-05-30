@@ -13,25 +13,25 @@ public class ProximityInfo extends Info {
 	public static final int PROXIMITY_NEAR =		1;
 	public static final int PROXIMITY_UNKNOWN =		2;
 
-	private int 									_localProximity;
-	private int 									_remoteProximity;
+	private byte 									_localProximity;
+	private byte 									_remoteProximity;
 
 
-	public ProximityInfo(int requestType, Date timestamp, Calibration calibration, int localProximity, int remoteProximity) {
+	public ProximityInfo(byte requestType, Date timestamp, Calibration calibration, byte localProximity, byte remoteProximity) {
 		super(requestType, timestamp, calibration);
 		_localProximity = localProximity;
 		_remoteProximity = remoteProximity;
 	}
 
-	public int getLocalProximity() {
+	public byte getLocalProximity() {
 		return _localProximity;
 	}
 
-	public int getRemoteProximity() {
+	public byte getRemoteProximity() {
 		return _remoteProximity;
 	}
 
-	public static String getStringForProximity(int proximity) {
+	public static String getStringForProximity(byte proximity) {
 		switch (proximity) {
 			case PROXIMITY_FAR:
 				return "far";

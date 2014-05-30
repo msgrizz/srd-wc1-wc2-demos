@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PLTInfo.h"
 #import "PLTCalibration.h"
 #import "PLTOrientationTrackingCalibration.h"
-#import "PLTPedometerInfo.h"
-#import "PLTWearingStateInfo.h"
+#import "PLTPedometerCalibration.h"
+#import "PLTInfo.h"
 #import "PLTProximityInfo.h"
+#import "PLTWearingStateInfo.h"
 #import "PLTOrientationTrackingInfo.h"
 #import "PLTTapsInfo.h"
 #import "PLTPedometerInfo.h"
@@ -24,80 +24,112 @@
 #define PLT_API_VERSION		2.0
 
 
-extern NSString *const PLTNewDeviceAvailableNotification;
-extern NSString *const PLTDidOpenDeviceConnectionNotification;
-extern NSString *const PLTDidFailToOpenDeviceConnectionNotification;
-extern NSString *const PLTDeviceDidDisconnectNotification;
+extern NSString *const PLTDeviceAvailableNotification;
+extern NSString *const PLTDeviceDidOpenConnectionNotification;
+extern NSString *const PLTDeviceDidFailOpenConnectionNotification;
+extern NSString *const PLTDeviceDidCloseConnectionNotification;
 
 extern NSString *const PLTDeviceNotificationKey;
-extern NSString *const PLTConnectionErrorNotificationKey;
+extern NSString *const PLTDeviceConnectionErrorNotificationKey;
 
 
 typedef NS_ENUM(NSUInteger, PLTService) {
-	PLTServiceProximity =                   0x00,
-	PLTServiceWearingState =                0x01,
-	PLTServiceOrientationTracking =         0x02,
-	PLTServicePedometer =                   0x03,
-	PLTServiceFreeFall =                    0x04,
-	PLTServiceTaps =                        0x05,
-	PLTServiceMagnetometerCalStatus =       0x06,
-	PLTServiceGyroscopeCalibrationStatus =  0x07
+	PLTServiceWearingState =				0x1000,
+	PLTServiceProximity =                   0x1001,
+	PLTServiceOrientationTracking =         0x0000,
+	PLTServicePedometer =                   0x0002,
+	PLTServiceFreeFall =                    0x0003,
+	PLTServiceTaps =                        0x0004,
+	PLTServiceMagnetometerCalStatus =       0x0005,
+	PLTServiceGyroscopeCalibrationStatus =  0x0006
 };
 
 typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
-	PLTSubscriptionModeOnChange = 0,
-	PLTSubscriptionModePeriodic = 1
+	PLTSubscriptionModeOnChange = 0x01,
+	PLTSubscriptionModePeriodic = 0x02
 };
 
-typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
-	PLTDeviceErrorCodeUnknownError =                -1,
-	PLTDeviceErrorCodeFailedToCreateDataSession =   1,
-	PLTDeviceErrorCodeNoAccessoryAssociated =       2,
-	PLTDeviceErrorCodeConnectionAlreadyOpen =       3,
-	PLTDeviceErrorInvalidArgument =                 4,
-	PLTDeviceErrorInvalidService =                  5,
-	PLTDeviceErrorUnsupportedService =              6,
-	PLTDeviceErrorInvalidMode =                     7,
-	PLTDeviceErrorUnsupportedMode =                 8,
-	PLTDeviceErrorIncompatibleVersions =            9
-};
+//typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
+//	PLTDeviceErrorCodeUnknownError =                -1,
+//	PLTDeviceErrorCodeFailedToCreateDataSession =   1,
+//	PLTDeviceErrorCodeNoAccessoryAssociated =       2,
+//	PLTDeviceErrorCodeConnectionAlreadyOpen =       3,
+//	PLTDeviceErrorInvalidArgument =                 4,
+//	PLTDeviceErrorInvalidService =                  5,
+//	PLTDeviceErrorUnsupportedService =              6,
+//	PLTDeviceErrorInvalidMode =                     7,
+//	PLTDeviceErrorUnsupportedMode =                 8,
+//	PLTDeviceErrorIncompatibleVersions =            9
+//};
 
 
 @class PLTConfiguration;
 @class PLTCalibration;
 @class PLTInfo;
-@protocol PLTDeviceInfoObserver;
+@protocol PLTDeviceSubscriber;
 
 
 @interface PLTDevice : NSObject
 
+// discovering devices
+
 + (NSArray *)availableDevices;
+
+// connecting to and disconnecting from devices
+
 - (void)openConnection;
 - (void)closeConnection;
-- (void)setConfiguration:(PLTConfiguration *)aConfiguration forService:(PLTService)theService;
-- (PLTConfiguration *)configurationForService:(PLTService)theService;
-- (void)setCalibration:(PLTCalibration *)aCalibration forService:(PLTService)theService;
-- (PLTCalibration *)calibrationForService:(PLTService)theService;
-- (NSError *)subscribe:(id <PLTDeviceInfoObserver>)subscriber toService:(PLTService)service withMode:(PLTSubscriptionMode)mode minPeriod:(NSUInteger)minPeriod;
-- (void)unsubscribe:(id <PLTDeviceInfoObserver>)subscriber fromService:(PLTService)service;
-- (void)unsubscribeFromAll:(id <PLTDeviceInfoObserver>)subscriber;
-- (NSArray *)subscriptions; // not implemented
-- (PLTInfo *)cachedInfoForService:(PLTService)aService;
-- (void)queryInfo:(id <PLTDeviceInfoObserver>)subscriber forService:(PLTService)aService;
 
-@property(readonly)	BOOL							isConnectionOpen;
-@property(readonly)	NSString						*model;
-@property(readonly)	NSString						*name;
-@property(readonly)	NSString						*serialNumber;
-@property(readonly)	NSUInteger						fwMajorVersion;
-@property(readonly)	NSUInteger						fwMinorVersion;
-@property(readonly)	NSArray							*supportedServices;
+// setting and reading service configurations
+
+- (void)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service;
+- (PLTConfiguration *)configurationForService:(PLTService)service;
+
+// setting and reading service calibrations
+
+- (void)setCalibration:(PLTCalibration *)calibration forService:(PLTService)service;
+- (PLTCalibration *)calibrationForService:(PLTService)service;
+
+// subscribing to and unsubscribing from service info
+
+- (NSError *)subscribe:(id <PLTDeviceSubscriber>)subscriber toService:(PLTService)service withMode:(PLTSubscriptionMode)mode andPeriod:(NSUInteger)period;
+- (void)unsubscribe:(id <PLTDeviceSubscriber>)subscriber fromService:(PLTService)service;
+- (void)unsubscribeFromAll:(id <PLTDeviceSubscriber>)subscriber;
+
+// querying service info
+
+- (void)queryInfo:(id <PLTDeviceSubscriber>)subscriber forService:(PLTService)service;
+
+// getting caches service info
+
+- (PLTInfo *)cachedInfoForService:(PLTService)service;
+
+// reading device info and state
+
+@property(nonatomic,readonly)	BOOL					isConnectionOpen;
+@property(nonatomic,readonly)	NSString				*address;
+@property(nonatomic,readonly)	NSString				*model;
+@property(nonatomic,readonly)	NSString				*name;
+@property(nonatomic,readonly)	NSString				*serialNumber;
+@property(nonatomic,readonly)	NSString				*hardwareVersion;
+@property(nonatomic,readonly)	NSString				*firmwareVersion;
+@property(nonatomic,readonly)	NSArray					*supportedServices;
 
 @end
 
 
-@protocol PLTDeviceInfoObserver <NSObject>
+@interface PLTSubscription : NSObject
+
+@property(nonatomic,readonly)	PLTService				service;
+@property(nonatomic,readonly)	PLTSubscriptionMode		mode;
+@property(nonatomic,readonly)	uint16_t				period;
+
+@end
+
+
+@protocol PLTDeviceSubscriber <NSObject>
 
 - (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo;
+- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription;
 
 @end

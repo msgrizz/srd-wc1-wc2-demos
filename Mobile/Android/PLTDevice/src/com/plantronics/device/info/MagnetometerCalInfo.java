@@ -12,7 +12,7 @@ public class MagnetometerCalInfo extends com.plantronics.device.info.Info {
 	private boolean 	_isCalibrated;
 
 
-	public MagnetometerCalInfo(int requestType, Date timestamp, Calibration calibration, boolean isCalibrated) {
+	public MagnetometerCalInfo(byte requestType, Date timestamp, Calibration calibration, boolean isCalibrated) {
 		super(requestType, timestamp, calibration);
 		_isCalibrated = isCalibrated;
 	}
@@ -24,6 +24,6 @@ public class MagnetometerCalInfo extends com.plantronics.device.info.Info {
 	@Override
 	public String toString() {
 		return getClass().getName() + ": requestType=" + _requestType + ", timestamp=" + _timestamp + ", calibration=" + _calibration
-				+ ", isCalibrated=" + (_isCalibrated ? "yes" : "no");
+				+ ", isCalibrated=" + (_isCalibrated ? "true" : "false");
 	}
 }

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BRIncomingMessage.h"
 
 
 typedef enum {
@@ -14,13 +14,9 @@ typedef enum {
     BRExceptionIDIllegalValue =     0x0808
 } BRExceptionID;
 
-@interface BRException : BRMessage {
-    
-    NSData      *_data;
-}
+
+@interface BRException : BRIncomingMessage
 
 + (BRException *)exceptionWithData:(NSData *)data;
-
-@property(nonatomic,strong) NSData *data;
 
 @end

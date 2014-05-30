@@ -7,14 +7,17 @@
 //
 
 #import "BRServiceSubscriptionChangedEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @implementation BRServiceSubscriptionChangedEvent
 
-#pragma mark - Public
+#pragma mark - Private
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint16_t serviceID;
     [[self.data subdataWithRange:NSMakeRange(8, sizeof(uint16_t))] getBytes:&serviceID length:sizeof(uint16_t)];
     self.serviceID = ntohs(serviceID);

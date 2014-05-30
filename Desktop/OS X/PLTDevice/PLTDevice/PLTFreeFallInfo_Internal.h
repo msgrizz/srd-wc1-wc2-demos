@@ -11,6 +11,7 @@
 
 @interface PLTFreeFallInfo()
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp freeFall:(BOOL)isInFreeFall;
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+				 freeFall:(BOOL)isInFreeFall;
 
 @end

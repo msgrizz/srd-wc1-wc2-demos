@@ -23,11 +23,9 @@
 
 #pragma mark - BRMessage
 
-- (NSData *)data
+- (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X 50 00 00 0%1X %04X %04X %04X %04X %02X",
-                           0xD,                     // length
-                           BRMessageTypeCommand,    // message type
+    NSString *hexString = [NSString stringWithFormat:@"%04X %04X %04X %04X %02X",
                            0xFF01,                  // deckard id
                            BRServiceIDPedometer,    // serviceID
                            0x0000,                  // characteristic

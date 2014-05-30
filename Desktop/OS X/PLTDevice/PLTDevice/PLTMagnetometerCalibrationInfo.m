@@ -12,7 +12,7 @@
 
 @interface PLTMagnetometerCalibrationInfo()
 
-@property(nonatomic, readwrite)	BOOL	isCalibrated;
+@property(nonatomic,readwrite)	BOOL	isCalibrated;
 
 @end
 
@@ -21,9 +21,10 @@
 
 #pragma mark - API Internal
 
-- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibrationStatus:(BOOL)isCalibrated
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration
+		calibrationStatus:(BOOL)isCalibrated
 {
-	self = [super initWithRequestType:requestType timestamp:timestamp];
+	self = [super initWithRequestType:requestType timestamp:timestamp calibration:calibration];
 	self.isCalibrated = isCalibrated;
 	return self;
 }
@@ -37,7 +38,7 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTMagnetometerCalibrationInfo: %p> {\n\trequestType: %u\n\ttimestamp: %@\n\tisCalibrated: %@\n}",
+	return [NSString stringWithFormat:@"<PLTMagnetometerCalibrationInfo: %p> requestTyp=%lu, timestamp=%@, isCalibrated=%@",
 			self, self.requestType, self.timestamp, (self.isCalibrated ? @"YES" : @"NO")];
 }
 

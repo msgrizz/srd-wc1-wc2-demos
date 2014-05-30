@@ -7,62 +7,35 @@
 //
 
 #import "BROrientationTrackingEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
-@interface BROrientationTrackingEvent () {
-    PLTQuaternion _rawQuaternion;
-}
+@interface BROrientationTrackingEvent ()
 
-@property(nonatomic,readwrite) PLTQuaternion     rawQuaternion;
+@property(nonatomic,assign,readwrite) BRQuaternion		quaternion;
 
 @end
 
 
 @implementation BROrientationTrackingEvent
 
-@dynamic rawEulerAngles;
-@dynamic rawQuaternion;
-
 #pragma mark - Public
-
-//- (void)parseData
-//{
-//    //int32_t w, x, y, z;
-//    int32_t d[4];
-//    int32_t *dd = d;
-//    
-//    double f[4];
-//    
-//    for (int i = 14; i<20; i+=2) {
-//        [[self.data subdataWithRange:NSMakeRange(i, sizeof(int16_t))] getBytes:dd length:sizeof(int16_t)];
-//         *dd = (int32_t)ntohs((uint16_t)*dd);
-//        if (*dd > 32767) *dd -= 65536;
-//        f[(i-14)/2] = ((double)*dd) / 16384.0f;
-//        dd += 2;
-//    }
-//    
-//    PLTQuaternion q = (PLTQuaternion){f[0], f[1], f[2], f[3]};
-//    if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
-//        NSLog(@"Bad quaternion! %@", NSStringFromQuaternion(q));
-//    }
-//    else {
-//        self.rawQuaternion = (PLTQuaternion){f[0], f[1], f[2], f[3]};
-//    }
-//}
 
 - (void)parseData
 {
-    int32_t w, x, y, z;
+	[super parseData];
+
+	int32_t w, x, y, z;
     
-    [[self.data subdataWithRange:NSMakeRange(14, sizeof(int16_t))] getBytes:&w length:sizeof(int16_t)];
-    [[self.data subdataWithRange:NSMakeRange(16, sizeof(int16_t))] getBytes:&x length:sizeof(int16_t)];
-    [[self.data subdataWithRange:NSMakeRange(18, sizeof(int16_t))] getBytes:&y length:sizeof(int16_t)];
-    [[self.data subdataWithRange:NSMakeRange(20, sizeof(int16_t))] getBytes:&z length:sizeof(int16_t)];
-    
-    w = (int32_t)ntohs((uint16_t)w);
-    x = (int32_t)ntohs((uint16_t)x);
-    y = (int32_t)ntohs((uint16_t)y);
-    z = (int32_t)ntohs((uint16_t)z);
+    [[self.data subdataWithRange:NSMakeRange(14, sizeof(int32_t))] getBytes:&w length:sizeof(int32_t)];
+    [[self.data subdataWithRange:NSMakeRange(18, sizeof(int32_t))] getBytes:&x length:sizeof(int32_t)];
+    [[self.data subdataWithRange:NSMakeRange(22, sizeof(int32_t))] getBytes:&y length:sizeof(int32_t)];
+    [[self.data subdataWithRange:NSMakeRange(26, sizeof(int32_t))] getBytes:&z length:sizeof(int32_t)];
+	
+	w = ntohl(w);
+	x = ntohl(x);
+	y = ntohl(y);
+	z = ntohl(z);
 
     if (w > 32767) w -= 65536;
     if (x > 32767) x -= 65536;
@@ -74,36 +47,21 @@
     double fy = ((double)y) / 16384.0f;
     double fz = ((double)z) / 16384.0f;
 	
-    PLTQuaternion q = (PLTQuaternion){fw, fx, fy, fz};
+    BRQuaternion q = (BRQuaternion){fw, fx, fy, fz};
     if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
-        NSLog(@"Bad quaternion! %@", NSStringFromQuaternion(q));
+        NSLog(@"Bad quaternion! { %f, %f, %f, %f }", q.w, q.x, q.y, q.z);
     }
     else {
-        self.rawQuaternion = (PLTQuaternion){fw, fx, fy, fz};
+        self.quaternion = (BRQuaternion){fw, fx, fy, fz};
     }
-}
-
-- (PLTEulerAngles)rawEulerAngles
-{
-    return EulerAnglesFromQuaternion(self.rawQuaternion);
-}
-
-- (PLTQuaternion)rawQuaternion
-{
-    return _rawQuaternion;
-}
-
-- (void)setRawQuaternion:(PLTQuaternion)quaternion
-{
-    _rawQuaternion = quaternion;
 }
 
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BROrientationTrackingEvent %p> quaternion=%@, eulerAngles=%@",
-            self, NSStringFromQuaternion(self.rawQuaternion), NSStringFromEulerAngles(self.rawEulerAngles)];
+    return [NSString stringWithFormat:@"<BROrientationTrackingEvent %p> quaternion={ %f, %f, %f, %f }",
+            self, self.quaternion.w, self.quaternion.x, self.quaternion.y, self.quaternion.z];
 }
 
 @end

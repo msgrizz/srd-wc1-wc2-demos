@@ -7,12 +7,13 @@
 //
 
 #import "BRTapsEvent.h"
+#import "BRIncomingMessage_Private.h"
 
 
 @interface BRTapsEvent ()
 
-@property(nonatomic,assign,readwrite) uint8_t          taps;
-@property(nonatomic,assign,readwrite) PLTTapDirection   direction;
+@property(nonatomic,assign,readwrite) uint8_t		count;
+@property(nonatomic,assign,readwrite) uint8_t		direction;
 
 @end
 
@@ -23,13 +24,15 @@
 
 - (void)parseData
 {
+	[super parseData];
+	
     uint8_t taps;
     uint8_t direction;
 
     [[self.data subdataWithRange:NSMakeRange(14, sizeof(uint8_t))] getBytes:&direction length:sizeof(uint8_t)];
     [[self.data subdataWithRange:NSMakeRange(15, sizeof(uint8_t))] getBytes:&taps length:sizeof(uint8_t)];
     
-    self.taps = taps;
+    self.count = taps;
     self.direction = direction;
 }
 
@@ -38,7 +41,7 @@
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"<BRTapsEvent %p> taps=%d, direction=%d",
-            self, self.taps, self.direction];
+            self, self.count, self.direction];
 }
 
 @end

@@ -11,4 +11,8 @@
 
 @interface BRSignalStrengthSettingRequest : BRSettingRequest
 
++ (BRSignalStrengthSettingRequest *)requestWithConnectionID:(int)conncetionID;
+
+@property(nonatomic,readonly) int conncetionID;
+
 @end
