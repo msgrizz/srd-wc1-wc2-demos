@@ -113,21 +113,30 @@ namespace Plantronics.Innovation.Util
 
             try
             {
-                quatn[0] = ExtractQuatFromHex(odppayload.Substring(6, 4), 0); //, Quat0_hex_label);  // quat 0 is 4 hex chars from char 6 (0-based index)
-                quatn[1] = ExtractQuatFromHex(odppayload.Substring(14, 4), 1); //, Quat1_hex_label);  // quat 1 is 4 hex chars from char 14 (0-based index)
-                quatn[2] = ExtractQuatFromHex(odppayload.Substring(22, 4), 2); //, Quat2_hex_label);  // quat 2 is 4 hex chars from char 22 (0-based index)
-                quatn[3] = ExtractQuatFromHex(odppayload.Substring(30, 4), 3); //, Quat3_hex_label);  // quat 3 is 4 hex chars from char 30 (0-based index)
-                gyrocalib = ExtractIntFromHex(odppayload.Substring(36, 2));  // gyrocalibration info is 2 hex chars from char 36 (0-based index)
+                // new 32 bit quat version
+                quatn[0] = ExtractQuatFromHex(odppayload.Substring(6, 8), 0); //, Quat0_hex_label);  // quat 0 is 4 hex chars from char 6 (0-based index)
+                quatn[1] = ExtractQuatFromHex(odppayload.Substring(14, 8), 1); //, Quat1_hex_label);  // quat 1 is 4 hex chars from char 14 (0-based index)
+                quatn[2] = ExtractQuatFromHex(odppayload.Substring(22, 8), 2); //, Quat2_hex_label);  // quat 2 is 4 hex chars from char 22 (0-based index)
+                quatn[3] = ExtractQuatFromHex(odppayload.Substring(30, 8), 3); //, Quat3_hex_label);  // quat 3 is 4 hex chars from char 30 (0-based index)
 
-                // extract other sensor info...
-                //temperature = ExtractIntFromHex(odppayload.Substring(4, 2));
-                freefall = ExtractIntFromHex(odppayload.Substring(12, 2));
-                tapdir = ExtractIntFromHex(odppayload.Substring(26, 2));
-                tapcount = ExtractIntFromHex(odppayload.Substring(28, 2));
-                magcalib = ExtractIntFromHex(odppayload.Substring(34, 2));
-                vermaj = ExtractIntFromHex(odppayload.Substring(38, 2));
-                vermin = ExtractIntFromHex(odppayload.Substring(40, 2));
-                pedometersteps = ExtractIntFromHex(odppayload.Substring(18, 4));
+                // old 16 bit quat version
+                //quatn[0] = ExtractQuatFromHex(odppayload.Substring(6, 4), 0); //, Quat0_hex_label);  // quat 0 is 4 hex chars from char 6 (0-based index)
+                //quatn[1] = ExtractQuatFromHex(odppayload.Substring(14, 4), 1); //, Quat1_hex_label);  // quat 1 is 4 hex chars from char 14 (0-based index)
+                //quatn[2] = ExtractQuatFromHex(odppayload.Substring(22, 4), 2); //, Quat2_hex_label);  // quat 2 is 4 hex chars from char 22 (0-based index)
+                //quatn[3] = ExtractQuatFromHex(odppayload.Substring(30, 4), 3); //, Quat3_hex_label);  // quat 3 is 4 hex chars from char 30 (0-based index)
+
+                // Old redundant OLMP code:
+                //gyrocalib = ExtractIntFromHex(odppayload.Substring(36, 2));  // gyrocalibration info is 2 hex chars from char 36 (0-based index)
+
+                //// extract other sensor info...
+                ////temperature = ExtractIntFromHex(odppayload.Substring(4, 2));
+                //freefall = ExtractIntFromHex(odppayload.Substring(12, 2));
+                //tapdir = ExtractIntFromHex(odppayload.Substring(26, 2));
+                //tapcount = ExtractIntFromHex(odppayload.Substring(28, 2));
+                //magcalib = ExtractIntFromHex(odppayload.Substring(34, 2));
+                //vermaj = ExtractIntFromHex(odppayload.Substring(38, 2));
+                //vermin = ExtractIntFromHex(odppayload.Substring(40, 2));
+                //pedometersteps = ExtractIntFromHex(odppayload.Substring(18, 4));
             }
             catch (Exception)
             {
@@ -244,14 +253,34 @@ namespace Plantronics.Innovation.Util
 
         private static long ExtractQuatFromHex(string hexchrs, int labelnum)
         {
+            // new 32 bit quat version
             string digit1hexchrs = hexchrs.Substring(0, 2);
             string digit2hexchrs = hexchrs.Substring(2, 2);
-            byte digit1 = Convert.ToByte(digit1hexchrs, 16);
-            byte digit2 = Convert.ToByte(digit2hexchrs, 16);
+            string digit3hexchrs = hexchrs.Substring(4, 2);
+            string digit4hexchrs = hexchrs.Substring(6, 2);
+            byte[] digits = new byte[4];
+            digits[0] = Convert.ToByte(digit1hexchrs, 16);
+            digits[1] = Convert.ToByte(digit2hexchrs, 16);
+            digits[2] = Convert.ToByte(digit3hexchrs, 16);
+            digits[3] = Convert.ToByte(digit4hexchrs, 16);
 
-            ulong temp;
-            temp = (((ulong)digit1) << 8) + ((ulong)digit2);
-            return checked((long)temp);
+            Array.Reverse(digits);
+            long l = BitConverter.ToInt32(digits, 0);
+
+            // old 16 bit quat version
+            //ulong temp;
+            //temp = 
+            //    (((ulong)digit1) << 24) 
+            //    + (((ulong)digit2) << 16) 
+            //    + (((ulong)digit3) << 8) 
+            //    + (((ulong)digit4));
+
+            //string digit1hexchrs = hexchrs.Substring(0, 2);
+            //string digit2hexchrs = hexchrs.Substring(2, 2);
+            //byte digit1 = Convert.ToByte(digit1hexchrs, 16);
+            //byte digit2 = Convert.ToByte(digit2hexchrs, 16);
+
+            return checked((long)l);
         }
 
         public static double[] quatmult(double[] p, double[] q)
@@ -329,19 +358,45 @@ namespace Plantronics.Innovation.Util
                 try
                 {
                     StringBuilder sb = new StringBuilder();
+
+                    // new 32-bit quaternion code:
                     sb.Append(",000000");
                     sb.Append(list[0].ToString("X2"));
                     sb.Append(list[1].ToString("X2"));
-                    sb.Append("0000");
                     sb.Append(list[2].ToString("X2"));
                     sb.Append(list[3].ToString("X2"));
-                    sb.Append("0000");
+                    //sb.Append("0000");
                     sb.Append(list[4].ToString("X2"));
                     sb.Append(list[5].ToString("X2"));
-                    sb.Append("0000");
                     sb.Append(list[6].ToString("X2"));
                     sb.Append(list[7].ToString("X2"));
-                    sb.Append("000000000");
+                    //sb.Append("0000");
+                    sb.Append(list[8].ToString("X2"));
+                    sb.Append(list[9].ToString("X2"));
+                    sb.Append(list[10].ToString("X2"));
+                    sb.Append(list[11].ToString("X2"));
+                    //sb.Append("0000");
+                    sb.Append(list[12].ToString("X2"));
+                    sb.Append(list[13].ToString("X2"));
+                    sb.Append(list[14].ToString("X2"));
+                    sb.Append(list[15].ToString("X2"));
+                    //sb.Append("0000"
+                    sb.Append("00000");
+
+                    // old 16-bit quaternion code:
+                    //sb.Append(",000000");
+                    //sb.Append(list[0].ToString("X2"));
+                    //sb.Append(list[1].ToString("X2"));
+                    //sb.Append("0000");
+                    //sb.Append(list[2].ToString("X2"));
+                    //sb.Append(list[3].ToString("X2"));
+                    //sb.Append("0000");
+                    //sb.Append(list[4].ToString("X2"));
+                    //sb.Append(list[5].ToString("X2"));
+                    //sb.Append("0000");
+                    //sb.Append(list[6].ToString("X2"));
+                    //sb.Append(list[7].ToString("X2"));
+                    //sb.Append("000000000");
 
                     m_odppayloads.Enqueue(sb.ToString());
                     _go = true;

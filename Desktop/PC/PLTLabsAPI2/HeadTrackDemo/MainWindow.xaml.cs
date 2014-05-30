@@ -26,6 +26,15 @@ namespace HeadTrackDemo
     /// 
     /// VERSION HISTORY:
     /// ********************************************************************************
+    /// Version 1.0.0.5:
+    /// Date: 30th May 2014
+    /// Changed by: Lewis Collins
+    /// Changes:
+    ///   - Recompiled against updated BRLibrary so it now decodes
+    ///     the BladeRunner meta data (device services) correctly.
+    ///   - And also new PLTLabsAPI2 so it decodes 32-bit quaternions
+    ///     correctly (were 16-bit).
+    ///
     /// Version 1.0.0.4:
     /// Date: 22nd May 2014
     /// Changed by: Lewis Collins
