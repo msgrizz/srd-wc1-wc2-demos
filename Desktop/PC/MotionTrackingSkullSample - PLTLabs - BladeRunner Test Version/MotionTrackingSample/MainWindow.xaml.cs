@@ -64,6 +64,13 @@ using Plantronics.Innovation.PLTLabsAPI2;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.5.1:
+ * Date: 30th May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Recompiled against newer BRLibrary/PLTLabsAPI2 library
+ *     (fixes meta data decode issue and 32-bit quaternion issue)
+ *
  * Version 1.0.5.0:
  * Date: 12th May 2014
  * Changed by: Lewis Collins
