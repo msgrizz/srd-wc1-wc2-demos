@@ -54,10 +54,19 @@ PLTLabsAPI.openConnection = function(device, callback){
   }
   log('openConnection: opening connection for device ' +  JSON.stringify(device));
   onSocketConnectionCallback = callback;
-  chrome.bluetooth.connect({device:device , profile: BR_PROFILE}, function() {
-    if (chrome.runtime.lastError){ 
-      log("Error connecting to PLTLabs device :" + chrome.runtime.lastError.message);
-    }});
+  
+  
+  
+  chrome.bluetoothSocket.create(function(createInfo) {
+    log('openConnection: socket created');
+    chrome.bluetoothSocket.connect(createInfo.socketId, device.address, "82972387-294e-4d62-97b5-2668aa35f618", onConnectDeviceHandler);
+  });
+  
+  
+  //chrome.bluetooth.connect({device:device , profile: BR_PROFILE}, function() {
+   // if (chrome.runtime.lastError){ 
+  //    log("Error connecting to PLTLabs device :" + chrome.runtime.lastError.message);
+   // }});
 };
 
 
@@ -76,7 +85,7 @@ PLTLabsAPI.closeConnection = function(callback){
   for(index = 0; index < PLTLabsAPI.connectedDevices.length; index++){
         var s = PLTLabsAPI.connectedDevices[index];
         if (s.socketId == PLTLabsAPI.socket.id) {
-          PLTLabsAPI.connectedDevicessplice(index, 1);
+          PLTLabsAPI.connectedDevices.splice(index, 1);
           break;
         }
   }
@@ -184,7 +193,7 @@ var findPLTLabsDevices = function(){
       }    
   });
   
-  chrome.bluetooth.onConnection.addListener(onConnectDeviceHandler);
+  //chrome.bluetooth.onConnection.addListener(onConnectDeviceHandler);
   chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
   chrome.bluetoothSocket.onReceiveError.addListener(function(info){log('error on socket receive: socket id = ' + info.socketId + ' message = ' + info.errorMessage + ' error = ' + info.error);});
   chrome.bluetoothSocket.onAccept.addListener(function (info){log('onAccept  server socket id = ' + info.socketId + ' clientSocket = ' + info.clientSocketId);});
@@ -207,6 +216,12 @@ var findPLTLabsDevices = function(){
 //Handle the device connect event and set up the device connection
 //and the socket read interval
 var onConnectDeviceHandler = function(_socket){
+  if (chrome.runtime.lastError) {
+    log("onConnectionDeviceHandler: Connection failed: " + chrome.runtime.lastError);
+    return;
+  }
+  
+  log('in on connect device handler ');
    if(PLTLabsAPI.socket && (PLTLabsAPI.socket.id == _socket.id)){
       //same socket as the one we currently have - return
       return;

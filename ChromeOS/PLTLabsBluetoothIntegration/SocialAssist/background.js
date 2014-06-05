@@ -13,10 +13,10 @@ chrome.app.runtime.onLaunched.addListener(
 		},
 		function(win) {
 	       // Add the profile to the list of profiles we support
-	       chrome.bluetooth.addProfile(BR_PROFILE, function(r) {
-		console.log("PLTLabs profile added");
+	       //chrome.bluetooth.addProfile(BR_PROFILE, function(r) {
+		//console.log("PLTLabs profile added");
 		//win.fullscreen();
-	       });
+	       //});
     
 	      // Make the profile available in the main content window.
 	      win.contentWindow.BR_PROFILE = BR_PROFILE;
