@@ -127,6 +127,8 @@ function disconnectPLT(){
  deviceMetadata = null;
  connectedToSensorPort = false;
  connectedToDevice = false;
+ clearSettings();
+ 
 }
 
 function connectionClosed(){
@@ -218,6 +220,14 @@ function onSettings(info){
     
 }
 
+function clearSettings(){
+   $('#batteryLevel').text('');
+   $('#productName').text('');
+   $('#firmwareVersion').text('');
+   $('#deckardVersion').text('');
+   $('#bdAddress').text('');
+}
+
 function getSettings(){
   var packet = PLTLabsMessageHelper.createGetProductNameSetting();
   log('getSettings: getting product name');
@@ -235,7 +245,7 @@ function getSettings(){
   log('getSettings: getting device battery information');
   PLTLabsAPI.sendSetting(packet);
   
-  $('#bdAddress').text(PLTLabsAPI.socket.device.address);
+  $('#bdAddress').text(PLTLabsAPI.device.address);
   
 }
 
