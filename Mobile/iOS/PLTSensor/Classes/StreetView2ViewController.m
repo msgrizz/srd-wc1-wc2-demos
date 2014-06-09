@@ -16,6 +16,7 @@
 #import "NSData+Base64.h"
 //#import "TestFlight.h"
 #import "Reachability.h"
+#import "LocationOverrideViewController.h"
 
 
 #define CAMERA_FOV						80.0
@@ -60,7 +61,7 @@
     //[self.panoramaView animateToCamera:camera animationDuration:.05];
 }
 
-- (void)didUpdateLocationNotification:(NSDictionary *)info
+- (void)locationOverrideDidSelectNewLocationNotification:(NSDictionary *)info
 {
     [self locationButton:self];
 }
@@ -184,7 +185,7 @@
     self.reachabilityImageView.alpha = 0.0;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateLocationNotification:) name:LocationMonitorDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationOverrideDidSelectNewLocationNotification:) name:LocationOverrideDidSelectNewLocation object:nil];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     
     //[TestFlight passCheckpoint:@"STREETVIEW_TAB"];
@@ -212,7 +213,7 @@
     [super viewDidDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:LocationOverrideDidSelectNewLocation object:nil];
     [[PLTContextServer sharedContextServer] removeDelegate:self];
 }
 

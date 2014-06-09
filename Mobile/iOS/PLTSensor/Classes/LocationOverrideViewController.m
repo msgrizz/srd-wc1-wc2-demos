@@ -14,6 +14,9 @@
 #import "LocationMonitor.h"
 
 
+NSString *const LocationOverrideDidSelectNewLocation =  @"LocationOverrideDidSelectNewLocation";
+
+
 @interface LocationOverrideViewController () <AddLocationViewControllerDelegate>
 
 - (void)editButton:(id)sender;
@@ -261,6 +264,7 @@
         
         [self saveToDefaults];
 		[[LocationMonitor sharedMonitor] updateLocationNow];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LocationOverrideDidSelectNewLocation object:nil];
     }
 }
 

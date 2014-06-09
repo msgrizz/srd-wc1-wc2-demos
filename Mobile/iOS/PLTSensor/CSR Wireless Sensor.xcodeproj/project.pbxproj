@@ -476,7 +476,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				42F2A56018AE35B900177547 /* TestFlight */,
 				422F75C016FBAD5C000DF717 /* Context Server */,
@@ -529,6 +528,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */,
 				4226344518A25DAD00FFA4F5 /* GLKit.framework */,
 				4226344318A25D9600FFA4F5 /* CoreData.framework */,
 				4226344118A25D6700FFA4F5 /* ImageIO.framework */,

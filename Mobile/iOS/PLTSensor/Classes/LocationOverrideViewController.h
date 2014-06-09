@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 
+extern NSString *const LocationOverrideDidSelectNewLocation;
+
+
 @interface LocationOverrideViewController : UITableViewController
 
 @end
