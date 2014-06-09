@@ -48,6 +48,17 @@ using System.Timers;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.0.7:
+ * Date: 30th May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Recompiled against updated BRLibrary so it now decodes
+ *     the BladeRunner meta data (device services) correctly.
+ *   - Made API subscribe head-tracking based on 0xFF1A event
+ *     rather than now defunct FF00 command.
+ *   - Fixed quaternion processor to work with WC1's 32-bit
+ *     quaternions (were 16 bit before)
+ *
  * Version 1.0.0.6:
  * Date: 22nd May 2014
  * Changed by: Lewis Collins
@@ -1011,6 +1022,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 case "0x0200":
                     bool isworn = deckardmessage.message_received.payload_received[0].boolValue;
                     Console.WriteLine("Is Worn?: " + isworn);
+                    m_lastwornstate.m_worn = isworn;
+                    m_lastwornstate.m_isInitialStateEvent = false;
+
                     // Wearing state update
                     subscr =
                         m_activeConnection.getSubscription(PLTService.WEARING_STATE_SVC);
@@ -1164,10 +1178,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         public void NotifyDeviceServices(BladeRunnerDevice device)
         {
             // Let's see if attached devices supports Motion Tracking!
-            foreach (int commandid in device.SupportedCommands)
+            foreach (int commandid in device.SupportedEvents)
             {
-                // does the id match the Configure services id: 0xFF00
-                if (commandid == 0xFF00)
+                // does the id match the Subscribed service data event id: 0xFF1A
+                if (commandid == 0xFF1A)
                 {
                     //Found a device with Motion Tracking - lets open the connection to it...
                     PLTDevice aDevice = new PLTDevice(device);

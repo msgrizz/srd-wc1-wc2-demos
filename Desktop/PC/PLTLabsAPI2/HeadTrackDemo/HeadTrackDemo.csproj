@@ -108,6 +108,7 @@
     <Content Include="..\..\..\..\..\..\..\technologies\deckard\dev-2.3\xml\deckard.xml">
       <Link>deckard.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -22,10 +22,15 @@ var PLTLabsAPI = {};
 PLTLabsAPI.connected = false;
 PLTLabsAPI.connectedDevices =[];
 PLTLabsAPI.debug = false;
-PLTLabsAPI.socket = null;
+PLTLabsAPI.socketId = null;
+PLTLabsAPI.device = null;
 PLTLabsAPI.lastCommandSent = null;
 PLTLabsAPI.testInterfaceEnabled = false;
 PLTLabsAPI.buttonEventsEnabled = false;
+
+var BR_PROFILE = {
+  uuid: '82972387-294e-4d62-97b5-2668aa35f618'
+};
 
 
 
@@ -42,6 +47,7 @@ PLTLabsAPI.findDevices = function(callback){
   findPLTLabsDevices();
 };
 
+
 //Function opens a socket connection to the device
 //the callback signature is a single argument function, the argument that will be passed back
 //is a port id that is used by that socket
@@ -54,12 +60,16 @@ PLTLabsAPI.openConnection = function(device, callback){
   }
   log('openConnection: opening connection for device ' +  JSON.stringify(device));
   onSocketConnectionCallback = callback;
-  chrome.bluetooth.connect({device:device , profile: BR_PROFILE}, function() {
-    if (chrome.runtime.lastError){ 
-      log("Error connecting to PLTLabs device :" + chrome.runtime.lastError.message);
-    }});
+  
+  chrome.bluetoothSocket.create(function(createInfo) {
+    log('openConnection: socket created connecting to device ' + device.address + ' with socketId ' + createInfo.socketId);
+    PLTLabsAPI.socketId = createInfo.socketId;
+    PLTLabsAPI.device = device;
+    chrome.bluetoothSocket.connect(createInfo.socketId, device.address, BR_PROFILE.uuid, onConnectDeviceHandler);
+    
+  });
+  
 };
-
 
 //closes down the socket connection to the device
 //the callback signature is a single argument function
@@ -75,21 +85,20 @@ PLTLabsAPI.closeConnection = function(callback){
   //remove the socket from the list of ports
   for(index = 0; index < PLTLabsAPI.connectedDevices.length; index++){
         var s = PLTLabsAPI.connectedDevices[index];
-        if (s.socketId == PLTLabsAPI.socket.id) {
-          PLTLabsAPI.connectedDevicessplice(index, 1);
+        if (s.socketId == PLTLabsAPI.socketId) {
+        //TODO - see if we need to maintain this array now
+          PLTLabsAPI.connectedDevices.splice(index, 1);
           break;
         }
   }
   
-  if (this.socket) {
-    log("closeConnection: disconnecting socket from device");
-    chrome.bluetoothSocket.disconnect(this.socket.id,function(){
+  log("closeConnection: disconnecting socket from device");
+  chrome.bluetoothSocket.disconnect(PLTLabsAPI.socketId,function(){
       log("closeConnection: socket closed.");
       callback();
-      PLTLabsAPI.socket = null;
-    });
-  }
-
+      PLTLabsAPI.socketId = null;
+      PLTLabsAPI.device = null;
+  });
 };
 
 //sets up the events subscription, if the subscription already exists then 
@@ -161,8 +170,7 @@ PLTLabsAPI.sendBladerunnerPacket = function(packet){
     return; 
   }
   //this variable is required to maintain correct scoping when calling the send function
-  var socketId = this.socket.id;
-  chrome.bluetoothSocket.send(socketId, packet);
+  chrome.bluetoothSocket.send(PLTLabsAPI.socketId, packet);
   log('sendBladerunnerPacket: packet sent to device');
 };
   
@@ -184,7 +192,6 @@ var findPLTLabsDevices = function(){
       }    
   });
   
-  chrome.bluetooth.onConnection.addListener(onConnectDeviceHandler);
   chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
   chrome.bluetoothSocket.onReceiveError.addListener(function(info){log('error on socket receive: socket id = ' + info.socketId + ' message = ' + info.errorMessage + ' error = ' + info.error);});
   chrome.bluetoothSocket.onAccept.addListener(function (info){log('onAccept  server socket id = ' + info.socketId + ' clientSocket = ' + info.clientSocketId);});
@@ -206,22 +213,16 @@ var findPLTLabsDevices = function(){
 
 //Handle the device connect event and set up the device connection
 //and the socket read interval
-var onConnectDeviceHandler = function(_socket){
-   if(PLTLabsAPI.socket && (PLTLabsAPI.socket.id == _socket.id)){
-      //same socket as the one we currently have - return
-      return;
-   }
-   
-   if(_socket){  
-      log("onConnectDeviceHandler: socket id " + _socket.id + " for device obtained, setting up socket communications");
-      chrome.bluetoothSocket.setPaused(_socket.id , false);
-      PLTLabsAPI.connected = true;
-      PLTLabsAPI.socket = _socket;
-      hostNegotiate();    
-   } 
-   else {
-      log("onConnectDeviceHandler: failed to connect to socket");
-   }
+var onConnectDeviceHandler = function(){
+  if (chrome.runtime.lastError) {
+    log("onConnectionDeviceHandler: Connection failed: " + chrome.runtime.lastError);
+    return;
+  }
+  
+  log("onConnectDeviceHandler: socket communications established");
+  chrome.bluetoothSocket.setPaused(PLTLabsAPI.socketId , false);
+  PLTLabsAPI.connected = true;
+  hostNegotiate();    
    
 };
 
@@ -245,7 +246,6 @@ var enableTestInterfaces = function(){
   //simple test right now - test for the presence of either the test interface events, or the button events, if 
   //either exist then enable the test interface
   var enableButtonEvents = (PLTLabsAPI.subscribedEvents.indexOf(PLTLabsMessageHelper.BUTTON_EVENT) > -1);
-  //todo - this test will grow over time - so revisit in the future for optimizations
   if(enableButtonEvents && !PLTLabsAPI.testInterfaceEnabled){
     //disable/enable the interface so the states match 
     var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
@@ -461,7 +461,7 @@ var connectedEvent = function(event){
       return;
     }
   }
-  //if we get here then assume the socet needs to be added
+  //if we get here then assume the socket needs to be added
   if (PLTLabsAPI.connectedDevices.length == 0 && connectEvent) {
     PLTLabsAPI.connectedDevices.push(socketConnection); 
   }
@@ -938,7 +938,6 @@ PLTLabsMessageHelper.parseEvent = function(info){
   var message = info.data;
   var data_view = new Uint8Array(message, this.BR_HEADER_SIZE);
   var eventId = this.parseShortArray(0, data_view, 2);
-  //todo -fix array/json insert of property
   var event = {"id": eventId[0], "socketId": info.socketId};
   event.properties = {};
   switch(event.id){
