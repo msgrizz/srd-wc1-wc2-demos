@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PLTConfiguration.h"
 #import "PLTCalibration.h"
 #import "PLTOrientationTrackingCalibration.h"
 #import "PLTPedometerCalibration.h"
@@ -34,14 +35,14 @@ extern NSString *const PLTDeviceConnectionErrorNotificationKey;
 
 
 typedef NS_ENUM(NSUInteger, PLTService) {
-	PLTServiceWearingState =				0x1000,
-	PLTServiceProximity =                   0x1001,
-	PLTServiceOrientationTracking =         0x0000,
-	PLTServicePedometer =                   0x0002,
-	PLTServiceFreeFall =                    0x0003,
-	PLTServiceTaps =                        0x0004,
-	PLTServiceMagnetometerCalStatus =       0x0005,
-	PLTServiceGyroscopeCalibrationStatus =  0x0006
+	PLTServiceWearingState =					0x1000,
+	PLTServiceProximity =						0x1001,
+	PLTServiceOrientationTracking =				0x0000,
+	PLTServicePedometer =						0x0002,
+	PLTServiceFreeFall =						0x0003,
+	PLTServiceTaps =							0x0004,
+	PLTServiceMagnetometerCalibrationStatus =	0x0005,
+	PLTServiceGyroscopeCalibrationStatus =		0x0006
 };
 
 typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
@@ -82,12 +83,12 @@ typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
 
 // setting and reading service configurations
 
-- (void)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service;
+- (NSError *)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service;
 - (PLTConfiguration *)configurationForService:(PLTService)service;
 
 // setting and reading service calibrations
 
-- (void)setCalibration:(PLTCalibration *)calibration forService:(PLTService)service;
+- (NSError *)setCalibration:(PLTCalibration *)calibration forService:(PLTService)service;
 - (PLTCalibration *)calibrationForService:(PLTService)service;
 
 // subscribing to and unsubscribing from service info
@@ -100,7 +101,7 @@ typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
 
 - (void)queryInfo:(id <PLTDeviceSubscriber>)subscriber forService:(PLTService)service;
 
-// getting caches service info
+// getting cached service info
 
 - (PLTInfo *)cachedInfoForService:(PLTService)service;
 

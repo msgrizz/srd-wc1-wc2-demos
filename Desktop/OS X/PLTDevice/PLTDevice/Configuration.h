@@ -8,5 +8,5 @@
 
 
 #define DEBUG_MODE
-#define TARGET_OSX TARGET_OS_IPHONE == 0
-#define TARGET_IOS TARGET_OS_IPHONE
+//#define TARGET_OSX #ifndef TARGET_OS_IPHONE #endif
+//#define TARGET_IOS #ifndef TARGET_OSX #endif

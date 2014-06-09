@@ -9,22 +9,38 @@
 #import "PLTDeviceWatcher.h"
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
+
+#ifdef TARGET_OSX
 #import <IOBluetooth/IOBluetoothUserLib.h>
 #import <IOBluetooth/IOBluetooth.h>
+#endif
+
+#ifdef TARGET_IOS
+#import <ExternalAccessory/ExternalAccessory.h>
+#endif
 
 
-NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
+#ifdef TARGET_IOS
+NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataservice";
+#endif
 
 
 @interface PLTDeviceWatcher()
 
+- (void)postDeviceAvailableNotification:(PLTDevice *)device;
+
+#ifdef TARGET_OSX
 - (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
 - (void)bluetoothDeviceDidDisconnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)device;
-- (void)postDeviceAvailableNotification:(PLTDevice *)device;
 - (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device;
+#endif
+
+#ifdef TARGET_IOS
+- (void)accessoryDidConnectNotification:(NSNotification *)notification;
+- (void)accessoryDidDisconnectNotification:(NSNotification *)notification;
+#endif
 
 @property(nonatomic, strong)	NSMutableArray	*devices;
-//@property(nonatomic, strong)	NSMutableArray	*connectedBluetoothDevices;
 
 @end
 
@@ -48,6 +64,7 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 		
         self.devices = [NSMutableArray array];
         
+#ifdef TARGET_OSX
         for (IOBluetoothDevice *d in [IOBluetoothDevice pairedDevices]) {
             if (d.isConnected && [self bluetoothDeviceIsWC1:d]) {
                 [d registerForDisconnectNotification:self selector:@selector(bluetoothDeviceDidDisconnectNotification:device:)];
@@ -57,11 +74,26 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
         }
         
         [IOBluetoothDevice registerForConnectNotifications:self selector:@selector(bluetoothDeviceDidConnectNotification:device:)];
+#endif
+		
+#ifdef TARGET_IOS
+		NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
+		NSLog(@"Connected accessories: %@",accessories);
+		for (EAAccessory *a in accessories) {
+			PLTDevice *device = [[PLTDevice alloc] initWithAccessory:a];
+			[self.devices addObject:device];
+		}
+		
+		[[EAAccessoryManager sharedAccessoryManager] registerForLocalNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidConnectNotification:) name:EAAccessoryDidConnectNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(accessoryDidDisconnectNotification:) name:EAAccessoryDidDisconnectNotification object:nil];
+#endif
     }
 	
     return self;
 }
 
+#ifdef TARGET_OSX
 - (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)btDevice
 {
 	NSLog(@"bluetoothDeviceDidConnectNotification: %@", btDevice);
@@ -103,14 +135,6 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
 		[self.devices removeObjectsAtIndexes:toRemove];
 	}
 }
-		  
-- (void)postDeviceAvailableNotification:(PLTDevice *)device
-{
-	NSLog(@"postDeviceAvailableNotification: %@", device);
-	
-	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
-	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceAvailableNotification object:nil userInfo:userInfo];
-}
 
 - (BOOL)bluetoothDeviceIsWC1:(IOBluetoothDevice *)device
 {
@@ -122,6 +146,50 @@ NSString *const PLTDeviceProtocolString =					@"com.plt.protocol1";
     }
     
     return NO;
+}
+#endif
+
+#ifdef TARGET_IOS
+- (void)accessoryDidConnectNotification:(NSNotification *)notification
+{
+	NSLog(@"PLTDeviceWatcher: accessoryDidConnectNotification: %@", notification);
+	
+	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
+	if ([accessory.protocolStrings containsObject:PLTDeviceEAProtocolString]) {
+		PLTDevice *device = [[PLTDevice alloc] initWithAccessory:accessory];
+		if (![self.devices containsObject:device]) {
+			[self.devices addObject:device];
+			[self postDeviceAvailableNotification:device];
+		}
+	}
+}
+
+- (void)accessoryDidDisconnectNotification:(NSNotification *)notification
+{
+	NSLog(@"PLTDeviceWatcher: accessoryDidDisconnectNotification: %@", notification);
+	
+	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
+	if ([accessory.protocolStrings containsObject:PLTDeviceEAProtocolString]) {
+		//	PLTDevice *device = [[PLTDevice alloc] initWithAccessory:accessory];
+		NSMutableIndexSet *toRemove = [NSMutableIndexSet indexSet];
+		for (NSUInteger i=0; i<[self.devices count]; i++) {
+			PLTDevice *d = self.devices[i];
+			if (d.accessory.connectionID == accessory.connectionID) {
+				[toRemove addIndex:i];
+				[d closeConnection];
+			}
+		}
+		[self.devices removeObjectsAtIndexes:toRemove];
+	}
+}
+#endif
+		  
+- (void)postDeviceAvailableNotification:(PLTDevice *)device
+{
+	NSLog(@"postDeviceAvailableNotification: %@", device);
+	
+	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceAvailableNotification object:nil userInfo:userInfo];
 }
 
 @end

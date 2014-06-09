@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRMessage.h"
+#import "BROutgoingMessage.h"
 
 
-@interface BRRawMessage : BRMessage
+@interface BRRawMessage : BROutgoingMessage
 
 + (BRRawMessage *)messageWithType:(BRMessageType)type payload:(NSData *)payload;
 

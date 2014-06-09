@@ -15,7 +15,8 @@ typedef enum {
     BREventIDServiceDataChanged =               0xFF1A,
     BREventIDServiceSubscriptionChanged =       0xFF0A,
     BREventIDDeviceConnected =                  0x0C00,
-    BREventIDDeviceDisconnected =               0x0C02
+    BREventIDDeviceDisconnected =               0x0C02,
+	BREventIDApplicationActionResult =			0xFF1E
 } BREventID;
 
 

@@ -4,20 +4,35 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>BRDeviceTest.xcscheme</key>
+		<key>BRDeviceTest_OSX.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
-		<key>PLTDevice.xcscheme</key>
+		<key>BRDeviceTest_iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>PLTDeviceTest_OSX.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>PLTDeviceTest_iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>PLTDevice_OSX.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>PLTDeviceTest.xcscheme</key>
+		<key>PLTDevice_iOS.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -58,6 +73,36 @@
 			<true/>
 		</dict>
 		<key>429E600718BEC511003563D6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA6ED1938239800B735E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA6FA1938239800B735E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA7161938296E00B735E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA7351938296E00B735E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA74D1938299600B735E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>42FEA76C1938299600B735E9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

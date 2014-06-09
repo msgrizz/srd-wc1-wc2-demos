@@ -12,9 +12,9 @@
 
 @interface BRServiceSubscriptionChangedEvent : BREvent
 
-@property(nonatomic,assign) BRServiceID					serviceID;
-@property(nonatomic,assign) BRCharacteristicID			characteristicID;
-@property(nonatomic,assign) BRServiceSubscriptionMode	mode;
-@property(nonatomic,assign) uint16_t					period;
+@property(nonatomic,readonly)	BRServiceID					serviceID;
+@property(nonatomic,readonly)	BRCharacteristicID			characteristicID;
+@property(nonatomic,readonly)	BRServiceSubscriptionMode	mode;
+@property(nonatomic,readonly)	uint16_t					period;
 
 @end

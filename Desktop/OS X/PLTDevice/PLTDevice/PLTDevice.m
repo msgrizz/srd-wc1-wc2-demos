@@ -55,9 +55,6 @@
 #import "NSData+HexStrings.h"
 #import "NSArray+PrettyPrint.h"
 
-#import <IOBluetooth/IOBluetooth.h>
-//#import <ExternalAccessory/ExternalAccessory.h>
-
 
 NSString *const PLTDeviceAvailableNotification =							@"PLTDeviceAvailableNotification";
 NSString *const PLTDeviceDidOpenConnectionNotification =					@"PLTDeviceDidOpenConnectionNotification";
@@ -115,7 +112,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 @property(nonatomic,strong)				NSMutableDictionary					*querySubscribers;
 @property(nonatomic,strong)				NSMutableDictionary					*cachedInfo;
 
+//#ifdef TARGET_OSX
 @property(nonatomic,strong,readwrite)	NSString							*address;
+//#endif
 @property(nonatomic,strong,readwrite)	NSString							*model;
 @property(nonatomic,strong,readwrite)	NSString							*name;
 @property(nonatomic,strong,readwrite)	NSString							*serialNumber;
@@ -166,11 +165,21 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 //		[address replaceCharactersInRange:NSMakeRange([address length]-1, 1) withString:@"f"];
 //		NSLog(@"address: %@", address);
 		
+#ifdef TARGET_OSX
 		self.brDevice = [BRDevice deviceWithAddress:self.address];
+#endif
+#ifdef TARGET_IOS
+		self.brDevice = [BRDevice deviceWithAccessory:self.accessory];
+#endif
         self.brDevice.delegate = self;
 		self.remotePort = -1;
 		
+#ifdef TARGET_OSX
 		NSLog(@"Connecting to device at %@...", self.brDevice.bluetoothAddress);
+#endif
+#ifdef TARGET_IOS
+		NSLog(@"Connecting to accessory %@...", self.brDevice.accessory);
+#endif
         [self.brDevice openConnection]; // wait for open callback
 	}
 	else {
@@ -184,9 +193,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	[self.brDevice closeConnection];
 }
 
-- (void)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service
+- (NSError *)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service
 {
-	
+	return nil;
 }
 
 - (PLTConfiguration *)configurationForService:(PLTService)theService
@@ -194,7 +203,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	return nil;
 }
 
-- (void)setCalibration:(PLTCalibration *)cal forService:(PLTService)service
+- (NSError *)setCalibration:(PLTCalibration *)cal forService:(PLTService)service
 {
 	NSLog(@"setCalibration: %@, forService: %lu", cal, service);
 	
@@ -231,6 +240,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		default:
 			break;
 	}
+	return nil;
 }
 
 - (PLTCalibration *)calibrationForService:(PLTService)theService
@@ -253,7 +263,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			case PLTServicePedometer:
 			case PLTServiceFreeFall:
 			case PLTServiceTaps:
-			case PLTServiceMagnetometerCalStatus:
+			case PLTServiceMagnetometerCalibrationStatus:
 			case PLTServiceGyroscopeCalibrationStatus:
 				// cool.
 				break;
@@ -381,7 +391,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			case PLTServicePedometer:
 			case PLTServiceFreeFall:
 			case PLTServiceTaps:
-			case PLTServiceMagnetometerCalStatus:
+			case PLTServiceMagnetometerCalibrationStatus:
 			case PLTServiceGyroscopeCalibrationStatus:
 				// cool.
 				break;
@@ -548,22 +558,25 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 #pragma mark - Private
 
-- (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
+#ifdef TARGET_OSX
+- (PLTDevice *)initWithBluetoothAddress:(NSString *)address
 {
 	if (self = [super init]) {
-        
-        //self.bluetoothDevice = [IOBluetoothDevice deviceWithAddressString:address];
 		self.address = address;
-		
-		// moved to openConnection
-//        self.brDevice = [BRDevice deviceWithAddress:self.address];
-//        self.brDevice.delegate = self;
-		
-		//self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:(PLTQuaternion){ 1, 0, 0, 0 }];
     }
-	
     return self;
 }
+#endif
+
+#ifdef TARGET_IOS
+- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory
+{
+	if (self = [super init]) {
+		self.accessory = anAccessory;
+    }
+    return self;
+}
+#endif
 
 - (void)didOpenConnection
 {
@@ -865,7 +878,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 												  count:e.count];
 	}
 	else if ([event isKindOfClass:[BRMagnetometerCalStatusEvent class]]) {
-		service = PLTServiceMagnetometerCalStatus;
+		service = PLTServiceMagnetometerCalibrationStatus;
 		BRMagnetometerCalStatusEvent *e = (BRMagnetometerCalStatusEvent *)event;
 		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
 		info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
@@ -1151,7 +1164,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 	else if ([response isKindOfClass:[BRMagnetometerCalStatusSettingResponse class]]) {
 		BRMagnetometerCalStatusSettingResponse *r = (BRMagnetometerCalStatusSettingResponse *)response;
-		service = PLTServiceMagnetometerCalStatus;
+		service = PLTServiceMagnetometerCalibrationStatus;
 		info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
 																 timestamp:timestamp
 															   calibration:nil
@@ -1339,6 +1352,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 #pragma mark - NSObject
 
+#warning IOS
 - (BOOL)isEqual:(id)object
 {
 	if ([object isKindOfClass:[PLTDevice class]]) {
@@ -1349,7 +1363,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTDevice: %p> address=%@, model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion%@, supportedServices=%@, isConnectionOpen=%@",
+	return [NSString stringWithFormat:@"<PLTDevice: %p> address=%@, model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion=%@, supportedServices=%@, isConnectionOpen=%@",
 			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];
 }
 

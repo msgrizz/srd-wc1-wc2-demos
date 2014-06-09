@@ -10,6 +10,16 @@
 #import "BRIncomingMessage_Private.h"
 
 
+@interface BRServiceSubscriptionChangedEvent ()
+
+@property(nonatomic,assign,readwrite)	BRServiceID						serviceID;
+@property(nonatomic,assign,readwrite)	BRCharacteristicID				characteristicID;
+@property(nonatomic,assign,readwrite)	BRServiceSubscriptionMode		mode;
+@property(nonatomic,assign,readwrite)	uint16_t						period;
+
+@end
+
+
 @implementation BRServiceSubscriptionChangedEvent
 
 #pragma mark - Private

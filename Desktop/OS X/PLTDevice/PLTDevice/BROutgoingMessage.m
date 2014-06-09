@@ -18,7 +18,7 @@
 
 - (NSData *)data
 {
-    NSString *hexString = [NSString stringWithFormat:@"1 %03X %@ %1X",
+	NSString *hexString = [NSString stringWithFormat:@"1 %03X %@ %1X",
 						   self.length,		// length
 						   self.address,	// address
 						   self.type		// type

@@ -11,6 +11,11 @@
 #import <Foundation/Foundation.h>
 
 
+#ifdef TARGET_IOS
+extern NSString *const PLTDeviceEAProtocolString;
+#endif
+
+
 @interface PLTDeviceWatcher : NSObject
 
 + (PLTDeviceWatcher *)sharedWatcher;

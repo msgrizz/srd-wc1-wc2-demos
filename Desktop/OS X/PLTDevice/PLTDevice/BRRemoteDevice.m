@@ -12,7 +12,9 @@
 #import "BRHostVersionNegotiateMessage.h"
 #import "NSData+HexStrings.h"
 #import "BRMetadataMessage.h"
-
+#ifdef TARGET_IOS
+#import <ExternalAccessory/ExternalAccessory.h>
+#endif
 
 //typedef enum {
 //    BRRemoteDeviceStateDisconnected,
@@ -45,7 +47,12 @@
 	BRRemoteDevice *device = [[BRRemoteDevice alloc] init];
 	device.parent = parent;
 	device.port = port;
+#ifdef TARGET_OSX
 	device.bluetoothAddress = parent.bluetoothAddress;
+#endif
+#ifdef TARGET_IOS
+	device.accessory = parent.accessory;
+#endif
 	return device;
 }
 
@@ -130,10 +137,19 @@
 
 #pragma mark - NSObject
 
+
 - (NSString *)description
 {
+#ifdef TARGET_OSX
     return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
-            self, self.bluetoothAddress, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], (unsigned long)[self.events count], self.remoteDevices];
+            self, self.bluetoothAddress, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
+			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.remoteDevices];
+#endif
+#ifdef TARGET_IOS
+	return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
+            self, self.accessory.name, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
+			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.remoteDevices];
+#endif
 }
 
 @end

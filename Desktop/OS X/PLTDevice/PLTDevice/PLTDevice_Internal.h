@@ -8,13 +8,23 @@
 
 
 @class PLTDevice;
-@class IOBluetoothDevice;
 
+#ifdef TARGET_IOS
+@class EAAccessory;
+#endif
 
 @interface PLTDevice()
 
+#ifdef TARGET_OSX
 - (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
+#endif
 
-//@property(nonatomic, retain)	IOBluetoothDevice		*bluetoothDevice;
+#ifdef TARGET_IOS
+- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory;
+#endif
+
+#ifdef TARGET_IOS
+@property(nonatomic,strong)		EAAccessory		*accessory;
+#endif
 
 @end

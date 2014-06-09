@@ -11,7 +11,13 @@
 
 typedef enum {
     BRDeviceStateDisconnected,
+	
+#ifdef TARGET_OSX
     BRDeviceStateOpeningRFCOMMChannel,
+#endif
+#ifdef TARGET_IOS
+	BRDeviceStateOpeningEASession,
+#endif
     BRDeviceStateHostVersionNegotiating,
 	BRDeviceStateConnected
 } BRDeviceState;
@@ -19,9 +25,15 @@ typedef enum {
 
 @interface BRDevice ()
 
-- (void)parseIncomingData:(NSData *)data;
+- (void)parseIncomingMessage:(NSData *)data;
 
+#ifdef TARGET_OSX
 @property(nonatomic,strong,readwrite)   NSString			*bluetoothAddress;
+#endif
+#ifdef TARGET_IOS
+@property(nonatomic,strong,readwrite)	EAAccessory			*accessory;
+#endif
+
 @property(nonatomic,assign,readwrite)   BOOL				isConnected;
 @property(nonatomic,assign,readwrite)	BRDeviceState		state;
 @property(nonatomic,strong,readwrite)	NSArray				*commands;

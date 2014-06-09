@@ -50,5 +50,4 @@
             self, self.connectionID, self.strength, self.distance];
 }
 
-
 @end

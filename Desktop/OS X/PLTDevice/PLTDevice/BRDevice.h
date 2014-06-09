@@ -14,24 +14,55 @@
 @class BRException;
 @class BRMetadataMessage;
 @class BRRemoteDevice;
+
+#ifdef TARGET_IOS
+@class EAAccessory;
+#endif
+
 @protocol BRDeviceDelegate;
+
+
+#ifdef TARGET_IOS
+typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
+	//BRDeviceErrorCodeUnknownError =                -1,
+	BRDeviceErrorCodeFailedToCreateDataSession =   1,
+	BRDeviceErrorCodeNoAccessoryAssociated =       2,
+	BRDeviceErrorCodeConnectionAlreadyOpen =       3,
+	//BRDeviceErrorInvalidArgument =                 4,
+	//BRDeviceErrorInvalidService =                  5,
+	//BRDeviceErrorUnsupportedService =              6,
+	//BRDeviceErrorInvalidMode =                     7,
+	//BRDeviceErrorUnsupportedMode =                 8,
+	//BRDeviceErrorIncompatibleVersions =            9
+};
+#endif
 
 
 @interface BRDevice : NSObject
 
+#ifdef TARGET_OSX
 + (BRDevice *)deviceWithAddress:(NSString *)BTAddress;
+#endif
+#ifdef TARGET_IOS
++ (BRDevice *)deviceWithAccessory:(EAAccessory *)anAccessory;
+#endif
+
 - (void)openConnection;
 - (void)closeConnection;
 - (void)sendMessage:(BRMessage *)message;
 
+#ifdef TARGET_OSX
+@property(nonatomic,readonly)   NSString				*bluetoothAddress;
+#endif
+#ifdef TARGET_IOS
+@property(nonatomic,readonly)	EAAccessory				*accessory;
+#endif
 @property(nonatomic,assign)     id <BRDeviceDelegate>   delegate;
-@property(nonatomic,readonly)   NSString                *bluetoothAddress;
 @property(nonatomic,readonly)   BOOL                    isConnected;
 @property(nonatomic,readonly)	NSDictionary			*remoteDevices;
 @property(nonatomic,readonly)	NSArray					*commands;
 @property(nonatomic,readonly)	NSArray					*settings;
 @property(nonatomic,readonly)	NSArray					*events;
-
 
 @end
 
