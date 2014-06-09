@@ -32,6 +32,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08d9b7eb-6f79-4334-acbe-963571ee8a77" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRawMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRawMessage.m" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests-Info.plist" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests.m" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/en.lproj/InfoPlist.strings" afterPath="" />
@@ -45,9 +47,24 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/en.lproj/InfoPlist.strings" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibratePedometerServiceCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibratePedometerServiceCommand.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../PLTDevice/src/com/plantronics/PLTDevice/Device.java" afterPath="$PROJECT_DIR$/../PLTDevice/src/com/plantronics/PLTDevice/Device.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" afterPath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceCalibrationSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceCalibrationSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetView2ViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetView2ViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../PLTDevice/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../PLTDevice/.idea/workspace.xml" />
     </list>
     <ignored path="DX650 Seamless Transfer.iws" />
@@ -112,10 +129,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+      <file leaf-file-name="SettingsActivity.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="599" column="12" selection-start="21488" selection-end="21911" vertical-scroll-proportion="10.726989" vertical-offset="312" max-vertical-offset="14352">
+            <state line="98" column="5" selection-start="3040" selection-end="3040" vertical-scroll-proportion="0.44929796" vertical-offset="888" max-vertical-offset="1596">
               <folding />
             </state>
           </provider>
@@ -160,7 +177,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="226" />
+    <option name="x" value="392" />
     <option name="y" value="22" />
     <option name="width" value="1453" />
     <option name="height" value="1024" />
@@ -191,8 +208,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -421,6 +436,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -479,17 +496,20 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+    <configuration default="true" type="XSLT" factoryName="XSLT">
+      <option name="myOutputFile" />
+      <option name="myOpenOutputFile" value="false" />
+      <option name="myOpenInBrowser" value="false" />
+      <option name="mySmartErrorHandling" value="true" />
+      <option name="myRunnerPort" value="34873" />
+      <option name="myVmArguments" />
+      <option name="myWorkingDirectory" />
+      <option name="myModule" />
+      <option name="myJdk" />
+      <parameters />
+      <OutputType value="CONSOLE" save-to-file="false" />
+      <FileType name="XML" />
+      <JdkChoice value="FROM_MODULE" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -519,20 +539,17 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="XSLT" factoryName="XSLT">
-      <option name="myOutputFile" />
-      <option name="myOpenOutputFile" value="false" />
-      <option name="myOpenInBrowser" value="false" />
-      <option name="mySmartErrorHandling" value="true" />
-      <option name="myRunnerPort" value="34873" />
-      <option name="myVmArguments" />
-      <option name="myWorkingDirectory" />
-      <option name="myModule" />
-      <option name="myJdk" />
-      <parameters />
-      <OutputType value="CONSOLE" save-to-file="false" />
-      <FileType name="XML" />
-      <JdkChoice value="FROM_MODULE" />
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -644,8 +661,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="226" y="22" width="1453" height="1024" extended-state="0" />
-    <editor active="false" />
+    <frame x="392" y="22" width="1453" height="1024" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -664,7 +681,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22608079" sideWeight="0.6771894" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22608079" sideWeight="0.6771894" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30753565" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -700,6 +717,13 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="599" column="12" selection-start="21488" selection-end="21911" vertical-scroll-proportion="0.0" vertical-offset="312" max-vertical-offset="14352">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="599" column="12" selection-start="21488" selection-end="21911" vertical-scroll-proportion="0.0" vertical-offset="7188" max-vertical-offset="14352">
@@ -818,11 +842,6 @@
         <state line="18" column="13" selection-start="763" selection-end="763" vertical-scroll-proportion="0.08562691" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="32" selection-start="2599" selection-end="2599" vertical-scroll-proportion="0.4587156" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/libs/bladerunnerdsp.jar!/com/plantronics/bladerunner/SignatureDescription.class">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="13" selection-start="170" selection-end="170" vertical-scroll-proportion="0.2975815" vertical-offset="0" max-vertical-offset="0" />
@@ -845,14 +864,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="13" selection-start="487" selection-end="487" vertical-scroll-proportion="0.11232449" vertical-offset="0" max-vertical-offset="641">
+        <state line="13" column="13" selection-start="487" selection-end="487" vertical-scroll-proportion="0.24336973" vertical-offset="0" max-vertical-offset="641">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="599" column="12" selection-start="21488" selection-end="21911" vertical-scroll-proportion="10.726989" vertical-offset="312" max-vertical-offset="14352">
+        <state line="69" column="42" selection-start="3045" selection-end="3047" vertical-scroll-proportion="0.33333334" vertical-offset="623" max-vertical-offset="14352">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="5" selection-start="3040" selection-end="3040" vertical-scroll-proportion="0.44929796" vertical-offset="888" max-vertical-offset="1596">
           <folding />
         </state>
       </provider>
