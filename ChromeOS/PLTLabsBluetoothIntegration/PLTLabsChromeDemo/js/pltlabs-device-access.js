@@ -227,7 +227,7 @@ var onConnectDeviceHandler = function(){
 };
 
 var onReceiveHandler = function(info) {
-  //log('socket has recieved ' + info.data.byteLength + ' bytes of data');
+  log('socket has recieved ' + info.data.byteLength + ' bytes of data');
   parseBladerunnerData(info);
 }
 
@@ -377,7 +377,7 @@ var parseBladerunnerData = function(info){
       onSettingsCallback(setting);
       break;
      case PLTLabsMessageHelper.GET_RESULT_EXCEPTION_TYPE:
-        //log('parseBladerunnerData: Exception Type Message');
+        log('parseBladerunnerData: Exception Type Message');
       break;
      case PLTLabsMessageHelper.PERFORM_COMMAND_TYPE:
      // log('Perform Command Type Message');
@@ -1019,20 +1019,20 @@ PLTLabsMessageHelper.parseEvent = function(info){
       var characteristic = this.parseShortArray(4, data_view, 6);
       event.properties["characteristic"] = characteristic[0];
       var serviceDataLength = this.parseShortArray(6, data_view, 8);
-      var serviceData = this.parseShortArray(8, data_view,(8 + serviceDataLength[0]));
       switch(serviceId[0]){
         case this.HEAD_ORIENTATION_SERVICE_ID:
           //convert quaternians to eular angles - w, x, y, z
+          var serviceData = this.parse32BitArray(8, data_view, (8 + serviceDataLength[0]))
           event.properties["quaternion"] = this.convertToQuaternion(serviceData);
           break;
         case this.PEDOMETER_SERVICE_ID:
-          event.properties["steps"] = serviceData[0];
+          event.properties["steps"] = this.parse32Bit(8, data_view,(8 + serviceDataLength[0]));;
           break;
         case this.TAPS_SERVICE_ID:
-          event.properties["x"] = serviceData[0];
+          event.properties["x"] = data_view[9];
           break;
         case this.FREE_FALL_SERVICE_ID:
-          event.properties["freefall"] = serviceData[0] == 1;
+          event.properties["freefall"] = this.byteToBool(data_view[8]);
           break;
         }
       break;
@@ -1240,6 +1240,26 @@ PLTLabsMessageHelper.parseShort = function(index, buffer){
     var val = buffer[index] << 8;
     val += (buffer[index+1] & 0xFF);
     return val;
+}
+
+PLTLabsMessageHelper.parse32Bit = function(index, buffer){
+  if(buffer.length < 4){
+    log("error parsing 32 bit value - array is undersized");
+    return null;
+  }
+  var val = buffer[index] << 24;
+  val += (buffer[index+1] & 0xFF) << 16;
+  val += (buffer[index+2] & 0xFF) << 8;
+  val += (buffer[index+3] & 0xFF);
+  return val;
+}
+
+PLTLabsMessageHelper.parse32BitArray = function(index, buffer, bounds){
+   var result = new Array();
+   for(index; index < bounds; index+=4){
+    result.push(this.parse32Bit(index, buffer));
+  }
+  return result;
 }
 
 PLTLabsMessageHelper.parseShortArray = function(index, buffer, bounds){
