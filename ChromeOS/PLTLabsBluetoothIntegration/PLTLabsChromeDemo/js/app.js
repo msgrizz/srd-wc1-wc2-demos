@@ -37,9 +37,10 @@ sensorPortAddress_view[0] = 0x50;
 
 
 //WebRTC variables
-var handleId = "Cary";
-var calleeId = "Joe";
+var handleId;
+var serverIPAddress;
 var port = "8080";
+var connectionKey = "peerjs";
 
 //Street view GPS coordinates
 var locationMatrix = [[47.608589,-122.340437, "Pike Place Market"],
@@ -100,20 +101,56 @@ function init(){
   $('#chkProximity').change(function(){
     enableProximity(this.checked);
   });
+  $('#btnDisconnect').click(disconnectWebRTC);
   $('#btnCall').attr("disabled", true);
   $('#btnCall').click(makeCall);
   $('#btnHangUp').attr("disabled", true);
   $('#btnHangUp').click(hangUp);
   $('#btnHangUp').hide();
-  
- $("input[name='server']").click(function(){
-		connectToServer(this.value);
+  $('#userHandle').change(enableConnectToServerButton);
+  $('#userServerIPAddress').change(enableConnectToServerButton);
+  $("input[name='server']").click(enableConnectToServerButton);
+  $('#btnConnect').click(function(){
+		//
+		$('#userHandle').attr("disabled", true);
+                $('#userServerIPAddress').attr("disabled", true);
+		$("input[name='server']").attr("disabled", true);
+		connectToServer();
 		this.disabled = true;
 		});
+  $("#select-result").change(function(){
+      $('#btnCall').attr("disabled", (this.innerText == ""));
+  });
+  $( "#selectable" ).selectable({
+      stop: function() {
+        var result = $( "#select-result" ).empty();
+        $( ".ui-selected", this ).each(function() {
+          var index = $( "#selectable li" ).index( this );
+          result.append(this.innerText);
+	  result.change();
+        });
+      }
+    });
+  $(".trWebRTCContacts").hide();
   PLTLabsAPI.debug = true;
   PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
 }
 
+function enableConnectToServerButton(){
+  handleId = $('#userHandle').val();
+  var serverType = $("input[name='server']:checked").val();
+  var ec2 = $('#ec2ServerIPAddress').val();
+  var userDefined =  $('#userServerIPAddress').val()
+  serverIPAddress = (serverType == "ec2" ?  ec2 : userDefined);
+  var disabled = true;
+  if (handleId && handleId != "") {
+    if (serverIPAddress && serverIPAddress != "") {
+      disabled = false;
+    }
+    
+  }
+  $('#btnConnect').attr("disabled", disabled);
+}
 
 //PLTLabs Functions
 function findPLTDevices(){
@@ -374,22 +411,95 @@ function enableButtonPressEvents(){
 //disconnect from webrtc server
 function disconnectWebRTC() {
   log('disconnectWebRTC: disconnecting');
-  
+  clearPeerList();
   if (peer) {
     peer.disconnect();
-    peer = null;
-    
+    peer.destroy();
+    peer = null;  
   }
 }
 
-function connectToServer(server) {
+
+
+function checkForUsers(){
+  if (!serverIPAddress) {
+    return;
+  }
+  var http = new XMLHttpRequest();
+  var url = 'http://' + serverIPAddress + ':' + port + '/' + connectionKey + '/whoison';
+  http.open('get', url, true);
+  http.onerror = function(e) {
+    log('Error retrieving peers connected to server', e);
+  }
+  
+  http.onreadystatechange = function() {
+    if (http.readyState !== 4) {
+      return;
+    }
+    if (http.status !== 200) {
+      http.onerror();
+      return;
+    }
+    var message = JSON.parse(http.responseText);
+    log('checkForUsers: found ' + message.userIds.length);
+    populatePeerList(message.userIds);
+  };
+  http.send(null);
+
+}
+
+function populatePeerList(users){
+  for(i = 0; i < users.length; i++){
+    var u = users[i];
+    if (u.name == handleId) {
+      //don't list yourself
+      continue;
+    }
+    $('#selectable').append('<li class="ui-widget-content">' + u.name + '</li>');
+  }
+}
+
+function clearPeerList(){
+  $('#selectable li').remove();
+  var result = $("#select-result").empty();
+}
+
+function connectToServer() {
   log('connectToServer: Connecting to WebRTC server');
-  peer = new Peer(handleId, {"host":server, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
+  peer = new Peer(handleId, {"host":serverIPAddress, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
     $('#user-name').text("Connected as " + peer.id);
-    $('#btnCall').attr("disabled", false);
+    $('.trWebRTCConnection').hide();
+    $(".trWebRTCContacts").show();
     gum();
+    checkForUsers();
+  });
+  
+  peer.on('peerremoved', function(id){
+    log('peer ' + id + ' has disconnected');
+    $('#selectable li:contains('+ id + ')').remove();
+    var callee = $("#select-result").text();
+    if (callee == id) {
+      $("#select-result").empty();
+      $("#select-result").change();
+    }
+  });
+  
+  peer.on('peeradded', function(id){
+    log('peer ' + id + ' has connected');
+     $('#selectable').append('<li class="ui-widget-content">' + id + '</li>');
+  });
+  
+  peer.on('close', function(){
+    $('#user-name').text("");
+    $('#userHandle').attr("disabled", false);
+    $('#userServerIPAddress').attr("disabled", false);
+    $("input[name='server']").attr("disabled", false);	
+    enableConnectToServerButton();
+    $('.trWebRTCConnection').show();
+    $(".trWebRTCContacts").hide();
+    window.localStream = null;
   });
   
   peer.on('connection', handleDataConnection);
@@ -452,7 +562,7 @@ function sendGPSToPeer(sendData){
 
 function ring(call){
   ringing = true;
-  $('#incoming-call').find('h3').text('Incoming call from ' + call.peer);
+  $('#peer-information').html('Incoming call from ' + call.peer);
   $('#butAnswerCall').click(function(){
     answerCall(call);
     $('#incoming-call').hide();
@@ -484,13 +594,15 @@ function makeCall() {
   if (!readyForCall) {
     return;
   }
+  
+  var callee = $("#select-result").text();
   // Initiate a call
-  log('makeCall: calling ' + calleeId);
-  var call = peer.call(calleeId, window.localStream);
+  log('makeCall: calling ' + callee);
+  var call = peer.call(callee, window.localStream);
   if (window.existingCall) {
     window.existingCall.close();
   }
-
+  
   // Wait for stream on the call, then set peer video display
   call.on('stream', function(stream){
     onStream(stream);

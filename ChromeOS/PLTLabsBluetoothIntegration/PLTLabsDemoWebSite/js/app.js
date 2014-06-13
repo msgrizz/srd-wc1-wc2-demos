@@ -3,15 +3,87 @@ function log(message){
     console.log(message);  
 }
 
-function connectToServer(server) {
-  log('Connecting to WebRTC server:' + server);
-  peer = new Peer(handleId, {host:server, port: port, debug: 3, config: {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
+function checkForUsers(){
+  if (!serverIPAddress) {
+    return;
+  }
+  var http = new XMLHttpRequest();
+  var url = 'http://' + serverIPAddress + ':' + port + '/' + connectionKey + '/whoison';
+  http.open('get', url, true);
+  http.onerror = function(e) {
+    log('Error retrieving peers connected to server', e);
+  }
+  
+  http.onreadystatechange = function() {
+    if (http.readyState !== 4) {
+      return;
+    }
+    if (http.status !== 200) {
+      http.onerror();
+      return;
+    }
+    var message = JSON.parse(http.responseText);
+    log('checkForUsers: found ' + message.userIds.length);
+    populatePeerList(message.userIds);
+  };
+  http.send(null);
+
+}
+
+function populatePeerList(users){
+  for(i = 0; i < users.length; i++){
+    var u = users[i];
+    if (u.name == handleId) {
+      //don't list yourself
+      continue;
+    }
+    $('#selectable').append('<li class="ui-widget-content">' + u.name + '</li>');
+  }
+}
+
+function clearPeerList(){
+  $('#selectable li').remove();
+  var result = $("#select-result").empty();
+}
+
+function connectToServer() {
+  log('connectToServer: Connecting to WebRTC server');
+  peer = new Peer(handleId, {"host":serverIPAddress, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
-      $('#user-name').text("Connected as " + peer.id);
-      $('#btnCall').attr("disabled", false);
-      gum();
+    $('#user-name').text("Connected as " + peer.id);
+    $('#webRTCConnection').hide();
+    $("#webRTCContacts").show();
+    gum();
+    checkForUsers();
   });
+  
+  peer.on('peerremoved', function(id){
+    log('peer ' + id + ' has disconnected');
+    $('#selectable li:contains('+ id + ')').remove();
+    var callee = $("#select-result").text();
+    if (callee == id) {
+      $("#select-result").empty();
+      $("#select-result").change();
+    }
+  });
+  
+  peer.on('peeradded', function(id){
+    log('peer ' + id + ' has connected');
+     $('#selectable').append('<li class="ui-widget-content">' + id + '</li>');
+  });
+  
+  peer.on('close', function(){
+    $('#user-name').text("");
+    $('#userHandle').attr("disabled", false);
+    $('#userServerIPAddress').attr("disabled", false);
+    $("input[name='server']").attr("disabled", false);	
+    enableConnectToServerButton();
+    $('#webRTCConnection').show();
+    $("#webRTCContacts").hide();
+    window.localStream = null;
+  });
+  
   
   peer.on('connection', handleDataConnection);
   peer.on('call', ring);
@@ -86,11 +158,13 @@ function makeCall() {
   if (!readyForCall) {
     return;
   }
+  
+  var callee = $("#select-result").text();
   // Initiate a call
-  log('Calling ' + calleeId);
-  var call = peer.call(calleeId, window.localStream);
+  log('makeCall: calling ' + callee);
+  var call = peer.call(callee, window.localStream);
   if (window.existingCall) {
-      window.existingCall.close();
+    window.existingCall.close();
   }
 
   // Wait for stream on the call, then set peer video display
@@ -164,10 +238,12 @@ function gum (initiator) {
 }
 
 
-function disconnect(){
-   if (peer) {
+function disconnectWebRTC(){
+  log('disconnectWebRTC: disconnecting');
+  clearPeerList();
+  if (peer) {
+    peer.disconnect();
     peer.destroy();
-    peer = null;
-   }
-   resetButtonsAfterWebRTCCall();
+    peer = null;  
+  }
 }

@@ -182,6 +182,24 @@ PeerServer.prototype._initializeHTTP = function() {
     res.send(self._generateClientId(req.params.key));
     return next();
   });
+  
+  this._app.get('/:key/whoison', function(req, res, next){
+      var key = req.params.key;
+      var output = {userIds:[]};
+      if (!self._clients[key]) {
+        res.send(JSON.stringify(output));
+        return next();
+      }
+      var users = self._clients[key];  
+      for (var n in users) {
+        var user = {name:n};
+        var info = self._clients[key][n];
+        user.ip = info.ip;
+        output.userIds.push(user);
+      }   
+      res.send(output);
+      return next();
+  });
 
   // Server sets up HTTP streaming when you get post an ID.
   this._app.post('/:key/:id/:token/id', function(req, res, next) {
@@ -195,12 +213,16 @@ PeerServer.prototype._initializeHTTP = function() {
         if (!err && !self._clients[key][id]) {
           self._clients[key][id] = { token: token, ip: ip };
           self._ips[ip]++;
+           //notify others that a new peer was added
+          self._notifyPeers(key, {type: 'PEERADDED', src: id});
+    
           self._startStreaming(res, key, id, token, true);
         } else {
           res.send(JSON.stringify({ type: 'HTTP-ERROR' }));
         }
       });
     } else {
+      self._notifyPeers(key, {type: 'PEERADDED', src: id});
       self._startStreaming(res, key, id, token);
     }
     return next();
@@ -345,6 +367,26 @@ PeerServer.prototype._removePeer = function(key, id) {
   if (this._clients[key] && this._clients[key][id]) {
     this._ips[this._clients[key][id].ip]--;
     delete this._clients[key][id];
+    this._notifyPeers(key, {type: 'PEERREMOVED', src: id});
+  }
+};
+
+PeerServer.prototype._notifyPeers = function(key, message){
+  var type = message.type;
+  var src  = message.src;
+  var data = JSON.stringify(message);
+  
+  var destinations = this._clients[key];
+  for(var userHandle in destinations){
+    //do not send notification to the user that generated the event
+    if (userHandle == src) {
+      continue;
+    }    
+    var user = this._clients[key][userHandle];
+    if (!user.socket) {
+      continue;
+    }
+    user.socket.send(data);
   }
 };
 

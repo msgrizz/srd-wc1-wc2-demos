@@ -5,13 +5,16 @@
     <title>Social Assist</title>
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/jquery-1.10.2.min.js"></script>
+    <script src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>
     <script src="js/vendor/peer.js"></script>
     <script src="js/app.js"></script>
     <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'></script>
     <script>
-	var handleId = "Joe";
-	var calleeId = "Cary";
-	var port = "9000";
+	//WebRTC variables
+	var handleId;
+	var serverIPAddress;
+	var port = "8080";
+	var connectionKey = "peerjs";
 
 	// Compatibility shim
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -27,17 +30,37 @@
 	function init(){
 	    readyForCall = false;
 	    $('#btnCall').attr("disabled", true);
-	    $('#btnCall').click(makeCall);
 	    $('#btnHangUp').attr("disabled", true);
 	    $('#btnHangUp').click(hangUp);
 	    $('#btnHangUp').hide();
-	    $("input[name='server']").click(function(){
-		connectToServer(this.value);
+	    $('#btnDisconnect').click(disconnectWebRTC)
+	    $("input[name='server']").click(enableConnectToServerButton);
+	    $('#btnConnect').click(function(){
+		//
+		$('#userHandle').attr("disabled", true);
+                $('#userServerIPAddress').attr("disabled", true);
+		$("input[name='server']").attr("disabled", true);
+		connectToServer();
 		this.disabled = true;
 		});
+  
+	    $("#select-result").change(function(){
+	        $('#btnCall').attr("disabled", (this.innerText == ""));
+	    });
+	    $("#selectable").selectable({
+		stop: function() {
+		  var result = $("#select-result" ).empty();
+		  $( ".ui-selected", this ).each(function() {
+		    var index = $( "#selectable li" ).index( this );
+		    result.append(this.innerText);
+		    result.change();
+		  });
+		}
+	      });   
 	    $('#btnCall').click(makeCall);
 	    $('#pano').hide();
 	    $('#map-canvas').hide();
+	    $('#webRTCContacts').hide();
 	    
 	}
         
@@ -76,7 +99,23 @@
 			    pitch:pitch});
 	   
             
-        } 
+        }
+	
+	function enableConnectToServerButton(){
+	    handleId = $('#userHandle').val();
+	    var serverType = $("input[name='server']:checked").val();
+	    var ec2 = $('#ec2ServerIPAddress').val();
+	    var userDefined =  $('#userServerIPAddress').val()
+	    serverIPAddress = (serverType == "ec2" ?  ec2 : userDefined);
+	    var disabled = true;
+	    if (handleId && handleId != "") {
+	      if (serverIPAddress && serverIPAddress != "") {
+		disabled = false;
+	      }
+	      
+	    }
+	    $('#btnConnect').attr("disabled", disabled);
+	}
         
        window.addEventListener('load', init);
     </script>
@@ -111,17 +150,24 @@
 				<div id="pano" style="width: 600px; height: 400px;"></div>
 			    </td>
                             <td width="300">
+				<div id="webRTCConnection">
 				<span>WebRTC Server:</span><br>
-				<input type="radio" name="server" id="server" value="10.0.1.51">Intranet
-				<input type="radio" name="server" id="server" value="23.23.249.221">EC2<br>
+				 <span id="webrtcConnectedState">Not Connected</span><br>
+				<input type="text" id="userHandle"><span> User Handle</span> <br><br>
+				<input type="radio" name="server" id="server" value="user-defined"/><input id="userServerIPAddress" type="text" size="20" maxlength="15"><span> IP Address</span><br>
+				<input type="radio" name="server" checked="checked" id="server" value="ec2"/><input id="ec2ServerIPAddress" type="text" readonly="readonly" size="20" maxlength="15" value="23.23.249.221"><span>PLTLabs Amazon EC2 Instance</span><br>
+				<button id="btnConnect" disabled="disabled">Connect</button>
+				</div>
 				<div id="video-container">
 				   <video id="remote-video" autoplay></video>
 				</div>
-				<input type="button" id="btnCall" value="Call For Help"/>
-                                <input type="button" id="btnHangUp" value="Hang Up"/><br>
-				
-				<!--<input type="button" id="btnConnect" value="Connect"/>
-				<input type="button" id="btnCall" value="Call For Help"/>-->
+				<div id="webRTCContacts">
+				    <span>Call:</span> <span id="select-result"></span><span>  </span><input type="button" id="btnCall" disabled="disabled" value="Call For Help"/> <input type="button" id="btnHangUp" value="Hang Up"/><br>
+                                    <br>
+                                    <ul id="selectable">
+                                    </ul>
+                                    <button id="btnDisconnect">Disconnect</button>
+				</div>
 				<div id="map-canvas" style="width: 300px; height: 200px"></div>
                             </td>
                         </tr>

@@ -1509,7 +1509,12 @@ Peer.prototype._handleMessage = function(message) {
     case 'INVALID-KEY': // The given API key cannot be found.
       this._abort('invalid-key', 'API KEY "' + this._key + '" is invalid');
       break;
-
+    case 'PEERREMOVED': //A peer has disconnected
+      this.emit('peerremoved', peer);
+      break;
+    case 'PEERADDED': //A peer has connected
+      this.emit('peeradded', peer);
+      break;
     //
     case 'LEAVE': // Another peer has closed its connection to this peer.
       util.log('Received leave message from', peer);

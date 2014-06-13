@@ -11,10 +11,27 @@ html {
     color: #0000FF;
 }
 
-#incoming-call{
-  display: none;
+#call-img{
+    width: 70px;
+    padding-top: 20px;
 }
 
+#peer-information{
+    font-size: larger;
+    font-weight: 300;
+    color: #ffff00;
+}
+
+#incoming-call {
+    position: relative;
+    width: 400px;
+    height: 140px;
+    z-index: 3;
+    margin: auto;
+    text-align: center;
+    background-color: rgba(0,0,0,0.75);
+    display: none;
+}
 
 #remote-video {
     position:relative;

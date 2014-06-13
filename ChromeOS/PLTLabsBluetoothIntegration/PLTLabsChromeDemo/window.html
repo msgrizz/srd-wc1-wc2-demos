@@ -22,11 +22,6 @@
             
             </span>
         </div>
-         <div id="incoming-call">
-            <img src="img/incoming.png"/>
-            <h3></h3>
-            <input type="button" id="butAnswerCall" value="Answer"/>
-        </div>
         <div id="controlPanel">
             <div id="accordion">
                 <h3>Device</h3>
@@ -128,24 +123,45 @@
                 </div>
                 <h3>Web RTC Demo</h3>
                 <div>
+                     <div id="incoming-call">
+                        <img id="call-img" src="img/call.jpg"/>
+                        <span id="peer-information"></span>
+                        <input type="button" id="butAnswerCall" value="Answer"/>			
+                    </div>
                      <table width="800px">
+                        <!--
+                        enhancing the webrtc demo - make google streetview optional so two chrome pas can speak to each other
+                        user Id - pull from google?  -  sign in?  Manual entry - no id == autogenerate?
+                        test two peers - peer 1 -> peer 2 then have peer 1 (a) on other device call peer 2
+                        1. -> Get proximity working
+                        -->
                         <tbody>
-                            <tr>
+                            <tr class="trWebRTCConnection">
                                 <td>
-                                  <span>WebRTC Server:</span>
+                                  <span>PeerJS WebRTC Server Connection Information:</span>
                                 </td>
                                 <td>
-                                    <input type="radio" name="server" id="server" value="10.0.1.51"/><span>Intranet</span><br>
-                                    <input type="radio" name="server" id="server" value="23.23.249.221"/><span>EC2</span>
+                                    <span id="webrtcConnectedState">Not Connected</span><br>
+                                    <input type="text" id="userHandle"><span> User Handle</span> <br><br>
+                                    <input type="radio" name="server" id="server" value="user-defined"/><input id="userServerIPAddress" type="text" size="20" maxlength="15"><span> IP Address</span><br>
+                                    <input type="radio" name="server" checked="checked" id="server" value="ec2"/><input id="ec2ServerIPAddress" type="text" readonly="readonly" size="20" maxlength="15" value="23.23.249.221"><span>PLTLabs Amazon EC2 Instance</span><br>
+                                    <button id="btnConnect" disabled="disabled">Connect</button>
+                                                                                                                                                                              
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="trWebRTCContacts">
                                 <td>
-                                  <span>Call Peer:</span>
+                                  <div id="video-container">
+                                    <video id="remote-video" autoplay></video>
+                                  </div>
                                 </td>
                                 <td>
-                                    <input type="button" id="btnCall" value="Call For Help"/>
-                                    <input type="button" id="btnHangUp" value="Hang Up"/><br>
+                                    <span>Call:</span> <span id="select-result"></span><span>  </span><input type="button" id="btnCall" disabled="disabled" value="Call For Help"/> <input type="button" id="btnHangUp" value="Hang Up"/><br>
+                                    <br>
+                                    <ul id="selectable">
+                                    </ul>
+                                    <button id="btnDisconnect">Disconnect</button>
+                                   
                                 </td>
                             </tr>
                             <tr>
@@ -154,18 +170,12 @@
                                   <label for="chkSendCoordinates">Send my location</label>
                                 </td>
                                 <td>
-                                  <select id="coordinates" name="coordinates">
-                                    <option value="0">Pike Place</option>
-                                    <option value="1">Gator Adventure</option>
-                                    <option value="2" selected="1">Times Square</option>
-                                  </select>      
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                   <div id="video-container">
-                                    <video id="remote-video" autoplay></video>
-                                  </div>
+                                    
+                                    <select id="coordinates" name="coordinates">
+                                     <option value="0">Pike Place</option>
+                                     <option value="1">Gator Adventure</option>
+                                     <option value="2" selected="1">Times Square</option>
+                                    </select>      
                                 </td>
                             </tr>
                         </tbody>
