@@ -161,14 +161,15 @@ function findPLTDevices(){
 
 function disconnectPLT(){
  PLTLabsAPI.closeConnection(connectionClosed);
- deviceMetadata = null;
- connectedToSensorPort = false;
- connectedToDevice = false;
- clearSettings();
  
 }
 
 function connectionClosed(){
+  deviceMetadata = null;
+  connectedToSensorPort = false;
+  connectedToDevice = false;
+  clearSettings();
+  $('#chkPLTDevice').attr("checked", false);
   setPLTCheckboxesState(true);
   log('connectionClosed: PLTLabs device connection closed');
 }
@@ -184,11 +185,10 @@ function setPLTCheckboxesState(connected){
 
 
 function devicesFound(deviceList){
-  log('devices have been found!');
-  devices = JSON.parse(JSON.stringify(deviceList));
+  log('devices have been found!' + deviceList);
   for(i = 0; i < deviceList.length; i++){
     var d = deviceList[i];
-    //log('Device ' + i + ' + : ' + d.name);
+    log('Device ' + i + ' + : ' + d.name);
     if(d.connected == true && d.name.indexOf("PLT_") != -1) {
       log('using: ' + d.name);
       PLTLabsAPI.openConnection(d, connectionOpened);
@@ -223,6 +223,7 @@ function connectionOpened(address){
     options.events = eventSubscriptions;
     PLTLabsAPI.subscribeToEvents(options, onEvent);
     PLTLabsAPI.subscribeToSettings(onSettings);
+    PLTLabsAPI.subscribeToDisconnect(connectionClosed);
     enableButtonPressEvents();
     getSettings();
     connectedToDevice = true;
@@ -236,23 +237,23 @@ function onSettings(info){
     
      switch (info.id){
       case PLTLabsMessageHelper.BATTERY_LEVEL_INFO_SETTING:
-	var charge = info.properties["chargeLevel"] + 0.0;
-	var levels = info.properties["numberOfChargeLevels"] + 0.0;
-	var totalCharge = (charge/levels) + "%"
-	$('#batteryLevel').text('WORK IN PROGRESS');
-	break;
+	       var charge = info.properties["chargeLevel"] + 0.0;
+	       var levels = info.properties["numberOfChargeLevels"] + 0.0;
+	       var totalCharge = (100* (charge/levels)) + "%";
+	       $('#batteryLevel').text(totalCharge);
+	       break;
       case PLTLabsMessageHelper.PRODUCT_NAME_SETTING:
-	$('#productName').text(info.properties["name"]);
-	break;
+	       $('#productName').text(info.properties["name"]);
+	       break;
       case PLTLabsMessageHelper.FIRMWARE_VERSION_SETTING:
-	var version = info.properties["buildTarget"] + "." + info.properties["releaseNumber"];
-	$('#firmwareVersion').text(version);
-	break;
+	       var version = info.properties["buildTarget"] + "." + info.properties["releaseNumber"];
+	       $('#firmwareVersion').text(version);
+	       break;
       case PLTLabsMessageHelper.DECKARD_VERSION_SETTING:
-	var isReleaseVersion = info.properties["releaseVersion"];
-	var version = info.properties["majorVersion"] + "." + info.properties["minorVersion"] + "(" + info.properties['maintenanceVersion'] + ')' + (isReleaseVersion ? 'Production' : 'Beta');  
-	$('#deckardVersion').text(version);
-	break;
+	       var isReleaseVersion = info.properties["releaseVersion"];
+	       var version = info.properties["majorVersion"] + "." + info.properties["minorVersion"] + "(" + info.properties['maintenanceVersion'] + ')' + (isReleaseVersion ? 'Production' : 'Beta');  
+	       $('#deckardVersion').text(version);
+	       break;
      }
     
 }
@@ -267,19 +268,19 @@ function clearSettings(){
 
 function getSettings(){
   var packet = PLTLabsMessageHelper.createGetProductNameSetting();
-  log('getSettings: getting product name');
+  //log('getSettings: getting product name');
   PLTLabsAPI.sendSetting(packet);
   
   packet = PLTLabsMessageHelper.createGetFirmwareVersionSetting();
-  log('getSettings: getting firmware version');
+  //log('getSettings: getting firmware version');
   PLTLabsAPI.sendSetting(packet);
   
   packet = PLTLabsMessageHelper.createGetDeckardVersionSetting();
-  log('getSettings: getting Plantronics M2M messaging version');
+  //log('getSettings: getting Plantronics M2M messaging version');
   PLTLabsAPI.sendSetting(packet);
   
   packet = PLTLabsMessageHelper.createGetBatteryInfoSetting();
-  log('getSettings: getting device battery information');
+  //log('getSettings: getting device battery information');
   PLTLabsAPI.sendSetting(packet);
   
   $('#bdAddress').text(PLTLabsAPI.device.address);
@@ -346,7 +347,7 @@ function enableWearableConceptEvents(){
 }
 
 function onEvent(info){
-   log('event received: ' + JSON.stringify(info));
+   //log('event received: ' + JSON.stringify(info));
    if (info.id == PLTLabsMessageHelper.SUBSCRIBED_SERVICE_DATA_CHANGE_EVENT) {
     switch(info.properties["serviceId"]) {
       case PLTLabsMessageHelper.HEAD_ORIENTATION_SERVICE_ID:
@@ -356,7 +357,8 @@ function onEvent(info){
       $('#roll').text(c.roll);
       $('#pitch').text(c.pitch);
       $('#heading').text(c.heading);
-      sendHeadTrackingCoordinatesToPeer(c);   
+      sendHeadTrackingCoordinatesToPeer(c); 
+        //log('onEvent: headtracking: ' + JSON.stringify(info));
       break;
       case PLTLabsMessageHelper.TAPS_SERVICE_ID:
       $('#taps').text("X = " + info.properties["x"]);
