@@ -12,6 +12,7 @@ var onSocketConnectionCallback = null;
 var onEventCallback = null;
 var onMetaDataCallback = null;
 var onSettingsCallback = null;
+var onDeviceDisconnectCallback = null;
 var subscribedEvents = [];
 
 var PLTLabsAPI = {};
@@ -71,6 +72,15 @@ PLTLabsAPI.openConnection = function(device, callback){
   
 };
 
+PLTLabsAPI.subscribeToDisconnect = function(callback){
+  if(!callback || !typeof(callback) == "function"){
+    throw new PLTLabsException("closeConnection: this method requires a callback function");
+  } 
+  onDeviceDisconnectCallback = callback;
+  
+}
+
+
 //closes down the socket connection to the device
 //the callback signature is a single argument function
 PLTLabsAPI.closeConnection = function(callback){
@@ -93,13 +103,84 @@ PLTLabsAPI.closeConnection = function(callback){
   }
   
   log("closeConnection: disconnecting socket from device");
-  chrome.bluetoothSocket.disconnect(PLTLabsAPI.socketId,function(){
-      log("closeConnection: socket closed.");
-      callback();
-      PLTLabsAPI.socketId = null;
-      PLTLabsAPI.device = null;
-  });
+  if(PLTLabsAPI.socketId){
+    chrome.bluetoothSocket.disconnect(PLTLabsAPI.socketId,function(){
+        log("closeConnection: socket closed.");
+        callback();
+        PLTLabsAPI.socketId = null;    
+    });
+  }
+  
+  PLTLabsAPI.device = null;
+  onDeviceDisconnectCallback = null;
 };
+
+
+
+//Function for fetching the PLTLabs devicess
+var findPLTLabsDevices = function(){
+  //if we already have a connection then do not try and find
+  //more devices - this assumes a 1 device connection at a time paradigm
+  if(PLTLabsAPI.connected){
+    return; 
+  }
+  
+  log('findPLTLabsDevices: searching for PLTLabs devices');
+  
+  // Add the listener to deal with our initial connection
+  chrome.bluetooth.onDeviceAdded.addListener(function(devices){
+      if (onDeviceAddedCallback) {
+          onDeviceAddedCallback(devices);  
+      }    
+  });
+  
+  chrome.bluetooth.onDeviceRemoved.addListener(function(device){
+    if(PLTLabsAPI.device && (PLTLabsAPI.device.address == device.address)){
+      PLTLabsAPI.closeConnection(onDeviceDisconnectCallback);
+    }
+  });
+  chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
+  chrome.bluetoothSocket.onReceiveError.addListener(function(info){
+    log('error on socket receive: socket id = ' + info.socketId + ' message = ' + info.errorMessage + ' error = ' + info.error);
+    PLTLabsAPI.closeConnection(onDeviceDisconnectCallback);
+  });
+  chrome.bluetoothSocket.onAccept.addListener(function (info){log('onAccept  server socket id = ' + info.socketId + ' clientSocket = ' + info.clientSocketId);});
+  
+  //log('findPLTLabsDevices: added connection listeners');
+  
+  chrome.bluetooth.getAdapterState(function(adapterState){
+    if(!adapterState.available || !adapterState.powered){
+      log('findPLTLabsDevices: bluetooth adapter not available');
+      return;
+    }
+    //log('getAdaptorState: getting devices');
+    chrome.bluetooth.getDevices(returnDeviceList);
+  });
+  
+  //log('findPLTLabsDevices: exit function');
+  
+};
+
+//Handle the device connect event and set up the device connection
+//and the socket read interval
+var onConnectDeviceHandler = function(){
+  if (chrome.runtime.lastError) {
+    log("onConnectionDeviceHandler: Connection failed: " + chrome.runtime.lastError.message);
+    closeConnection();
+    return;
+  }
+  
+  log("onConnectDeviceHandler: socket communications established");
+  chrome.bluetoothSocket.setPaused(PLTLabsAPI.socketId , false);
+  PLTLabsAPI.connected = true;
+  hostNegotiate();    
+   
+};
+
+var onReceiveHandler = function(info) {
+  PLTLabsMessageHelper.printDeckardMessage(true, info.data);
+  parseBladerunnerData(info);
+}
 
 //sets up the events subscription, if the subscription already exists then 
 //update the events subscription service
@@ -134,6 +215,8 @@ PLTLabsAPI.subscribeToSettings = function(callback){
 
 }
 
+
+
 //returns device metadata when it arrive to the callback
 //callback parameter must be a function with a single argument
 PLTLabsAPI.subscribeToDeviceMetadata = function(callback){
@@ -160,7 +243,6 @@ PLTLabsAPI.sendSetting = function(setting){
   }
   
   PLTLabsAPI.sendBladerunnerPacket(setting);
-  log('sendSetting: setting packet has been sent to device');
 };
 
 //Attempts to send a blade runner packet over the bluetooth socket connection, if error occurs will log it out.
@@ -171,65 +253,10 @@ PLTLabsAPI.sendBladerunnerPacket = function(packet){
   }
   //this variable is required to maintain correct scoping when calling the send function
   chrome.bluetoothSocket.send(PLTLabsAPI.socketId, packet);
-  log('sendBladerunnerPacket: packet sent to device');
+  PLTLabsMessageHelper.printDeckardMessage(false, packet);
 };
   
 
-//Function for fetching the PLTLabs devicess
-var findPLTLabsDevices = function(){
-  //if we already have a connection then do not try and find
-  //more devices - this assumes a 1 device connection at a time paradigm
-  if(PLTLabsAPI.connected){
-    return; 
-  }
-  
-  log('findPLTLabsDevices: searching for PLTLabs devices');
-  
-  // Add the listener to deal with our initial connection
-  chrome.bluetooth.onDeviceAdded.addListener(function(device){
-      if (onDeviceAddedCallback) {
-          onDeviceAddedCallback([devices]);  
-      }    
-  });
-  
-  chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
-  chrome.bluetoothSocket.onReceiveError.addListener(function(info){log('error on socket receive: socket id = ' + info.socketId + ' message = ' + info.errorMessage + ' error = ' + info.error);});
-  chrome.bluetoothSocket.onAccept.addListener(function (info){log('onAccept  server socket id = ' + info.socketId + ' clientSocket = ' + info.clientSocketId);});
-  
-  log('findPLTLabsDevices: added connection listeners');
-  
-  chrome.bluetooth.getAdapterState(function(adapterState){
-    if(!adapterState.available || !adapterState.powered){
-      log('findPLTLabsDevices: bluetooth adapter not available');
-      return;
-    }
-    log('getAdaptorState: getting devices');
-    chrome.bluetooth.getDevices(returnDeviceList);
-  });
-  
-  log('findPLTLabsDevices: exit function');
-  
-};
-
-//Handle the device connect event and set up the device connection
-//and the socket read interval
-var onConnectDeviceHandler = function(){
-  if (chrome.runtime.lastError) {
-    log("onConnectionDeviceHandler: Connection failed: " + chrome.runtime.lastError);
-    return;
-  }
-  
-  log("onConnectDeviceHandler: socket communications established");
-  chrome.bluetoothSocket.setPaused(PLTLabsAPI.socketId , false);
-  PLTLabsAPI.connected = true;
-  hostNegotiate();    
-   
-};
-
-var onReceiveHandler = function(info) {
-  log('socket has recieved ' + info.data.byteLength + ' bytes of data');
-  parseBladerunnerData(info);
-}
 
  
 //This function enables the test interface for the PLTLabs device
@@ -250,7 +277,7 @@ var enableTestInterfaces = function(){
     //disable/enable the interface so the states match 
     var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
     var packet = PLTLabsMessageHelper.createEnableTestInterfaceCommand(command); 
-    log('enableTestInterfaces: sending command '  + JSON.stringify(command));
+    log('enableTestInterfaces: enabling test interface');
     PLTLabsAPI.sendCommand(packet);
    }
 };
@@ -264,12 +291,12 @@ var enableButtons = function(){
     enableTestInterfaces();
   }
   
-    window.setTimeout(function(){
+   // window.setTimeout(function(){
   
     var command = {"address": deviceRoute, "enabled" : enableButtonEvents};
     var packet = PLTLabsMessageHelper.createEnableButtonEventsCommand(command); 
     log('enableButtons: sending command ' + JSON.stringify(command));
-    PLTLabsAPI.sendCommand(packet)}, 100)
+    PLTLabsAPI.sendCommand(packet);//}, 100)
 };
   
 var returnDeviceList = function(devices) {
@@ -667,14 +694,13 @@ PLTLabsMessageHelper.createEnableProximityCommand = function(options){
   //"reportNearFarToBase" type="BOOLEAN"
   data_view[6] = 0;//options.reportNearFarToBase ? this.boolToByte(options.reportNearFarToBase) : 0x1;
   //"sensitivity" type="BYTE"
-  data_view[7] = 1;//options.sensitivity ? options.sensitivity : 0x5;
+  data_view[7] = 0;//options.sensitivity ? options.sensitivity : 0x5;
   //"nearThreshold" type="BYTE"
-  data_view[8] = 71;//data_view[7] = options.nearThreshold ? options.nearThreshold : 0x28;
- 
+  data_view[8] = 0X47;//data_view[7] = options.nearThreshold ? options.nearThreshold : 0x28;
   //"max timeout" type="SHORT"
-  data_view[9] = 0;
-  data_view[10] = 10; //default to 60 seconds - TODO - do we need to add this to the options?
-  
+  data_view[9] = 0XFF;
+  data_view[10] = 0XFF;
+ 
   options.messageData = data;  
   return this.createMessage(options);  
   
@@ -842,7 +868,6 @@ PLTLabsMessageHelper.parseResult = function(message){
 
 //parse the metadata and return it in an object that can be used later
 PLTLabsMessageHelper.parseMetadata = function(message){ 
-  log('parseMetadata: parsing message');
   var meta = {"supportedCommands" : [],
               "supportedGetSettings" : [],
               "supportedEvents" : [],
@@ -889,6 +914,40 @@ PLTLabsMessageHelper.parseMetadata = function(message){
    
 } 
 
+//prints out the bytes in the packet
+PLTLabsMessageHelper.printDeckardMessage = function(incoming, packet){
+  var data_view = new Uint8Array(packet);
+  var result = incoming ? ">>>> In Message:" : "<<<< Out Message:";
+  
+  var packetType =  (data_view[0] >>> 4).toString(16);
+  var length = (data_view[0] & 0X0F).toString(16)
+  length = length << 8;
+  length = (length | data_view[1]).toString(16);
+  
+  //address
+  var address = (data_view[2] >>>4).toString(16);
+  address += (data_view[2] & 0x0F).toString(16);
+  address += (data_view[3] >>>4).toString(16);
+  address += (data_view[3] & 0x0F).toString(16);
+  address += (data_view[4] >>>4).toString(16);
+  address += (data_view[4] & 0x0F).toString(16);
+  address += (data_view[5] >>>4).toString(16);
+  var messageType = (data_view[5] & 0x0F).toString(16);
+  
+  var messagePayload = "";
+  for(i = 6; i < data_view.length; i++){
+    var highBs = data_view[i] >>> 4;
+    var lowBs = data_view[i] & 0x0F; 
+    if(i > 6 && (i%2 == 0)){
+        messagePayload += ' ';
+    }
+    messagePayload += highBs.toString(16) + lowBs.toString(16); 
+    
+  }
+  
+  result += '\n\tpacketType = ' + packetType + '\n\tmessageLength = ' + length + '\n\taddress = ' + address + '\n\tmessage type = ' + messageType + '\n\tpayload = ' + messagePayload; 
+  log(result);
+}
 
 //function responsible for converting PLTLabs byte array messages into
 //settings get success objects - expect and info object as a parameter
@@ -1224,7 +1283,7 @@ PLTLabsMessageHelper.boolToByte = function(bool){
 }
 
 PLTLabsMessageHelper.parseString = function(index, buffer, bounds){
-  log("parsing string");
+  //log("parsing string");
   var result = "";
    for(index; index < bounds; index+=2){
     var val = buffer[index] << 8;
