@@ -10,7 +10,8 @@
 		}
 	},
 	"bluetooth":{
-	    "uuids": ["82972387-294e-4d62-97b5-2668aa35f618"]
+	    "uuids": ["82972387-294e-4d62-97b5-2668aa35f618"],
+            "socket" : true
 	},
 	"permissions" : ["http://*/","https://*/","videoCapture", "audioCapture"]
 
