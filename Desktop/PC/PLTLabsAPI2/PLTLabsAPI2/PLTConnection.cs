@@ -150,6 +150,15 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 //case PLTService.TEMPERATURE_SVC:
                 //    doSubscribe = true;
                 //    break;
+                case PLTService.MUTESTATE_SVC:
+                    //if (m_spokes.DeviceCapabilities.HasWearingSensor)
+                    //{
+                    doSubscribe = true;
+                    lock (m_pltlabsapi.m_lastmutestateLock)
+                    {
+                        lastData = m_pltlabsapi.m_lastmutestate;
+                    }
+                    break;
             }
 
             if (doSubscribe)
@@ -241,9 +250,13 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                         m_pltlabsapi.RegisterForDeviceSensorService(m_device.m_device, 6,
                             (int)aMode, aPeriodmilliseconds);
                     break;
-                //case PLTService.WEARING_STATE_SVC:
-                //    if (m_pltlabsapi != null)
-                //        m_pltlabsapi.RegisterForDeviceWearingStateService(m_device.m_device, true);
+                case PLTService.WEARING_STATE_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceWearingStateService(m_pltlabsapi.m_wearingsensorDevice.m_device, true);
+                    break;
+                case PLTService.PROXIMITY_SVC:
+                    if (m_pltlabsapi != null)
+                        m_pltlabsapi.RegisterForDeviceProximityService(m_pltlabsapi.m_proximityDevice.m_device, true);
                     break;
             }
         }
@@ -327,6 +340,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                         //        m_callbackhandler.infoUpdated(
                         //            m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTTemperature)aSubscription.LastData));
                         //    break;
+                        case PLTService.MUTESTATE_SVC:
+                            m_pltlabsapi.m_callbackhandler.infoUpdated(
+                                    m_pltlabsapi.m_activeConnection, new PLTInfo(aService, (PLTMuteState)aSubscription.LastData));
+                            break;
                     }
                 }
             }

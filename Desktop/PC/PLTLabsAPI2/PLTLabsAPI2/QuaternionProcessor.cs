@@ -29,6 +29,7 @@ namespace Plantronics.Innovation.Util
         public static bool m_doCalibrate = false;
         public static bool m_doOrientation = false;
         private static bool m_usercalquat = false;
+        private static bool m_quit = false;
 
         public QuaternionProcessor(HeadtrackingUpdateHandler headsetDataHandler,
             bool doCalibrate = false, bool doOrientation = false)
@@ -52,7 +53,7 @@ namespace Plantronics.Innovation.Util
         {
             try
             {
-                while (true)
+                while (!m_quit)
                 {
                     lock (_locker)
                         while (!_go)
@@ -313,6 +314,12 @@ namespace Plantronics.Innovation.Util
 
         internal void Stop()
         {
+            lock (_locker)
+            {
+                _go = true;
+                m_quit = true;
+                Monitor.Pulse(_locker);
+            }
             m_worker.Abort();
         }
 

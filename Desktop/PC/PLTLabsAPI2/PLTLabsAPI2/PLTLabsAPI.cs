@@ -48,6 +48,30 @@ using System.Timers;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.6.0.1:
+ * Date: 30th July 2014
+ * Compatible/tested with Hub / Spokes SDK version(s): 3.0.50718.1966
+ * Changed by: Lewis Collins
+ *   Changes:
+ *     - Changed head-tracking event ID to 0xFF0D from 0xFF1A
+ *
+ * Version 1.6.0.0:
+ * Date: 29th July 2014
+ * Compatible/tested with Hub / Spokes SDK version(s): 3.0.50718.1966
+ * Changed by: Lewis Collins
+ *   Changes:
+ *     - Modified to support WC1 head-tracking features
+ *     - Re-wired certain UC/CI features via BladeRunner that
+ *       are no longer supported on WC1 via Spokes, including:
+ *         > Wearing state, Proximity, Mobile Call State,
+ *           Mobile Mute State (new)
+ *
+ * Version 1.0.0.8:
+ * Date: 4th May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Minor fix for gyro calibration data format from WC1
+ *
  * Version 1.0.0.7:
  * Date: 30th May 2014
  * Changed by: Lewis Collins
@@ -144,6 +168,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         internal PLTDock m_lastdockstate = new PLTDock();
         internal Object m_lastdockstateLock = new Object();
 
+        internal PLTMuteState m_lastmutestate = new PLTMuteState();
+        internal Object m_lastmutestateLock = new Object();
+
         private bool m_headsetinrange = true; // assume in range initially
         private bool m_constructordone;
         private HIDDevice myDevice = null;
@@ -163,6 +190,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         /// </summary>
         public static string SDK_VERSION = "0.4";
         private BladeRunnerEndpoint BRendpoint;
+        private bool m_wasMobIncoming = false;
+        public PLTDevice m_wearingsensorDevice { get; set; }
+        public PLTDevice m_proximityDevice { get; set; }
 
         /// <summary>
         /// Constructor for PLTLabsAPI object which is used to connect
@@ -174,6 +204,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         /// sensor data.</param>
         public PLTLabsAPI2(PLTLabsCallbackHandler aCallBackHandler)
         {
+            m_wearingsensorDevice = null;
+            m_proximityDevice = null;
+
             m_callbackhandler = aCallBackHandler;
 
             m_quatproc = new QuaternionProcessor(this);
@@ -518,11 +551,12 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         //    }
         //}
 
-        private void UpdateProximityStateToConnection(PLTProximityType proximitytype)
+        private void UpdateProximityStateToConnection(PLTProximityType proximitytype, byte rssistrength)
         {
             lock (m_lastproximitystateLock)
             {
                 m_lastproximitystate.m_proximity = proximitytype;
+                m_lastproximitystate.m_rssistrength = rssistrength;
             }
 
             if (m_activeConnection != null) // todo only do this if subscribed to relevant service?
@@ -1019,6 +1053,15 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                     string ProductName = deckardmessage.message_received.payload_received[0].stringValue;
                     Console.WriteLine("ProductName: " + ProductName);
                     break;
+                case "0x0214":
+                    Console.WriteLine(">>> 0x0214: ");
+                    break;
+                case "0x0216":
+                    Console.WriteLine(">>> 0x0216: ");
+                    break;
+                case "0x0202":
+                    Console.WriteLine(">>> 0x0202: ");
+                    break;
                 case "0x0200":
                     bool isworn = deckardmessage.message_received.payload_received[0].boolValue;
                     Console.WriteLine("Is Worn?: " + isworn);
@@ -1043,7 +1086,118 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                         }
                     }
                     break;
-                case "0xFF1A":
+                case "0x0800":
+                    Console.WriteLine(">>> 0800: ");
+                    break;
+                case "0x0806":
+                    if (deckardmessage.message_received.payload_received.Count() > 2)
+                    {
+                        byte connectionId = deckardmessage.message_received.payload_received[0].byteValue;
+                        byte strength = deckardmessage.message_received.payload_received[1].byteValue;
+                        byte nearfar = deckardmessage.message_received.payload_received[2].byteValue;
+
+                        //<![CDATA[
+                        //    The device's determination of whether it is Near to or Far from the device to which it is connected.
+                        //    <a name="nearFarValues">
+                        //    0 = Far<br/>
+                        //    1 = Near<br/>
+                        //    2 = Unknown<br/>
+                        //    </a>
+                        //]]>
+
+                        UpdateProximityStateToConnection(nearfar == 0 ? PLTProximityType.Far : PLTProximityType.Near, strength);
+                    }
+
+                    break;
+                case "0x0E1E":
+                    // Audio status (mute/unmute/gain)
+                    if (deckardmessage.m_brtype == EBRMessageType.eBR_EVENT)
+                    {
+                        if (deckardmessage.message_received.payload_received.Count() > 3)
+                        {
+                            byte codec = deckardmessage.message_received.payload_received[0].byteValue;
+                            byte port = deckardmessage.message_received.payload_received[1].byteValue;
+                            byte speakergain = deckardmessage.message_received.payload_received[2].byteValue;
+                            byte micgain = deckardmessage.message_received.payload_received[3].byteValue;
+
+                            bool muteon = (micgain == 0);
+
+                            Console.WriteLine(">>> muteon: " + muteon);
+                            Console.WriteLine(">>> codec: " + codec);
+                            Console.WriteLine(">>> port: " + port);
+                            Console.WriteLine(">>> speakergain: " + speakergain);
+                            Console.WriteLine(">>> micgain: " + micgain);
+
+                            // update mute state to API event!
+                            m_lastmutestate.m_muted = muteon;
+                            subscr =
+                                m_activeConnection.getSubscription(PLTService.MUTESTATE_SVC);
+                            if (subscr != null)
+                            {
+                                lock (m_lastmutestateLock)
+                                {
+                                    subscr.LastData = m_lastmutestate;
+                                }
+
+                                // if it is an on change subscription, beam to connected app now
+                                // otherwise will happen in the PLTConnection's periodic timer
+                                if (subscr.m_mode == PLTMode.On_Change)
+                                {
+                                    m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.MUTESTATE_SVC, subscr.LastData));
+                                }
+                            }
+                        }
+                    }           
+                    break;
+                case "0x0E00":
+                    // Mobile Call status change
+                    if (deckardmessage.m_brtype == EBRMessageType.eBR_EVENT)
+                    {
+                        if (deckardmessage.message_received.payload_received.Count() > 1)
+                        {
+                            byte state = deckardmessage.message_received.payload_received[0].byteValue;
+                            string number = deckardmessage.message_received.payload_received[1].stringValue;
+
+                            string tmp = number;
+                            Console.WriteLine(">>> NUMBER: "+number);
+                            Console.WriteLine(">>> state: " + state);
+
+                            PLTCallStateInfo callstate = new PLTCallStateInfo();
+                            callstate.m_callsource = "Mobile";
+                            callstate.m_callid = -1;
+                            switch (state)
+                            {
+                                case 0: //Idle
+                                    callstate.m_callstate = PLTCallState.Idle;
+                                    m_wasMobIncoming = false;
+                                    break;
+                                case 1: //Active
+                                    callstate.m_callstate = PLTCallState.OnCall;
+                                    break;
+                                case 2: //Ringing
+                                    callstate.m_callstate = PLTCallState.Ringing;
+                                    m_wasMobIncoming = true;
+                                    break;
+                                case 3: //Dialing
+                                    callstate.m_callstate = PLTCallState.Ringing;
+                                    m_wasMobIncoming = false;
+                                    break;
+                                case 4: // ActiveAndRinging
+                                    callstate.m_callstate = PLTCallState.Ringing;
+                                    m_wasMobIncoming = true;
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            UpdateCallStateToConnection(PLTCallStateType.OnMobileCall, callstate.m_callstate,
+                                callstate.m_callid, callstate.m_callsource, m_wasMobIncoming);
+                            UpdateMobileCallerIdToConnection(number);                            
+                        }
+                    }           
+                    break;
+                //case "0xFF1A":
+                case "0xFF0D":
                     Console.WriteLine(">>> HEAD TRACKING: ");
 
                     if (deckardmessage.message_received.payload_received.Count()>0)
@@ -1087,7 +1241,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                                     m_activeConnection.getSubscription(PLTService.FREE_FALL_SVC);
                                 if (subscr != null)
                                 {
-                                    freefall = deckardmessage.message_received.payload_received[2].barray[1] == 1;
+                                    //freefall = deckardmessage.message_received.payload_received[2].barray[1] == 1;
+                                    freefall = deckardmessage.message_received.payload_received[2].barray[0] == 1;
 
                                     PLTFreeFall data = new PLTFreeFall();
                                     data.m_isinfreefall = freefall;
@@ -1102,7 +1257,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                                 break;
                             case 5:
                                 // magno calib
-                                calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+                                //calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+                                calib = deckardmessage.message_received.payload_received[2].barray[0] == 3;
 
                                 // SENSOR_CAL_STATE_SVC data for sensor cal state service...
                                 subscr =
@@ -1123,7 +1279,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                                 break;
                             case 6:
                                 // gyro calib
-                                calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+                                //calib = deckardmessage.message_received.payload_received[2].barray[1] == 3;
+                                calib = deckardmessage.message_received.payload_received[2].barray[0] == 3;
                                 // SENSOR_CAL_STATE_SVC data for sensor cal state service...
                                 subscr =
                                     m_activeConnection.getSubscription(PLTService.SENSOR_CAL_STATE_SVC);
@@ -1177,11 +1334,21 @@ namespace Plantronics.Innovation.PLTLabsAPI2
 
         public void NotifyDeviceServices(BladeRunnerDevice device)
         {
-            // Let's see if attached devices supports Motion Tracking!
+            if (device.DeviceAddress == "2000000")
+            {
+                // hack - force to use headset for wear sensor
+                if (m_wearingsensorDevice == null)
+                {
+                    PLTDevice aDevice = new PLTDevice(device);
+                    m_wearingsensorDevice = aDevice;
+                }
+            }
+
+            // Let's see if attached devices supports Motion Tracking and other services!
             foreach (int commandid in device.SupportedEvents)
             {
-                // does the id match the Subscribed service data event id: 0xFF1A
-                if (commandid == 0xFF1A)
+                // does the id match the Subscribed service data event id: 0xFF0D  (was 0xFF1A)
+                if (commandid == 0xFF0D) //0xFF1A)
                 {
                     //Found a device with Motion Tracking - lets open the connection to it...
                     PLTDevice aDevice = new PLTDevice(device);
@@ -1190,6 +1357,50 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                         // open the API connection to this device
                         openConnection(aDevice);
                     }
+                }
+
+                // does it match for wearing sensor don/doff?
+                if (commandid == 0x0216)
+                {
+                    //Found a device with wearing sensor
+                    PLTDevice aDevice = new PLTDevice(device);
+
+                    if (m_wearingsensorDevice == null)
+                        m_wearingsensorDevice = aDevice;
+                }
+
+                // does it match for proximity?
+                if (commandid == 0x0806)
+                {
+                    //Found a device with wearing sensor
+                    PLTDevice aDevice = new PLTDevice(device);
+
+                    if (m_proximityDevice == null)
+                        m_proximityDevice = aDevice;
+                }
+            }
+
+            foreach (int commandid in device.SupportedCommands)
+            {
+
+                // does it match for wearing sensor don/doff?
+                if (commandid == 0x0216)
+                {
+                    //Found a device with wearing sensor
+                    PLTDevice aDevice = new PLTDevice(device);
+
+                    if (m_wearingsensorDevice == null)
+                        m_wearingsensorDevice = aDevice;
+                }
+
+                // does it match for proximity?
+                if (commandid == 0x0806)
+                {
+                    //Found a device with wearing sensor
+                    PLTDevice aDevice = new PLTDevice(device);
+
+                    if (m_proximityDevice == null)
+                        m_proximityDevice = aDevice;
                 }
             }
 
@@ -1338,19 +1549,51 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                 payload2, 2);
         }
 
-        //internal void RegisterForDeviceWearingStateService(BladeRunnerDevice device, bool enable)
-        //{
-        //    // turn on requested service:
-        //    // prepare subscribe to wearing state sensor service command
-        //    List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload2
-        //        = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
-        //    payload2.Add(new Deckard.BRProtocolElement((bool)enable)); // enable or disable
-        //    BRendpoint.SendBladeRunnerMessage(device,
-        //        EBRMessageType.eBR_COMMAND,
-        //        device.DeviceAddress,
-        //        "0x0214",
-        //        payload2, 2);            
-        //}
+        internal void RegisterForDeviceWearingStateService(BladeRunnerDevice device, bool enable)
+        {
+            // turn on requested service:
+            // prepare subscribe to wearing state sensor service command
+            List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload2
+                = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+            payload2.Add(new Deckard.BRProtocolElement((bool)enable)); // enable or disable
+            BRendpoint.SendBladeRunnerMessage(device,
+                EBRMessageType.eBR_COMMAND,
+                device.DeviceAddress,
+                "0x0216",
+                payload2, 2);
+
+            // and do a get!
+            BRendpoint.SendBladeRunnerMessage(device,
+                EBRMessageType.eBR_GET_SETTING,
+                device.DeviceAddress,
+                "0x0202",
+                null, 2);
+        }
+
+        internal void RegisterForDeviceProximityService(BladeRunnerDevice device, bool enable)
+        {
+            // turn on requested service:
+            // prepare subscribe to wearing state sensor service command
+            List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement> payload2
+                = new List<Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement>();
+
+            payload2.Add(new Deckard.BRProtocolElement((byte)2)); // connectionId
+            payload2.Add(new Deckard.BRProtocolElement((bool)enable)); // enable
+            payload2.Add(new Deckard.BRProtocolElement((bool)true)); // dononly
+            payload2.Add(new Deckard.BRProtocolElement((bool)true)); // disabletrend
+            payload2.Add(new Deckard.BRProtocolElement((bool)true)); // report rssi audio
+            payload2.Add(new Deckard.BRProtocolElement((bool)true)); // report near far audio
+            payload2.Add(new Deckard.BRProtocolElement((bool)true)); // report near far to base
+            payload2.Add(new Deckard.BRProtocolElement((byte)1)); // sensitivity
+            payload2.Add(new Deckard.BRProtocolElement((byte)71)); // near threshold
+            payload2.Add(new Deckard.BRProtocolElement((short)10)); // max timeout
+
+            BRendpoint.SendBladeRunnerMessage(device,
+                EBRMessageType.eBR_COMMAND,
+                device.DeviceAddress,
+                "0x0800",
+                payload2, 2);
+        }
     }
 
     // 

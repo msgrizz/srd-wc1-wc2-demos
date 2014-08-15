@@ -22,7 +22,8 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         DOCKSTATE_SVC,
         CHARGESTATE_SVC,
         //TEMPERATURE_SVC - not currently available
-        DEBUGINFO_SVC
+        DEBUGINFO_SVC,
+        MUTESTATE_SVC
     }
 
     /// <summary>
@@ -185,6 +186,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
         /// Proximity state enumeration value (Near, Far, Unknown)
         /// </summary>
         public PLTProximityType m_proximity;
+        /// <summary>
+        /// The actual RSSI signal strength
+        /// </summary>
+        public byte m_rssistrength;
     }
 
     /// <summary>
@@ -381,5 +386,14 @@ namespace Plantronics.Innovation.PLTLabsAPI2
     public class PLTBatteryState
     {
         public PLTBatteryLevel m_batterylevel = PLTBatteryLevel.BatteryLevel_Empty;
+    }
+
+    /// <summary>
+    /// Used to return to your app the current mute status
+    /// when registered for mute service.
+    /// </summary>
+    public class PLTMuteState
+    {
+        public bool m_muted = false;
     }
 }
