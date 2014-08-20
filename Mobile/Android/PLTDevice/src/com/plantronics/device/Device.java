@@ -2072,6 +2072,7 @@ public class Device {
 		bladeRunnerCommunicator.getBladerunnerCapableDevices(new BladeRunnerCommunicator.CapableDevicesCallback() {
 			@Override
 			public void onCapableDevicesReceived(Set<BluetoothDevice> bladeRunnerCapableDevices) {
+				Log.d(FN(), "onCapableDevicesReceived()");
 				ArrayList<Device> devices = new ArrayList<Device>();
 				for (BluetoothDevice d : bladeRunnerCapableDevices) {
 					//Device device = new Device(d);
@@ -2088,7 +2089,7 @@ public class Device {
 
 			@Override
 			public void failure() {
-		Log.e(FN(), "Failed to get BR capable devices!");
+				Log.e(FN(), "Failed to get BR capable devices!");
 				if (callback != null) {
 					callback.onFailure();
 				}
