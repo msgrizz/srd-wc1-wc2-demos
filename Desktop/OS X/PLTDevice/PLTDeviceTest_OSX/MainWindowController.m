@@ -9,6 +9,9 @@
 #import "MainWindowController.h"
 #import "PLTDevice.h"
 
+#import "BRRawMessage.h"
+#import "NSData+HexStrings.h"
+
 
 @interface MainWindowController () <PLTDeviceSubscriber>
 
@@ -46,7 +49,11 @@
         NSLog(@"availableDevices: %@", devices);
 		if ([devices count]) {
 			self.device = devices[0];
-			[self.device openConnection];
+			NSError *err = nil;
+			[self.device openConnection:&err];
+			if (err) {
+				NSLog(@"Error opening connection: %@", err);
+			}
 		}
 		else {
 			NSLog(@"No devices!");
@@ -65,16 +72,16 @@
 	NSLog(@"subscribeToServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-		[self.device subscribe:self toService:PLTServiceOrientationTracking			withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
+		[self.device subscribe:self toService:PLTServiceOrientationTracking				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
 		
-		[self.device subscribe:self toService:PLTServicePedometer					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device subscribe:self toService:PLTServiceFreeFall					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device subscribe:self toService:PLTServiceTaps						withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device subscribe:self toService:PLTServiceMagnetometerCalStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-		[self.device subscribe:self toService:PLTServiceWearingState				withMode:PLTSubscriptionModeOnChange	andPeriod:0];
-//		[self.device subscribe:self toService:PLTServiceProximity					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
+		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceTaps							withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 	}
 }
 
@@ -97,7 +104,7 @@
 //		[self.device queryInfo:self forService:PLTServiceMagnetometerCalStatus];
 //		[self.device queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus];
 //		[self.device queryInfo:self forService:PLTServiceWearingState];
-		[self.device queryInfo:self forService:PLTServiceProximity];
+		[self.device queryInfo:self forService:PLTServiceProximity						error:nil];
 	}
 }
 
@@ -105,14 +112,14 @@
 {
 	NSLog(@"getCachedInfoButton:");
 	
-	NSLog(@"PLTServiceOrientationTracking: %@", [self.device cachedInfoForService:PLTServiceOrientationTracking]);
-	NSLog(@"PLTServicePedometer: %@", [self.device cachedInfoForService:PLTServicePedometer]);
-	NSLog(@"PLTServiceFreeFall: %@", [self.device cachedInfoForService:PLTServiceFreeFall]);
-	NSLog(@"PLTServiceTaps: %@", [self.device cachedInfoForService:PLTServiceTaps]);
-	NSLog(@"PLTServiceMagnetometerCalStatus: %@", [self.device cachedInfoForService:PLTServiceMagnetometerCalStatus]);
-	NSLog(@"PLTServiceGyroscopeCalibrationStatus: %@", [self.device cachedInfoForService:PLTServiceGyroscopeCalibrationStatus]);
-	NSLog(@"PLTServiceWearingState: %@", [self.device cachedInfoForService:PLTServiceWearingState]);
-	NSLog(@"PLTServiceProximity: %@", [self.device cachedInfoForService:PLTServiceProximity]);
+	NSLog(@"PLTServiceOrientationTracking: %@", [self.device cachedInfoForService:PLTServiceOrientationTracking error:nil]);
+	NSLog(@"PLTServicePedometer: %@", [self.device cachedInfoForService:PLTServicePedometer error:nil]);
+	NSLog(@"PLTServiceFreeFall: %@", [self.device cachedInfoForService:PLTServiceFreeFall error:nil]);
+	NSLog(@"PLTServiceTaps: %@", [self.device cachedInfoForService:PLTServiceTaps error:nil]);
+	NSLog(@"PLTServiceMagnetometerCalStatus: %@", [self.device cachedInfoForService:PLTServiceMagnetometerCalibrationStatus error:nil]);
+	NSLog(@"PLTServiceGyroscopeCalibrationStatus: %@", [self.device cachedInfoForService:PLTServiceGyroscopeCalibrationStatus error:nil]);
+	NSLog(@"PLTServiceWearingState: %@", [self.device cachedInfoForService:PLTServiceWearingState error:nil]);
+	NSLog(@"PLTServiceProximity: %@", [self.device cachedInfoForService:PLTServiceProximity error:nil]);
 }
 
 - (IBAction)calibrateButton:(id)sender
@@ -125,9 +132,9 @@
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceEulerAngles:oldOrientationInfo.eulerAngles];
 //	[self.device setCalibration:orientationCal forService:PLTServiceOrientationTracking];
 	
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
+	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
 	
-	[self.device setCalibration:nil forService:PLTServicePedometer];
+	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
 }
 
 - (void)setUIConnected:(BOOL)flag
@@ -145,7 +152,7 @@
 - (id)init
 {
 	if (self = [super initWithWindowNibName:@"MainWindow.xib"]) {
-        
+		
 		[[NSNotificationCenter defaultCenter] addObserverForName:PLTDeviceAvailableNotification object:Nil queue:NULL usingBlock:^(NSNotification *note) {
             NSLog(@"Device available! %@", (PLTDevice *)([note userInfo][PLTDeviceNotificationKey]));
 			[self openConnectionButton:self];

@@ -7,7 +7,6 @@
 //
 
 #import "MainWindowController.h"
-
 #import "BRDevice.h"
 #import "BRRemoteDevice.h"
 #import "NSData+HexStrings.h"
@@ -34,6 +33,8 @@
 #import "BRGyroscopeCalStatusSettingResponse.h"
 #import "BRCalibratePedometerServiceCommand.h"
 #import "BRServiceCalibrationSettingRequest.h"
+#import "BRConnectionStatusSettingRequest.h"
+#import "BRConnectionStatusSettingResponse.h"
 
 #import "BRDeviceConnectedEvent.h"
 
@@ -43,10 +44,11 @@
 
 #import "BRRawMessage.h"
 
-#warning bangle
+#warning BANGLE
 
 #import "BRPerformApplicationActionCommand.h"
 #import "BRApplicationActionResultEvent.h"
+#import "BRConfigureApplicationCommad.h"
 
 
 typedef struct {
@@ -95,8 +97,8 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 - (void)enableUI;
 - (void)disableUI;
 
-@property(nonatomic,retain) BRDevice *device;
-@property(nonatomic,retain) BRRemoteDevice *sensorsDevice;
+@property(nonatomic,retain) BRDevice						*device;
+@property(nonatomic,retain) BRRemoteDevice					*sensorsDevice;
 
 @property(nonatomic,assign) IBOutlet NSButton               *closeConnectionButton;
 @property(nonatomic,assign) IBOutlet NSButton               *queryWearingStateButton;
@@ -120,15 +122,29 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 
 #warning BANGLE
-- (IBAction)cookiesButton:(id)sender;
-@property(nonatomic,assign) IBOutlet NSButton               *cookiesButton;
-@property(nonatomic,assign) IBOutlet NSTextField            *cookiesField;
+- (IBAction)dialogInteractionButton:(id)sender;
+- (IBAction)configureApplicationButton:(id)sender;
+- (IBAction)unlockButton:(id)sender;
+- (IBAction)lockButton:(id)sender;
+
 - (void)showTextDialogWithTopText:(NSString *)topText bottomText:(NSString *)bottomText;
 - (void)showYesNoDialogWithTopText:(NSString *)topText;
 - (void)showChooseNumberDialogWithTopText:(NSString *)topText;
 - (void)showChooseOneDialogWithTopText:(NSString *)topText choices:(NSArray *)choices;
 - (void)showChooseMultipleDialogWithTopText:(NSString *)topText choices:(NSArray *)choices;
-@property(nonatomic,strong) NSArray               *dialogChoices;
+
+- (void)setDisplayReadoutForCharacteristic:(BRDisplayReadoutCharacteristic)characteristic enabled:(BOOL)enabled;
+
+- (void)setLockState:(BOOL)lockState;
+
+@property(nonatomic,strong) NSArray							*dialogChoices;
+
+@property(nonatomic,assign) IBOutlet NSButton               *dialogInteractionButton;
+@property(nonatomic,assign) IBOutlet NSButton               *configureApplicationButton;
+@property(nonatomic,assign) IBOutlet NSTextField            *dialogInteractionResultField;
+@property(nonatomic,assign) IBOutlet NSButton               *unlockButton;
+@property(nonatomic,assign) IBOutlet NSButton               *lockButton;
+
 
 @end
 
@@ -175,6 +191,10 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (IBAction)queryDeviceInfoButton:(id)sender
 {
+//	NSString *msg = @"FF0300030000000100";
+//	BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeCommand payload:[NSData dataWithHexString:msg]];
+//	[self.sensorsDevice sendMessage:message];
+	
     BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
     [self.sensorsDevice sendMessage:request];
 }
@@ -186,18 +206,18 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 //	BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:BRServiceIDPedometer];
 //	[self.sensorsDevice sendMessage:request];
 	
-	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
-                                                                                        mode:BRServiceSubscriptionModePeriodic
-                                                                                      period:1000];
-	[self.sensorsDevice sendMessage:message];
+//	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
+//                                                                                        mode:BRServiceSubscriptionModePeriodic
+//                                                                                      period:1000];
+//	[self.sensorsDevice sendMessage:message];
 
 	
-//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-//        if (i==1) continue;
-//        
-//		BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:i];
-//		[self.sensorsDevice sendMessage:request];
-//    }
+    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+        if (i==1) continue;
+        
+		BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:i];
+		[self.sensorsDevice sendMessage:request];
+    }
 } 
 
 - (IBAction)subscribeToServicesButton:(id)sender
@@ -220,20 +240,24 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (IBAction)unsubscribeFromServicesButton:(id)sender
 {
-	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:0x00
-																						mode:BRServiceSubscriptionModeOff
-																					  period:0];
-	[self.sensorsDevice sendMessage:message];
+//	BRConnectionStatusSettingRequest *message = [BRConnectionStatusSettingRequest request];
+//	[self.device sendMessage:message];
+	
+	
+//	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:0x00
+//																						mode:BRServiceSubscriptionModeOff
+//																					  period:0];
+//	[self.sensorsDevice sendMessage:message];
 
 	
-//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-//        if (i==1) continue;
-//        
-//        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-//                                                                                            mode:BRServiceSubscriptionModeOff
-//                                                                                          period:0];
-//        [self.sensorsDevice sendMessage:message];
-//    }
+    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+        if (i==1) continue;
+        
+        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+                                                                                            mode:BRServiceSubscriptionModeOff
+                                                                                          period:0];
+        [self.sensorsDevice sendMessage:message];
+    }
 }
 
 - (void)enableUI
@@ -248,7 +272,10 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
     [self.subscribeToSignalStrengthButton setEnabled:YES];
 	
 #warning BANGLE
-	[self.cookiesButton setEnabled:YES];
+	[self.dialogInteractionButton setEnabled:YES];
+	[self.configureApplicationButton setEnabled:YES];
+	[self.unlockButton setEnabled:YES];
+	//[self.lockButton setEnabled:YES];
 }
 
 - (void)disableUI
@@ -273,172 +300,70 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
     self.gyroCalTextField.stringValue = @"-";
 	
 #warning BANGLE
-	[self.cookiesButton setEnabled:NO];
+	[self.dialogInteractionButton setEnabled:NO];
+	[self.configureApplicationButton setEnabled:NO];
+	[self.unlockButton setEnabled:NO];
+	//[self.lockButton setEnabled:NO];
 }
 
 #pragma mark - BANGLE
 
-- (IBAction)cookiesButton:(id)sender
+- (IBAction)dialogInteractionButton:(id)sender
 {
-	NSLog(@"cookiesButton:");
+	NSLog(@"dialogInteractionButton:");
 	
 	//[self showTextDialogWithTopText:@"I LOVE" bottomText:@"TURTLES"];
 	//[self showYesNoDialogWithTopText:@"COOKIES"];
 	//[self showChooseNumberDialogWithTopText:@"COOKIES"];
 	//[self showChooseOneDialogWithTopText:@"FAVORITE" choices:@[@"CUPCAKES", @"MARMOLADE", @"CHEESE"]];
 	[self showChooseMultipleDialogWithTopText:@"FAVORITES" choices:@[@"CUPCAKES", @"MARMOLADE", @"CHEESE"]];
-	
-	
-//	// i love turtles
-//	
-//	enum PromptAttentionType {
-//		PromptAttentionTypeCanned =	0x0000,
-//		PromptAttentionTypeTTS =	0x0001,
-//		PromptAttentionTypeWAV =	0x0002
-//	};
-//	
-//	const char *topPrompt = [@"I LOVE" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *topPromptData = [NSData dataWithBytes:topPrompt length:strlen(topPrompt)];
-//	uint16_t topPromptLen = (uint16_t)[topPromptData length];
-//	
-//	const char *bottomPrompt = [@"TURTLES" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *bottomPromptData = [NSData dataWithBytes:bottomPrompt length:strlen(bottomPrompt)];
-//	uint16_t bottomPromptLen = (uint16_t)[bottomPromptData length];
-//	
-//	NSString *hexString = [NSString stringWithFormat:@"%04X %@ %04X %@ %04X %04X",
-//						   topPromptLen,
-//						   [topPromptData hexStringWithSpaceEvery:0],
-//						   bottomPromptLen,
-//						   [bottomPromptData hexStringWithSpaceEvery:0],
-//						   2, // attention type
-//						   0x4748 // attention specifier
-//						   ];
-//	
-//	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
-//	hexString = [NSString stringWithFormat:@"%04X %@",
-//				 deckardArrayLen,
-//				 hexString
-//				 ];
-//	
-//	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDDialog
-//																																		   action:BRDialogApplicationActionTextAlert
-//																																	operatingData:[NSData dataWithHexString:hexString]];
-//	[self.sensorsDevice sendMessage:command];
+}
 
+- (IBAction)configureApplicationButton:(id)sender
+{
+	NSLog(@"configureApplicationButton:");
 	
+	[self setDisplayReadoutForCharacteristic:BRDisplayReadoutCharacteristicAmbientHumidity enabled:NO];
+}
+
+- (IBAction)unlockButton:(id)sender
+{
+	NSLog(@"unlockButton:");
+	[self setLockState:NO];
+}
+
+- (IBAction)lockButton:(id)sender
+{
+	NSLog(@"lockButton:");
+	//[self setLockState:YES];
 	
-//	// cookies? (yes/no)
-//	const char *prompt = [@"COOKIES" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *promptData = [NSData dataWithBytes:prompt length:strlen(prompt)];
-//	uint16_t promptLen = (uint16_t)[promptData length];
+	NSLog(@"self.device.isConnected = %@", (self.device.isConnected ? @"YES" : @"NO"));
+	NSLog(@"self.sensorsDevice.isConnected = %@", (self.sensorsDevice.isConnected ? @"YES" : @"NO"));
+	
+//	NSLog(@"ADD CONTACTS");
 //	
-//	NSString *hexString = [NSString stringWithFormat:@"%04X %@",
-//						   promptLen,
-//						   [promptData hexStringWithSpaceEvery:0]
+//	const char *name = [@"MORGAN" cStringUsingEncoding:NSASCIIStringEncoding];
+//	NSData *nameData = [NSData dataWithBytes:name length:strlen(name)];
+//	//uint16_t nameLen = (uint16_t)[nameData length];
+//	
+//	const char *number = [@"8314198651" cStringUsingEncoding:NSASCIIStringEncoding];
+//	NSData *numberData = [NSData dataWithBytes:number length:strlen(number)];
+//	//uint16_t numberLen = (uint16_t)[numberData length];
+//	
+//	NSString *hexString = [NSString stringWithFormat:@"%@ 00 %@ 00",
+//						   [nameData hexStringWithSpaceEvery:0],
+//						   [numberData hexStringWithSpaceEvery:0]
 //						   ];
 //	
 //	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
-//	hexString = [NSString stringWithFormat:@"%04X %@",
+//	hexString = [NSString stringWithFormat:@"%04X %04X %@",
+//				 0xFF0B,
 //				 deckardArrayLen,
 //				 hexString
 //				 ];
 //	
-//	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDDialog
-//																																		   action:BRDialogApplicationActionYesNo
-//																																	operatingData:[NSData dataWithHexString:hexString]];
-//	[self.sensorsDevice sendMessage:command];
-	
-	
-	
-//	// cookies? (how many)
-//	const char *prompt = [@"COOKIES" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *promptData = [NSData dataWithBytes:prompt length:strlen(prompt)];
-//	uint16_t promptLen = (uint16_t)[promptData length];
-//	
-//	NSString *hexString = [NSString stringWithFormat:@"%04X %@",
-//						   promptLen,
-//						   [promptData hexStringWithSpaceEvery:0]
-//						   ];
-//	
-//	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
-//	hexString = [NSString stringWithFormat:@"%04X %@",
-//				 deckardArrayLen,
-//				 hexString
-//				 ];
-//	
-//	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDDialog
-//																																		   action:BRDialogApplicationActionEnterNumber
-//																																	operatingData:[NSData dataWithHexString:hexString]];
-//	[self.sensorsDevice sendMessage:command];
-	
-	
-	
-//	// cookie? (choose one)
-//	const char *prompt = [@"COOKIE" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *promptData = [NSData dataWithBytes:prompt length:strlen(prompt)];
-//	uint16_t promptLen = (uint16_t)[promptData length];
-//	//promptLen = htons(promptLen);
-//	
-//	const char *choices = [@"MPLCHCLPBUT" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *choicesData = [NSData dataWithBytes:choices length:strlen(choices)];
-//	uint16_t choicesIndexes[] = {2, 6, 10};
-//	
-//	
-//	uint16_t indexesArrayLen = sizeof(choicesIndexes)/2; // length in 2-byte incraments
-//	NSString *hexString = [NSString stringWithFormat:@"%04X %@ %04X %04X %04X %04X %@",
-//						   promptLen,
-//						   [promptData hexStringWithSpaceEvery:0],
-//						   indexesArrayLen,
-//						   choicesIndexes[0],
-//						   choicesIndexes[1],
-//						   choicesIndexes[2],
-//						   [choicesData hexStringWithSpaceEvery:0]
-//						   ];
-//	
-//	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
-//	hexString = [NSString stringWithFormat:@"%04X %@",
-//				 deckardArrayLen,
-//				 hexString
-//				 ];
-//	
-//	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDDialog
-//																																		   action:BRDialogApplicationActionChooseOne
-//																																	operatingData:[NSData dataWithHexString:hexString]];
-//	[self.sensorsDevice sendMessage:command];
-	
-	
-//	// which cookies? (choose multiple)
-//	const char *prompt = [@"COOKIES" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *promptData = [NSData dataWithBytes:prompt length:strlen(prompt)];
-//	uint16_t promptLen = (uint16_t)[promptData length];
-//	//promptLen = htons(promptLen);
-//	
-//	const char *choices = [@"MPLCHCLPBUT" cStringUsingEncoding:NSASCIIStringEncoding];
-//	NSData *choicesData = [NSData dataWithBytes:choices length:strlen(choices)];
-//	uint16_t choicesIndexes[] = {2, 6, 10};
-//	
-//	
-//	uint16_t indexesArrayLen = sizeof(choicesIndexes)/2; // length in 2-byte incraments
-//	NSString *hexString = [NSString stringWithFormat:@"%04X %@ %04X %04X %04X %04X %@",
-//						   promptLen,
-//						   [promptData hexStringWithSpaceEvery:0],
-//						   indexesArrayLen,
-//						   choicesIndexes[0],
-//						   choicesIndexes[1],
-//						   choicesIndexes[2],
-//						   [choicesData hexStringWithSpaceEvery:0]
-//						   ];
-//	
-//	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
-//	hexString = [NSString stringWithFormat:@"%04X %@",
-//				 deckardArrayLen,
-//				 hexString
-//				 ];
-//	
-//	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDDialog
-//																																		   action:BRDialogApplicationActionChooseMultiple
-//																																	operatingData:[NSData dataWithHexString:hexString]];
-//	[self.sensorsDevice sendMessage:command];
+//	BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeCommand payload:[NSData dataWithHexString:hexString]];
+//	[self.sensorsDevice sendMessage:message];
 }
 
 
@@ -494,7 +419,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 																																		   action:BRDialogApplicationActionYesNo
 																																	operatingData:[NSData dataWithHexString:hexString]];
 	[self.sensorsDevice sendMessage:command];
-
+	
 }
 
 - (void)showChooseNumberDialogWithTopText:(NSString *)topText
@@ -518,7 +443,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 																																		   action:BRDialogApplicationActionEnterNumber
 																																	operatingData:[NSData dataWithHexString:hexString]];
 	[self.sensorsDevice sendMessage:command];
-
+	
 }
 
 - (void)showChooseOneDialogWithTopText:(NSString *)topText choices:(NSArray *)choices
@@ -530,7 +455,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	const char *prompt = [topText cStringUsingEncoding:NSASCIIStringEncoding];
 	NSData *promptData = [NSData dataWithBytes:prompt length:strlen(prompt)];
 	uint16_t promptLen = (uint16_t)[promptData length];
-
+	
 	uint16_t choicesIndexes[[choices count]];
 	NSMutableString *choicesString = [NSMutableString string];
 	
@@ -542,7 +467,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	
 	const char *choicesCStr = [choicesString cStringUsingEncoding:NSASCIIStringEncoding];
 	NSData *choicesData = [NSData dataWithBytes:choicesCStr length:strlen(choicesCStr)];
-
+	
 	uint16_t indexesArrayLen = (uint16_t)ceilf((float)sizeof(choicesIndexes)/2.0); // length in 2-byte incraments
 	NSMutableString *hexString = [NSMutableString stringWithFormat:@"%04X %@ %04X",
 								  promptLen,
@@ -565,7 +490,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 																																		   action:BRDialogApplicationActionChooseOne
 																																	operatingData:[NSData dataWithHexString:hexString]];
 	[self.sensorsDevice sendMessage:command];
-
+	
 }
 
 - (void)showChooseMultipleDialogWithTopText:(NSString *)topText choices:(NSArray *)choices
@@ -614,6 +539,33 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	[self.sensorsDevice sendMessage:command];
 }
 
+- (void)setDisplayReadoutForCharacteristic:(BRDisplayReadoutCharacteristic)characteristic enabled:(BOOL)enabled
+{
+	NSLog(@"setDisplayReadoutForCharacteristic: %d, enabled: %@", characteristic, (enabled ? @"YES" : @"NO"));
+	
+	NSData *enabledData = [NSData dataWithBytes:&enabled length:sizeof(BOOL)];
+	
+	BRConfigureApplicationCommad *command = [BRConfigureApplicationCommad commandWithFeatureID:BRFeatureIDDisplayReadout characteristic:characteristic configurationData:enabledData];
+	[self.sensorsDevice sendMessage:command];
+}
+
+- (void)setLockState:(BOOL)lockState
+{
+	NSMutableString *hexString = [NSMutableString stringWithFormat:@"%02X",
+								  lockState];
+	
+	uint16_t deckardArrayLen = (uint16_t)[[NSData dataWithHexString:hexString] length];
+	hexString = [NSMutableString stringWithFormat:@"%04X %@",
+				 deckardArrayLen,
+				 hexString
+				 ];
+	
+	BRPerformApplicationActionCommand *command = (BRPerformApplicationActionCommand *)[BRPerformApplicationActionCommand commandWithApplicationID:BRApplicationIDLock
+																																		   action:0
+																																	operatingData:[NSData dataWithHexString:hexString]];
+	[self.sensorsDevice sendMessage:command];
+}
+
 #pragma mark - BRDeviceDelegate
 
 - (void)BRDeviceDidConnect:(BRDevice *)device
@@ -624,6 +576,10 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 		self.connectedTextField.stringValue = @"Yeahh boi";
 		[self enableUI];
 	}
+	
+#warning temporary for EDGE
+	self.connectedTextField.stringValue = @"Yeahh boi";
+	[self enableUI];
 }
 
 - (void)BRDeviceDidDisconnect:(BRDevice *)device
@@ -691,7 +647,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
     }
 	
 	
-#warning bangle
+#warning BANGLE
 	else if ([event isKindOfClass:[BRApplicationActionResultEvent class]]) {
 		BRApplicationActionResultEvent *e = (BRApplicationActionResultEvent *)event;
 		if (e.applicationID == BRApplicationIDDialog) {
@@ -705,12 +661,12 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 				case BRDialogApplicationActionEnterNumber: {
 					uint8_t count;
 					[[e.resultData subdataWithRange:NSMakeRange(1, sizeof(uint8_t))] getBytes:&count length:sizeof(uint8_t)];
-					self.cookiesField.stringValue = [NSString stringWithFormat:@"%d cookies.", count];
+					self.dialogInteractionResultField.stringValue = [NSString stringWithFormat:@"%d cookies.", count];
 					break; }
 				case BRDialogApplicationActionChooseOne: {
 					uint8_t index;
 					[[e.resultData subdataWithRange:NSMakeRange(1, sizeof(uint8_t))] getBytes:&index length:sizeof(uint8_t)];
-					self.cookiesField.stringValue = self.dialogChoices[index];
+					self.dialogInteractionResultField.stringValue = self.dialogChoices[index];
 					break; }
 				case BRDialogApplicationActionChooseMultiple: {
 					//uint16_t len;
@@ -728,7 +684,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 							[choices appendString:[NSString stringWithFormat:@"%@, ", self.dialogChoices[index]]];
 						}
 					}
-					self.cookiesField.stringValue = choices;
+					self.dialogInteractionResultField.stringValue = choices;
 					break; }
 				default:
 					break;
@@ -793,16 +749,16 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data
 {
-    NSString *hexString = [data hexStringWithSpaceEvery:2];
-    NSLog(@"--> %@", hexString);
-    self.dataTextField.stringValue = [NSString stringWithFormat:@"--> %@", hexString];
+//    NSString *hexString = [data hexStringWithSpaceEvery:2];
+//    NSLog(@"--> %@", hexString);
+//    self.dataTextField.stringValue = [NSString stringWithFormat:@"--> %@", hexString];
 }
 
 - (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data
 {
-    NSString *hexString = [data hexStringWithSpaceEvery:2];
-    NSLog(@"<-- %@", hexString);
-    self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
+//    NSString *hexString = [data hexStringWithSpaceEvery:2];
+//    NSLog(@"<-- %@", hexString);
+//    self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
 }
 
 #pragma mark - NSWindowController
@@ -810,6 +766,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 - (id)init
 {
 	if (self = [super initWithWindowNibName:@"MainWindow.xib"]) {
+		_pltDLogLevel = DLogLevelTrace;
 		return self;
 	}
 	return nil;

@@ -22,9 +22,6 @@
 #import "PLTGyroscopeCalibrationInfo.h"
 
 
-#define PLT_API_VERSION		2.0
-
-
 extern NSString *const PLTDeviceAvailableNotification;
 extern NSString *const PLTDeviceDidOpenConnectionNotification;
 extern NSString *const PLTDeviceDidFailOpenConnectionNotification;
@@ -50,18 +47,14 @@ typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
 	PLTSubscriptionModePeriodic = 0x02
 };
 
-//typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
-//	PLTDeviceErrorCodeUnknownError =                -1,
-//	PLTDeviceErrorCodeFailedToCreateDataSession =   1,
-//	PLTDeviceErrorCodeNoAccessoryAssociated =       2,
-//	PLTDeviceErrorCodeConnectionAlreadyOpen =       3,
-//	PLTDeviceErrorInvalidArgument =                 4,
-//	PLTDeviceErrorInvalidService =                  5,
-//	PLTDeviceErrorUnsupportedService =              6,
-//	PLTDeviceErrorInvalidMode =                     7,
-//	PLTDeviceErrorUnsupportedMode =                 8,
-//	PLTDeviceErrorIncompatibleVersions =            9
-//};
+typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
+	PLTDeviceErrorCodeUnknownError =                1,
+	PLTDeviceErrorConnectionAlreadyOpen =			2,
+	PLTDeviceErrorConnectionNotOpen =				3,
+	PLTDeviceErrorInvalidArgument =                 4,
+	PLTDeviceErrorInvalidService =                  5,
+	PLTDeviceErrorInvalidMode =                     7
+};
 
 
 @class PLTConfiguration;
@@ -78,32 +71,32 @@ typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
 
 // connecting to and disconnecting from devices
 
-- (void)openConnection;
+- (void)openConnection:(NSError **)error;
 - (void)closeConnection;
 
 // setting and reading service configurations
 
-- (NSError *)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service;
-- (PLTConfiguration *)configurationForService:(PLTService)service;
+- (void)setConfiguration:(PLTConfiguration *)configuration forService:(PLTService)service error:(NSError **)error;
+- (PLTConfiguration *)configurationForService:(PLTService)service error:(NSError **)error;
 
 // setting and reading service calibrations
 
-- (NSError *)setCalibration:(PLTCalibration *)calibration forService:(PLTService)service;
-- (PLTCalibration *)calibrationForService:(PLTService)service;
+- (void)setCalibration:(PLTCalibration *)calibration forService:(PLTService)service error:(NSError **)error;
+- (PLTCalibration *)calibrationForService:(PLTService)service error:(NSError **)error;
 
 // subscribing to and unsubscribing from service info
 
-- (NSError *)subscribe:(id <PLTDeviceSubscriber>)subscriber toService:(PLTService)service withMode:(PLTSubscriptionMode)mode andPeriod:(NSUInteger)period;
+- (void)subscribe:(id <PLTDeviceSubscriber>)subscriber toService:(PLTService)service withMode:(PLTSubscriptionMode)mode andPeriod:(NSUInteger)period error:(NSError **)error;
 - (void)unsubscribe:(id <PLTDeviceSubscriber>)subscriber fromService:(PLTService)service;
 - (void)unsubscribeFromAll:(id <PLTDeviceSubscriber>)subscriber;
 
 // querying service info
 
-- (void)queryInfo:(id <PLTDeviceSubscriber>)subscriber forService:(PLTService)service;
+- (void)queryInfo:(id <PLTDeviceSubscriber>)subscriber forService:(PLTService)service error:(NSError **)error;
 
 // getting cached service info
 
-- (PLTInfo *)cachedInfoForService:(PLTService)service;
+- (PLTInfo *)cachedInfoForService:(PLTService)service error:(NSError **)error;
 
 // reading device info and state
 
@@ -130,7 +123,7 @@ typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {
 
 @protocol PLTDeviceSubscriber <NSObject>
 
-- (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo;
-- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription;
+- (void)PLTDevice:(PLTDevice *)device didUpdateInfo:(PLTInfo *)info;
+- (void)PLTDevice:(PLTDevice *)device didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription;
 
 @end

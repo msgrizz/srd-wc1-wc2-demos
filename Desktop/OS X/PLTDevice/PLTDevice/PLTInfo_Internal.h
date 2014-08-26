@@ -13,6 +13,12 @@
 
 - (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration;
 
-@property(nonatomic, readwrite)	PLTInfoRequestType	requestType;
+#warning BANGLE
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration serviceData:(NSData *)serviceData;
+- (void)parseServiceData;
+
+@property(nonatomic,readwrite)			PLTInfoRequestType	requestType;
+@property(nonatomic,strong,readwrite)	NSDate				*timestamp;
+@property(nonatomic,strong)				NSData				*serviceData;
 
 @end

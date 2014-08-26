@@ -16,9 +16,13 @@
 
 - (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"%04X",
-                           0xFF18];                     // deckard id
-    
+	NSString *hexString = [NSString stringWithFormat:@"%04X",
+#ifdef OLD_SKEWL_IDS
+							0xFF18];                     // deckard id
+#else
+							0xFF20];
+#endif
+	
     return [NSData dataWithHexString:hexString];
 }
 

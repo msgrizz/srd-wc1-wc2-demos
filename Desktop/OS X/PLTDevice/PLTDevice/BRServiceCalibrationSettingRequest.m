@@ -23,8 +23,12 @@
 
 - (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"%04X %04X %04X",
-                           0xFF11,                  // deckard id
+	NSString *hexString = [NSString stringWithFormat:@"%04X %04X %04X",
+#ifdef OLD_SKEWL_IDS
+						   0xFF11,                  // deckard id
+#else
+						   0xFF01,
+#endif
                            self.serviceID,          
                            0x0000];                 // characteristic
     

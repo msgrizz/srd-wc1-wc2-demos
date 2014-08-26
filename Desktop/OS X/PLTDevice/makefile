@@ -17,25 +17,28 @@ all: osx ios
 
 ios_armv7.a:
 	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7 -configuration Release clean build
-	-mv $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
+	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
 
 ios_armv7s.a:
 	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7s -configuration Release clean build
-	-mv $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
+	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
 
 ios_arm64.a:
 	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch arm64 -configuration Release clean build
-	-mv $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
+	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
 
 ios_headers:
 	mkdir -p $(BUILD_IOS)/$(PRODUCT_NAME)/
-	-mv $(WORKING_IOS)/usr/local/include $(BUILD_IOS)/$(PRODUCT_NAME)/
+	-rm -rf $(BUILD_IOS)/$(PRODUCT_NAME)/include
+	-mv -f $(WORKING_IOS)/usr/local/include $(BUILD_IOS)/$(PRODUCT_NAME)/
 
 osx_64:
 	mkdir -p $(BUILD_OSX)
 	$(XBUILD) -project $(PROJECT) -target $(TARGET_OSX) -sdk macosx -arch x86_64 -configuration Release clean build
-	-mv $(BUILD)/Release/$(PRODUCT_NAME).framework $(BUILD_OSX)/
-	-mv $(BUILD)/Release/$(PRODUCT_NAME).framework.dSYM $(BUILD_OSX)/
+	-rm -rf $(BUILD_OSX)/$(PRODUCT_NAME).framework
+	-rm -rf $(BUILD_OSX)/$(PRODUCT_NAME).framework.dSYM
+	-mv -f $(BUILD)/Release/$(PRODUCT_NAME).framework $(BUILD_OSX)/
+	-mv -f $(BUILD)/Release/$(PRODUCT_NAME).framework.dSYM $(BUILD_OSX)/
 
 ios_all: ios_armv7.a ios_armv7s.a ios_arm64.a ios_headers
 	mkdir -p $(BUILD_IOS)/$(PRODUCT_NAME)/lib
@@ -49,7 +52,7 @@ ios: ios_all clean_ios
 
 clean_osx:
 	-rm -rf $(BUILD)/PLTDevice.build
-	rm -rf $(BUILD)/Release
+	-rm -rf $(BUILD)/Release
 
 clean_ios:
 	-rm -rf $(BUILD)/PLTDevice.build

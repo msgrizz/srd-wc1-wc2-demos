@@ -27,7 +27,7 @@
 
 - (NSData *)payload
 {
-    NSString *hexString = [NSString stringWithFormat:@"%04X %04d %04X %04X %04X",
+    NSString *hexString = [NSString stringWithFormat:@"%04X %04X %04X %04X %04X",
                            0xFF0A,                  // deckard id
                            self.serviceID,
                            0,                       // characteristic

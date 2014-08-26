@@ -11,15 +11,12 @@
 
 typedef enum {
     BRDeviceStateDisconnected,
-	
-#ifdef TARGET_OSX
-    BRDeviceStateOpeningRFCOMMChannel,
-#endif
-#ifdef TARGET_IOS
-	BRDeviceStateOpeningEASession,
-#endif
+    BRDeviceStateOpeningLink,
     BRDeviceStateHostVersionNegotiating,
-	BRDeviceStateConnected
+	BRDeviceStateAwaitingMetadata,
+	BRDeviceStateConnected,
+	BRDeviceStateClosingSession,
+	BRDeviceStateClosingLink
 } BRDeviceState;
 
 
@@ -34,7 +31,7 @@ typedef enum {
 @property(nonatomic,strong,readwrite)	EAAccessory			*accessory;
 #endif
 
-@property(nonatomic,assign,readwrite)   BOOL				isConnected;
+//@property(nonatomic,assign,readwrite)   BOOL				isConnected;
 @property(nonatomic,assign,readwrite)	BRDeviceState		state;
 @property(nonatomic,strong,readwrite)	NSArray				*commands;
 @property(nonatomic,strong,readwrite)	NSArray				*settings;

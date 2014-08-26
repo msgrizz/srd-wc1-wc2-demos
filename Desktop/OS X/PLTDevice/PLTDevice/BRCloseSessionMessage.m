@@ -44,7 +44,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRHostVersionNegotiateCommand %p>",
+    return [NSString stringWithFormat:@"<BRCloseSessionMessage %p>",
             self];
 }
 

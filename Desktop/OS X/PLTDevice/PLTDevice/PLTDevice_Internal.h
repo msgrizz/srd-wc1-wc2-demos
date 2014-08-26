@@ -7,13 +7,15 @@
 //
 
 
-@class PLTDevice;
+#import "PLTDevice.h"
+
+@class BRDevice;
 
 #ifdef TARGET_IOS
 @class EAAccessory;
 #endif
 
-@interface PLTDevice()
+@interface PLTDevice ()
 
 #ifdef TARGET_OSX
 - (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
@@ -23,8 +25,16 @@
 - (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory;
 #endif
 
+// this should be readonly here, but in implementation it complains about being already declaired... (because this is a class extension?)
+@property(nonatomic,strong,readwrite)	BRDevice		*brDevice;
 #ifdef TARGET_IOS
-@property(nonatomic,strong)		EAAccessory		*accessory;
+@property(nonatomic,strong)				EAAccessory		*accessory;
 #endif
+
+
+
+
+//#warning TEMPORARY
+//- (void)sneakySneaky:(id)subscriber;
 
 @end

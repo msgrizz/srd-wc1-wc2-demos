@@ -12,4 +12,4 @@ To build the PLTDevice library use the included makefile.
 ### Building for iOS and Mac OS X:
 <code>make</code>
 
-The resulting frameworks, static libraries and/or header files can be found in the <code>build</code> directory under the appropriate OS's subdirectory directory.
+The resulting frameworks, static libraries and/or header files can be found in the <code>build</code> directory under the appropriate OS's subdirectory.

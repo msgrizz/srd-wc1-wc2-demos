@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainWindowController.h"
+#import "PLTDLog.h"
 
 
 @interface AppDelegate ()
@@ -23,6 +24,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+	_pltDLogLevel = DLogLevelTrace;
     self.mainWindowController = [[MainWindowController alloc] init];
     [self.mainWindowController showWindow:self];
 }

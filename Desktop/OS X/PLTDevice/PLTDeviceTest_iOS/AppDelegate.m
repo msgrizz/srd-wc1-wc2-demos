@@ -7,12 +7,14 @@
 //
 
 #import "AppDelegate.h"
+#import "PLTDLog.h"
 
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	_pltDLogLevel = DLogLevelTrace;
     return YES;
 }
 

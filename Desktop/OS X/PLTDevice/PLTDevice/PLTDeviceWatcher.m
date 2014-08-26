@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
+#import "PLTDLog.h"
 #import "PLTDeviceWatcher.h"
 #import "PLTDevice.h"
 #import "PLTDevice_Internal.h"
@@ -78,7 +79,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 		
 #ifdef TARGET_IOS
 		NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
-		NSLog(@"Connected accessories: %@",accessories);
+		DLog(DLogLevelInfo, @"Connected accessories: %@",accessories);
 		for (EAAccessory *a in accessories) {
 			PLTDevice *device = [[PLTDevice alloc] initWithAccessory:a];
 			[self.devices addObject:device];
@@ -96,7 +97,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 #ifdef TARGET_OSX
 - (void)bluetoothDeviceDidConnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)btDevice
 {
-	NSLog(@"bluetoothDeviceDidConnectNotification: %@", btDevice);
+	DLog(DLogLevelInfo, @"bluetoothDeviceDidConnectNotification: %@", btDevice);
     
     if ([self bluetoothDeviceIsWC1:btDevice]) {
         [btDevice registerForDisconnectNotification:self selector:@selector(bluetoothDeviceDidDisconnectNotification:device:)];
@@ -121,7 +122,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 
 - (void)bluetoothDeviceDidDisconnectNotification:(IOBluetoothUserNotification *)note device:(IOBluetoothDevice *)btDevice
 {
-	NSLog(@"bluetoothDeviceDidDisconnectNotification: %@", btDevice);
+	DLog(DLogLevelInfo, @"bluetoothDeviceDidDisconnectNotification: %@", btDevice);
 	
     if ([self bluetoothDeviceIsWC1:btDevice]) { // this is a sanity check since we shouldn't get the disconnect notification if the device wasn't a WC1 in the first place...
 		NSMutableIndexSet *toRemove = [NSMutableIndexSet indexSet];
@@ -152,7 +153,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 #ifdef TARGET_IOS
 - (void)accessoryDidConnectNotification:(NSNotification *)notification
 {
-	NSLog(@"PLTDeviceWatcher: accessoryDidConnectNotification: %@", notification);
+	DLog(DLogLevelInfo, @"PLTDeviceWatcher: accessoryDidConnectNotification: %@", notification);
 	
 	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
 	if ([accessory.protocolStrings containsObject:PLTDeviceEAProtocolString]) {
@@ -166,7 +167,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 
 - (void)accessoryDidDisconnectNotification:(NSNotification *)notification
 {
-	NSLog(@"PLTDeviceWatcher: accessoryDidDisconnectNotification: %@", notification);
+	DLog(DLogLevelInfo, @"PLTDeviceWatcher: accessoryDidDisconnectNotification: %@", notification);
 	
 	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
 	if ([accessory.protocolStrings containsObject:PLTDeviceEAProtocolString]) {
@@ -186,7 +187,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 		  
 - (void)postDeviceAvailableNotification:(PLTDevice *)device
 {
-	NSLog(@"postDeviceAvailableNotification: %@", device);
+	DLog(DLogLevelInfo, @"postDeviceAvailableNotification: %@", device);
 	
 	NSDictionary *userInfo = @{ PLTDeviceNotificationKey : device };
 	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceAvailableNotification object:nil userInfo:userInfo];

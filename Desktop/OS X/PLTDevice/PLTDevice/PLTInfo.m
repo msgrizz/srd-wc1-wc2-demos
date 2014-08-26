@@ -14,7 +14,7 @@
 @interface PLTInfo()
 
 //@property(readwrite, strong)	PLTDevice			*device;
-@property(nonatomic,strong,readwrite)	NSDate				*timestamp;
+//@property(nonatomic,strong,readwrite)	NSDate				*timestamp;
 @property(nonatomic,strong,readwrite)	PLTCalibration		*calibration;
 
 @end
@@ -33,11 +33,28 @@
 	return self;
 }
 
+#warning BANGLE
+- (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration serviceData:(NSData *)serviceData
+{
+	self = [super init];
+	self.requestType = requestType;
+	self.timestamp = timestamp;
+	self.calibration = calibration;
+	self.serviceData = serviceData;
+	[self parseServiceData];
+	return self;
+}
+
+- (void)parseServiceData
+{
+	// parse deckard "serviceData" and populate appropriate ivars
+}
+
 #pragma mark - NSObject
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTInfo: %p> requestType=%d, timestamp=%@, calibration=%@",
+	return [NSString stringWithFormat:@"<PLTInfo: %p> requestType=%lu, timestamp=%@, calibration=%@",
 			self, self.requestType, self.timestamp, self.calibration];
 }
 

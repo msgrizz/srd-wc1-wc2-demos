@@ -15,7 +15,18 @@ typedef enum {
     BRServiceIDFreeFall =               0x0003,
     BRServiceIDTaps =                   0x0004,
     BRServiceIDMagCal =                 0x0005,
-    BRServiceIDGyroCal =                0x0006
+    BRServiceIDGyroCal =                0x0006,
+	
+#warning BANGLE
+	BRServiceIDAmbientHumidity =		0x0008,
+	BRServiceIDAmbientLight =			0x0009,
+	// optical proximity
+	BRServiceIDAmbientTemperature =		0x000B,
+	// ambient temp 2
+	BRServiceIDSkinTemperature =		0x000D,
+	BRServiceIDSkinConductivity =		0x000E,
+	BRServiceIDAmbientPressure =		0x000F,
+	BRServiceIDHeartRate =				0x0010
 } BRServiceID;
 
 typedef enum {

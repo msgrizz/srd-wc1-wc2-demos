@@ -42,7 +42,7 @@ class Device {
 		}
 	}
 	
-	enum Service : Int {
+	enum Service: Int {
 		case WearingState =					0x1000
 		case Proximity =					0x1001
 		case OrientationTracking =			0x0000
@@ -53,7 +53,7 @@ class Device {
 		case GyroscopeCalibrationStatus =	0x0006
 	}
 	
-	enum SubscriptionMode : Int {
+	enum SubscriptionMode: Int {
 		case OnChange = 0x01
 		case Periodic = 0x02
 	}
@@ -61,13 +61,13 @@ class Device {
 	// MARK: Properties
 	
 	var isConnectionOpen:	Bool =		false
-	var address:			String =	""
-	var model:				String =	""
-	var name:				String =	""
-	var erialNumber:		String =	""
-	var hardwareVersion:	String =	""
-	var firmwareVersion:	String =	""
-	var supportedServices:	String[] =	[]
+	var address:			String?
+	var model:				String?
+	var name:				String?
+	var erialNumber:		String?
+	var hardwareVersion:	String?
+	var firmwareVersion:	String?
+	var supportedServices:	String[]?
 	
 	// MARK: Initializers
 	
@@ -116,7 +116,7 @@ class Device {
 
 	// MARK: Subscribing to and Unsubscribing from Service Info
 	
-	func subscribe(subscriber: DeviceSubscriber, toService service: Service, withMode mode: SubscriptionMode, andPeriod period: UInt16) -> NSError {
+	func subscribe(subscriber: DeviceSubscriber, toService service: Service, withMode mode: SubscriptionMode, andPeriod period: Int) -> NSError {
 		return NSError()
 	}
 	

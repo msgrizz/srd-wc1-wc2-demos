@@ -40,6 +40,13 @@
 
 @implementation BRRemoteDevice
 
+@dynamic isConnected;
+
+- (BOOL)isConnected
+{
+	return self.state == BRDeviceStateConnected;
+}
+
 #pragma mark - Public
 
 + (BRRemoteDevice *)deviceWithParent:(BRDevice *)parent port:(uint8_t)port
@@ -80,7 +87,7 @@
 	self.commands = metadata.commands;
 	self.settings = metadata.settings;
 	self.events = metadata.events;
-	self.isConnected = YES;
+	self.state = BRDeviceStateConnected;
 	[self.delegate BRDeviceDidConnect:self];
 }
 
@@ -88,19 +95,19 @@
 
 - (void)BRDeviceDidConnect:(BRDevice *)device
 {
-	self.isConnected = YES;
+	//self.isConnected = YES;
 	[self.delegate BRDeviceDidConnect:self];
 }
 
 - (void)BRDeviceDidDisconnect:(BRDevice *)device
 {
-	self.isConnected = NO;
+	//self.isConnected = NO;
 	[self.delegate BRDeviceDidDisconnect:self];
 }
 
 - (void)BRDevice:(BRDevice *)device didFailConnectWithError:(int)ioBTError
 {
-	self.isConnected = NO;
+	//self.isConnected = NO;
 	[self.delegate BRDevice:self didFailConnectWithError:ioBTError];
 }
 
@@ -143,12 +150,12 @@
 #ifdef TARGET_OSX
     return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
             self, self.bluetoothAddress, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
-			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.remoteDevices];
+			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
 #endif
 #ifdef TARGET_IOS
 	return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
             self, self.accessory.name, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
-			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.remoteDevices];
+			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
 #endif
 }
 

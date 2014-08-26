@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-//#import "Configuration.h"
-
+#import "Configuration.h"
+#import "PLTDLog.h"
 #import "BRDevice.h"
 #import "BRDevice_Private.h"
 #import "BRMessage_Private.h"
@@ -47,9 +47,13 @@
 #import "BRProductNameSettingResponse.h"
 #import "NSData+HexStrings.h"
 #import "NSArray+PrettyPrint.h"
+#import "BRConnectionStatusSettingResponse.h"
 
-#warning bangle
+#import "BRSubscribedServiceDataEvent.h"
+
+#ifdef BANGLE
 #import "BRApplicationActionResultEvent.h"
+#endif
 
 #ifdef TARGET_OSX
 #import <IOBluetooth/Bluetooth.h>
@@ -60,6 +64,12 @@
 #import <ExternalAccessory/ExternalAccessory.h>
 #endif
 
+#ifdef BR_GENESIS
+#import "BRRawMessage.h"
+#endif
+
+
+#define DISCONNECT_DELAY	250 // ms
 
 #ifdef TARGET_IOS
 NSString *const BRDeviceEAProtocolString =							@"com.plantronics.headsetdataservice";
@@ -79,18 +89,28 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 - (void)checkOutputBuffers;
 #endif
 - (void)parseIncomingMessage:(NSData *)data;
+- (void)startCloseSessionTimer;
+- (void)cancelCloseSessionTimer;
+- (void)closeSessionTimer:(NSTimer *)aTimer;
 
 @property(nonatomic,strong)				NSMutableData				*inputBuffer;
 @property(nonatomic,strong,readwrite)	NSMutableDictionary			*remoteDevices;
+@property(nonatomic,strong)				NSTimer						*closeSessionTimer;
 #ifdef TARGET_OSX
 @property(nonatomic,strong)             IOBluetoothRFCOMMChannel    *RFCOMMChannel;
-@property(nonatomic,assign)             BOOL                        channelOpened;
+//@property(nonatomic,assign)             BOOL                        channelOpened;
 #endif
 #ifdef TARGET_IOS
 @property(nonatomic,strong)				EASession					*session;
 @property(nonatomic,assign)             BOOL                        streamOpened;
-//@property(nonatomic,strong)				NSMutableData				*outputBuffer;
 @property(nonatomic,strong)				NSMutableArray				*outputBuffers;
+
+
+//#warning TEMPORARY FOR IAP PARSE ERROR
+//#define OUTPUT_DELAY	.25
+//@property(nonatomic,strong)				NSTimer						*outputTimer;
+//@property(nonatomic,strong)				NSDate						*lastOutputDate;
+
 #endif
 
 @end
@@ -98,6 +118,13 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 
 @implementation BRDevice
+
+@dynamic isConnected;
+
+- (BOOL)isConnected
+{
+	return self.state == BRDeviceStateConnected;
+}
 
 #pragma mark - Public
 
@@ -109,43 +136,44 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
     return device;
 }
 
-- (void)openConnection
-{
-    NSLog(@"Opening connection to device at address %@...", self.bluetoothAddress);
-    
-	if (!self.isConnected) {
-		self.state = BRDeviceStateOpeningRFCOMMChannel;
-		self.remoteDevices = [NSMutableDictionary dictionary];
-		
-		IOBluetoothDevice *device = [IOBluetoothDevice deviceWithAddressString:self.bluetoothAddress];
-		IOBluetoothRFCOMMChannel *RFCOMMChannel;
-		self.channelOpened = NO;
-		IOReturn error = [device openRFCOMMChannelAsync:&RFCOMMChannel withChannelID:5 delegate:self];
-		self.RFCOMMChannel = RFCOMMChannel;
-		if (error != kIOReturnSuccess) {
-			NSLog(@"Error opening RFCOMM channel: %d", error);
-			self.state = BRDeviceStateDisconnected;
-			[self.delegate BRDevice:self didFailConnectWithError:error];
-		}
-	}
-	else {
-		NSLog(@"Already connected!");
-	}
-}
+//- (void)openConnection
+//{
+//    NSLog(@"Opening connection to device at address %@...", self.bluetoothAddress);
+//    
+//	if (!self.isConnected) {
+//		self.state = BRDeviceStateOpeningLink;
+//		self.remoteDevices = [NSMutableDictionary dictionary];
+//		
+//		IOBluetoothDevice *device = [IOBluetoothDevice deviceWithAddressString:self.bluetoothAddress];
+//		IOBluetoothRFCOMMChannel *RFCOMMChannel;
+//		//self.channelOpened = NO;
+//		IOReturn error = [device openRFCOMMChannelAsync:&RFCOMMChannel withChannelID:5 delegate:self];
+//		self.RFCOMMChannel = RFCOMMChannel;
+//		if (error != kIOReturnSuccess) {
+//			NSLog(@"Error opening RFCOMM channel: %d", error);
+//			self.state = BRDeviceStateDisconnected;
+//			[self.delegate BRDevice:self didFailConnectWithError:error];
+//		}
+//	}
+//	else {
+//		NSLog(@"Already connected!");
+//	}
+//}
 
-- (void)closeConnection
-{
-    NSLog(@"Closing connection (%@)...", self.bluetoothAddress);
-	
-#warning check disconnect remote devices
-    
-    BRCloseSessionMessage *message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
-    [self sendMessage:message];
-    
-    [self.RFCOMMChannel closeChannel];
-	
-	self.isConnected = NO;
-}
+//- (void)closeConnection
+//{
+//    NSLog(@"Closing connection (%@)...", self.bluetoothAddress);
+//    
+//	self.state = BRDeviceStateClosingSession;
+//	
+//    BRCloseSessionMessage *message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
+//    [self sendMessage:message];
+//	
+//	[self startCloseSessionTimer];
+//    
+//    //[self.RFCOMMChannel closeChannel];
+//	//self.isConnected = NO;
+//}
 #endif
 
 #ifdef TARGET_IOS
@@ -156,23 +184,109 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
     return device;
 }
 
+//- (void)openConnection
+//{
+//    NSLog(@"Opening session with accessory %@...", self.accessory);
+//	
+//	if (!self.isConnected) {
+//		if (!self.session) {
+//			// create data session if we found a matching accessory
+//			if (self.accessory) {
+//				self.state = BRDeviceStateOpeningLink;
+//				self.streamOpened = NO;
+//				self.remoteDevices = [NSMutableDictionary dictionary];
+//				
+//				NSLog(@"Attempting to create data session with accessory %@", [self.accessory name]);
+//				
+//#ifdef BR_GENESIS
+//				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:@"com.plantronics.opportunity"];
+//#else
+//				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:BRDeviceEAProtocolString];
+//#endif
+//				if (self.session) {
+//					NSLog(@"Created EA session: %@", self.session);
+//					
+//					// open input and output streams
+//					[[self.session inputStream] setDelegate:self];
+//					[[self.session inputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//					[[self.session inputStream] open];
+//					[[self.session outputStream] setDelegate:self];
+//					[[self.session outputStream] scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+//					[[self.session outputStream] open];
+//				}
+//				else {
+//					NSLog(@"Failed to create EA session.");
+////					NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+////														 code:BRDeviceErrorCodeFailedToCreateDataSession
+////													 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
+//					[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeFailedToCreateDataSession];
+//				}
+//			}
+//			else {
+//				NSLog(@"No accessory accociated!");
+////				NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+////													 code:BRDeviceErrorCodeNoAccessoryAssociated
+////												 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
+//				[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeNoAccessoryAssociated];
+//			}
+//		}
+//		else {
+//			NSLog(@"Data session already active.");
+////			NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+////												 code:BRDeviceErrorCodeConnectionAlreadyOpen
+////											 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
+//			[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeConnectionAlreadyOpen];
+//		} // !self.session
+//	} // !self.isConnected
+//}
+#endif
+
 - (void)openConnection
 {
-    NSLog(@"Opening session with accessory %@...", self.accessory);
+#ifdef TARGET_OSX
+	DLog(DLogLevelInfo, @"Opening connection to device at address %@...", self.bluetoothAddress);
+	
+	if (!self.isConnected) {
+		self.state = BRDeviceStateOpeningLink;
+		self.remoteDevices = [NSMutableDictionary dictionary];
+		
+		IOBluetoothDevice *device = [IOBluetoothDevice deviceWithAddressString:self.bluetoothAddress];
+		IOBluetoothRFCOMMChannel *RFCOMMChannel;
+		//self.channelOpened = NO;
+		IOReturn error = [device openRFCOMMChannelAsync:&RFCOMMChannel withChannelID:5 delegate:self];
+		self.RFCOMMChannel = RFCOMMChannel;
+		if (error != kIOReturnSuccess) {
+			DLog(DLogLevelError, @"Error opening RFCOMM channel: %d", error);
+			self.state = BRDeviceStateDisconnected;
+			[self.delegate BRDevice:self didFailConnectWithError:error];
+		}
+	}
+	else {
+		DLog(DLogLevelWarn, @"Already connected!");
+	}
+#endif
+	
+#ifdef TARGET_IOS
+	DLog(DLogLevelInfo, @"Opening session with accessory %@...", self.accessory);
 	
 	if (!self.isConnected) {
 		if (!self.session) {
 			// create data session if we found a matching accessory
 			if (self.accessory) {
-				self.state = BRDeviceStateOpeningEASession;
+				self.state = BRDeviceStateOpeningLink;
+				self.accessory.delegate = self;
 				self.streamOpened = NO;
 				self.remoteDevices = [NSMutableDictionary dictionary];
 				
-				NSLog(@"Attempting to create data session with accessory %@", [self.accessory name]);
+				DLog(DLogLevelDebug, @"Attempting to create data session with accessory %@", [self.accessory name]);
 				
+#ifdef BR_GENESIS
+				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:@"com.plantronics.opportunity"];
+#else
 				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:BRDeviceEAProtocolString];
+#endif
 				if (self.session) {
-					NSLog(@"Created EA session: %@", self.session);
+					DLog(DLogLevelDebug, @"Created EA session: %@", self.session);
 					
 					// open input and output streams
 					[[self.session inputStream] setDelegate:self];
@@ -183,71 +297,79 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 					[[self.session outputStream] open];
 				}
 				else {
-					NSLog(@"Failed to create EA session.");
-//					NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
-//														 code:BRDeviceErrorCodeFailedToCreateDataSession
-//													 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
-					[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeFailedToCreateDataSession];
+					DLog(DLogLevelError, @"Failed to create EA session.");
+					DLog(DLogLevelError, @"Ensure that %@ is included in the UISupportedExternalAccessoryProtocols key of your Info.plist file.", BRDeviceEAProtocolString);
+					//					NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+					//														 code:BRDeviceErrorCodeFailedToCreateDataSession
+					//													 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
+					[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorFailedToCreateDataSession];
 				}
 			}
 			else {
-				NSLog(@"No accessory accociated!");
-//				NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
-//													 code:BRDeviceErrorCodeNoAccessoryAssociated
-//												 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
-				[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeNoAccessoryAssociated];
+				DLog(DLogLevelWarn, @"No accessory accociated!");
+				//				NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+				//													 code:BRDeviceErrorCodeNoAccessoryAssociated
+				//												 userInfo:@{NSLocalizedDescriptionKey : @"No create External Accessory associated."}];
+				[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorNoAccessoryAssociated];
 			}
 		}
 		else {
-			NSLog(@"Data session already active.");
-//			NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
-//												 code:BRDeviceErrorCodeConnectionAlreadyOpen
-//											 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
-			[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorCodeConnectionAlreadyOpen];
+			DLog(DLogLevelError, @"Data session already active.");
+			//			NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
+			//												 code:BRDeviceErrorCodeConnectionAlreadyOpen
+			//											 userInfo:@{NSLocalizedDescriptionKey : @"External Accessory data session already open."}];
+			[self.delegate BRDevice:self didFailConnectWithError:BRDeviceErrorConnectionAlreadyOpen];
 		} // !self.session
 	} // !self.isConnected
+#endif
 }
 
 - (void)closeConnection
 {
-    NSLog(@"Closing connection to accessory %@...", self.accessory);
-	
-    BRCloseSessionMessage *message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
-    [self sendMessage:message];
-	
-	if (self.session) {
-		[[self.session inputStream] close];
-        [[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session inputStream] setDelegate:nil];
-        [[self.session outputStream] close];
-        [[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-        [[self.session outputStream] setDelegate:nil];
-		
-        self.session = nil;
-	}
-	
-	self.isConnected = NO;
-}
+#ifdef TARGET_OSX
+	DLog(DLogLevelInfo, @"Closing connection (%@)...", self.bluetoothAddress);
 #endif
+#ifdef TARGET_IOS
+	DLog(DLogLevelInfo, @"Closing connection to accessory %@...", self.accessory);
+#endif
+	
+	self.state = BRDeviceStateClosingSession;
+	
+	// make individual messages since remote devices will manipulate their addresses
+	BRCloseSessionMessage *message = nil;
+	for (NSNumber *port in self.remoteDevices) {
+		message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
+		BRDevice *destinationDevice = self.remoteDevices[port];
+		[destinationDevice sendMessage:message];
+	}
+	message = (BRCloseSessionMessage *)[BRCloseSessionMessage message];
+	[self sendMessage:message];
+	
+	[self startCloseSessionTimer];
+}
 
 - (void)sendMessage:(BRMessage *)message
 {
 	NSData *messageData = message.data; // message.data computes on each call...
 	
-#ifdef TARGET_IOS
+#if defined(TARGET_IOS) && defined(MFI_SEQUENCE_PREFIXES)
 	NSMutableData *mfiHeaderData = [[NSData dataWithHexString:@"0101"] mutableCopy]; // add MFI prefix...
 	[mfiHeaderData appendData:messageData];
 	messageData = mfiHeaderData;
 #endif
 	
 	if ([message.address integerValue] == 0) {
-		[self.delegate BRDevice:self willSendData:messageData];
+		if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
+			[self.delegate BRDevice:self willSendData:messageData];
+		}
 	}
 	else {//([message.address integerValue] != 0) {
 		NSString *portString = [message.address substringToIndex:1];
 		uint8_t port = [portString integerValue];
 		BRRemoteDevice *remoteDevice = self.remoteDevices[@(port)];
-		[remoteDevice BRDevice:self willSendData:messageData];
+		if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
+			[remoteDevice BRDevice:self willSendData:messageData];
+		}
 	}
 	
 #ifdef TARGET_OSX
@@ -265,7 +387,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)checkInputBuffer
 {
-	//NSLog(@"checkInputBuffer");
+	DLog(DLogLevelTrace, @"checkInputBuffer");
 	
 	// the theory is that the beginning of the data will always be the start of a message
 	// the buffer may not contain a whole message, or it may overflow into part or all of a new message
@@ -309,46 +431,72 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 #ifdef TARGET_IOS
 
+//#warning TEMPORARY
+//- (void)outputTimer:(NSTimer *)timer
+//{
+//	//NSLog(@"*** OUTPUT TIMER: %@ ***", timer);
+//	[self.outputTimer invalidate];
+//	self.outputTimer = nil;
+//	[self checkOutputBuffers];
+//}
+
 - (void)checkOutputBuffers
 {
-	NSLog(@"checkOutputBuffers: (num messages: %d)", [self.outputBuffers count]);
+	DLog(DLogLevelTrace, @"checkOutputBuffers: (num messages: %d)", [self.outputBuffers count]);
 	
-	NSOutputStream *outputStream = [self.session outputStream];
-	NSMutableData *outData;
-	if ([self.outputBuffers count]) {
-		outData = self.outputBuffers[0];
-	}
-	//if ([outData length]) {
-	while(self.session && [outputStream hasSpaceAvailable] && [outData length]) {
-		NSLog(@"(data)");
-		NSInteger len = [outputStream write:(void *)[outData bytes] maxLength:[outData length]];
-		switch (len) {
-			case 0: // reached fixed-length capacity (?)
-				break;
-			case -1: { // error
-				NSError *error = [outputStream streamError];
-				NSLog(@"****** Stream error: %@ ******", error);
-#warning handle?
-				break; }
-			default: { // data written
-				NSLog(@"Wrote %d bytes.", len);
-				if (len == [outData length]) {
-					NSLog(@"(whole message)");
-					[self.outputBuffers removeObjectAtIndex:0];
-				}
-				else {
-					NSLog(@"(partial message)");
-#warning wait and re-send whole message at once?
-					NSRange range = NSMakeRange(0, len);
-					[outData replaceBytesInRange:range withBytes:nil length:0];
-				}
-				break; }
-		}
+//	NSTimeInterval timeSinceLastOutput = [[NSDate date] timeIntervalSinceDate:self.lastOutputDate];
+//	if (!self.lastOutputDate || timeSinceLastOutput >= OUTPUT_DELAY) {
 		
+		NSOutputStream *outputStream = [self.session outputStream];
+		NSMutableData *outData;
 		if ([self.outputBuffers count]) {
+			DLog(DLogLevelTrace, @"*** SENDING ***");
 			outData = self.outputBuffers[0];
 		}
-	}
+		else {
+			DLog(DLogLevelTrace, @"*** NOTHING TO SEND ***");
+		}
+		//if ([outData length]) {
+		while(self.session && [outputStream hasSpaceAvailable] && [outData length]) {
+			DLog(DLogLevelTrace, @"(data)");
+			NSInteger len = [outputStream write:(void *)[outData bytes] maxLength:[outData length]];
+			switch (len) {
+				case 0: // reached fixed-length capacity (?)
+					break;
+				case -1: { // error
+					NSError *error = [outputStream streamError];
+					DLog(DLogLevelError, @"****** Stream error: %@ ******", error);
+#warning handle?
+					break; }
+				default: { // data written
+					DLog(DLogLevelTrace, @"Wrote %ld bytes.", (long)len);
+					if (len == [outData length]) {
+						DLog(DLogLevelTrace, @"(whole message)");
+						[self.outputBuffers removeObjectAtIndex:0];
+					}
+					else {
+						DLog(DLogLevelTrace, @"(partial message)");
+#warning wait and re-send whole message at once?
+						NSRange range = NSMakeRange(0, len);
+						[outData replaceBytesInRange:range withBytes:nil length:0];
+					}
+					break; }
+			}
+			
+			if ([self.outputBuffers count]) {
+				outData = self.outputBuffers[0];
+			}
+			
+			//self.lastOutputDate = [NSDate date];
+		}
+//	}
+//	else {
+//		//NSLog(@"*** WAITING ***");
+//		if (!self.outputTimer) {
+//			//NSLog(@"*** STARTING TIMR ***");
+//			self.outputTimer = [NSTimer scheduledTimerWithTimeInterval:OUTPUT_DELAY target:self selector:@selector(outputTimer:) userInfo:nil repeats:NO];
+//		}
+//	}
 }
 
 //- (void)checkOutputBuffer
@@ -379,9 +527,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)parseIncomingMessage:(NSData *)data
 {
-	NSLog(@"parseIncomingMessage:");
+	DLog(DLogLevelTrace, @"parseIncomingMessage:");
 	
-	[self.delegate BRDevice:self didReceiveData:data];
+	if ([self.delegate respondsToSelector:@selector(BRDevice:didReceiveData:)]) {
+		[self.delegate BRDevice:self didReceiveData:data];
+	}
 	
 	@try {
 		NSString *address = [[[data subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] hexStringWithSpaceEvery:0] substringToIndex:6];
@@ -397,12 +547,12 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 		
 		switch (messageType) {
 			case BRMessageTypeHostProtocolVersion:
-				NSLog(@"BRMessageTypeHostProtocolVersion");
+				DLog(DLogLevelTrace, @"BRMessageTypeHostProtocolVersion(%d)", port);
 				// something
 				break;
 				
 			case BRMessageTypeSettingRequest:
-				NSLog(@"BRMessageTypeSettingRequest");
+				DLog(DLogLevelTrace, @"BRMessageTypeSettingRequest(%d)", port);
 				// something
 				break;
 				
@@ -415,9 +565,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				Class class = nil;
 				
 				switch (deckardID) {
+#ifndef BR_GENESIS
 					case BRSettingResponseIDWearingState:
 						class = [BRWearingStateSettingResponse class];
 						break;
+#endif
 						
 					case BRSettingResponseIDSignalStrength:
 						class = [BRSignalStrengthSettingResponse class];
@@ -433,6 +585,10 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 						
 					case BRSettingResponseIDProductName:
 						class = [BRProductNameSettingResponse class];
+						break;
+						
+					case BRSettingResponseIDConnectionStatus:
+						class = [BRConnectionStatusSettingResponse class];
 						break;
 						
 					case BRSettingResponseIDSeaviceData: {
@@ -461,13 +617,16 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 								class = [BRGyroscopeCalStatusSettingResponse class];
 								break;
 							default:
-								NSLog(@"Error: unknown service ID 0x%02X", serviceID);
+								DLog(DLogLevelError, @"Error: unknown service ID 0x%02X", serviceID);
 								break;
 						}
 						break; }
 						
 					default:
-						NSLog(@"Error: unknown Deckard setting 0x%04X", deckardID);
+						//NSLog(@"Error: unknown Deckard setting 0x%04X", deckardID);
+						if ([self.delegate respondsToSelector:@selector(BRDevice:didReceiveUnknownMessage:)]) {
+							[self.delegate BRDevice:self didReceiveUnknownMessage:[BRIncomingMessage messageWithData:data]];
+						}
 						break;
 				}
 				
@@ -485,7 +644,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeSettingResultException:
 			case BRMessageTypeCommandResultException: {
-				NSLog(@"***** EXCEPTION *****");
+				DLog(DLogLevelError, @"***** EXCEPTION(%d) *****", port);
 				
 				//            BRExceptionID exceptionID;
 				//            NSData *exceptionIDData = [data subdataWithRange:NSMakeRange(10, sizeof(uint16_t))];
@@ -516,7 +675,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				break;
 				
 			case BRMessageTypeCommandResultSuccess:
-				NSLog(@"BRMessageTypeCommandResultSuccess");
+				DLog(DLogLevelTrace, @"BRMessageTypeCommandResultSuccess(%d)", port);
 				break;
 				//        case BRMessageTypeCommandResultException:
 				//            NSLog(@"***** COMMAND EXCEPTION *****");
@@ -524,7 +683,9 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeDeviceProtocolVersion: {
 				BRDeviceProtocolVersionMessage *protocolVersionMessage = (BRDeviceProtocolVersionMessage *)[BRDeviceProtocolVersionMessage messageWithData:data];
-				NSLog(@"BRMessageTypeDeviceProtocolVersion: %@", protocolVersionMessage);
+				DLog(DLogLevelTrace, @"BRMessageTypeDeviceProtocolVersion(%d): %@", port, protocolVersionMessage);
+				destinationDevice.state = BRDeviceStateAwaitingMetadata;
+				
 				break; }
 				
 			case BRMessageTypeMetadata: {
@@ -538,7 +699,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 					self.commands = metadata.commands;
 					self.settings = metadata.settings;
 					self.events = metadata.events;
-					self.isConnected = YES;
+					self.state = BRDeviceStateConnected;
 					[self.delegate BRDeviceDidConnect:self];
 					//[self.delegate BRDevice:self didReceiveMetadata:metadata];
 				}
@@ -548,6 +709,8 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				break; }
 				
 			case BRMessageTypeEvent: {
+				DLog(DLogLevelTrace, @"BRMessageTypeEvent(%d)", port);
+				
 				BREventID deckardID;
 				NSData *deckardIDData = [data subdataWithRange:NSMakeRange(6, sizeof(uint16_t))];
 				[deckardIDData getBytes:&deckardID length:sizeof(uint16_t)];
@@ -612,7 +775,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 								class = [BRGyroscopeCalStatusEvent class];
 								break;
 							default:
-								NSLog(@"Error: unknown service ID 0x%02X", serviceID);
+								class = [BRSubscribedServiceDataEvent class];
 								break;
 						}
 						break; }
@@ -621,12 +784,17 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 						class = [BRServiceSubscriptionChangedEvent class];
 						break;
 						
+#ifdef BANGLE
 					case BREventIDApplicationActionResult:
 						class = [BRApplicationActionResultEvent class];
 						break;
+#endif
 						
 					default:
-						NSLog(@"Error: unknown Deckard event 0x%04X", deckardID);
+						//NSLog(@"Error: unknown Deckard event 0x%04X", deckardID);
+						if ([self.delegate respondsToSelector:@selector(BRDevice:didReceiveUnknownMessage:)]) {
+							[self.delegate BRDevice:self didReceiveUnknownMessage:[BRIncomingMessage messageWithData:data]];
+						}
 						break;
                 }
 				
@@ -642,19 +810,19 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				break; }
 				
 			case BRMessageTypeCloseSession:
-				NSLog(@"BRMessageTypeCloseSession");
+				DLog(DLogLevelTrace, @"BRMessageTypeCloseSession(%d)", port);
 				break;
 				
 			case BRMessageTypeProtocolVersionRejection:
-				NSLog(@"BRMessageTypeProtocolVersionRejection");
+				DLog(DLogLevelTrace, @"BRMessageTypeProtocolVersionRejection(%d)", port);;
 				break;
 				
 			case BRMessageTypeConnectionChangeEvent:
-				NSLog(@"BRMessageTypeConnectionChangeEvent");
+				DLog(DLogLevelTrace, @"BRMessageTypeConnectionChangeEvent(%d)", port);
 				break;
 				
 			default:
-				NSLog(@"Error: unknown message type 0x%01X", messageType);
+				DLog(DLogLevelWarn, @"Error: unknown message type 0x%01X, port %d", messageType, port);
 				break;
 		}
 	}
@@ -666,8 +834,67 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 		// a chunk of data will arrive at NSStreamEventHasBytesAvailable that has a second 2-byte prefix in the body of the data
 		// this causes parsing errors. so far, ignoring the exceptions seems to work pretty well, but there is probably a "real" solution.
 		// this is possibly a firmware issue, an application issue buffering input, and OS issue buffering input, or related to combinations of the NSStreamEvent bitmasks.
-		NSLog(@"************ EXCEPTION PARSING MESSAGE DATA: %@ ************", e);
+		DLog(DLogLevelError, @"************ EXCEPTION PARSING MESSAGE DATA: %@ ************", e);
 	}
+}
+
+- (void)startCloseSessionTimer
+{
+	DLog(DLogLevelTrace, @"startCloseSessionTimer");
+	
+	[self cancelCloseSessionTimer];
+	self.closeSessionTimer = [NSTimer scheduledTimerWithTimeInterval:(float)DISCONNECT_DELAY/1000.0 target:self selector:@selector(closeSessionTimer:) userInfo:nil repeats:NO];
+	
+	self.state = BRDeviceStateClosingSession;
+}
+
+- (void)cancelCloseSessionTimer
+{
+	DLog(DLogLevelTrace, @"cancelCloseSessionTimer");
+	
+	if ([self.closeSessionTimer isValid]) {
+		[self.closeSessionTimer invalidate];
+	}
+	self.closeSessionTimer = nil;
+	
+	self.state = BRDeviceStateConnected; // ya?
+}
+
+- (void)closeSessionTimer:(NSTimer *)aTimer
+{
+	DLog(DLogLevelTrace, @"closeSessionTimer:");
+	
+	self.state = BRDeviceStateClosingLink;
+	
+#ifdef TARGET_OSX
+	DLog(DLogLevelInfo, @"Closing RFCOMM channel...");
+	
+	[self.RFCOMMChannel closeChannel];
+	self.RFCOMMChannel = nil;
+	
+	// wait for RFCOMMChannel callbacks for self.state = BRDeviceStateDisconnected
+#endif
+	
+#ifdef TARGET_IOS
+	DLog(DLogLevelInfo, @"Closing External Accessory session...");
+	
+	[[self.session inputStream] close];
+	[[self.session inputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	[[self.session inputStream] setDelegate:nil];
+	[[self.session outputStream] close];
+	[[self.session outputStream] removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	[[self.session outputStream] setDelegate:nil];
+	self.session = nil;
+	self.streamOpened = NO;
+	
+	self.state = BRDeviceStateDisconnected;
+	
+	for (NSNumber *port in self.remoteDevices) {
+		id destinationDevice = self.remoteDevices[port];
+		[destinationDevice BRDeviceDidDisconnect:self];
+	}
+	[self.delegate BRDeviceDidDisconnect:self];
+#endif
 }
 
 #pragma mark - IOBluetoothRFCOMMChannelDelegate
@@ -681,7 +908,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)rfcommChannelOpenComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel status:(IOReturn)error
 {
-    NSLog(@"rfcommChannelOpenComplete: %@, status: %d", rfcommChannel, error);
+    DLog(DLogLevelTrace, @"rfcommChannelOpenComplete: %@, status: %d", rfcommChannel, error);
 	
 	if (!rfcommChannel.isOpen) {
 		// when an invalid BT address is supplied, error is 4. not sure where this comes from.
@@ -691,39 +918,50 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
-    NSLog(@"rfcommChannelClosed:");
+    DLog(DLogLevelTrace, @"rfcommChannelClosed:");
+	
     self.state = BRDeviceStateDisconnected;
+	
+	for (NSNumber *port in self.remoteDevices) {
+		id destinationDevice = self.remoteDevices[port];
+		[destinationDevice BRDeviceDidDisconnect:self];
+	}
     [self.delegate BRDeviceDidDisconnect:self];
-	self.channelOpened = NO;
-	self.isConnected = NO;
+	
+//	self.channelOpened = NO;
+//	self.isConnected = NO;
 }
 
 - (void)rfcommChannelControlSignalsChanged:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
-    NSLog(@"rfcommChannelControlSignalsChanged:");
+    DLog(DLogLevelTrace, @"rfcommChannelControlSignalsChanged:");
 }
 
 - (void)rfcommChannelFlowControlChanged:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
-    NSLog(@"rfcommChannelFlowControlChanged: %d", [rfcommChannel getMTU]);
+    DLog(DLogLevelTrace, @"rfcommChannelFlowControlChanged: %d", [rfcommChannel getMTU]);
 }
 
 - (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel refcon:(void*)refcon status:(IOReturn)error
 {
-    NSLog(@"rfcommChannelWriteComplete: %d", error);
+    //NSLog(@"rfcommChannelWriteComplete: %d", error);
 }
 
 - (void)rfcommChannelQueueSpaceAvailable:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
-    NSLog(@"rfcommChannelQueueSpaceAvailable:");
+    //NSLog(@"rfcommChannelQueueSpaceAvailable:");
     
-    if (!self.channelOpened) {
-        self.channelOpened = YES;
-        if (self.state==BRDeviceStateOpeningRFCOMMChannel) {
+    if (![rfcommChannel isOpen]) {
+        //self.channelOpened = YES;
+        if (self.state == BRDeviceStateOpeningLink) {
             self.state = BRDeviceStateHostVersionNegotiating;
-			//BRHostVersionNegotiateMessage *message = [BRHostVersionNegotiateMessage messageWithAddress:0x0000000];
+#ifdef BR_GENESIS
+			BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeHostProtocolVersion payload:[NSData dataWithHexString:@"646E"]];
+			[self sendMessage:message];	
+#else
 			BRHostVersionNegotiateMessage *message = (BRHostVersionNegotiateMessage *)[BRHostVersionNegotiateMessage messageWithMinimumVersion:1 maximumVersion:1];
-			[self sendMessage:message];
+			[self sendMessage:message];	
+#endif
         }
     }
 }
@@ -734,13 +972,18 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 #ifdef TARGET_IOS
 - (void)accessoryDidDisconnect:(EAAccessory *)accessory
 {
-	NSLog(@"accessoryDidDisconnect: %@", accessory);
-	self.state = BRDeviceStateDisconnected;
-    [self.delegate BRDeviceDidDisconnect:self];
-	self.streamOpened = NO;
-	self.isConnected = NO;
+	DLog(DLogLevelWarn, @"accessoryDidDisconnect: %@", accessory);
+	
+	[self closeSessionTimer:nil];
+	
+//	self.state = BRDeviceStateDisconnected;
+//	
+//	for (NSNumber *port in self.remoteDevices) {
+//		id destinationDevice = self.remoteDevices[port];
+//		[destinationDevice BRDeviceDidDisconnect:self];
+//	}
+//    [self.delegate BRDeviceDidDisconnect:self];
 }
-
 #endif
 
 #pragma mark - NSStreamDelegate
@@ -748,23 +991,29 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 #ifdef TARGET_IOS
 - (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent
 {
+	//NSLog(@"handleEvent: %lu", streamEvent);
+	
 	// OPEN COMPLETED
 	if (streamEvent & NSStreamEventOpenCompleted) {
-		NSLog(@"NSStreamEventOpenCompleted");
+		DLog(DLogLevelTrace, @"NSStreamEventOpenCompleted");
 		self.inputBuffer = [NSMutableData data];
 		self.outputBuffers = [NSMutableArray array];
-		//self.outputBuffer = [NSMutableData data];
 	}
 	
 	// SPACE AVAILABLE
 	if (streamEvent & NSStreamEventHasSpaceAvailable) {
-		NSLog(@"NSStreamEventHasSpaceAvailable");
+		//NSLog(@"NSStreamEventHasSpaceAvailable");
 		if (!self.streamOpened) {
 			self.streamOpened = YES;
-			if (self.state == BRDeviceStateOpeningEASession) {
+			if (self.state == BRDeviceStateOpeningLink) {
 				self.state = BRDeviceStateHostVersionNegotiating;
+#ifdef BR_GENESIS
+				BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeHostProtocolVersion payload:[NSData dataWithHexString:@"646E"]];
+				[self sendMessage:message];	
+#else
 				BRHostVersionNegotiateMessage *message = (BRHostVersionNegotiateMessage *)[BRHostVersionNegotiateMessage messageWithMinimumVersion:1 maximumVersion:1];
 				[self sendMessage:message];
+#endif
 			}
 		}
 		[self checkOutputBuffers];
@@ -772,7 +1021,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 	
 	// BYTES AVAILABLE
 	if (streamEvent & NSStreamEventHasBytesAvailable) {
-		NSLog(@"NSStreamEventHasBytesAvailable:");
+		//NSLog(@"NSStreamEventHasBytesAvailable:");
 		
 		uint8_t buf[4096*3]; // maximum deckard message size (with address type 1) x 3.
 		NSUInteger len = [[self.session inputStream] read:buf maxLength:4096*3];
@@ -782,7 +1031,9 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 		//NSLog(@"MFI packet: %@", [data hexStringWithSpaceEvery:2]);
 		
 		// since the "MFI prefix" is added to every BUFFER, not every MESSAGE, from it for each buffer
+#ifdef MFI_SEQUENCE_PREFIXES
 		data = [data subdataWithRange:NSMakeRange(2, [data length]-2)];
+#endif
 		
 		[self.inputBuffer appendData:data];
 		[self checkInputBuffer];
@@ -791,19 +1042,19 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 	
 	// END ENCOUNTERED
 	if (streamEvent & NSStreamEventEndEncountered) {
-		NSLog(@"NSStreamEventEndEncountered");
+		DLog(DLogLevelTrace, @"NSStreamEventEndEncountered");
 	}
 	
 	// ERROR OCCURRED
 	if (streamEvent & NSStreamEventErrorOccurred) {
 		NSError *error = [theStream streamError];
-		NSString *errorMessage = [NSString stringWithFormat:@"%@ (code %d)", [error localizedDescription], [error code]];
-		NSLog(@"StreamEventError %@", errorMessage);
+		NSString *errorMessage = [NSString stringWithFormat:@"%@ (code %ld)", [error localizedDescription], (long)[error code]];
+		DLog(DLogLevelError, @"NSStreamEventErrorOccurred: %@", errorMessage);
 	}
 	
 	// NONE
 	if (streamEvent & NSStreamEventNone) {
-		NSLog(@"NSStreamEventNone");
+		//NSLog(@"NSStreamEventNone");
 	}
 }
 

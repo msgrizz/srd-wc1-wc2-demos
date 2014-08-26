@@ -7,6 +7,7 @@
 //
 
 
-#define DEBUG_MODE
-//#define TARGET_OSX #ifndef TARGET_OS_IPHONE #endif
-//#define TARGET_IOS #ifndef TARGET_OSX #endif
+//#define BANGLE
+//#define MFI_SEQUENCE_PREFIXES
+//#define OLD_SKEWL_IDS
+//#define BR_GENESIS

@@ -14,6 +14,7 @@
 @class BRException;
 @class BRMetadataMessage;
 @class BRRemoteDevice;
+@class BRIncomingMessage;
 
 #ifdef TARGET_IOS
 @class EAAccessory;
@@ -23,11 +24,11 @@
 
 
 #ifdef TARGET_IOS
-typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
+typedef NS_ENUM(NSInteger, BRDeviceError) {
 	//BRDeviceErrorCodeUnknownError =                -1,
-	BRDeviceErrorCodeFailedToCreateDataSession =   1,
-	BRDeviceErrorCodeNoAccessoryAssociated =       2,
-	BRDeviceErrorCodeConnectionAlreadyOpen =       3,
+	BRDeviceErrorFailedToCreateDataSession =		1,
+	BRDeviceErrorNoAccessoryAssociated =			2,
+	BRDeviceErrorConnectionAlreadyOpen =			3,
 	//BRDeviceErrorInvalidArgument =                 4,
 	//BRDeviceErrorInvalidService =                  5,
 	//BRDeviceErrorUnsupportedService =              6,
@@ -69,15 +70,19 @@ typedef NS_ENUM(NSInteger, PLTDeviceErrorCode) {
 
 @protocol BRDeviceDelegate <NSObject>
 
+@required
 - (void)BRDeviceDidConnect:(BRDevice *)device;
 - (void)BRDeviceDidDisconnect:(BRDevice *)device;
 - (void)BRDevice:(BRDevice *)device didFailConnectWithError:(int)ioBTError;
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event;
 - (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse;
 - (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception;
+- (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice;
+
+@optional
+- (void)BRDevice:(BRDevice *)device didReceiveUnknownMessage:(BRIncomingMessage *)unknownMessage;
 - (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data;
 - (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data;
-- (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice;
 
 @end
 
