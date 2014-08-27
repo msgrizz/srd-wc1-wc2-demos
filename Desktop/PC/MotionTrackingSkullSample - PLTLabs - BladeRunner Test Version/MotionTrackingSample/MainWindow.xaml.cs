@@ -64,6 +64,14 @@ using Plantronics.Innovation.PLTLabsAPI2;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.0.5.2:
+ * Date: 30th May 2014
+ * Changed by: Lewis Collins
+ * Changes:
+ *   - Recompiled against updated PLT Labs API (new deckard id for
+ *     head-tracking events)
+ *   - Slowed head-tracking refresh to 200ms to avoid lag issues
+ *
  * Version 1.0.5.1:
  * Date: 30th May 2014
  * Changed by: Lewis Collins
@@ -492,8 +500,8 @@ namespace HeadTrackingDiagnosticsSkullSample
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to register for headset services.");
 
                 // 1. MOTION_TRACKING_SVC Lets register for headtracking service:
-                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.On_Change);
-                //m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.Periodic, 500);
+                //m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.On_Change);
+                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.Periodic, 200);
 
                 // Example: configure motion tracking to utilise uncalibrated (raw) quaternions:
                 //m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Offset_Raw);
@@ -726,28 +734,28 @@ namespace HeadTrackingDiagnosticsSkullSample
                 + ", evts=" + pltDevice.m_device.SupportedEvents.Count()
                 );
 
-            // ok, so - what service is my app waiting for?
+            //// ok, so - what service is my app waiting for?
 
-            // have we a device that supports motion-tracking?
-            if (pltDevice.m_device != null)
-            {
-                if (pltDevice.m_device.SupportedCommands.Count() > 0)
-                {
-                    foreach (int commandid in pltDevice.m_device.SupportedCommands)
-                    {
-                        // todo, match this as hex? avoid hard-coded numbers?
-                        if (commandid == 0xFF00)
-                        {
-                            if (!m_pltlabsapi.getIsConnected(pltDevice))
-                            {
-                                m_pltlabsapi.openConnection(pltDevice);
-                            }
+            //// have we a device that supports motion-tracking?
+            //if (pltDevice.m_device != null)
+            //{
+            //    if (pltDevice.m_device.SupportedCommands.Count() > 0)
+            //    {
+            //        foreach (int commandid in pltDevice.m_device.SupportedCommands)
+            //        {
+            //            // todo, match this as hex? avoid hard-coded numbers?
+            //            if (commandid == 0xFF00)
+            //            {
+            //                if (!m_pltlabsapi.getIsConnected(pltDevice))
+            //                {
+            //                    m_pltlabsapi.openConnection(pltDevice);
+            //                }
 
-                            m_myMotionTrackingDevice = pltDevice.m_device;
-                        }
-                    }
-                }
-            }
+            //                m_myMotionTrackingDevice = pltDevice.m_device;
+            //            }
+            //        }
+            //    }
+            //}
         }
     }
 }
