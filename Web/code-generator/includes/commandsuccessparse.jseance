@@ -1,0 +1,168 @@
+ 
+  //parses a settings success message (response from a get settings message)
+  var parseEventResult = function(message){
+    var payload = {};
+    var data_view = new Uint8Array(message, BR_HEADER_SIZE);
+    payload.messageId =  parseShort(0, data_view);
+    switch(payload.messageId){
+@!For("section")!
+ @!Code!   
+ var title = Models['default'].currentNode.@title;
+ title = title.toUpperCase();
+ var isNotTestSection = title.indexOf('TESTING');
+ var isTestInterfaceSection = title.indexOf('TESTING - TEST AUTOMATION MESSAGES');
+  @!End!
+  @!If(isNotTestSection == -1 || isTestInterfaceSection > -1)!
+    @!For("event")!
+       @!Code!
+         var eventName = Models['default'].currentNode.@name;
+         var name = fixName(eventName);
+         var id = Models['default'].currentNode.@id;
+    
+         function fixName(str) {
+           var name = str.toUpperCase();
+           name = replaceAll("-", "_", name);
+           name = replaceAll("/", "_", name);
+           name = replaceAll(" ", "_", name);
+           if(name.indexOf("_EVENT") == -1){
+             name += "_EVENT";
+           }
+           return name;
+         }
+         
+         function replaceAll(find, replace, str){
+          return str.replace(new RegExp(find, 'g'), replace);
+         }
+         
+         var childrenSize = Models['default'].currentNode.payload_out.children().length();
+         
+       @!End!
+       !If(childrenSize > 0)!
+       case my.!Eval(name)!:
+        @!For("payload_out")!
+            @!Code!
+            var outCode = "var index = 2;\r\n";
+            outCode += "         var bounds = 0;\r\n";
+            outCode += "         var arrayLength = 0;\r\n";
+            outCode += "         payload.name = '" + eventName + "';\r\n";
+            @!End!
+            @!For("item")!
+               @!Code!
+                      var type =  Models['default'].currentNode.@type;
+                      var n = Models['default'].currentNode.@name;
+                      var d = n.split(" ");
+                      var itemName = "";
+                      //fix for inconsistencies in naming of item names - turn to camel case
+                      //TODO - tried several regex's to do this with .replace() - did not parse correctly
+                      //if you want to optimize feel free but because this is generating code it doesn't really matter
+                      
+                      for(j = 0; j < d.length; j++){
+                      //itemName += j == 0 ? itemName += d[j] : d[j].charAt(0).toUpperCase() + d[j].slice(1);
+                        if(j == 0){
+                          itemName += d[j].charAt(0).toLowerCase() + d[j].slice(1);
+                         }
+                         else{
+                          itemName += d[j].charAt(0).toUpperCase() + d[j].slice(1);
+                         }
+                         
+                      }
+                      itemName = replaceAll("_", "", itemName);
+                      
+                      if(type == "BOOLEAN"){
+                         outCode += "         payload." + itemName + " = byteToBool(data_view[index]);\r\n";
+                         outCode += "         index++;\r\n";
+                       }
+                       else if(type == "BYTE"){
+                         outCode += "         payload." + itemName + " = data_view[index];\r\n";
+                         outCode += "         index++;\r\n";
+                       }
+                       else if(type == "SHORT" || type == "UNSIGNED_SHORT"){
+                         //two bytes increase item count by 1
+                         outCode += "         payload." + itemName + " = parseShort(index, data_view);\r\n";
+                         outCode += "         index += 2;\r\n";
+                       }
+                       else if(type == "INT" || type == "UNSIGNED_INT"){
+                         //4 bytes increase count by 4
+                         outCode += "         payload." + itemName + " = parse32Bit(index, data_view);\r\n";
+                         outCode += "         index += 4;\r\n";
+                         
+                       }
+                       else if(type == "LONG" || type == "UNSIGNED_LONG"){
+                         //4 bytes increase count by 8
+                         outCode += "         payload." + itemName + " = parse64Bit(index, data_view);\r\n";
+                         outCode += "         index += 8;\r\n";
+                         
+                       }
+                       else if(type == "SHORT_ARRAY"){
+                         outCode += "         arrayLength = parseShort(index, data_view);\r\n";
+                         outCode += "         index += 2;\r\n";
+                         outCode += "         bounds = (index + (2 * arrayLength));\r\n";
+                         outCode += "         payload." + itemName + " = parseShortArray(index, data_view, bounds);\r\n";
+                         outCode += "         index = bounds;\r\n"; 
+                       }
+                       else if(type == "STRING"){
+                         outCode += "         arrayLength = parseShort(index, data_view);\r\n";
+                         outCode += "         index += 2;\r\n";
+                         outCode += "         bounds = (index + (2 * arrayLength));\r\n";
+                         outCode += "         payload." + itemName + " = parseString(index, data_view, bounds);\r\n";
+                         outCode += "         index = bounds;\r\n"; 
+                       }
+                       else if(type == "BYTE_ARRAY"){
+                         outCode += "         arrayLength = parseShort(index, data_view) ;\r\n";
+                         outCode += "         index += 2;\r\n";
+                         outCode += "         bounds = index + arrayLength;\r\n";
+                         outCode += "         payload." + itemName + " = parseByteArray(index, data_view, bounds);\r\n";
+                         outCode += "         index = bounds;\r\n"; 
+                       }
+               @!End!
+            @!End!
+            @!Code!
+             //special case stuff - fragile but makes it easier for the developer to use the objects
+                       if(name == "SUBSCRIBED_SERVICE_DATA_EVENT"){
+                          outCode += "         switch(payload.serviceID){\r\n";
+                          outCode += "          case my.TYPE_SERVICEID_HEADORIENTATION:\r\n";
+                          outCode += "           //convert quaternians to eular angles - w, x, y, z\r\n";
+                          outCode += "            var q = parse32BitArray(0, payload.serviceData, payload.serviceData.length);\r\n";
+                          outCode += "            payload.quaternion = convertToQuaternion(q);\r\n";
+                          outCode += "            var c = convertQuaternianToCoordinates(payload.quaternion);\r\n"; 
+                          outCode += "            payload.roll = c.roll;\r\n";
+                          outCode += "            payload.pitch = c.pitch;\r\n";
+                          outCode += "            payload.heading = c.heading;\r\n";
+                          outCode += "            break;\r\n";
+                          outCode += "            case my.TYPE_SERVICEID_PEDOMETER:\r\n";
+                          outCode += "            payload.steps = parse32Bit(0, payload.serviceData);\r\n";
+                          outCode += "            break;\r\n";
+                          outCode += "          case my.TYPE_SERVICEID_TAPS:\r\n";
+                          outCode += "            payload.x = payload.serviceData[1];\r\n";
+                          outCode += "            break;\r\n";
+                          outCode += "          case my.TYPE_SERVICEID_FREEFALL:\r\n";
+                          outCode += "            payload.freefall = byteToBool(payload.serviceData[0]);\r\n";
+                          outCode += "            break;\r\n";
+                          outCode += "         }\r\n";        
+                       }
+                       if(name == "RAW_BUTTON_TEST_EVENT"){
+                          outCode += "         payload.buttonId = (payload.button & 0x00FF);\r\n";
+                          outCode += "         payload.buttonPressTypeId = (payload.button & 0xFF00) >> 8;\r\n";
+                          outCode += "         payload.buttonIdName = buttonIdToString(payload.buttonId);\r\n";
+                          outCode += "         payload.buttonPressTypeIdName = pressTypeIdToString(payload.buttonPressTypeId);\r\n";
+                       }
+            @!End!
+         !Eval(outCode)!
+         break;    
+        @!End!      
+       @!End! 
+  @!End!
+@!End!
+@!End!
+      default:
+       payload.type = "Unknown Event"
+       break;
+    }
+    return payload; 
+  };
+  
+  
+  
+  
+  
+ 

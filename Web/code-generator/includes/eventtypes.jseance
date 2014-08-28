@@ -1,0 +1,35 @@
+  //EVENTS
+@!For("section")!
+  @!Code!   
+ var title = Models['default'].currentNode.@title;
+ title = title.toUpperCase();
+ var isNotTestSection = title.indexOf('TESTING');
+ var isTestInterfaceSection = title.indexOf('TESTING - TEST AUTOMATION MESSAGES');
+  @!End!
+@!If(isNotTestSection == -1 || isTestInterfaceSection > -1)!
+  //Section !Eval(Models['default'].currentNode.@title, "javascript")!
+ @!For("event")!
+  @!Code!
+    var name = fixName(Models['default'].currentNode.@name);
+    var id = Models['default'].currentNode.@id;
+    
+    function fixName(str) {
+      var name = str.toUpperCase();
+      name = replaceAll("-", "_", name);
+      name = replaceAll("/", "_", name);
+      name = replaceAll(" ", "_", name);
+      if(name.indexOf("_EVENT") == -1){
+	  name += "_EVENT";
+      }
+      return name;
+    }
+    
+    function replaceAll(find, replace, str){
+     return str.replace(new RegExp(find, 'g'), replace);
+    }
+  @!End!
+  my.!Eval(name)! = !Eval(id)!;
+ @!End! 
+ @!End!
+@!End!
+//END EVENTS

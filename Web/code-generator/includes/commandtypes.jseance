@@ -1,0 +1,75 @@
+  //COMMANDS
+@!For("section")!
+  @!Code!   
+ var title = Models['default'].currentNode.@title;
+ title = title.toUpperCase();
+ var isNotTestSection = title.indexOf('TESTING');
+ var isTestInterfaceSection = title.indexOf('TESTING - TEST AUTOMATION MESSAGES');
+  @!End!
+@!If(isNotTestSection == -1 || isTestInterfaceSection > -1)!
+  //Section !Eval(Models['default'].currentNode.@title, "javascript")!
+ @!For("command")!
+  @!Code!
+    var name = fixName(Models['default'].currentNode.@name); 
+    var id = Models['default'].currentNode.@id;
+    
+    function fixName(str) {
+      var name = str.toUpperCase();
+      name = replaceAll("-", "_", name);
+      name = replaceAll("/", "_", name);
+      name = replaceAll(" ", "_", name);
+      if(name.indexOf("_COMMAND") == -1){
+       name += "_COMMAND";
+      }
+      return name;
+    }
+    
+    function replaceAll(find, replace, str){
+     return str.replace(new RegExp(find, 'g'), replace);
+    }
+  @!End!
+  my.!Eval(name)! = !Eval(id)!;
+ @!End!
+@!End!
+@!End!
+  var supportedCommands = [];
+@!For("section")!
+  @!Code!   
+ var title = Models['default'].currentNode.@title;
+ title = title.toUpperCase();
+ var isNotTestSection = title.indexOf('TESTING');
+ var isTestInterfaceSection = title.indexOf('TESTING - TEST AUTOMATION MESSAGES');
+  @!End!
+@!If(isNotTestSection == -1 || isTestInterfaceSection > -1)!
+ @!For("command")!
+  @!Code!
+   var name = fixName(Models['default'].currentNode.@name);
+  @!End!
+  supportedCommands.push(my.!Eval(name)!);
+ @!End!
+@!End!
+@!End!
+//COMMAND DEFINED VALUES
+@!For("section")!
+@!For("command")!
+@!For("payload_in")!
+@!For("item")!
+@!For("definedValue")!
+  @!Code!   
+      var name =  Models['default'].currentNode.@name;
+      name = name.toUpperCase();
+      name = replaceAll("-", "_", name);
+      name = replaceAll("/", "_", name);
+      name = replaceAll(" ", "_", name);
+      var val = Models['default'].currentNode.@value;
+      var defVal = "  my.TYPE_" + name + " = " + val + ";\r\n"
+  @!End!
+   @!Eval(defVal)!
+@!End!
+@!End!
+@!End!
+@!End!
+@!End!
+
+
+//END COMMANDS

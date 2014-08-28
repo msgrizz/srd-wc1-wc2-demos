@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+	"name" : "PLTLabs Javascript Bluetooth API Demo",
+	"description" : "Help guide someone around town using the PLTLabs Wearable Concept 1 device, WebRTC and Bluetooth",
+	"version" : "1.0",
+	"icons": { "128": "pltlabs.png" },
+	"app": {
+		"background" : {
+			"scripts": ["background.js"]
+		}
+	},
+	"bluetooth":{
+	    "uuids": ["82972387-294e-4d62-97b5-2668aa35f618"],
+            "socket" : true
+	},
+	"permissions" : ["http://*/","https://*/","videoCapture", "audioCapture"]
+
+}

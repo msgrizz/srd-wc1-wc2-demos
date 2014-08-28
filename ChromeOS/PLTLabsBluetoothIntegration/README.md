@@ -1,15 +1,18 @@
-# [PltLabs](http://pltlabs.com)
+#PLT Labs Javascript integration
+=============
+[PltLabs](http://pltlabs.com) - Javascript library for creating and parsing PLT Labs device messages  
 
-PLTLabs - Chrome Bluetooth API Integration 
-
-This project is to test the Google Chrome Bluetooth API integration capabilities PLT device APIs.
+This project provides a javascript library for PLT Labs device message parsing and creation.  There 
 
 * Source: [https://github.com/plantronics-innovation/core-team/tree/master/ChromeOS/PLTLabsBluetoothIntegration](https://github.com/plantronics-innovation/core-team/tree/master/ChromeOS/PLTLabsBluetoothIntegration)
 * Twitter: [@pltlabs](http://twitter.com/pltlabs)
 * Author: [@carybran](http://twitter.com/carybran)
 
 
-## Demo Setup
+Whats Inside
+----------
+codegen
+* This is the code generator project for generating the plt.msg javascript library
 
 ### Setting up Chrome/Chrome OS 
 Grab the dev channel version of Google Chrome or set your Chrome OS device to the dev channel - if you need instructions for this just google it
