@@ -75,12 +75,12 @@
 		[self.device subscribe:self toService:PLTServiceOrientationTracking				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 		[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
 		
-		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceTaps							withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceTaps							withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 //		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 	}
 }
@@ -97,13 +97,13 @@
 	NSLog(@"queryServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-//		[self.device queryInfo:self forService:PLTServiceOrientationTracking];
-//		[self.device queryInfo:self forService:PLTServicePedometer];
-//		[self.device queryInfo:self forService:PLTServiceFreeFall];
-//		[self.device queryInfo:self forService:PLTServiceTaps];
-//		[self.device queryInfo:self forService:PLTServiceMagnetometerCalStatus];
-//		[self.device queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus];
-//		[self.device queryInfo:self forService:PLTServiceWearingState];
+		[self.device queryInfo:self forService:PLTServiceOrientationTracking			error:nil];
+		[self.device queryInfo:self forService:PLTServicePedometer						error:nil];
+		[self.device queryInfo:self forService:PLTServiceFreeFall						error:nil];
+		[self.device queryInfo:self forService:PLTServiceTaps							error:nil];
+		[self.device queryInfo:self forService:PLTServiceMagnetometerCalibrationStatus	error:nil];
+		[self.device queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus		error:nil];
+		[self.device queryInfo:self forService:PLTServiceWearingState					error:nil];
 		[self.device queryInfo:self forService:PLTServiceProximity						error:nil];
 	}
 }

@@ -14,6 +14,7 @@
 #endif
 #ifdef TARGET_IOS
 #import <UIKit/UIKit.h>
+#import <ExternalAccessory/ExternalAccessory.h>
 #endif
 
 #import "PLTDevice.h"
@@ -114,7 +115,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 @interface PLTDevice() <BRDeviceDelegate>
 
-- (void)didGetMetadata;
+- (void)didOpenBRConnection;
 - (void)didCloseConnection:(BOOL)notify;
 - (void)didGetProductName:(BRProductNameSettingResponse *)response;
 - (void)didGetGUID:(BRGenesGUIDSettingResponse *)response;
@@ -200,6 +201,8 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		[NSException raise:@"PLT categories not found"
 					format:@"PLT categories don't appear to be loaded. Make sure to link with the -all_load and -ObjC linker flags."];
 	}
+	
+	[PLTDLogger sharedLogger];
 	
 //	static BOOL initdLog = NO;
 //	if (!initdLog) {
@@ -577,7 +580,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			}
 		}
 		else {
-			DLog(DLogLevelWarn, @"Listener is null!");
+			DLog(DLogLevelWarn, @"Subscriber is null!");
 			// who cares, you're unsubscribed!
 		}
 	}
@@ -768,9 +771,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 }
 #endif
 
-- (void)didGetMetadata
+- (void)didOpenBRConnection
 {
-	DLog(DLogLevelInfo, @"didGetMetadata");
+	DLog(DLogLevelInfo, @"didOpenBRConnection");
 	
 	self.waitingForWearingStatePrimer = NO;
 	self.waitingForRemoteSignalStrengthEvent = NO;
@@ -793,7 +796,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (void)didCloseConnection:(BOOL)notify
 {
-	DLog(DLogLevelDebug, @"didCloseConnection");
+	DLog(DLogLevelInfo, @"didCloseConnection");
 	
 	//#warning open connection timer
 	//	if (self.openConnectionTimer) {
@@ -892,7 +895,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 	
 	for (int v = 0; v<[info.majorSoftwareVersions count]; v++) {
-		NSString *commaString = ((v == [info.majorHardwareVersions count]-1) ? @"" : @", ");
+		NSString *commaString = ((v == [info.majorSoftwareVersions count]-1) ? @"" : @", ");
 		[(NSMutableString *)self.firmwareVersion appendFormat:@"%@.%@%@", info.majorSoftwareVersions[v], info.minorSoftwareVersions[v], commaString];
 	}
 	
@@ -1048,7 +1051,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		// waiting for sensors device at BRDevice:didFindRemoteDevice:
 	}
 	else if (device == self.brSensorsDevice) {
-		[self didGetMetadata];
+		[self didOpenBRConnection];
 	}
 }
 
@@ -1566,23 +1569,28 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (BOOL)isEqual:(id)object
 {
-//	if ([object isKindOfClass:[PLTDevice class]]) {
-//#ifdef TARGET_OSX
-//		return [((PLTDevice *)object).address isEqualToString:self.address];
-//		
-//#endif
-//#ifdef TARGET_IOS
+	if ([object isKindOfClass:[PLTDevice class]]) {
+#ifdef TARGET_OSX
 		return [((PLTDevice *)object).address isEqualToString:self.address];
-//#endif
-//	}
-	
+		
+#endif
+#ifdef TARGET_IOS
+		return ((PLTDevice *)object).accessory.connectionID == self.accessory.connectionID;
+#endif
+	}
 	return NO;
 }
 
 - (NSString *)description
 {
+#ifdef TARGET_OSX
 	return [NSString stringWithFormat:@"<PLTDevice: %p> address=%@, model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion=%@, supportedServices=%@, isConnectionOpen=%@",
-			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];
+			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];	
+#endif
+#ifdef TARGET_IOS
+	return [NSString stringWithFormat:@"<PLTDevice: %p> model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion=%@, supportedServices=%@, isConnectionOpen=%@",
+			self, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];
+#endif
 }
 
 @end

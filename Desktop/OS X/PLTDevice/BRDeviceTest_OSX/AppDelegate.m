@@ -24,7 +24,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	_pltDLogLevel = DLogLevelTrace;
+	[PLTDLogger sharedLogger].level = DLogLevelTrace;
     self.mainWindowController = [[MainWindowController alloc] init];
     [self.mainWindowController showWindow:self];
 }

@@ -108,6 +108,18 @@
 		429E60E818BEE1A5003563D6 /* BRSubscribeToSignalStrengthCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E60C018BEE1A5003563D6 /* BRSubscribeToSignalStrengthCommand.m */; };
 		429E60EA18BEE1A5003563D6 /* BRTapsEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E60C218BEE1A5003563D6 /* BRTapsEvent.m */; };
 		429E60EC18BEE1A5003563D6 /* BRWearingStateEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 429E60C418BEE1A5003563D6 /* BRWearingStateEvent.m */; };
+		42C8E19819AE7606008D4701 /* BRCustomButtonEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C8E19619AE7606008D4701 /* BRCustomButtonEvent.h */; };
+		42C8E19919AE7606008D4701 /* BRCustomButtonEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E19719AE7606008D4701 /* BRCustomButtonEvent.m */; };
+		42C8E19A19AE7615008D4701 /* BRCustomButtonEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E19719AE7606008D4701 /* BRCustomButtonEvent.m */; };
+		42C8E19D19AE77DA008D4701 /* BRHeadsetCallStatusEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C8E19B19AE77DA008D4701 /* BRHeadsetCallStatusEvent.h */; };
+		42C8E19E19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E19C19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m */; };
+		42C8E19F19AE7A92008D4701 /* BRHeadsetCallStatusEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E19C19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m */; };
+		42C8E1A219AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C8E1A019AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.h */; };
+		42C8E1A319AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E1A119AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m */; };
+		42C8E1A619AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 42C8E1A419AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.h */; };
+		42C8E1A719AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E1A519AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m */; };
+		42C8E1A819AE7F8E008D4701 /* BRHeadsetCallStatusSettingRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E1A519AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m */; };
+		42C8E1A919AE7F8F008D4701 /* BRHeadsetCallStatusSettingResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C8E1A119AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m */; };
 		42E94BAA18EB356800C83819 /* BRRawMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E94BA818EB356800C83819 /* BRRawMessage.m */; };
 		42EA0B4A194F9FD80074EDBB /* BRConfigureApplicationCommad.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EA0B48194F9FD80074EDBB /* BRConfigureApplicationCommad.h */; };
 		42EA0B4B194F9FD80074EDBB /* BRConfigureApplicationCommad.h in Headers */ = {isa = PBXBuildFile; fileRef = 42EA0B48194F9FD80074EDBB /* BRConfigureApplicationCommad.h */; };
@@ -402,6 +414,14 @@
 		429E60C218BEE1A5003563D6 /* BRTapsEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRTapsEvent.m; sourceTree = "<group>"; };
 		429E60C318BEE1A5003563D6 /* BRWearingStateEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRWearingStateEvent.h; sourceTree = "<group>"; };
 		429E60C418BEE1A5003563D6 /* BRWearingStateEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRWearingStateEvent.m; sourceTree = "<group>"; };
+		42C8E19619AE7606008D4701 /* BRCustomButtonEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCustomButtonEvent.h; sourceTree = "<group>"; };
+		42C8E19719AE7606008D4701 /* BRCustomButtonEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCustomButtonEvent.m; sourceTree = "<group>"; };
+		42C8E19B19AE77DA008D4701 /* BRHeadsetCallStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRHeadsetCallStatusEvent.h; sourceTree = "<group>"; };
+		42C8E19C19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRHeadsetCallStatusEvent.m; sourceTree = "<group>"; };
+		42C8E1A019AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRHeadsetCallStatusSettingResponse.h; sourceTree = "<group>"; };
+		42C8E1A119AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRHeadsetCallStatusSettingResponse.m; sourceTree = "<group>"; };
+		42C8E1A419AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRHeadsetCallStatusSettingRequest.h; sourceTree = "<group>"; };
+		42C8E1A519AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRHeadsetCallStatusSettingRequest.m; sourceTree = "<group>"; };
 		42D4611C193EF01E00437876 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		42D4611E193EF02600437876 /* Calibration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calibration.swift; sourceTree = "<group>"; };
 		42E94BA718EB356800C83819 /* BRRawMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRawMessage.h; sourceTree = "<group>"; };
@@ -898,6 +918,10 @@
 				42F2317018CBFF0300E08B93 /* BRServiceSubscriptionChangedEvent.m */,
 				42822EC2193FC896004C6C28 /* BRApplicationActionResultEvent.h */,
 				42822EC3193FC896004C6C28 /* BRApplicationActionResultEvent.m */,
+				42C8E19619AE7606008D4701 /* BRCustomButtonEvent.h */,
+				42C8E19719AE7606008D4701 /* BRCustomButtonEvent.m */,
+				42C8E19B19AE77DA008D4701 /* BRHeadsetCallStatusEvent.h */,
+				42C8E19C19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -951,6 +975,8 @@
 				429E60B218BEE1A5003563D6 /* BRServiceDataSettingRequest.m */,
 				427B968418CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.h */,
 				427B968518CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m */,
+				42C8E1A419AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.h */,
+				42C8E1A519AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -984,6 +1010,8 @@
 				42F1C98418C5BC7F00A75592 /* BRGyroscopeCalStatusSettingResponse.m */,
 				42F1C98718C5BC9000A75592 /* BRMagnetometerCalStatusSettingResponse.h */,
 				42F1C98818C5BC9000A75592 /* BRMagnetometerCalStatusSettingResponse.m */,
+				42C8E1A019AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.h */,
+				42C8E1A119AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m */,
 			);
 			name = Response;
 			sourceTree = "<group>";
@@ -1093,6 +1121,7 @@
 				42195EC31954EEC8001613C9 /* PLTSkinTemperatureInfo.h in Headers */,
 				42822EBE193FC594004C6C28 /* BRPerformApplicationActionCommand.h in Headers */,
 				42FEA691193704B800B735E9 /* PLTCalibration.h in Headers */,
+				42C8E1A219AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.h in Headers */,
 				42195EDD19550AF9001613C9 /* PLTAmbientPressureInfo.h in Headers */,
 				42FEA6E2193706DF00B735E9 /* PLTOrientationTrackingCalibration.h in Headers */,
 				42FEA6E3193706E100B735E9 /* PLTPedometerCalibration.h in Headers */,
@@ -1100,6 +1129,7 @@
 				42FEA693193704C300B735E9 /* PLTProximityInfo.h in Headers */,
 				42822ECC19402061004C6C28 /* PLTDialogInteractionResult.h in Headers */,
 				420C23EB19A800140031AF57 /* PLTDLog.h in Headers */,
+				42C8E19819AE7606008D4701 /* BRCustomButtonEvent.h in Headers */,
 				42FEA694193704C600B735E9 /* PLTWearingStateInfo.h in Headers */,
 				42FEA695193704C900B735E9 /* PLTOrientationTrackingInfo.h in Headers */,
 				42822EC4193FC896004C6C28 /* BRApplicationActionResultEvent.h in Headers */,
@@ -1110,6 +1140,8 @@
 				42FEA697193704CF00B735E9 /* PLTFreeFallInfo.h in Headers */,
 				42FEA698193704D200B735E9 /* PLTPedometerInfo.h in Headers */,
 				42FEA699193704D500B735E9 /* PLTMagnetometerCalibrationInfo.h in Headers */,
+				42C8E1A619AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.h in Headers */,
+				42C8E19D19AE77DA008D4701 /* BRHeadsetCallStatusEvent.h in Headers */,
 				42FEA69A193704D800B735E9 /* PLTGyroscopeCalibrationInfo.h in Headers */,
 				42023CD019785A4600C5DBEE /* BRConnectionStatusSettingResponse.h in Headers */,
 				42195ECA1954F0E5001613C9 /* BRSubscribedServiceDataEvent.h in Headers */,
@@ -1345,6 +1377,7 @@
 				42195ED71955086F001613C9 /* PLTAmbientHumidityInfo.m in Sources */,
 				429E607B18BEE06F003563D6 /* PLTFreeFallInfo.m in Sources */,
 				42F1C97218C5B57700A75592 /* BRDeviceInfoSettingRequest.m in Sources */,
+				42C8E1A319AE7E25008D4701 /* BRHeadsetCallStatusSettingResponse.m in Sources */,
 				425415141925BF3F00BEFA0B /* BRIncomingMessage.m in Sources */,
 				42F016D719256DAB00897713 /* BRDeviceProtocolVersionMessage.m in Sources */,
 				42822EC0193FC594004C6C28 /* BRPerformApplicationActionCommand.m in Sources */,
@@ -1365,11 +1398,13 @@
 				42F1C98A18C5BC9000A75592 /* BRMagnetometerCalStatusSettingResponse.m in Sources */,
 				42EA0B4C194F9FD80074EDBB /* BRConfigureApplicationCommad.m in Sources */,
 				429E5FA318BEBEB9003563D6 /* NSData+HexStrings.m in Sources */,
+				42C8E1A719AE7E82008D4701 /* BRHeadsetCallStatusSettingRequest.m in Sources */,
 				429E607818BEE06F003563D6 /* PLTDeviceWatcher.m in Sources */,
 				429E608418BEE06F003563D6 /* PLTMagnetometerCalibrationInfo.m in Sources */,
 				429E60E218BEE1A5003563D6 /* BRSettingRequest.m in Sources */,
 				42F11A9C1936DB55003A3427 /* BRGenesGUIDSettingRequest.m in Sources */,
 				429E606F18BEE06F003563D6 /* PLTCalibration.m in Sources */,
+				42C8E19919AE7606008D4701 /* BRCustomButtonEvent.m in Sources */,
 				427B968718CFE92300CB6A9E /* BRServiceCalibrationSettingRequest.m in Sources */,
 				42F1C97E18C5BC6800A75592 /* BRFreeFallSettingResponse.m in Sources */,
 				422A5B4A18CED8B1007E7564 /* NSArray+PrettyPrint.m in Sources */,
@@ -1380,6 +1415,7 @@
 				42F11A941935AF8B003A3427 /* PLTPedometerCalibration.m in Sources */,
 				420C23EC19A800140031AF57 /* PLTDLog.m in Sources */,
 				429E608618BEE06F003563D6 /* PLTOrientationTrackingCalibration.m in Sources */,
+				42C8E19E19AE77DA008D4701 /* BRHeadsetCallStatusEvent.m in Sources */,
 				42F1C98218C5BC6F00A75592 /* BRPedometerSettingResponse.m in Sources */,
 				429E60DE18BEE1A5003563D6 /* BRWearingStateSettingRequest.m in Sources */,
 				42195EC51954EEC8001613C9 /* PLTSkinTemperatureInfo.m in Sources */,
@@ -1435,7 +1471,9 @@
 				42FEA78C1938415600B735E9 /* PLTFreeFallInfo.m in Sources */,
 				42FEA78D1938415A00B735E9 /* PLTPedometerInfo.m in Sources */,
 				42FEA78E1938415D00B735E9 /* PLTMagnetometerCalibrationInfo.m in Sources */,
+				42C8E1A819AE7F8E008D4701 /* BRHeadsetCallStatusSettingRequest.m in Sources */,
 				42FEA78F1938416000B735E9 /* PLTGyroscopeCalibrationInfo.m in Sources */,
+				42C8E19A19AE7615008D4701 /* BRCustomButtonEvent.m in Sources */,
 				42FEA7901938416400B735E9 /* BRDevice.m in Sources */,
 				42FEA7911938416700B735E9 /* BRRemoteDevice.m in Sources */,
 				42FEA7921938416A00B735E9 /* BRMessage.m in Sources */,
@@ -1443,7 +1481,9 @@
 				42822ECF19402061004C6C28 /* PLTDialogInteractionResult.m in Sources */,
 				42FEA7941938416E00B735E9 /* BRIncomingMessage.m in Sources */,
 				42FEA7951938417000B735E9 /* BRRawMessage.m in Sources */,
+				42C8E19F19AE7A92008D4701 /* BRHeadsetCallStatusEvent.m in Sources */,
 				42FEA7961938417200B735E9 /* BRHostVersionNegotiateMessage.m in Sources */,
+				42C8E1A919AE7F8F008D4701 /* BRHeadsetCallStatusSettingResponse.m in Sources */,
 				42FEA7971938417800B735E9 /* BRDeviceProtocolVersionMessage.m in Sources */,
 				42FEA7981938417A00B735E9 /* BRMetadataMessage.m in Sources */,
 				42195ED81955086F001613C9 /* PLTAmbientHumidityInfo.m in Sources */,

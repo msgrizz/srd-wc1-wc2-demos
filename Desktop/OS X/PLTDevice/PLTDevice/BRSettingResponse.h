@@ -21,7 +21,8 @@ typedef enum {
 #endif
 	BRSettingResponseIDGenesGUID =				0x0A1E,
 	BRSettingResponseIDProductName =			0x0A00,
-	BRSettingResponseIDConnectionStatus =		0x0C00
+	BRSettingResponseIDConnectionStatus =		0x0C00,
+	BRSettingResponseIDHeadsetCallStatus =		0x0E22
 } BRSettingResponseID;
 
 

@@ -8,6 +8,6 @@
 
 
 //#define BANGLE
-//#define MFI_SEQUENCE_PREFIXES
+#define MFI_SEQUENCE_PREFIXES
 //#define OLD_SKEWL_IDS
-//#define BR_GENESIS
+//#define GENESIS
