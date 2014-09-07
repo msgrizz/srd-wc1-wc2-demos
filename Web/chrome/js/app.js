@@ -161,8 +161,11 @@ function init(){
       }
     });
   $(".trWebRTCContacts").hide();
+  plt.addConnectionListener(connectionListener);
+  plt.addEventListener(onEvent);
+  plt.addSettingsListener(onSettings);
+  plt.addCommandSuccessListener(onCommandSuccess);
   PLTLabsAPI.debug = true;
-  PLTLabsAPI.subscribeToDeviceMetadata(onMetadata);
   PLTLabsAPI.subscribeToEvents(onEvent);
   PLTLabsAPI.subscribeToSettings(onSettings);
   PLTLabsAPI.subscribeToDisconnect(connectionClosed);
@@ -184,15 +187,34 @@ function enableConnectToServerButton(){
   $('#btnConnect').attr("disabled", disabled);
 }
 
+function onCommandSuccess(commandSuccessMessage){
+    log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
+}
+
 //PLTLabs Functions
 function findPLTDevices(){
   log("findPLTDevices: Searching for PLT Labs devices");
-  PLTLabsAPI.findDevices(devicesFound);
+  try{
+    plt.addDeviceListener(devicesFound);
+    plt.getDevices();
+  }
+  catch(e){
+    log(e);
+  }
+}
 
+function connectionListener(connected){
+  if (connected) {
+    //device connected
+    
+  }
+  else{
+    connectionClosed();
+  }
 }
 
 function disconnectPLT(){
- PLTLabsAPI.closeConnection(connectionClosed);
+ plt.disconnect();
  
 }
 
@@ -217,29 +239,12 @@ function setPLTCheckboxesState(connected){
 
 
 function devicesFound(deviceList){
-  log('devices have been found!' + deviceList);
-  for(i = 0; i < deviceList.length; i++){
-    var d = deviceList[i];
-    log('Device ' + i + ' + : ' + d.name);
-    if(d.connected == true && d.name.indexOf("PLT_") != -1) {
-      log('using: ' + d.name);
-      PLTLabsAPI.openConnection(d, connectionOpened);
-      break;
-    }
+   if (!connectedToDevice) {
+    plt.connect(deviceList[0]);
   }
+  
+     
 }
-
-function onMetadata(metadata){
-  log("metadata recieved " + JSON.stringify(metadata));
-  deviceMetadata = metadata;
-  if (!connectingToSensorPort && !connectedToSensorPort) {
-    connectingToSensorPort = true;
-    log("onMetadata: connecting to sensor port");
-    enableWearableConceptEvents(); 
-  }
- // 
-}
-
 
 function connectionOpened(event){
   if (event.payload.address == plt.msg.SENSOR_PORT) {
@@ -299,19 +304,19 @@ function clearSettings(){
 function getSettings(){
   var packet = plt.msg.createGetSetting(plt.msg.PRODUCT_NAME_SETTING);
   log('getSettings: getting product name');
-  PLTLabsAPI.sendSetting(packet);
+  plt.getSetting(packet);
   
   packet = plt.msg.createGetSetting(plt.msg.FIRMWARE_VERSION_SETTING);
   log('getSettings: getting firmware version');
-  PLTLabsAPI.sendSetting(packet);
+  plt.getSetting(packet);
   
   packet = plt.msg.createGetSetting(plt.msg.DECKARD_VERSION_SETTING);
   log('getSettings: getting Plantronics M2M messaging version');
-  PLTLabsAPI.sendSetting(packet);
+  plt.getSetting(packet);
   
   packet = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
   log('getSettings: getting device battery information');
-  PLTLabsAPI.sendSetting(packet);
+  plt.getSetting(packet);
   
   $('#bdAddress').text(PLTLabsAPI.device.address);
   
@@ -342,7 +347,7 @@ function enableWC1Service(on, options) {
   options.mode = on ? plt.msg.TYPE_MODEONCCHANGE : plt.msg.TYPE_MODEOFF;
   options.address = sensorPortAddress;
   var packet = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options) 
-  PLTLabsAPI.sendCommand(packet)
+  plt.sendCommand(packet)
 }
 
 function enableProximity(on){
@@ -352,13 +357,13 @@ function enableProximity(on){
   options.maxTimeout = 0xFFFF;
   var packet = plt.msg.createCommand(plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND, options);
   console.log("sending command to enable proximity " + JSON.stringify(packet));
-  PLTLabsAPI.sendCommand(packet);
+  plt.sendCommand(packet);
 }
 
 
 //Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
 function enableWearableConceptEvents(){
-  if (!deviceMetadata) {
+  /*if (!deviceMetadata) {
     log("enableWearableConceptEvents: no device metadata abondoning efforts to sensor service device features");
     return;
   }
@@ -368,38 +373,43 @@ function enableWearableConceptEvents(){
    log("enableWearableConceptEvents: device does not support sensor service subscription");
    return;
  }
-
- log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
- var packet = plt.msg.createHostNegotiateMessage({"address":sensorPortAddress});
- PLTLabsAPI.sendBladerunnerPacket(packet);  
+*/
+// log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
+ //var packet = plt.msg.createHostNegotiateMessage({"address":sensorPortAddress});
+   
 }
 
 function onEvent(info){
-   //log('event received: ' + JSON.stringify(info));
+   log('event received: ' + JSON.stringify(info));
    switch (info.payload.messageId) {
 
     case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
      switch(info.payload.serviceID) {
        case plt.msg.TYPE_SERVICEID_HEADORIENTATION:
-       $('#roll').text(info.payload.roll);
-       $('#pitch').text(info.payload.pitch);
-       $('#heading').text(info.payload.heading);
-       var c = {"roll":info.payload.roll, "pitch": info.payload.pitch, "heading": info.payload.heading};
-       sendHeadTrackingCoordinatesToPeer(c); 
-       break;
+         $('#roll').text(info.payload.roll);
+	 $('#pitch').text(info.payload.pitch);
+         $('#heading').text(info.payload.heading);
+         var c = {"roll":info.payload.roll, "pitch": info.payload.pitch, "heading": info.payload.heading};
+         sendHeadTrackingCoordinatesToPeer(c); 
+         break;
        case plt.msg.TYPE_SERVICEID_TAPS:
-       $('#taps').text("X = " + info.payload.x);
-       break;
+         $('#taps').text("X = " + info.payload.x);
+         break;
        case plt.msg.TYPE_SERVICEID_FREEFALL:
-       $('#freefall').text(info.payload.freefall);
-       break;
+         $('#freefall').text(info.payload.freefall);
+         break;
        case plt.msg.TYPE_SERVICEID_PEDOMETER:
-       $('#steps').text(info.payload.steps);
-       break;
+         $('#steps').text(info.payload.steps);
+         break;
        default:
        break;
      }
      break;
+    case plt.msg.CONNECTED_DEVICE_EVENT:
+	connectionOpened(info);
+	break;
+    case plt.msg.DISCONNECTED_DEVICE_EVENT:
+	break;
    case plt.msg.WEARING_STATE_CHANGED_EVENT:
      var state = info.payload.worn ? "On" : "Off";
       $('#dondoff').text(state);

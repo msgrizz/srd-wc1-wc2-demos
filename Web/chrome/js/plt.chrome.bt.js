@@ -2,44 +2,41 @@
 //Author - Cary Bran - cary.bran@plantronics.com
 //This library is to enable experimental device data access
 //using the Google Chrome Bluetooth APIs 
-var BR_PROFILE = {
-  uuid: '82972387-294e-4d62-97b5-2668aa35f618'
-};
-
 var plt = (function(my){
   var deviceListener = null;
+  var connectionListener = null;
   var eventListener = null;
   var settingListener = null;
-  var commandListener = null;
+  var commandSuccessListener = null;
+  var errorListener = null;
   
-  var deviceConnections = [];
+  var isSensorPortEnabled = false;
+  
+  var PLT_PROFILE = {
+    uuid: '82972387-294e-4d62-97b5-2668aa35f618'
+  };
+  //default device address is 00 00 00 00 which maps to the device connected to the host
+  var defaultAddress = new ArrayBuffer(4);
+  
+  //default sensor port address is 50 00 00 00 which maps to the connected device's sensor services
+  var sensorAddress = new ArrayBuffer(4);
+  var sensorAddress_view = new Uint8Array(sensorAddress);
+  sensorAddress_view[0] = 0x50;
+  
+  var socketConnections = [];
   
   if(chrome.bluetooth){
-    // Add the listener to deal with our initial connection
+    //device related listeners
     chrome.bluetooth.onDeviceAdded.addListener(function(device){
-        if (this.deviceListener) {
-            this.deviceListener(true, device);  
-        }    
-    });
-    
-    chrome.bluetooth.onDeviceRemoved.addListener(function(device){
-      
-      //iterate through the device array
-      for(var i = 0; i < this.deviceConnections.length; i++){
-        var d = this.deviceConnections[i];
-        if(d.address == device.address){
-            this.deviceConnections.splice(i, 1);
-          if(this.deviceListener){
-            this.deviceListner(false, device);
-          }
-          break;
-        }
-         
+      if (deviceListener) {
+        deviceListener(device);  
       }
     });
- // chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
     
- // chrome.bluetoothSocket.onReceiveError.addListener(function(info){
+    chrome.bluetooth.onDeviceRemoved.addListener(onDeviceRemoved);
+    
+    // Add the listener to deal with the socket connection  
+ //function(info){
    // log('error on socket receive: socket id = ' + info.socketId + ' message = ' + info.errorMessage + ' error = ' + info.error);
     // PLTLabsAPI.closeConnection(onDeviceDisconnectCallback);
   //});
@@ -49,60 +46,220 @@ var plt = (function(my){
     
   }
   
+  var onReceiveHandler = function(eventData){
+    var message = plt.msg.parse(eventData.data);
+    
+    //console.log("onReceiveHandler: " + JSON.stringify(message));
+    switch(message.messageType){
+      case plt.msg.PROTOCOL_VERSION_TYPE:
+        break;
+       case plt.msg.GET_RESULT_SUCCESS_TYPE:
+        if (settingListener) {
+          settingListener(message);
+        }
+        break;
+       case plt.msg.GET_RESULT_EXCEPTION_TYPE:
+        break;
+       case plt.msg.COMMAND_RESULT_SUCCESS_TYPE:
+        if(commandSuccessListener){
+          commandSuccessListener(message);
+        }
+        break;
+       case plt.msg.COMMAND_RESULT_EXCEPTION_TYPE:
+        console.log("command exception: " + JSON.stringify(message));
+        break; 
+       case plt.msg.DEVICE_PROTOCOL_VERSION_TYPE:
+        break;
+       case plt.msg.METADATA_TYPE:
+        if (!isSensorPortEnabled) {
+          var availablePorts = message.payload.availablePorts;
+          if (!availablePorts.indexOf(my.SENSOR_PORT) >= 0) {
+           console.log("enable sensor service subscription");
+           sendMessageToSocket(plt.msg.createHostNegotiateMessage({"address":sensorPortAddress}).messageBytes);
+           isSensorPortEnabled = true;
+          }
+        }
+        break;
+       case plt.msg.EVENT_TYPE:
+        switch (message.payload.messageId) {
+          case plt.msg.CONNECTED_DEVICE_EVENT:
+            if(connectionListener){
+              connectionListener(true);
+            }
+            break;
+          case plt.msg.DISCONNECTED_DEVICE_EVENT:
+            if(connectionListener){
+              connectionListener(false);
+            }
+            break;
+        }
+        if(eventListener){
+          eventListener(message);
+        }
+        break;
+       case plt.msg.CLOSE_SESSION_TYPE:
+          console.log('close session: ' + JSON.stringify(message));
+        break;
+       case plt.msg.HOST_PROTOCOL_NEGOTIATION_REJECTION_TYPE:
+          console.log('host protocol negotiation rejection: ' + JSON.stringify(message));
+        break;
+      default:
+        console.log('Unknown Message Type: ' + JSON.stringify(message));
+        break;   
+    }
+  };
+
   
-  my.getDevices = function(callback){
+  var onReceiveErrorHandler = function(eventData){
+    console.log("onReceiveErrorHandler: socket error: " + JSON.stringify(eventData));
+    if (connectionListener) {
+      connectionListener(false);
+    }
+    
+  };
+
+  var onDeviceRemoved = function(device){
+    for(var i = 0; i < socketConnections.length; i++){
+       var socket = socketConnections[i];
+       if(socket.address == device.address){
+         socketConnections.splice(i, 1);
+         if(deviceListener){
+           deviceListner(false);
+         }
+         break;
+       }
+     }
+  }
+  
+  my.getDevices = function(){
+    
+    try{
+    
+     // Add the listener to deal with the socket connection
+    chrome.bluetoothSocket.onReceive.addListener(onReceiveHandler);
+    chrome.bluetoothSocket.onReceiveError.addListener(onReceiveErrorHandler);
+    chrome.bluetooth.getAdapterState(function(adapterState){
+      if(!adapterState.available || !adapterState.powered){
+        log('findPLTLabsDevices: bluetooth adapter not available');
+        return;
+      }
+      chrome.bluetooth.getDevices(function(devices){
+        if(chrome.runtime.lastError) {
+          console.log('getDevices: error searching for a devices ' + chrome.runtime.lastError.message);
+          return;
+        }
+        var pltDevices = [];
+        //filter on PLT devices that are connected to the host
+        for(i = 0; i < devices.length; i++){
+         if(devices[i].connected == true && devices[i].name.indexOf("PLT_") != -1) {
+            pltDevices.push(devices[i]);
+          }
+        }
+        //send notification if 
+        if (pltDevices.length > 0 && deviceListener) {
+           deviceListener(pltDevices);
+        }
+    });
+      });
+    }
+    catch(e){
+      console.log("exception " + e);
+    }
   
   };
   
   my.connect = function(device){
-    console.log('connect called');
+    if(!device){
+      throw 'connect: requires a device';
+    }
+    //open socket for data
+    chrome.bluetoothSocket.create(function(createInfo) {
+      chrome.bluetoothSocket.connect(createInfo.socketId, device.address, BR_PROFILE.uuid, function(){
+        if (chrome.runtime.lastError) {
+          throw 'connect: connection failed: ' + chrome.runtime.lastError.message; 
+        }
+        chrome.bluetoothSocket.setPaused(createInfo.socketId, false);
+        chrome.bluetoothSocket.getInfo(createInfo.socketId, function(socketInfo){
+          socketConnections.push(socketInfo);
+          sendMessageToSocket(plt.msg.createHostNegotiateMessage().messageBytes, createInfo.socketId);   
+          });
+        })
+      });
+  };
+  
+  //message is byte array
+  //socket id is optional - if set, then it will use the specified socketId
+  var sendMessageToSocket = function(message, socketId){  
+    if(socketConnections.length == 0){
+      throw "no active connections";
+      return; 
+    }
+    if (!socketId) {
+      //if there is no socket id passed grab the first connection out of the sockets array
+      socketId = socketConnections[0].socketId;
+    }
+    //this variable is required to maintain correct scoping when calling the send function
+    chrome.bluetoothSocket.send(socketId, message);
+  };
+  
+  
+  my.disconnect = function(socketId){
+    if (socketConnections.length == 0) {
+      return;
+    }
+    if (!socketId) {
+      socketId = socketConnections[0].socketId
+    }
+
+    for(var i = 0; i < socketConnections.length; i++){
+       var socket = socketConnections[i];
+       if(socket.socketId == socketId){
+         socketConnections.splice(i, 1);
+         break;
+       }
+    }
+    log("disconnect: disconnecting socket from device");
+    chrome.bluetoothSocket.disconnect(socketId,function(){
+        log("closeConnection: socket closed.");
+        if (connectionListener) {
+           connectionListener(false);
+         }
+    });
+  };
+  
+  my.sendCommand = function(command, socketId){
+    console.log('sendCommad called');
+    sendMessageToSocket(command.messageBytes, socketId);
+  };
+  
+  //setting - a setting message
+  //socketId - optional
+  my.getSetting = function(setting, socketId){
+    console.log("getSetting: sending "  + JSON.stringify(setting));
+    sendMessageToSocket(setting.messageBytes, socketId);
+  }
+  
+  //registration functions for device callbacks
+  my.addDeviceListener = function(callback){
+    deviceListener = callback;
+  }
+  my.addConnectionListener = function(callback){
+    connectionListener = callback;
+  };
+  my.addEventListener = function(callback){
+    eventListener = callback;
+  };
+  my.addSettingsListener = function(callback){
+    settingListener = callback;
+  };
+  my.addCommandSuccessListener = function(callback){
+    commandSuccessListener = callback;
   };
    
-  
-  my.disconnect = function(device){
-    console.log('disconnect called');
-  };
-  
-  my.sendCommand = function(id){
-    console.log('sendCommad called');
-  };
-  
-  
-  my.getSetting = function(id){
-    console.log('getSetting called');
-  }
-  
-  //callback sends two arguments back
-  //listener(added <boolean>, device <object>);
-  //added will be true when a device is added, false when removed
-  my.registerDeviceListener = function(listener){
-    this.deviceListener = listener;
-    console.log('registerDeviceListener');
-  }
-  
-  my.registerConnectionListener = function(listener){
-    this.connectionListener = listener;
-    console.log('registerConnectionListener');
-  };
-  my.registerEventListener = function(listener){
-    this.eventListener = listener;
-    console.log('registerEventListener');
-  };
-  my.registerSettingListener = function(listener){
-    this.settingListener = listener;
-    console.log('registerSettingListener');
-  };
-  my.registerCommandListener = function(listener){
-    this.commandListener = listener;
-    console.log('registeringCommandListener');
-  };
-  
-  
-  
   return my;  
 })(plt || {});
 
-
+/*
 
 var deviceRoute = new ArrayBuffer(4);
 //initialize the address array to 0x0
@@ -510,3 +667,4 @@ function PLTLabsException(message){
     return "PLTLabsException:" + message;
   }
 }
+*/
