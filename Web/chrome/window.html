@@ -90,8 +90,10 @@
                                 <td width="300"><input type="checkbox" name="chkPedo" id="chkPedo" />
                                     <label for="chkPedo">Enable Pedometer</label><br>
                                 </td>
-                              <td width="300"><span class="sensor-data" id="steps">0</span><span> steps</span>
+                              <td width="300">
+                                    <span class="sensor-data" id="steps">0</span><span> steps</span>
                                     <br>
+                                    <input type="button" id="btnResetPedometer" value="Reset Pedometer">
                                 </td>
                              </tr>
                              <tr>
@@ -116,6 +118,8 @@
                                 <td><span>Roll: </span><span class="sensor-data" id="roll"></span><br>
                                     <span>Pitch: </span><span class="sensor-data" id="pitch"></span><br>
                                     <span>Heading: </span><span class="sensor-data" id="heading"></span>
+                                    <br>
+                                    <input type="button" id="btnCalHeadtracking" value="Calibrate">
                                 </td>
                             </tr>
                         </tbody>
@@ -181,69 +185,12 @@
                         </tbody>
                      </table>
                 </div>
-                <h3>Test New Library Functionality</h3>
-                <div>
-                    <table width="800px">
-                        <tr>
-                            <td>
-                                <span>PLTLabs Message Creation Test</span>
-                            </td>
-                            <td>
-                                <span>Command Type</span><br>
-                                <select id="selectCommand">
-                                    <option value="0x1000">Enable Test Interface</option>
-                                    <option value="0x1007">Enable Buttons</option>
-                                    <option value="0x0800">Enable Proximity</option>
-                                    <option value="0">Enable Head Tracking</option>
-                                    <option value="2">Enable Pedometer</option>
-                                    <option value="3">Enable Free Fall</option>
-                                    <option value="4">Enable Tap</option>
-                                    <option value="0x0208">Auto Pause Media</option>
-                                    <option value="0x0204">Auto Answer on Wearing</option>
-                                    <option value="0x020C">Auto Audio Transfer on Wearing</option>
-                                    <option value="0x0210">Auto Lock Call Button on Off</option>
-                                    <option value="0x0216">Enable Wearing Sensor</option>
-                                    <option value="0x0400">Mute Tone Volume</option>
-                                    <option value="0x0404">Ring Type</option>
-                                    <option value="XZY">Unsupported Command</option>
-                                </select>
-                                <button id="btnCreateCommand">Create Command</button>
-                                <br>
-                                <span>Get Setting Type</span><br>
-                                <select id="selectSetting">
-                                    <option value="0x0A00">Product Name</option>
-                                    <option value="0x0A04">Firmware Version</option>
-                                    <option value="0x0A1A">Battery Level</option>
-                                    <option value="0x0AFE">Deckard Version</option>
-                                    <option value="0x0202">Wearing State</option>
-                                    <option value="0x0202">Auto Answer on Worn</option>
-                                    <option value="0x020A">Auto Pause on Off</option>
-                                    <option value="0x020E">Auto Transfer Audio on Wearing State</option>
-                                    <option value="0x0212">Auto Lock Call Button</option>
-                                    <option value="0x0214">Wearing Sensor Enabled</option>
-                                    <option value="0x0402">Mute Tone Volume</option>
-                                    <option value="0x0406">Ring Type</option>
-                                </select>
-                                <button id="btnCreateSetting">Create Setting</button>
-                                <br>
-                                <span>Host Negotiate Message</span><br>
-                                <button id="btnCreateHostNegotiate">Create HostNegotiate</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan='2'>
-                                <div id="messageJSON" style="width:700px; overflow: auto; overflow-x: hidden;"></div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
             </div>
         </div>   
        </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script>
       <script src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>
       <script src="js/vendor/peer.js"></script>
-      <script src="js/pltlabs-device-access.js"></script>
       <script src="js/plt.chrome.bt.js"></script>
       <script src="js/plt.msg.js"></script>
       <script src="js/app.js"></script>
