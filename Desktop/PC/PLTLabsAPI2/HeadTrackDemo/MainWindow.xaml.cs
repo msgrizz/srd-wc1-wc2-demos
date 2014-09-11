@@ -117,7 +117,7 @@ namespace HeadTrackDemo
                 // lets register for headtracking service
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, "About to register for head tracking data.");
                 //m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.On_Change);
-                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.Periodic, 100000);
+                m_pltlabsapi.subscribe(PLTService.MOTION_TRACKING_SVC, PLTMode.Periodic, 200);
 
                 //m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Offset_Raw);
                 m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Offset_Calibrated);
@@ -129,7 +129,10 @@ namespace HeadTrackDemo
                 //m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Format_Quaternion);
                 m_pltlabsapi.configureService(PLTService.MOTION_TRACKING_SVC, PLTConfiguration.MotionSvc_Format_Orientation);
 
-                m_pltlabsapi.subscribe(PLTService.SENSOR_CAL_STATE_SVC, PLTMode.Periodic, 200000);
+                m_pltlabsapi.subscribe(PLTService.SENSOR_CAL_STATE_SVC, PLTMode.Periodic, 500);
+
+                // register for headset wearing state
+                m_pltlabsapi.subscribe(PLTService.WEARING_STATE_SVC, PLTMode.Periodic, 500);
 
                 // check we subcribed ok...
                 DebugPrintSubscribedServices();

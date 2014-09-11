@@ -28,13 +28,11 @@ using System.Timers;
  *      
  * PRE-REQUISITES for building apps with this library:
  * To leverage the API and sample code presented in this developer guide your PC will require the following:
- *   - Microsoft Visual Studio 2010 SP1
- *   - Microsoft .NET Framework 4.0
- *   - Plantronics Spokes SDK 3.0 beta 2, available from PDC site here:
- *     http://developer.plantronics.com/community/nychack
- *     NOTE: you need to Log out of PDC and login again using the following user in order to access this beta:
- *     User: NYChack
- *     Password: IoThack
+ *   - Microsoft Visual Studio 2010 SP1 or higher
+ *   - Microsoft .NET Framework 4.0 or higher
+ *   - For sample apps available please check out:
+ *     http://developer.plantronics.com/community/concept1
+ *     NOTE: You may need to ask for access at a hackathon event.
  *
  * INSTRUCTIONS FOR USE OF CONCEPT 1 DEVICE
  * 
@@ -48,16 +46,29 @@ using System.Timers;
  * 
  * VERSION HISTORY:
  * ********************************************************************************
+ * Version 1.6.0.3:
+ * Date: 11th Sept 2014
+ * Changed by: Lewis Collins
+ *   Changes:
+ *     - Changing to use BladeRunner 0x0E01 message to detect mic mute status
+ *       (rather than 0x0E1E audio status with mic gain = 0)
+ *     - Changing to recognise mobile call status as distinct from PC call status
+ *       so apps don't confuse the two
+ *
+ * Version 1.6.0.2:
+ * Date: 30th July 2014
+ * Changed by: Lewis Collins
+ *   Changes:
+ *     - Minor documentation update
+ *
  * Version 1.6.0.1:
  * Date: 30th July 2014
- * Compatible/tested with Hub / Spokes SDK version(s): 3.0.50718.1966
  * Changed by: Lewis Collins
  *   Changes:
  *     - Changed head-tracking event ID to 0xFF0D from 0xFF1A
  *
  * Version 1.6.0.0:
  * Date: 29th July 2014
- * Compatible/tested with Hub / Spokes SDK version(s): 3.0.50718.1966
  * Changed by: Lewis Collins
  *   Changes:
  *     - Modified to support WC1 head-tracking features
@@ -1109,24 +1120,55 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                     }
 
                     break;
-                case "0x0E1E":
-                    // Audio status (mute/unmute/gain)
+                //case "0x0E1E":
+                //    // Audio status (mute/unmute/gain)
+                //    if (deckardmessage.m_brtype == EBRMessageType.eBR_EVENT)
+                //    {
+                //        if (deckardmessage.message_received.payload_received.Count() > 3)
+                //        {
+                //            byte codec = deckardmessage.message_received.payload_received[0].byteValue;
+                //            byte port = deckardmessage.message_received.payload_received[1].byteValue;
+                //            byte speakergain = deckardmessage.message_received.payload_received[2].byteValue;
+                //            byte micgain = deckardmessage.message_received.payload_received[3].byteValue;
+
+                //            bool muteon = (micgain == 0);
+
+                //            Console.WriteLine(">>> muteon: " + muteon);
+                //            Console.WriteLine(">>> codec: " + codec);
+                //            Console.WriteLine(">>> port: " + port);
+                //            Console.WriteLine(">>> speakergain: " + speakergain);
+                //            Console.WriteLine(">>> micgain: " + micgain);
+
+                //            // update mute state to API event!
+                //            m_lastmutestate.m_muted = muteon;
+                //            subscr =
+                //                m_activeConnection.getSubscription(PLTService.MUTESTATE_SVC);
+                //            if (subscr != null)
+                //            {
+                //                lock (m_lastmutestateLock)
+                //                {
+                //                    subscr.LastData = m_lastmutestate;
+                //                }
+
+                //                // if it is an on change subscription, beam to connected app now
+                //                // otherwise will happen in the PLTConnection's periodic timer
+                //                if (subscr.m_mode == PLTMode.On_Change)
+                //                {
+                //                    m_callbackhandler.infoUpdated(m_activeConnection, new PLTInfo(PLTService.MUTESTATE_SVC, subscr.LastData));
+                //                }
+                //            }
+                //        }
+                //    }           
+                //    break;
+                case "0x0E01":
+                    // Microphone Mute State
                     if (deckardmessage.m_brtype == EBRMessageType.eBR_EVENT)
                     {
-                        if (deckardmessage.message_received.payload_received.Count() > 3)
+                        if (deckardmessage.message_received.payload_received.Count() > 0)
                         {
-                            byte codec = deckardmessage.message_received.payload_received[0].byteValue;
-                            byte port = deckardmessage.message_received.payload_received[1].byteValue;
-                            byte speakergain = deckardmessage.message_received.payload_received[2].byteValue;
-                            byte micgain = deckardmessage.message_received.payload_received[3].byteValue;
-
-                            bool muteon = (micgain == 0);
+                            bool muteon = deckardmessage.message_received.payload_received[0].boolValue;
 
                             Console.WriteLine(">>> muteon: " + muteon);
-                            Console.WriteLine(">>> codec: " + codec);
-                            Console.WriteLine(">>> port: " + port);
-                            Console.WriteLine(">>> speakergain: " + speakergain);
-                            Console.WriteLine(">>> micgain: " + micgain);
 
                             // update mute state to API event!
                             m_lastmutestate.m_muted = muteon;
@@ -1147,10 +1189,10 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                                 }
                             }
                         }
-                    }           
+                    }
                     break;
                 case "0x0E00":
-                    // Mobile Call status change
+                    // Call status change
                     if (deckardmessage.m_brtype == EBRMessageType.eBR_EVENT)
                     {
                         if (deckardmessage.message_received.payload_received.Count() > 1)
@@ -1163,7 +1205,9 @@ namespace Plantronics.Innovation.PLTLabsAPI2
                             Console.WriteLine(">>> state: " + state);
 
                             PLTCallStateInfo callstate = new PLTCallStateInfo();
-                            callstate.m_callsource = "Mobile";
+                            // Did this call status come from PC call, or from Mobile device?
+                            callstate.m_callsource = deckardmessage.m_addresshex != "0000000" ? 
+                                "Mobile" : "PC";
                             callstate.m_callid = -1;
                             switch (state)
                             {
