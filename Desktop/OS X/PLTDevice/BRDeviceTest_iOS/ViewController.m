@@ -35,6 +35,8 @@
 #import "BRGyroscopeCalStatusSettingResponse.h"
 #import "BRCalibratePedometerServiceCommand.h"
 #import "BRServiceCalibrationSettingRequest.h"
+#import "BRHeadsetCallStatusSettingRequest.h"
+#import "BRHeadsetCallStatusSettingResponse.h"
 
 #import "BRDeviceConnectedEvent.h"
 
@@ -181,6 +183,12 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (IBAction)closeConnectionButton:(id)sender
 {
+//	if (self.device.isConnected) {
+//		BRHeadsetCallStatusSettingRequest *request = (BRHeadsetCallStatusSettingRequest *)[BRHeadsetCallStatusSettingRequest request];
+//		[self.device sendMessage:request];
+//	}
+	
+	
 	[self.device closeConnection];
 }
 
@@ -219,10 +227,10 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	//	BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:BRServiceIDPedometer];
 	//	[self.sensorsDevice sendMessage:request];
 	
-	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
-																						mode:BRServiceSubscriptionModePeriodic
-																					  period:1000];
-	[self.sensorsDevice sendMessage:message];
+//	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
+//																						mode:BRServiceSubscriptionModePeriodic
+//																					  period:1000];
+//	[self.sensorsDevice sendMessage:message];
 	
 	
 	//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
@@ -808,7 +816,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 		[self enableUI];
 	}
 	
-#ifdef BR_GENESIS
+#ifdef GENESIS
 	BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeSettingRequest payload:[NSData dataWithHexString:@"0100"]];
 	[self.device sendMessage:message];
 #endif
@@ -981,7 +989,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (void)BRDevice:(BRDevice *)device didReceiveUnknownMessage:(BRIncomingMessage *)unknownMessage
 {
-#ifdef BR_GENESIS
+#ifdef GENESIS
 	if ([[unknownMessage payload] isEqualToData:[NSData dataWithHexString:@"0200 0010 4649 545F 4143 435F 5031 425F 4400 0000 00"]]) {
 		BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeSettingRequest payload:[NSData dataWithHexString:@"0101"]];
 		[self.device sendMessage:message];

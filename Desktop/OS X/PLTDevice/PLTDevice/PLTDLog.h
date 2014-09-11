@@ -17,6 +17,14 @@ typedef enum {
 	DLogLevelError
 } DLogLevel;
 
-extern DLogLevel _pltDLogLevel;// = DLogLevelError;
 
 void DLog(DLogLevel level, NSString *format, ...);
+
+
+@interface PLTDLogger : NSObject
+
++ (PLTDLogger *)sharedLogger;
+
+@property(nonatomic,assign)	NSInteger	level;
+
+@end

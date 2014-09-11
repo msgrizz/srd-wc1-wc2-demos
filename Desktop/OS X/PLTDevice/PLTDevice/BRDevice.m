@@ -48,6 +48,9 @@
 #import "NSData+HexStrings.h"
 #import "NSArray+PrettyPrint.h"
 #import "BRConnectionStatusSettingResponse.h"
+#import "BRCustomButtonEvent.h"
+#import "BRHeadsetCallStatusEvent.h"
+#import "BRHeadsetCallStatusSettingResponse.h"
 
 #import "BRSubscribedServiceDataEvent.h"
 
@@ -64,7 +67,7 @@
 #import <ExternalAccessory/ExternalAccessory.h>
 #endif
 
-#ifdef BR_GENESIS
+#ifdef GENESIS
 #import "BRRawMessage.h"
 #endif
 
@@ -198,7 +201,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 //				
 //				NSLog(@"Attempting to create data session with accessory %@", [self.accessory name]);
 //				
-//#ifdef BR_GENESIS
+//#ifdef GENESIS
 //				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:@"com.plantronics.opportunity"];
 //#else
 //				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:BRDeviceEAProtocolString];
@@ -280,7 +283,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 				DLog(DLogLevelDebug, @"Attempting to create data session with accessory %@", [self.accessory name]);
 				
-#ifdef BR_GENESIS
+#ifdef GENESIS
 				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:@"com.plantronics.opportunity"];
 #else
 				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:BRDeviceEAProtocolString];
@@ -298,7 +301,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				}
 				else {
 					DLog(DLogLevelError, @"Failed to create EA session.");
-					DLog(DLogLevelError, @"Ensure that %@ is included in the UISupportedExternalAccessoryProtocols key of your Info.plist file.", BRDeviceEAProtocolString);
+					DLog(DLogLevelError, @"Insure that %@ is included in the UISupportedExternalAccessoryProtocols key of your Info.plist file.", BRDeviceEAProtocolString);
 					//					NSError *error = [NSError errorWithDomain:BRDeviceErrorDomain
 					//														 code:BRDeviceErrorCodeFailedToCreateDataSession
 					//													 userInfo:@{NSLocalizedDescriptionKey : @"Failed to create External Accessory session."}];
@@ -565,7 +568,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				Class class = nil;
 				
 				switch (deckardID) {
-#ifndef BR_GENESIS
+#ifndef GENESIS
 					case BRSettingResponseIDWearingState:
 						class = [BRWearingStateSettingResponse class];
 						break;
@@ -589,6 +592,10 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 						
 					case BRSettingResponseIDConnectionStatus:
 						class = [BRConnectionStatusSettingResponse class];
+						break;
+						
+					case BRSettingResponseIDHeadsetCallStatus:
+						class = [BRHeadsetCallStatusSettingResponse class];
 						break;
 						
 					case BRSettingResponseIDSeaviceData: {
@@ -784,6 +791,14 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 						class = [BRServiceSubscriptionChangedEvent class];
 						break;
 						
+					case BREventIDCustomButton:
+						class = [BRCustomButtonEvent class];
+						break;
+						
+					case BREventIDHeadsetCallStatus:
+						class = [BRHeadsetCallStatusEvent class];
+						break;
+						
 #ifdef BANGLE
 					case BREventIDApplicationActionResult:
 						class = [BRApplicationActionResultEvent class];
@@ -949,13 +964,13 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)rfcommChannelQueueSpaceAvailable:(IOBluetoothRFCOMMChannel *)rfcommChannel
 {
-    //NSLog(@"rfcommChannelQueueSpaceAvailable:");
+    //DLog(DLogLevelTrace, @"rfcommChannelQueueSpaceAvailable:");
     
     if (![rfcommChannel isOpen]) {
         //self.channelOpened = YES;
         if (self.state == BRDeviceStateOpeningLink) {
             self.state = BRDeviceStateHostVersionNegotiating;
-#ifdef BR_GENESIS
+#ifdef GENESIS
 			BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeHostProtocolVersion payload:[NSData dataWithHexString:@"646E"]];
 			[self sendMessage:message];	
 #else
@@ -1007,7 +1022,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 			self.streamOpened = YES;
 			if (self.state == BRDeviceStateOpeningLink) {
 				self.state = BRDeviceStateHostVersionNegotiating;
-#ifdef BR_GENESIS
+#ifdef GENESIS
 				BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeHostProtocolVersion payload:[NSData dataWithHexString:@"646E"]];
 				[self sendMessage:message];	
 #else

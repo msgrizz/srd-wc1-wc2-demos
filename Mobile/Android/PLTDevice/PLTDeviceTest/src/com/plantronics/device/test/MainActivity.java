@@ -220,36 +220,45 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void openConnectionButton() {
 		Log.i(FN(), "openConnectionButton()");
 
-		if (_device == null) {
-			ArrayList<Device> devices = Device.getPairedDevices();
+		try {
+			if (_device == null) {
+				ArrayList<Device> devices = Device.getPairedDevices();
 
-			if (devices.size() > 0) {
-				_device = devices.get(0);
-				Log.d(FN(), "Got device: " + _device);
-				Log.v(FN(), "Opening connection...");
-				_device.registerConnectionListener(this);
-				_device.openConnection();
+				if (devices.size() > 0) {
+					_device = devices.get(0);
+					Log.d(FN(), "Got device: " + _device);
+					Log.v(FN(), "Opening connection...");
+					_device.registerConnectionListener(this);
+					_device.openConnection();
+				}
+				else {
+					Log.i(FN(), "No PLT devices found!");
+				}
 			}
-			else {
-				Log.i(FN(), "No PLT devices found!");
-			}
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception opening connection: " + e);
 		}
 	}
 
 	private void subscribeButton() {
 		Log.i(FN(), "subscribeButton()");
 
-		//_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
+		try {
+			//_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
 
 //		_device.subscribe(this, Device.SERVICE_WEARING_STATE, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 //		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
-		//_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+			_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+			//_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
 //		_device.subscribe(this, Device.SERVICE_TAPS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 //		_device.subscribe(this, Device.SERVICE_PEDOMETER, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 //		_device.subscribe(this, Device.SERVICE_FREE_FALL, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 //		_device.subscribe(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
 //		_device.subscribe(this, Device.SERVICE_GYROSCOPE_CAL_STATUS, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		}catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void changeSubscriptionButton1() {
@@ -257,31 +266,56 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		//_device.onPause();
 
-		_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
+		try {
+			_device.subscribe(this, Device.SERVICE_ORIENTATION_TRACKING, Device.SUBSCRIPTION_MODE_PERIODIC, (short)1000);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void changeSubscriptionButton2() {
 		Log.i(FN(), "changeSubscriptionButton2()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
+		try {
+			_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void changeSubscriptionButton3() {
 		Log.i(FN(), "changeSubscriptionButton3()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
+		try {
+			_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_PERIODIC, (short)15);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void changeSubscriptionButton4() {
 		Log.i(FN(), "changeSubscriptionButton4()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		try {
+			_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void changeSubscriptionButton5() {
 		Log.i(FN(), "changeSubscriptionButton5()");
 
-		_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		try {
+			_device.subscribe(this, Device.SERVICE_PROXIMITY, Device.SUBSCRIPTION_MODE_ON_CHANGE, (short)0);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void unsubscribeButton() {
@@ -299,39 +333,54 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 	private void queryButton() {
 		Log.i(FN(), "queryButton()");
 
+		try {
 //		_device.queryInfo(this, Device.SERVICE_WEARING_STATE);
 //		_device.queryInfo(this, Device.SERVICE_PROXIMITY);
-//		_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
-		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
+			_device.queryInfo(this, Device.SERVICE_ORIENTATION_TRACKING);
+//		_device.queryInfo(this, Device.SERVICE_PEDOMETER);
 //		_device.queryInfo(this, Device.SERVICE_FREE_FALL);
 //		_device.queryInfo(this, Device.SERVICE_TAPS);
 //		_device.queryInfo(this, Device.SERVICE_MAGNETOMETER_CAL_STATUS);
 //		_device.queryInfo(this, Device.SERVICE_GYROSCOPE_CAL_STATUS);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	private void getCachedButton() {
 		Log.i(FN(), "getCachedButton()");
 
-		Log.i(FN(), "SERVICE_PROXIMITY: " + _device.getCachedInfo(Device.SERVICE_PROXIMITY));
-		Log.i(FN(), "SERVICE_WEARING_STATE: " + _device.getCachedInfo(Device.SERVICE_WEARING_STATE));
-		Log.i(FN(), "SERVICE_ORIENTATION_TRACKING: " + _device.getCachedInfo(Device.SERVICE_ORIENTATION_TRACKING));
-		Log.i(FN(), "SERVICE_PEDOMETER: " + _device.getCachedInfo(Device.SERVICE_PEDOMETER));
-		Log.i(FN(), "SERVICE_FREE_FALL: " + _device.getCachedInfo(Device.SERVICE_FREE_FALL));
-		Log.i(FN(), "SERVICE_TAPS: " + _device.getCachedInfo(Device.SERVICE_TAPS));
-		Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_MAGNETOMETER_CAL_STATUS));
-		Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_GYROSCOPE_CAL_STATUS));
+		try {
+			Log.i(FN(), "SERVICE_PROXIMITY: " + _device.getCachedInfo(Device.SERVICE_PROXIMITY));
+			Log.i(FN(), "SERVICE_WEARING_STATE: " + _device.getCachedInfo(Device.SERVICE_WEARING_STATE));
+			Log.i(FN(), "SERVICE_ORIENTATION_TRACKING: " + _device.getCachedInfo(Device.SERVICE_ORIENTATION_TRACKING));
+			Log.i(FN(), "SERVICE_PEDOMETER: " + _device.getCachedInfo(Device.SERVICE_PEDOMETER));
+			Log.i(FN(), "SERVICE_FREE_FALL: " + _device.getCachedInfo(Device.SERVICE_FREE_FALL));
+			Log.i(FN(), "SERVICE_TAPS: " + _device.getCachedInfo(Device.SERVICE_TAPS));
+			Log.i(FN(), "SERVICE_MAGNETOMETER_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_MAGNETOMETER_CAL_STATUS));
+			Log.i(FN(), "SERVICE_GYROSCOPE_CAL_STATUS: " + _device.getCachedInfo(Device.SERVICE_GYROSCOPE_CAL_STATUS));
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	public void calibrateButton() {
 		Log.i(FN(), "calibrateButton()");
 
+		try {
 //		OrientationTrackingInfo oldOrientationInfo = (OrientationTrackingInfo)_device.getCachedInfo(Device.SERVICE_ORIENTATION_TRACKING);
 //		OrientationTrackingCalibration orientationCal = new OrientationTrackingCalibration(oldOrientationInfo.getEulerAngles());
 //		_device.setCalibration(orientationCal, Device.SERVICE_ORIENTATION_TRACKING);
 
-		_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
+			_device.setCalibration(null, Device.SERVICE_ORIENTATION_TRACKING);
 
-		_device.setCalibration(null, Device.SERVICE_PEDOMETER);
+			_device.setCalibration(null, Device.SERVICE_PEDOMETER);
+		}
+		catch(Exception e) {
+			Log.e(FN(), "Exception: " + e);
+		}
 	}
 
 	/* ****************************************************************************************************

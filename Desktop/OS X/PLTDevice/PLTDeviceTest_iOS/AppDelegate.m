@@ -14,7 +14,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	_pltDLogLevel = DLogLevelTrace;
+	[PLTDLogger sharedLogger].level = DLogLevelTrace;
     return YES;
 }
 

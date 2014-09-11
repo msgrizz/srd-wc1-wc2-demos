@@ -25,16 +25,9 @@
 
 #ifdef TARGET_IOS
 typedef NS_ENUM(NSInteger, BRDeviceError) {
-	//BRDeviceErrorCodeUnknownError =                -1,
 	BRDeviceErrorFailedToCreateDataSession =		1,
 	BRDeviceErrorNoAccessoryAssociated =			2,
 	BRDeviceErrorConnectionAlreadyOpen =			3,
-	//BRDeviceErrorInvalidArgument =                 4,
-	//BRDeviceErrorInvalidService =                  5,
-	//BRDeviceErrorUnsupportedService =              6,
-	//BRDeviceErrorInvalidMode =                     7,
-	//BRDeviceErrorUnsupportedMode =                 8,
-	//BRDeviceErrorIncompatibleVersions =            9
 };
 #endif
 

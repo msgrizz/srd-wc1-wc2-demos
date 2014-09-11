@@ -21,8 +21,10 @@ typedef enum {
 #else
 	BREventIDServiceDataChanged =               0xFF0D,
 	BREventIDServiceSubscriptionChanged =       0xFF0A,
-	BREventIDApplicationActionResult =			0xFF03
+	BREventIDApplicationActionResult =			0xFF03,
 #endif
+	BREventIDCustomButton =						0x0802,
+	BREventIDHeadsetCallStatus =				0x0E22
 } BREventID;
 
 
