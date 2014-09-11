@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PLTLabsAPI</name>
+    </assembly>
+    <members>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTService">
+            <summary>
+            An enumeration of all the services you can register for on device
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTStatussDataType">
+            <summary>
+            An enumaration of datatypes that can be received from subscribed services
+            (used for casting void reference back to correct data type when you receive
+            some data)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTMode">
+            <summary>
+            The mode to receice data, to a time period or as soon as it changes
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTQuaternion">
+            <summary>
+            An object to hold quaternion
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTOrientation">
+            <summary>
+            An object to hold an orientation (Euler angles)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTMotionTrackingData">
+            <summary>
+            An object to return motion tracking data to the application that is
+            registered for motion tracking service.
+            Note, depending how you have configured motion tracking you may receive
+            raw quaternion only, calibrated quaternions and orientations (Euler
+            angles). Refer to the SDK configureService method
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTMoving">
+            <summary>
+            Flag to indicate if device is moving (Motion state service)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTSensorCal">
+            <summary>
+            Object to specify if gyro is calibrated.
+            **NOTE:** from device switch on place it on desk until the
+            SENSOR_CAL_STATE_SVC returns a PLTSensorCal with
+            m_isgyrocal == true.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTPedometerCount">
+            <summary>
+            Object with how many steps have been taken with device.
+            Note, only starts counting after person has set up a steady
+            gait and taken about 8 steps.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTTapDirection">
+            <summary>
+            Enum values to determine direction of tap on the device
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTTapInfo">
+            <summary>
+            Object to return how many taps where made on device and
+            in which direction
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTWear">
+            <summary>
+            Object to return if the headset is worn or not
+            and if this is the initial state at application start
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTFreeFall">
+            <summary>
+            Object to return if device is in freefall
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTProximityType">
+            <summary>
+            Types of proximity states than can occur with device
+            PC-to-device proximity
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTProximity">
+            <summary>
+            Object to return the current proximity state between
+            PC and Device (is it near/far/unknown)
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTProximity.m_proximity">
+            <summary>
+            Proximity state enumeration value (Near, Far, Unknown)
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTProximity.m_rssistrength">
+            <summary>
+            The actual RSSI signal strength
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTCallerIdType">
+            <summary>
+            Type of caller id (Mobile, Softphone, Deskphone)
+            (Platform only currently returns Mobile caller id's)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTCallerId">
+            <summary>
+            Used to return the caller id from the Plantronics device
+            for example during inbound mobile call with mobile paired
+            with headset, the PC app will receive the mobile caller id
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTCallStateType">
+            <summary>
+            A type of call state that can occur
+            (on or not on a VoIP call, on or not on a Mobile call)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTCallState">
+            <summary>
+            A call status that can occur for given call state type
+            i.e. is that call Ringing/OnCall or Idle
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTCallStateInfo">
+            <summary>
+            Used to return a call state data event from Plantronics
+            to your application. This can be used to inform you of
+            changes in softphone call state for the ~13 Spokes-supported
+            softphones, and also in mobile call states for mobile that
+            is paired with headset.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTConfiguration">
+            <summary>
+            Type of configurations that can be set in the PLTLabsAPI
+            services. For example Motion Service you can configure
+            raw or calibrated quaternions, plus quaternion only or
+            also orientation output (Euler angles)
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTDock">
+            <summary>
+            Used to pass back to your app whether the headset device
+            is docked or not (when registered for docking service)
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTDock.m_isdocked">
+            <summary>
+            Flag to indicate if headset is in it's docking base or not
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTServiceSubscription">
+            <summary>
+            Used to return to app registed for charge service the current
+            battery level information of headset.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTWearingState">
+            <summary>
+            Used to return to your app whether the headset is worn or not
+            and if the wearing state is at application start (initial state event)
+            or not.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTBatteryLevel">
+            <summary>
+            Enum to define the possible headset battery levels
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTBatteryState">
+            <summary>
+            Used to return to your app the current headset battery level
+            when registered for charging service.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTMuteState">
+            <summary>
+            Used to return to your app the current mute status
+            when registered for mute service.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTInfo">
+            <summary>
+            The PLTInfo object abstration is used to pass data back to applications
+            for the various services that the app can subcribe to.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTInfo.m_serviceType">
+            <summary>
+            This member holds the service type as PLTService enum value.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTInfo.m_data">
+            <summary>
+            This member is a object pointer that can be recast the appropriate
+            data type depending on the service type.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTInfo.#ctor(Plantronics.Innovation.PLTLabsAPI2.PLTService,System.Object)">
+            <summary>
+            The PLT default constructor
+            </summary>
+            <param name="serviceType">PLTService enum value</param>
+            <param name="data">object pointer to returned data</param>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2">
+            <summary>
+            PLTLabsAPI - the main object class for PLTLabsAPI for using
+            motion tracking etc headset sensors.
+            WARNING: only instantiate 1 of these objects (pending to
+            convert this to a singleton).
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.SDK_VERSION">
+            <summary>
+            SDK_VERSION defines the current version of the PLTLabsAPI DLL
+            (It matches the rev version of the Developer High-Level API Description document).
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.#ctor(Plantronics.Innovation.PLTLabsAPI2.PLTLabsCallbackHandler)">
+            <summary>
+            Constructor for PLTLabsAPI object which is used to connect
+            to the Plantronics motion sensor headset devices.
+            ***NOTE: Only instantiate 1 of these objects - pending to do make a singleton***
+            </summary>
+            <param name="aCallBackHandler">Pass reference to your object class that implements
+            the PLTLabsCallbackHandler interface to be able to receive motion tracking and other
+            sensor data.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.availableDevices">
+            <summary>
+            Call this method to find out which device(s) are connected.
+            NOTE: will only return 1 device with PC Spokes API, that
+            being the currently configured Spokes "call control" device.
+            </summary>
+            <returns>Returns an array of connected Plantronics devices as PLTDevice[] objects.</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.openConnection(Plantronics.Innovation.PLTLabsAPI2.PLTDevice)">
+            <summary>
+            Call this method to instruct device to open a connection to the
+            specified device. Once connected you will be able to subscribe
+            to data services of the device.
+            </summary>
+            <param name="aDevice">Pass the PLTDevice object you want to connect to.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.closeConnection(Plantronics.Innovation.PLTLabsAPI2.PLTConnection)">
+            <summary>
+            Call this method to close a conection to the Plantronics
+            device. Pass the PLTConnection object reference that you
+            wish to close. This method will close all the active
+            subscriptions for the device and unattach from the device
+            motion sensors.
+            </summary>
+            <param name="aConnection">Pass the PLTConnection object reference
+            that you wish to close.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.getIsConnected(Plantronics.Innovation.PLTLabsAPI2.PLTDevice)">
+            <summary>
+            Call this method to find out if a particular device is attached or not.
+            </summary>
+            <param name="aDevice">The PLTDevice you want to check if it is connected</param>
+            <returns>Returns true if the device is connected</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.calibrateService(Plantronics.Innovation.PLTLabsAPI2.PLTService)">
+            <summary>
+            Call this method to initiate a calibration process of the
+            selected PLTService. For example, if you call it for
+            the MOTION_TRACKING_SVC it will cause a calibration
+            (set to zero) of the motion tracking angles.
+            </summary>
+            <param name="aService">The PLTService type you want to calibrate.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.configureService(Plantronics.Innovation.PLTLabsAPI2.PLTService,Plantronics.Innovation.PLTLabsAPI2.PLTConfiguration,System.Object)">
+            <summary>
+            Call this method to apply service-specific configurations to a service.
+            For example, to configure the motion tracking service to provide only raw
+            quaternions or calibrated quaternions (calibrated to a reference quaternion).
+            Or to tell motion tracking service to provide quaternions as output or
+            to  also include orientations (Euler angles).
+            </summary>
+            <param name="aService">PLTService name being configured</param>
+            <param name="aConfiguration">PLTConfiguration enum value of config to be applied</param>
+            <param name="data">Optional reference to object for user data, e.g. a PLTQuaternion
+            object as a user-supplied reference quaternion for calibration.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.subscribe(Plantronics.Innovation.PLTLabsAPI2.PLTService,Plantronics.Innovation.PLTLabsAPI2.PLTMode,System.Int32)">
+            <summary>
+            Call this method to subscribe to the specified data service (PLTService enum) from the
+            device. For example you can subscribe to motion tracking service to receive
+            head tracking angles etc.
+            </summary>
+            <param name="aService">The PLTService enum value defines which service to subscribe to</param>
+            <param name="aMode">The PLTMode defines On_Change (as soon as new data is available)
+            or Periodic mode (return data on specific period). Note not all services are compatible
+            with Periodic mode (These are not: Tap service, Free fall service and Call state service)</param>
+            <param name="aPeriodmilliseconds">The period in milliseconds to return data
+            if using Periodic mode</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.unsubscribe(Plantronics.Innovation.PLTLabsAPI2.PLTService)">
+            <summary>
+            Call this method to unsunscribe a previously subscribed device service.
+            </summary>
+            <param name="aService">The PLTService enum value defines which service to unsubscribe from</param>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.getSubscribed(Plantronics.Innovation.PLTLabsAPI2.PLTService)">
+            <summary>
+            Call this method to query if the specified service is currently subscribed
+            </summary>
+            <param name="aService">The PLTService enum value defines which service to check</param>
+            <returns>Returns a boolean to indicate if service was subscribed or not.</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.getSubscribed">
+            <summary>
+            Call this method to obtain a list of currently subscribed services
+            </summary>
+            <returns>Returns an array of subscribed services as PLTService[] enum values.</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.Shutdown">
+            <summary>
+            Call this method to perform a clean shutdown of the
+            PLTLabsAPI object and ensure threads are stopped and
+            resources released.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTLabsAPI2.HeadsetTrackingUpdate(Plantronics.Innovation.Util.HeadsetTrackingData)">
+            <summary>
+            This is a method used by the internals of the PLTLabsAPI DLL to receive
+            Motion Tracking events from the headset and then distribute them to 
+            applications that are subscribed to those data services.
+            *** DO NOT CALL THIS METHOD ***
+            </summary>
+            <param name="headsetData">The data received from headset *** DO NOT CALL THIS METHOD ***</param>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTLabsCallbackHandler">
+            <summary>
+            This interface allows your application to receive data from the motion
+            tracking service and other sensor services of the Plantronics device
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTDevice">
+            <summary>
+            The PLTDevice object abstraction describes a device object
+            that is available for connecting to with the PLTLabsAPI
+            and ultimately subscribing for its services once the connection
+            is established.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTDevice.m_ProductName">
+            <summary>
+            The Product Name of the device
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.PLTLabsAPI2.PLTConnection">
+            <summary>
+            PLTConnection is like a proxy service between
+            the application and the PLTLabsAPI / Spokes connection.
+            When you connect to PLTLabsAPI you receive a PLTConnection
+            object, which includes vermaj, vermin members that reveal
+            the device firmware version, and the PLTDevice of this
+            connection, being the device that is connected to.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTConnection.m_device">
+            <summary>
+            This member holds a reference to the PLTDevice object for this connection
+            (the device that is connected to)
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTConnection.vermaj">
+            <summary>
+            The major version number of connected device firmware
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.PLTLabsAPI2.PLTConnection.vermin">
+            <summary>
+            The minor version number of connected device firmware
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.PLTLabsAPI2.PLTConnection.SendBladeRunnerSubscribeCommand(System.Boolean,Plantronics.Innovation.PLTLabsAPI2.PLTService,Plantronics.Innovation.PLTLabsAPI2.PLTMode,System.Int32)">
+            <summary>
+            Internal method to send either a subscribe or unsubscribe BladeRunner command
+            to the BladeRunner device that represents this PLTConnection.
+            </summary>
+            <param name="subscribe"></param>
+            <param name="aService"></param>
+            <param name="aMode"></param>
+            <param name="aPeriodmilliseconds"></param>
+        </member>
+        <member name="P:Plantronics.Innovation.PLTLabsAPI2.PLTConnection.DeviceName">
+            <summary>
+            Returns a string representation of the device Product Name
+            </summary>
+        </member>
+    </members>
+</doc>

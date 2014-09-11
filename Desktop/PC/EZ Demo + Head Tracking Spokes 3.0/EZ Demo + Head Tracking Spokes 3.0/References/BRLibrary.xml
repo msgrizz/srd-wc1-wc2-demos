@@ -1,0 +1,743 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BRLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:Plantronics.Innovation.BRLibrary.BladeRunnerDevice">
+            <summary>
+            An object to store information about a BladeRunner Device that is known
+            to this BladeRunnerEndPoint in the BladeRunner network
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.BRLibrary.BladeRunnerDevice.m_physicalinterface">
+            <summary>
+            This member variable holds an optional pointer to the "physical" BladeRunner device, which could
+            for example be a USB HID device attached to local PC, or a WebSocket, to name but two
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.BladeRunnerDeviceInterface">
+            <summary>
+            A common interface class to be used by different "physical" BladeRunner interfaces, such
+            as USB HID and WebSocket, to name but two.
+            
+            An abstract class defining a SendRaw method to allow sub-classes to have a common parent class for this behaviour.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerDeviceInterface.SendRaw(System.String)">
+            <summary>
+            This function will send a BladeRunnerMessage to this device
+            </summary>
+            <param name="cmdString">Contents of the BladeRunner messages expressed as ASCII</param>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint">
+             <summary>
+             The main class of this API. An application using the API should instantiate only 1 
+             instance of this (pending to make a singleton).
+             
+             Defines a PC BladeRunerEndpoint used to exchange messages
+             with a Plantronics BladeRunner device
+             
+             Define a conditional called consoleBRdebug to see lots of debug output
+             
+             To debug how long the Deckard message decode is taking you can define:consoleTimingdebug
+             To debug BladeRunner injection you can define:consoleTimingdebug
+             
+             Version history:
+                 27th August 2014
+                 v1.0.0.3
+                 Changes:
+                  - Fixed bug preventing it to work with Cydoemus firmware 20 - the
+                    port 1000000 is reported and the library was trying to host negotiate
+                    with it with a null device (it is actually the PC itself). Put a
+                    special case to avoid that occuring.
+            
+                 14th August 2014
+                 v1.0.0.2
+                 Changes:
+                  - Fixed previously undetected decoding of hex values in DeckardDecoder.cs
+                    DecodeDeckard function - previously would have generated errors decoding
+                    deckard payloads.
+            
+                 30th May 2014
+                 v1.0.0.1
+                 Changes:
+                  - Fixed the BladeRunner meta data decoding so that it correctly decodes
+                    the command id's.
+            
+                 12th May 2014
+                 v1.0.0.0
+                 Initial version
+             </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.Shutdown">
+            <summary>
+            Cleanly shutdown this BR endpoint !
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.SetHIDDevice(Plantronics.Innovation.BRLibrary.HIDDevice)">
+            <summary>
+            Inform the API and connected apps that a USB 2.0 HID device (BladeRunner device)
+            was either attached or detached.
+            </summary>
+            <param name="myDevice">Pass a HIDDevice object reference to inform that device was attached. Pass null to inform was detached.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.UpdateDeliveryQueue">
+            <summary>
+            Periodically check the BR delivery queue.
+            This means grab the first item. If it is acknowledged or timedout
+            then remove it, and grab the next one.
+            The next item therefore cannot be sent until the top item is ack'd
+            or timed out.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.SendBladeRunnerMessage(Plantronics.Innovation.BRLibrary.BladeRunnerDevice,Plantronics.Innovation.BRLibrary.EBRMessageType,System.String,System.String,System.Collections.Generic.List{Plantronics.Innovation.BRLibrary.Deckard.BRProtocolElement},System.Int32)">
+            <summary>
+            Call this method to request the API to queue up and deliver a BladeRunner
+            message. The BladeRunnerEndpoint will attempt delivery and await a
+            suitable acknowledgement before attempting to deliver further messages.
+            </summary>
+            <param name="bladerunnertype">Type of BR message (only 1 is supported right now)</param>
+            <param name="targetaddress">The target device address (port) to send the BR message to</param>
+            <param name="deckardid">The deckard message id to include in deckard payload (optional)</param>
+            <param name="payload_out">The deckard payload items to include in deckard payload body (optional)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.FindBladeRunnerDevice(System.String)">
+            <summary>
+            Search this BladeRunnerEndpoint's store of known BladeRunnerDevice objects.
+            Match initially on addresshex.
+            </summary>
+            <param name="addresshex">The address of a device to find.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.InjectBladeRunnerCommand(Plantronics.Innovation.BRLibrary.MsgReceivedArgs)">
+            <summary>
+            Inject a BladeRunner command into the PC BladeRunner API
+            From another source, for example, from a Websocket
+            </summary>
+            <param name="brmsg">The BladeRunner message received</param>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.BladeRunnerEndpoint.GetFreeDevicePort">
+            <summary>
+            Iterate all the BladeRunnerDevices in our BR node store
+            and find next free local device port
+            Or return -1 if no more ports free
+            </summary>
+            <returns>local port number or -1 if no more ports free</returns>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.BladeRunnerHandler">
+            <summary>
+            An interface defining callback methods that an application must implement to use this BladeRunner API.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.BladeRunnerDefinitions">
+            Defines.
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.EBRReturnStatus">
+            Enumerations
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Plantronics.Innovation.BRLibrary.EBRWordBitWidth" -->
+        <!-- Badly formed XML comment ignored for member "T:Plantronics.Innovation.BRLibrary.EBRWordAlignment" -->
+        <!-- Badly formed XML comment ignored for member "T:Plantronics.Innovation.BRLibrary.EBRWordEndianness" -->
+        <!-- Badly formed XML comment ignored for member "T:Plantronics.Innovation.BRLibrary.EBRPortVal" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.EBRPortVal.eBR_PORT_MIN" -->
+        <member name="T:Plantronics.Innovation.BRLibrary.EBRPacketType">
+            <summary>
+            Enumeration type for supported BladeRunner packet type values.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.EBRMessageType">
+            <summary>
+            Enumeration type for supported BladeRunner message type values.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.BRDelivery">
+            <summary>
+            This class encapsulates information about a BladeRunner message you want to deliver
+            to a particular BladeRunner device. It will typically be added to the outgoing BladeRunner
+            message queue (BRDeliveryQueue member of BladeRunnerEndpoint).
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.ConsoleTestDevice">
+            <summary>
+            An implementation of BladeRunnerDeviceInterface that allows a
+            Console application to pretend to be a BladeRunner device and
+            send and receive messages from other BladeRunner devices in the
+            BladeRunner network.
+            </summary>
+        </member>
+        <member name="T:Generic.Debugging">
+            <summary>
+            A Debugging mechanism inherited from the BladeRunnerStatusMonitor application code.
+            </summary>
+            <summary>
+            A Debugging mechanism inherited from the BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <member name="M:Generic.Debugging.ResultOfAPICall(System.String)">
+             <summary>
+             Get text that describes the result of an API call.
+             </summary>
+             
+             <param name="FunctionName"> the name of the API function. </param>
+             
+             <returns>
+             The text.
+             </returns>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.Deckard">
+            <summary>
+            This class holds in internal object representation
+            of the Deckard command registry.
+            Note: using singleton model to avoid possibility of multiple instantiation
+            as specified in: http://msdn.microsoft.com/en-us/library/ff650316.aspx
+            Note: The Deckard command registry is loaded by BRLibrary and apps that use
+            it at runtime. This allows a newer registry to be deployed without recompiling
+            your app code.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.BRLibrary.Deckard.xml_filename">
+            <summary>
+            Default filename for the Deckard registry. Change this public member
+            before obtaining Instance of Deckard if you need to use a different
+            filename. Filename of Deckard command registry xml. If no path specified assumes is in current working folder.
+            </summary>
+        </member>
+        <member name="F:Plantronics.Innovation.BRLibrary.Deckard.deckardcommands">
+            <summary>
+            A Dictionary (hash map) of deckard id strings mapping to deckard commands (a summary
+            of all the payload elements etc for that command
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.Deckard.#ctor">
+            <summary>
+            Default constructor. Will load the specified xml file
+            into the Deckard command registry.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.Deckard.DecodeDeckardTypes(System.Xml.Linq.XElement,System.String,System.String)">
+            <summary>
+            Look for command, event, setting and exception types in passed data
+            </summary>
+            <param name="section"></param>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.Deckard.BRTypeToNumber(Plantronics.Innovation.BRLibrary.EBRMessageType)">
+            <summary>
+            Convert a BladeRunner type definition into a Deckard XML message section type, as integer string, one of:
+            deckard_command,
+            deckard_event,
+            deckard_setting,
+            deckard_exception,
+            host_negotiate
+            </summary>
+            <param name="brtype"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Plantronics.Innovation.BRLibrary.Deckard.Instance">
+            <summary>
+            Returns the single Instance of Deckard which you can use to decode Deckard events/commands etc
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_BYTE" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_SHORT" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_UNSIGNED_SHORT" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_INT" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_UNSIGNED_INT" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_LONG" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_UNSIGNED_LONG" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_BYTE_ARRAY" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_SHORT_ARRAY" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_STRING" -->
+        <!-- Badly formed XML comment ignored for member "F:Plantronics.Innovation.BRLibrary.Deckard.BRType.BR_TYPE_ENUM" -->
+        <member name="T:Plantronics.Innovation.BRLibrary.DeckardDecoder">
+            <summary>
+            An "active" threaded object to receive inbound fully assembled BladeRunner packets and decode
+            them into Deckard messages.
+            </summary>
+        </member>
+        <member name="E:Plantronics.Innovation.BRLibrary.DeckardDecoder.DeckardReceived">
+            <summary>
+            Triggered when the a deckard message has been received from attached device
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.DeckardDecoder.DeckardReceivedArgs">
+            <summary>
+            Event args for Deckard Received event handler
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.DeckardMessage">
+            <summary>
+            A new class to represent a deckard message received from a device, for passing to an interested app.
+            Simply a container for: Deckard ID, Deckard Payload data, BR type number and BR address as hex
+            </summary>
+        </member>
+        <member name="T:Generic.DeviceManagement">
+            <summary>
+            A USB HID device management mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+            <summary>
+            A USB HID device management mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Generic.DeviceManagement.DBT_DEVICEARRIVAL" -->
+        <member name="M:Generic.DeviceManagement.DeviceNameMatch(Generic.DeviceManagement.DEV_BROADCAST_HDR,Generic.DeviceManagement.DEV_BROADCAST_DEVICEINTERFACE_1,System.String)">
+             <summary>
+             Compares two device path names. Used to find out if the device name 
+             of a recently attached or removed device matches the name of a 
+             device the application is communicating with.
+             </summary>
+             
+             <param name="m"> a WM_DEVICECHANGE message. A call to RegisterDeviceNotification
+             causes WM_DEVICECHANGE messages to be passed to an OnDeviceChange routine.. </param>
+             <param name="mydevicePathName"> a device pathname returned by 
+             SetupDiGetDeviceInterfaceDetail in an SP_DEVICE_INTERFACE_DETAIL_DATA structure. </param>
+             
+             <returns>
+             True if the names match, False if not.
+             </returns>
+             
+            LC: updated to be called from a potential windows application
+            that received WM_DEVICECHANGED
+            
+        </member>
+        <member name="M:Generic.DeviceManagement.FindDeviceFromGuid(System.Guid,System.String[]@)">
+             <summary>
+             Use SetupDi API functions to retrieve the device path name of an
+             attached device that belongs to a device interface class.
+             </summary>
+             
+             <param name="myGuid"> an interface class GUID. </param>
+             <param name="devicePathName"> a pointer to the device path name 
+             of an attached device. </param>
+             
+             <returns>
+              True if a device is found, False if not. 
+             </returns>
+        </member>
+        <member name="M:Generic.DeviceManagement.RegisterForDeviceNotifications(System.IntPtr,System.Guid,System.IntPtr@)">
+             <summary>
+             Requests to receive a notification when a device is attached or removed.
+             </summary>
+             
+             <param name="devicePathName"> handle to a device. </param>
+             <param name="formHandle"> handle to the window that will receive device events. </param>
+             <param name="classGuid"> device interface GUID. </param>
+             <param name="deviceNotificationHandle"> returned device notification handle. </param>
+             
+             <returns>
+             True on success.
+             </returns>
+             
+        </member>
+        <member name="M:Generic.DeviceManagement.StopReceivingDeviceNotifications(System.IntPtr)">
+             <summary>
+             Requests to stop receiving notification messages when a device in an
+             interface class is attached or removed.
+             </summary>
+             
+             <param name="deviceNotificationHandle"> handle returned previously by
+             RegisterDeviceNotification. </param>
+        </member>
+        <member name="T:Generic.FileIO">
+             <summary>
+             API declarations relating to file I/O.
+             Part of the USB HID mechanism inherited from BladeRunnerStatusMonitor application code.
+             </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.UsbWatcherForm">
+            <summary>
+            Meant to be a "hidden" Window for monitoring arrival and removal of USB HID devices on local PC.
+            Part of the USB HID mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.isInt16(System.String,System.Globalization.NumberStyles)">
+            <summary>
+            Tests whether a string is a valid Int16 of the specified type.
+            </summary>
+            <param name="val">String to be tested</param>
+            <param name="NumberStyle">Number type</param>
+            <returns></returns>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.StartUsbPlugAndPlayMonitor">
+            <summary>
+            Start monitoring USB plug/unplug events for the specified HID.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.WndProc(System.Windows.Forms.Message@)">
+             <summary>
+              Overrides WndProc to enable checking for and handling WM_DEVICECHANGE messages.
+             </summary>
+             <param name="m">a Windows Message.</param>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.OnDeviceChange(System.Windows.Forms.Message)">
+             <summary>
+             Called when a WM_DEVICECHANGE message has arrived,
+             indicating that a device has been attached or removed.
+             </summary>
+             <param name="m"> a message with information about the device </param>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.FindTheHid(Plantronics.Innovation.BRLibrary.UsbWatcherForm.Pid,System.Collections.Generic.List{Plantronics.Innovation.BRLibrary.HidInformation})">
+            <summary>
+            Check whether the specified HID is attached to the host.  If so,
+            set the "connected" and "devicePathName" properties.
+            </summary>
+            <returns>True if the HID is attached to the host, or false if it is not attached.</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.UsbWatcherForm.Pid.ToString">
+            <summary>
+            Returns a string representing the PID value in hexadecimal notation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.UsbPlugAndPlayEventArgs">
+            <summary>
+            Indicates that a USB HID Plug-and-Play event has occurred.
+            </summary>
+        </member>
+        <member name="P:Plantronics.Innovation.BRLibrary.UsbPlugAndPlayEventArgs.WasAdded">
+            <summary>
+            USB connection status: true->HID is connected, false->HID is unplugged.
+            </summary>
+        </member>
+        <member name="T:Generic.Hid">
+            <summary>
+            Part of the USB HID mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <member name="M:Generic.Hid.FlushQueue(Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             Remove any Input reports waiting in the buffer.
+             </summary>
+             
+             <param name="hidHandle"> a handle to a device.   </param>
+             
+             <returns>
+             True on success, False on failure.
+             </returns>
+        </member>
+        <member name="M:Generic.Hid.GetDeviceCapabilities(Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             Retrieves a structure with information about a device's capabilities. 
+             </summary>
+             
+             <param name="hidHandle"> a handle to a device. </param>
+             
+             <returns>
+             An HIDP_CAPS structure.
+             </returns>
+        </member>
+        <member name="M:Generic.Hid.GetHidUsage(Generic.Hid.HIDP_CAPS)">
+             <summary>
+             Creates a 32-bit Usage from the Usage Page and Usage ID. 
+             Determines whether the Usage is a system mouse or keyboard.
+             Can be modified to detect other Usages.
+             </summary>
+             
+             <param name="MyCapabilities"> a HIDP_CAPS structure retrieved with HidP_GetCaps. </param>
+             
+             <returns>
+             A String describing the Usage.
+             </returns>
+        </member>
+        <member name="M:Generic.Hid.GetNumberOfInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32@)">
+             <summary>
+             Retrieves the number of Input reports the host can store.
+             </summary>
+             
+             <param name="hidDeviceObject"> a handle to a device  </param>
+             <param name="numberOfInputBuffers"> an integer to hold the returned value. </param>
+             
+             <returns>
+             True on success, False on failure.
+             </returns>
+        </member>
+        <member name="M:Generic.Hid.SetNumberOfInputBuffers(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Int32)">
+             <summary>
+             sets the number of input reports the host will store.
+             Requires Windows XP or later.
+             </summary>
+             
+             <param name="hidDeviceObject"> a handle to the device.</param>
+             <param name="numberBuffers"> the requested number of input reports.  </param>
+             
+             <returns>
+             True on success. False on failure.
+             </returns>
+        </member>
+        <member name="M:Generic.Hid.IsWindowsXpOrLater">
+             <summary>
+             Find out if the current operating system is Windows XP or later.
+             (Windows XP or later is required for HidD_GetInputReport and HidD_SetInputReport.)
+             </summary>        
+        </member>
+        <member name="M:Generic.Hid.IsWindows98Gold">
+             <summary>
+             Find out if the current operating system is Windows 98 Gold (original version).
+             Windows 98 Gold does not support the following:
+             Interrupt OUT transfers (WriteFile uses control transfers and Set_Report).
+             HidD_GetNumInputBuffers and HidD_SetNumInputBuffers
+             (Not yet tested on a Windows 98 Gold system.)
+             </summary>
+        </member>
+        <member name="T:Generic.Hid.ReportIn">
+             <summary>
+             For reports the device sends to the host.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.ReportIn.Read(Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,System.Boolean@,System.Byte[]@,System.Boolean@)">
+             <summary>
+             Each class that handles reading reports defines a Read method for reading 
+             a type of report. Read is declared as a Sub rather
+             than as a Function because asynchronous reads use a callback method 
+             that can access parameters passed by ByRef but not Function return values.
+             </summary>
+        </member>
+        <member name="T:Generic.Hid.InFeatureReport">
+             <summary>
+             For reading Feature reports.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.InFeatureReport.Read(Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,System.Boolean@,System.Byte[]@,System.Boolean@)">
+             <summary>
+             reads a Feature report from the device.
+             </summary>
+             
+             <param name="hidHandle"> the handle for learning about the device and exchanging Feature reports. </param>
+             <param name="readHandle"> the handle for reading Input reports from the device. </param>
+             <param name="writeHandle"> the handle for writing Output reports to the device. </param>
+             <param name="myDeviceDetected"> tells whether the device is currently attached.</param>
+             <param name="inFeatureReportBuffer"> contains the requested report.</param>
+             <param name="success"> read success</param>
+        </member>
+        <member name="T:Generic.Hid.InputReportViaControlTransfer">
+             <summary>
+             For reading Input reports via control transfers
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.InputReportViaControlTransfer.Read(Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,System.Boolean@,System.Byte[]@,System.Boolean@)">
+             <summary>
+             reads an Input report from the device using a control transfer.
+             </summary>
+             
+             <param name="hidHandle"> the handle for learning about the device and exchanging Feature reports. </param>
+             <param name="readHandle"> the handle for reading Input reports from the device. </param>
+             <param name="writeHandle"> the handle for writing Output reports to the device. </param>
+             <param name="myDeviceDetected"> tells whether the device is currently attached. </param>
+             <param name="inputReportBuffer"> contains the requested report. </param>
+             <param name="success"> read success </param>
+        </member>
+        <member name="T:Generic.Hid.InputReportViaInterruptTransfer">
+             <summary>
+             Read Input reports.  The calling thread is blocked until an IN report is received.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.InputReportViaInterruptTransfer.CancelTransfer(Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr)">
+             <summary>
+             closes open handles to a device.
+             </summary>
+             
+             <param name="hidHandle"> the handle for learning about the device and exchanging Feature reports. </param>
+             <param name="readHandle"> the handle for reading Input reports from the device. </param>
+             <param name="writeHandle"> the handle for writing Output reports to the device. </param>
+             <param name="eventObject"> event object. </param>
+        </member>
+        <member name="M:Generic.Hid.InputReportViaInterruptTransfer.Read(Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,Microsoft.Win32.SafeHandles.SafeFileHandle,System.Boolean@,System.Byte[]@,System.Boolean@)">
+             <summary>
+             Read an Input report from the device using interrupt transfers.
+             </summary>
+             <param name="hidHandle"> the handle for learning about the device and exchanging Feature reports. </param>
+             <param name="readHandle"> the handle for reading Input reports from the device. </param>
+             <param name="writeHandle"> the handle for writing Output reports to the device. </param>
+             <param name="myDeviceDetected"> tells whether the device is currently attached. </param>
+             <param name="inputReportBuffer"> contains the requested report. </param>
+             <param name="success"> read success </param>           
+        </member>
+        <member name="T:Generic.Hid.ReportOut">
+             <summary>
+             For reports the host sends to the device.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.ReportOut.Write(System.Byte[],Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             Each class that handles writing reports defines a Write method for 
+             writing a type of report.
+             </summary>
+             
+             <param name="reportBuffer"> contains the report ID and report data. </param>
+              <param name="deviceHandle"> handle to the device.  </param>
+             
+             <returns>
+              True on success. False on failure.
+             </returns>             
+        </member>
+        <member name="T:Generic.Hid.OutFeatureReport">
+             <summary>
+             For Feature reports the host sends to the device.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.OutFeatureReport.Write(System.Byte[],Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             writes a Feature report to the device.
+             </summary>
+             
+             <param name="outFeatureReportBuffer"> contains the report ID and report data. </param>
+             <param name="hidHandle"> handle to the device.  </param>
+             
+             <returns>
+              True on success. False on failure.
+             </returns>            
+        </member>
+        <member name="T:Generic.Hid.OutputReportViaControlTransfer">
+             <summary>
+             For writing Output reports via control transfers
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.OutputReportViaControlTransfer.Write(System.Byte[],Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             writes an Output report to the device using a control transfer.
+             </summary>
+             
+             <param name="outputReportBuffer"> contains the report ID and report data. </param>
+             <param name="hidHandle"> handle to the device.  </param>
+             
+             <returns>
+              True on success. False on failure.
+             </returns>            
+        </member>
+        <member name="T:Generic.Hid.OutputReportViaInterruptTransfer">
+             <summary>
+             For Output reports the host sends to the device.
+             Uses interrupt or control transfers depending on the device and OS.
+             </summary>
+        </member>
+        <member name="M:Generic.Hid.OutputReportViaInterruptTransfer.Write(System.Byte[],Microsoft.Win32.SafeHandles.SafeFileHandle)">
+             <summary>
+             writes an Output report to the device.
+             </summary>
+             
+             <param name="outputReportBuffer"> contains the report ID and report data. </param>
+             <param name="writeHandle"> handle to the device.  </param>
+             
+             <returns>
+              True on success. False on failure.
+             </returns>            
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.HIDDevice">
+            <summary>
+            An implementation of BladeRunnerDeviceInterface, the HIDDevice object handles 
+            the interaction (connection, receive reports in) with a local USB HID device 
+            attached to this PC.
+            Part of the USB HID mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.HIDDevice.FindTheHid(Plantronics.Innovation.BRLibrary.Pid,System.Collections.Generic.List{Plantronics.Innovation.BRLibrary.HidInformation})">
+            <summary>
+            Check whether the specified HID is attached to the host.  If so,
+            set the "connected" and "devicePathName" properties.
+            </summary>
+            <returns>True if the HID is attached to the host, or false if it is not attached.</returns>
+        </member>
+        <member name="M:Plantronics.Innovation.BRLibrary.Pid.ToString">
+            <summary>
+            Returns a string representing the PID value in hexadecimal notation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Generic.HidObject">
+            <summary>
+            This is a complete representation of the physical HID device.
+            Part of the USB HID mechanism inherited from BladeRunnerStatusMonitor application code.
+            </summary>
+        </member>
+        <member name="M:Generic.HidObject.#ctor(System.String,Generic.Hid.HIDD_ATTRIBUTES,Generic.Hid.HIDP_CAPS)">
+            <summary>
+            HidObject Constructor
+            </summary>
+        </member>
+        <member name="M:Generic.HidObject.WriteOutputReport(System.Byte[],System.Int16)">
+            <summary>
+            Write a HID OUT report using the default report ID of zero.
+            </summary>
+            <param name="data">data to write to HID.</param>
+        </member>
+        <member name="M:Generic.HidObject.WriteOutputReport(System.Byte,System.Byte[],System.Int16)">
+            <summary>
+            Write a HID OUT report using the specified report ID.
+            </summary>
+            <param name="outputReportId">HID report ID</param>
+            <param name="data">data to write to HID.</param>
+        </member>
+        <member name="M:Generic.HidObject.WriteFeatureReport(System.Byte,System.Byte[])">
+            <summary>
+            Write a HID Feature report using the specified report ID.
+            </summary>
+            <param name="featureReportId">Feature report ID</param>
+            <param name="data">data to write to HID.</param>
+        </member>
+        <member name="M:Generic.HidObject.ReadFeatureReport(System.Byte)">
+            <summary>
+            Read a HID Feature report
+            </summary>
+            <param name="featureReportId">Feature report ID</param>
+            <returns>Byte array, containing the report data</returns>
+        </member>
+        <member name="M:Generic.HidObject.Dispose">
+            <summary>
+            Dispose of the HidObject.
+            </summary>
+        </member>
+        <member name="M:Generic.HidObject.ReadContinuously">
+            <summary>
+            Continously read HID IN reports
+            This function should run on a different thread from the main GUI window.
+            </summary>
+        </member>
+        <member name="P:Generic.HidObject.SystemExclusive">
+            <summary>
+            Identifies whether the specified HID device is system-exclusive (e.g. mouse or keyboard).  System-exclusive devices are not accessible.
+            </summary>
+        </member>
+        <member name="T:Generic.InputReportEventArgs">
+            <summary>
+            A class to hold information about HID InputReport events
+            </summary>
+        </member>
+        <member name="P:Generic.InputReportEventArgs.InputReportId">
+            <summary>
+            HID IN report ID.
+            </summary>
+        </member>
+        <member name="P:Generic.InputReportEventArgs.InputReportData">
+            <summary>
+            HID IN report data.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.MessageTimer">
+            <summary>
+            This is C# StopWatch timer object that is used when the consoleTimingdebug conditional
+            is defined in BRLibrary build. It is used to track how long it takes to decode
+            each incoming BladeRunner message and extract it's Deckard payload. This is acheived
+            by adding a MessageTimer object member variable to each incoming MsgReceivedArgs that
+            lives with it for the life of the message. So that when receiving application gets the
+            message with timer, it can see how long the time was from BladeRunner received until
+            it gets the decoded Deckard payload.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.MsgReceivedArgs">
+            <summary>
+            Encapsulation of a BladeRunner message and decoded Deckard payload that may be received 
+            a BladeRunner device on the network whether it be local USB HID device, a WebSocket "virtual"
+            device, etc.
+            </summary>
+        </member>
+        <member name="T:Plantronics.Innovation.BRLibrary.WebSocketDevice">
+            <summary>
+            An implementation of BladeRunnerDeviceInterface device that allows
+            the BladeRunner library to route BladeRunner messages
+            via a WebSocket to/from remote BladeRunner devices
+            on BladeRunner network.
+            </summary>
+        </member>
+    </members>
+</doc>
