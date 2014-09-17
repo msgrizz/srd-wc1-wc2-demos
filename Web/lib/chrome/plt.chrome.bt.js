@@ -236,10 +236,10 @@ var plt = (function(my){
                var iQ = inverseQuaternion(device.calibrationQuaternion);
                var calQ = multiplyQuaternions(iQ, message.payload.quaternion);
                message.payload.calibratedQuaternion = calQ;
-               var c = convertQuaternianToCoordinates(calQ);
-               message.payload.roll = c.roll;
-               message.payload.pitch = c.pitch;
-               message.payload.heading = c.heading;
+               message.payload.eulerAngles = quaternionToEuler(calQ).eulerAngles;
+            }
+            else{
+               message.payload.eulerAngles = quaternionToEuler(message.payload.quaternion).eulerAngles;
             }
             break;
         }
@@ -259,7 +259,13 @@ var plt = (function(my){
     }
   };
   
-  
+    //converts a quaternion into a set of Euler angles 
+  var quaternionToEuler = function(q){
+    var roll = (-180.0 / Math.PI) * Math.atan2((q.x * q.z - q.w * q.y), (q.w* q.w + q.z * q.z - 0.5));
+    var pitch = (180.0 / Math.PI) * Math.asin(2.0 * q.y * q.z + 2.0 * q.w * q.x);
+    var heading = (-180.0 / Math.PI) * Math.atan2((q.y * q.x - q.w * q.z), (q.w * q.w + q.y * q.y - 0.5));
+    return {"eulerAngles":{"pitch" :Math.round(pitch), "roll" : Math.round(roll), "heading" : Math.round(heading)}};
+  }
   var inverseQuaternion = function(q){
     return {"w": q.w, "x": -q.x , "y": -q.y, "z": -q.z};
   };
@@ -278,64 +284,6 @@ var plt = (function(my){
     }
     return {"w": newQuatArray[0], "x": newQuatArray[1] , "y": newQuatArray[2], "z": newQuatArray[3]}; 
   }
-  
-  var quaternianToEuler = function(q1) {
-    var pitchYawRoll = {"x":0, "y":0, "z":0};
-    var sqw = q1.w*q1.w;
-    var sqx = q1.x*q1.x;
-    var sqy = q1.y*q1.y;
-    var sqz = q1.z*q1.z;
-    var unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-    var test = q1.x*q1.y + q1.z*q1.w;
-    var heading = 0;
-    var attitude = 0;
-    var bank = 0;
-    
-    if (test > 0.499*unit) { // singularity at north pole
-        heading = 2 * Math.atan2(q1.x,q1.w);
-        attitude = Math.PI/2;
-    }
-    if (test < -0.499*unit) { // singularity at south pole
-        heading = -2 * Math.atan2(q1.x,q1.w);
-        attitude = -Math.PI/2;
-    }
-    else {
-        heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
-        attitude = Math.asin(2*test/unit);
-        bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
-    }
-    pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
-    pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
-    pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
-
-    return pitchYawRoll;
-  }        
-
-  var eulerToAngle = function(r) {
-      var c = 0;
-      if (r > 0){
-        c = (Math.PI*2) - r;
-      } 
-      else {
-        c = -r
-      }
-      return Math.round((c / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
-  }
-
-  //converts a quaternion into a set of Euler angles 
-  var convertQuaternianToCoordinates = function(q){
-    var e = quaternianToEuler(q);
-   
-    p = convertToPitch(q);
-    return {"pitch" :p, "roll" :eulerToAngle(e.z), "heading" : eulerToAngle(e.y)};
-  
-  }
-  
-  var convertToPitch = function(q){
-    var p = (2 * q.y * q.z) + (2 * q.w * q.x);
-    var pitch = (180 / Math.PI) * Math.asin(p);
-    return Math.round(pitch);
-  };
 
 
   var messageCameFromSensorPort = function(message){
@@ -346,6 +294,7 @@ var plt = (function(my){
     //the sensor port 
     return message.address[1] == 5;
   }
+  
   //enables the button event functionality
   var enableButtonEvents = function(device){
     var options = {"address": defaultAddress, "enable" : true};

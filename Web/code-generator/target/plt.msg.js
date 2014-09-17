@@ -5023,10 +5023,6 @@ plt.msg = (function (){
            //convert quaternians to eular angles - w, x, y, z
             var q = parse32BitArray(0, payload.serviceData, payload.serviceData.length);
             payload.quaternion = convertToQuaternion(q);
-            var c = convertQuaternianToCoordinates(payload.quaternion);
-            payload.roll = c.roll;
-            payload.pitch = c.pitch;
-            payload.heading = c.heading;
             break;
             case my.TYPE_SERVICEID_PEDOMETER:
             payload.steps = parse32Bit(0, payload.serviceData);
@@ -5589,64 +5585,6 @@ plt.msg = (function (){
       result += String.fromCharCode(val);
     }
     return result.toString();
-  };
-  
-  
-    var quaternianToEuler = function(q1) {
-    var pitchYawRoll = {"x":0, "y":0, "z":0};
-       sqw = q1.w*q1.w;
-       sqx = q1.x*q1.x;
-       sqy = q1.y*q1.y;
-       sqz = q1.z*q1.z;
-       unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-       test = q1.x*q1.y + q1.z*q1.w;
-      if (test > 0.499*unit) { // singularity at north pole
-          heading = 2 * Math.atan2(q1.x,q1.w);
-          attitude = Math.PI/2;
-          bank = 0;
-          //return;
-      }
-      if (test < -0.499*unit) { // singularity at south pole
-          heading = -2 * Math.atan2(q1.x,q1.w);
-          attitude = -Math.PI/2;
-          bank = 0;
-          //return;
-      }
-      else {
-          heading = Math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , sqx - sqy - sqz + sqw);
-          attitude = Math.asin(2*test/unit);
-          bank = Math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , -sqx + sqy - sqz + sqw)
-      }
-      pitchYawRoll.z = Math.floor(attitude * 1000) / 1000;
-      pitchYawRoll.y = Math.floor(heading * 1000) / 1000;
-      pitchYawRoll.x = Math.floor(bank * 1000) / 1000;
-  
-      return pitchYawRoll;
-  }        
-
-  var eulerToAngle = function(r) {
-      var c = 0;
-      if (r > 0){
-        c = (Math.PI*2) - r;
-      } 
-      else {
-        c = -r
-      }
-      return Math.round((c / ((Math.PI*2)/360)));  // camera angle radians converted to degrees
-  }
-
-  //converts a quaternion into a set of Euler angles 
-  var convertQuaternianToCoordinates = function(q){
-    var e = quaternianToEuler(q);
-   
-    p = convertToPitch(q);
-    return {"pitch" :p, "roll" :eulerToAngle(e.z), "heading" : eulerToAngle(e.y)};
-  
-  }
-  var convertToPitch = function(q){
-    var p = (2 * q.y * q.z) + (2 * q.w * q.x);
-    var pitch = (180 / Math.PI) * Math.asin(p);
-    return Math.round(pitch);
   };
   
   var convertToQuaternion = function(s){

@@ -56,8 +56,6 @@ function init(){
     calibrateHeadtracking();
   });
   
-  Logger.show();
-  
   log("init() - registering listeners with plt library");
   plt.addEventListener(onEvent);
   log("init() - events -> plt.addEventListener(onEvent);");
@@ -69,14 +67,35 @@ function init(){
   log("init() - device socket connection opened -> plt.addOnConnectionListener(onConnectionOpened);");
   plt.addOnDisconnectListener(onDisconnect);
   log("init() - device socket disconnect -> plt.addOnDisconnectListener(onDisconnect);");
+  
+  initWebGL();
+  
 }
-
+var viewer;
+function initWebGL(){
+  var canvas = document.getElementById('cv');
+  viewer = new JSC3D.Viewer(canvas);
+  
+  viewer.setParameter('SceneUrl', 'model/mother_child_statue.obj');
+  viewer.setParameter('InitRotationX', 0);
+  viewer.setParameter('InitRotationY', 0);
+  viewer.setParameter('InitRotationZ', 0);
+  viewer.setParameter('BackgroundColor1', '#060606');
+  viewer.setParameter('BackgroundColor2', '#303030');
+  viewer.setParameter('RenderMode', 'texture');
+  viewer.init();
+  viewer.enableDefaultInputHandler(false);
+  viewer.update();
+  
+}
 function calibrateHeadtracking(){
   if (!connectedDevice) {
     return;
   }
   log('\ncalibrateHeadtracking(): plt api call to connected device to calibrate head orientation  -> plt.calibrateHeadOrientation(connectedDevice);');
   plt.calibrateHeadOrientation(connectedDevice);
+  viewer.resetScene();
+  viewer.update();
 }
 
 function resetPedometer(){
@@ -319,20 +338,23 @@ function enableProximity(on){
   plt.sendMessage(connectedDevice, message);
 }
 
+function log(message){
+  console.log(message);
+}
 
 function onEvent(info){
-  log('\nonEvent(info): event received');
-  log('onEvent(info): event -> ' + JSON.stringify(info));
+ // log('\nonEvent(info): event received');
+//  log('onEvent(info): event -> ' + JSON.stringify(info));
   switch (info.payload.messageId) {
 
     case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
      switch(info.payload.serviceID) {
        case plt.msg.TYPE_SERVICEID_HEADORIENTATION:
-         $('#roll').text(info.payload.roll);
-	 $('#pitch').text(info.payload.pitch);
-         $('#heading').text(info.payload.heading);
-         var c = {"roll":info.payload.roll, "pitch": info.payload.pitch, "heading": info.payload.heading};
-         sendHeadTrackingCoordinatesToPeer(c); 
+         $('#roll').text(info.payload.eulerAngles.roll);
+	 $('#pitch').text(info.payload.eulerAngles.pitch);
+         $('#heading').text(info.payload.eulerAngles.heading);
+	 viewer.rotate(info.payload.eulerAngles.heading, info.payload.eulerAngles.roll, info.payload.eulerAngles.pitch);
+	 viewer.update();
          break;
        case plt.msg.TYPE_SERVICEID_TAPS:
          $('#taps').text("X = " + info.payload.x);
