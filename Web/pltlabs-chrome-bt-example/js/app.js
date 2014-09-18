@@ -84,7 +84,7 @@ function initWebGL(){
   viewer.setParameter('BackgroundColor2', '#303030');
   viewer.setParameter('RenderMode', 'texture');
   viewer.init();
-  viewer.enableDefaultInputHandler(false);
+  //viewer.enableDefaultInputHandler(false);
   viewer.update();
   
 }
@@ -342,6 +342,10 @@ function log(message){
   console.log(message);
 }
 
+var lastX = 0;
+var lastY = 0;
+var lastZ = 0;
+
 function onEvent(info){
  // log('\nonEvent(info): event received');
 //  log('onEvent(info): event -> ' + JSON.stringify(info));
@@ -353,8 +357,16 @@ function onEvent(info){
          $('#roll').text(info.payload.eulerAngles.roll);
 	 $('#pitch').text(info.payload.eulerAngles.pitch);
          $('#heading').text(info.payload.eulerAngles.heading);
-	 viewer.rotate(info.payload.eulerAngles.heading, info.payload.eulerAngles.roll, info.payload.eulerAngles.pitch);
-	 viewer.update();
+	 var x = lastX == info.payload.eulerAngles.heading ? 0 : info.payload.eulerAngles.heading - lastX;
+	 var y = lastY == info.payload.eulerAngles.roll ? 0 : info.payload.eulerAngles.roll - lastY;
+	 var z = lastZ == info.payload.eulerAngles.pitch ? 0 : info.payload.eulerAngles.pitch - lastZ;
+	 if (z != 0 || x != 0 || y != 0) {
+	  viewer.rotate(y, x, z);
+	  viewer.update();
+	 } 
+	 lastX = info.payload.eulerAngles.heading;
+	 lastY = info.payload.eulerAngles.roll;
+	 lastZ = info.payload.eulerAngles.pitch;
          break;
        case plt.msg.TYPE_SERVICEID_TAPS:
          $('#taps').text("X = " + info.payload.x);
