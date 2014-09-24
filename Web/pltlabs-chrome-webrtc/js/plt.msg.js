@@ -1,18 +1,16 @@
 /*
  * Plantronics M2M message library
  * This library provides an abstraction over the raw Plantronics machine messages.
- * @author: Cary Bran
+ * @author: Cary A. Bran
  * @version: 1.0
  * @copyright: 2014 Plantronics Inc
  */
-
 if (!plt) {
   plt = (function(my){
     return my;  
    })(plt || {});
 
 }
-
 plt.msg = (function (){
   var my = {};
   my.PROTOCOL_VERSION_TYPE = 0x01;

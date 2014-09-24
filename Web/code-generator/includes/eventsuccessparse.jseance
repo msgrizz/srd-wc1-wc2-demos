@@ -123,10 +123,6 @@
                           outCode += "           //convert quaternians to eular angles - w, x, y, z\r\n";
                           outCode += "            var q = parse32BitArray(0, payload.serviceData, payload.serviceData.length);\r\n";
                           outCode += "            payload.quaternion = convertToQuaternion(q);\r\n";
-                          outCode += "            var c = convertQuaternianToCoordinates(payload.quaternion);\r\n"; 
-                          outCode += "            payload.roll = c.roll;\r\n";
-                          outCode += "            payload.pitch = c.pitch;\r\n";
-                          outCode += "            payload.heading = c.heading;\r\n";
                           outCode += "            break;\r\n";
                           outCode += "            case my.TYPE_SERVICEID_PEDOMETER:\r\n";
                           outCode += "            payload.steps = parse32Bit(0, payload.serviceData);\r\n";

@@ -7,10 +7,7 @@
 
 
 //Device related variables
-var connectedToDevice = false;
-var connectedToSensorPort = false;
-var connectingToSensorPort = false;
-var deviceMetadata = null;
+var connectedDevice = null;
 
 var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
@@ -99,54 +96,6 @@ function init(){
       connectToServer();
       this.disabled = true;
       });
-  $('#btnCreateHostNegotiate').click(function(){
-      $('#messageJSON').html('');
-      var hs = plt.msg.createHostNegotiateMessage();
-      var c = JSON.stringify(hs);
-      $('#messageJSON').html("<span>" + c + "</span>");
-      });
-  
-  $('#btnCreateCommand').click(function(){
-      $('#messageJSON').html('');
-      var options = {};
-      var commandId = parseInt($("#selectCommand").val());
-      if (commandId == plt.msg.TYPE_SERVICEID_HEADORIENTATION ||
-	  commandId == plt.msg.TYPE_SERVICEID_PEDOMETER ||
-	  commandId == plt.msg.TYPE_SERVICEID_FREEFALL ||
-	  commandId == plt.msg.TYPE_SERVICEID_TAPS) {
-	  options.address = sensorPortAddress;
-	  options.serviceID = commandId;
-	  options.characteristic = 0;
-	  options.mode = plt.msg.TYPE_MODEONCCHANGE;
-	  commandId = plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND;
-      }
-      if (commandId == plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND) {
-	 options.muteToneVolume = 2;
-      }
-      if (commandId == plt.msg.SECOND_INBOUND_CALL_RING_TYPE_COMMAND) {
-	 options.ringType = 2;
-      }
-      
-      try{
-	var command = plt.msg.createCommand(commandId, options);
-	var c = JSON.stringify(command);
-	$('#messageJSON').html("<span>" + c + "</span>");
-      }catch(e){
-	$('#messageJSON').html("exception caught " + e);
-      }
-  });
-  $('#btnCreateSetting').click(function(){
-      $('#messageJSON').html('');
-      var options = {};
-      var settingId = parseInt($("#selectSetting").val());
-      try{
-	var setting = plt.msg.createGetSetting(settingId, options);
-	var c = JSON.stringify(setting);
-	$('#messageJSON').html("<span>" + c + "</span>");
-      }catch(e){
-	$('#messageJSON').html("exception caught " + e);
-      }
-  });
   $("#select-result").change(function(){
       $('#btnCall').attr("disabled", (this.innerText == ""));
   });
@@ -161,14 +110,40 @@ function init(){
       }
     });
   $(".trWebRTCContacts").hide();
-  plt.addConnectionListener(connectionListener);
+  $("#btnResetPedometer").click(function(){
+      resetPedometer();
+    });
+  $("#btnCalHeadtracking").click(function(){
+      calibrateHeadtracking();
+    });
+  
   plt.addEventListener(onEvent);
   plt.addSettingsListener(onSettings);
   plt.addCommandSuccessListener(onCommandSuccess);
-  PLTLabsAPI.debug = true;
-  PLTLabsAPI.subscribeToEvents(onEvent);
-  PLTLabsAPI.subscribeToSettings(onSettings);
-  PLTLabsAPI.subscribeToDisconnect(connectionClosed);
+  plt.addOnConnectionListener(onConnectionOpened);
+  plt.addOnDisconnectListener(onDisconnect);
+}
+
+function calibrateHeadtracking(){
+  if (!connectedDevice) {
+    return;
+  }
+  plt.calibrateHeadOrientation(connectedDevice);
+}
+
+function resetPedometer(){
+  var options = {"serviceID": plt.msg.TYPE_SERVICEID_PEDOMETER, "address": sensorPortAddress}
+  var calibrationData = new ArrayBuffer(1);
+  var calibrationData_view = new Uint8Array(calibrationData);
+  //set the reset flag
+  calibrationData_view[0] = 1;
+  options.calibrationData = calibrationData;
+  var command = plt.msg.createCommand(plt.msg.CALIBRATE_SERVICES_COMMAND, options);
+  if (connectedDevice) {
+    plt.sendMessage(connectedDevice, command);
+  }
+  $("#steps").text = "0";
+  
 }
 
 function enableConnectToServerButton(){
@@ -188,12 +163,12 @@ function enableConnectToServerButton(){
 }
 
 function onCommandSuccess(commandSuccessMessage){
-    log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
+   // console.log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
 }
 
 //PLTLabs Functions
 function findPLTDevices(){
-  log("findPLTDevices: Searching for PLT Labs devices");
+  console.log("findPLTDevices: Searching for PLT Labs devices");
   try{
     plt.addDeviceListener(devicesFound);
     plt.getDevices();
@@ -203,25 +178,20 @@ function findPLTDevices(){
   }
 }
 
-function connectionListener(connected){
-  if (connected) {
-    //device connected
-    
-  }
-  else{
-    connectionClosed();
-  }
-}
 
 function disconnectPLT(){
- plt.disconnect();
+ plt.disconnect(connectedDevice);
  
 }
 
-function connectionClosed(){
-  deviceMetadata = null;
-  connectedToSensorPort = false;
-  connectedToDevice = false;
+function onDisconnect(device){
+  //check to make sure this is the device we connected to
+  //as this event could be from another connection
+  if (device.socketId != connectedDevice.socketId) {
+    return;
+  }
+  console.log("disconnecting device " + JSON.stringify(device))
+  connectedDevice = null;
   clearSettings();
   $('#chkPLTDevice').attr("checked", false);
   setPLTCheckboxesState(true);
@@ -239,49 +209,40 @@ function setPLTCheckboxesState(connected){
 
 
 function devicesFound(deviceList){
-   if (!connectedToDevice) {
+   if (!connectedDevice) {
     plt.connect(deviceList[0]);
   }
   
      
 }
 
-function connectionOpened(event){
-  if (event.payload.address == plt.msg.SENSOR_PORT) {
-    log("connectionOpened: sensor port connection is open!");
-    enableWearableConceptEvents();
-    connectedToSensorPort = true;
-    connectingToSensorPort = false;
+function onConnectionOpened(device) {
+  if (connectedDevice) {
+    return;
+  }
+  connectedDevice = device;
+  //console.log("connectionOpened: device " + JSON.stringify(connectedDevice));
+  if (connectedDevice.isSensorPortEnabled) {
     setPLTCheckboxesState(false);
   }
-  else if (!connectedToDevice) {
-    log('connectionOpened: data connection opened to device');
-    var options = new Object();
-    getSettings();
-    connectedToDevice = true;
-    $('#chkProximity').attr("disabled",false);
-  }
+  $('#chkProximity').attr("disabled",false);
+  getSettings();
+  
 }
 
 function onSettings(info){
   
-    log('onSetttings: settings info ' + JSON.stringify(info));
+    //console.log('onSetttings: settings info ' + JSON.stringify(info));
     
      switch (info.payload.messageId){
       case plt.msg.BATTERY_INFO_SETTING:
-	       var charge = info.payload.level + 0.0;
-	       var levels = info.payload.numLevels + 0.0;
-	       var totalCharge = (100* (charge/levels)) + "%";
-	       if (info.payload.charging) {
-		  totalCharge += "(charging)";
-	       }
-	       $('#batteryLevel').text(totalCharge);
+	       updateBatterySettings(info);
 	       break;
       case plt.msg.PRODUCT_NAME_SETTING:
 	       $('#productName').text(info.payload.productName);
 	       break;
       case plt.msg.FIRMWARE_VERSION_SETTING:
-	       var version = info.payload.buildTarget + "." + info.payload.release;
+	       var version = "Release:" + info.payload.release;
 	       $('#firmwareVersion').text(version);
 	       break;
       case plt.msg.DECKARD_VERSION_SETTING:
@@ -293,6 +254,15 @@ function onSettings(info){
     
 }
 
+function updateBatterySettings(message){
+  var charge = message.payload.level + 0.0;
+  var levels = message.payload.numLevels + 0.0;
+  var totalCharge = (100* (charge/levels)) + "%";
+  if (message.payload.charging) {
+     totalCharge += "(charging)";
+  }
+  $('#batteryLevel').text(totalCharge);
+}
 function clearSettings(){
    $('#batteryLevel').text('');
    $('#productName').text('');
@@ -302,23 +272,23 @@ function clearSettings(){
 }
 
 function getSettings(){
-  var packet = plt.msg.createGetSetting(plt.msg.PRODUCT_NAME_SETTING);
-  log('getSettings: getting product name');
-  plt.getSetting(packet);
+  var message = plt.msg.createGetSetting(plt.msg.PRODUCT_NAME_SETTING);
+  console.log('getSettings: getting product name');
+  plt.sendMessage(connectedDevice, message);
   
-  packet = plt.msg.createGetSetting(plt.msg.FIRMWARE_VERSION_SETTING);
-  log('getSettings: getting firmware version');
-  plt.getSetting(packet);
+  message = plt.msg.createGetSetting(plt.msg.FIRMWARE_VERSION_SETTING);
+  console.log('getSettings: getting firmware version');
+  plt.sendMessage(connectedDevice,message);
   
-  packet = plt.msg.createGetSetting(plt.msg.DECKARD_VERSION_SETTING);
-  log('getSettings: getting Plantronics M2M messaging version');
-  plt.getSetting(packet);
+  message = plt.msg.createGetSetting(plt.msg.DECKARD_VERSION_SETTING);
+  console.log('getSettings: getting Plantronics M2M messaging version');
+  plt.sendMessage(connectedDevice,message);
   
-  packet = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
-  log('getSettings: getting device battery information');
-  plt.getSetting(packet);
+  message = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
+  console.log('getSettings: getting device battery information');
+  plt.sendMessage(connectedDevice,message);
   
-  $('#bdAddress').text(PLTLabsAPI.device.address);
+  $('#bdAddress').text(connectedDevice.address);
   
 }
 
@@ -346,8 +316,8 @@ function enablePedometer(on) {
 function enableWC1Service(on, options) {
   options.mode = on ? plt.msg.TYPE_MODEONCCHANGE : plt.msg.TYPE_MODEOFF;
   options.address = sensorPortAddress;
-  var packet = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options) 
-  plt.sendCommand(packet)
+  var message = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options) 
+  plt.sendMessage(connectedDevice, message)
 }
 
 function enableProximity(on){
@@ -355,32 +325,14 @@ function enableProximity(on){
   options.sensitivity = 5;
   options.nearThreshold = 0x3C;
   options.maxTimeout = 0xFFFF;
-  var packet = plt.msg.createCommand(plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND, options);
-  console.log("sending command to enable proximity " + JSON.stringify(packet));
-  plt.sendCommand(packet);
+  var message = plt.msg.createCommand(plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND, options);
+  console.log("sending command to enable proximity " + JSON.stringify(message));
+  plt.sendMessage(connectedDevice, message);
 }
 
-
-//Turns on the WC1's sensor channel - does so by sending a metadata command to port 5
-function enableWearableConceptEvents(){
-  /*if (!deviceMetadata) {
-    log("enableWearableConceptEvents: no device metadata abondoning efforts to sensor service device features");
-    return;
-  }
-  
-  var availablePorts = deviceMetadata.payload.availablePorts;
-  if (availablePorts.indexOf(plt.msg.SENSOR_PORT) < 0) {
-   log("enableWearableConceptEvents: device does not support sensor service subscription");
-   return;
- }
-*/
-// log("enableWearbleConceptEvents: sending host negotiate to enable concept device services");
- //var packet = plt.msg.createHostNegotiateMessage({"address":sensorPortAddress});
-   
-}
 
 function onEvent(info){
-   log('event received: ' + JSON.stringify(info));
+   console.log('event received: ' + JSON.stringify(info));
    switch (info.payload.messageId) {
 
     case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
@@ -405,6 +357,9 @@ function onEvent(info){
        break;
      }
      break;
+    case plt.msg.BATTERY_STATUS_CHANGED_EVENT:
+      updateBatterySettings(info);
+      break;
     case plt.msg.CONNECTED_DEVICE_EVENT:
 	connectionOpened(info);
 	break;
@@ -442,7 +397,7 @@ function onEvent(info){
 
 //disconnect from webrtc server
 function disconnectWebRTC() {
-  log('disconnectWebRTC: disconnecting');
+  console.log('disconnectWebRTC: disconnecting');
   clearPeerList();
   if (peer) {
     peer.disconnect();
@@ -461,7 +416,7 @@ function checkForUsers(){
   var url = 'http://' + serverIPAddress + ':' + port + '/' + connectionKey + '/whoison';
   http.open('get', url, true);
   http.onerror = function(e) {
-    log('Error retrieving peers connected to server', e);
+    console.log('Error retrieving peers connected to server', e);
   }
   
   http.onreadystatechange = function() {
@@ -473,7 +428,7 @@ function checkForUsers(){
       return;
     }
     var message = JSON.parse(http.responseText);
-    log('checkForUsers: found ' + message.userIds.length);
+    console.log('checkForUsers: found ' + message.userIds.length);
     populatePeerList(message.userIds);
   };
   http.send(null);
@@ -497,7 +452,7 @@ function clearPeerList(){
 }
 
 function connectToServer() {
-  log('connectToServer: Connecting to WebRTC server');
+  console.log('connectToServer: Connecting to WebRTC server');
   peer = new Peer(handleId, {"host":serverIPAddress, "port": port, "debug": 3, "config": {'iceServers': [{ url: 'stun:stun.l.google.com:19302' } ]}});
 
   peer.on('open', function(){
@@ -509,7 +464,7 @@ function connectToServer() {
   });
   
   peer.on('peerremoved', function(id){
-    log('peer ' + id + ' has disconnected');
+    console.log('peer ' + id + ' has disconnected');
     $('#selectable li:contains('+ id + ')').remove();
     var callee = $("#select-result").text();
     if (callee == id) {
@@ -519,7 +474,7 @@ function connectToServer() {
   });
   
   peer.on('peeradded', function(id){
-    log('peer ' + id + ' has connected');
+    console.log('peer ' + id + ' has connected');
      $('#selectable').append('<li class="ui-widget-content">' + id + '</li>');
   });
   
@@ -537,7 +492,7 @@ function connectToServer() {
   peer.on('connection', handleDataConnection);
   peer.on('call', ring);
   
-  peer.on('error', function(err){log('Error connecting to server: ' + err.type);});
+  peer.on('error', function(err){console.log('Error connecting to server: ' + err.type);});
 }
 
 //sends headtracking coordinates
@@ -553,7 +508,7 @@ function sendHeadTrackingCoordinatesToPeer(eularAngles){
 function sendGPSToPeer(sendData){
   if (!window.existingDataConnection) {
     sendHeadtrackingData = false;
-    log("sendGPSToPeer: no data connection to send GPS to - returning");
+    console.log("sendGPSToPeer: no data connection to send GPS to - returning");
     return;
   }
   if(!sendData){
@@ -570,7 +525,7 @@ function sendGPSToPeer(sendData){
       currentGPSIndex = gpsIndex;
       var location = locationMatrix[currentGPSIndex];
       var gpsMessage = {"id":"gps","lat":location[0], "long": location[1], "description": location[2]};
-      log('sendGPSToPeer: sending GPS for ' + gpsMessage.description + ' to peer');
+      console.log('sendGPSToPeer: sending GPS for ' + gpsMessage.description + ' to peer');
 
       window.existingDataConnection.send(JSON.stringify(gpsMessage));
     }
@@ -578,7 +533,7 @@ function sendGPSToPeer(sendData){
   }
 
   function handleDataConnection(dataConnection){
-    log("handleDataConnection: got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
+    console.log("handleDataConnection: got a data connection from " + dataConnection.peer + " label = " + dataConnection.label);
     if (window.existingDataConnection) {
     //close any existing calls
     window.existingDataConnection.close();
@@ -605,7 +560,7 @@ function ring(call){
 }
 
 function answerCall(call){
-  log('answerCall: answering incoming call from ' + call.peer);
+  console.log('answerCall: answering incoming call from ' + call.peer);
   ringing = false;
   $('#incoming-call').hide();
 
@@ -639,10 +594,10 @@ function makeCall() {
   call.on('stream', function(stream){
     onStream(stream);
     //set up the data channel
-    log("setting up data connection for " + call.peer);
+    console.log("setting up data connection for " + call.peer);
     var dataConnection = peer.connect(call.peer);
     dataConnection.on('open', function() {
-      log("data connection has been opened");
+      console.log("data connection has been opened");
       handleDataConnection(dataConnection);
     });
     dataConnection.on('error', function(err) { log(err); });
@@ -675,17 +630,17 @@ function gum (initiator) {
             navigator.getUserMedia({audio: true, video: true},
              function(stream){
                                     // Set your video displays
-                                    log("gum: GUM returned successfuly");
+                                    console.log("gum: GUM returned successfuly");
                                     window.localStream = stream;
                                     readyForCall = true;
                                   },
                                   function(error){
-                                    log(error);
+                                    console.log(error);
                                   });
 }
 
 function resetButtonsAfterWebRTCCall(){
-  log('resetButtonsAfterWebRTCCall: call has ended');
+  console.log('resetButtonsAfterWebRTCCall: call has ended');
   ringing = false;
   $('#btnHangUp').attr("disabled", true);
   $('#btnHangUp').hide();
