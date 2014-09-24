@@ -453,7 +453,8 @@ static inline BOOL AFStateTransitionIsValid(AFOperationState fromState, AFOperat
     [self.lock lock];
     if (![self isFinished] && ![self isCancelled]) {
         [self willChangeValueForKey:@"isCancelled"];
-        _cancelled = YES;
+        //_cancelled = YES;
+		self.cancelled = YES; // Morgan 14/09/04
         [super cancel];
         [self didChangeValueForKey:@"isCancelled"];
         

@@ -9,7 +9,7 @@
 #import "HTCalibrationTriggersViewController.h"
 #import "UITableView+Cells.h"
 #import "AppDelegate.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 
 
 #define IPAD		([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
@@ -89,7 +89,7 @@ typedef NS_ENUM(NSUInteger, HTCalibrationTriggersTableRow) {
             break;
     }
 	[DEFAULTS setObject:@(triggers) forKey:PLTDefaultsKeyHeadTrackingCalibrationTriggers];
-	[PLTHeadsetManager sharedManager].headTrackingCalibrationTriggers = triggers;
+	[PLTDeviceHandler sharedHandler].headTrackingCalibrationTriggers = triggers;
 }
 
 #pragma mark - UIViewController

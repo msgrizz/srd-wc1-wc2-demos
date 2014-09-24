@@ -14,9 +14,8 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2899E5220DE3E06400AC0155 /* SettingsViewController_old.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* SettingsViewController_old.xib */; };
-		28D7ACF80DDB3853001CB0EB /* SettingsViewController_old.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* SettingsViewController_old.m */; };
 		42082D541702A8070057F63B /* LocationMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2363317022F6800329EC1 /* LocationMonitor.m */; };
-		42082D641703C8E80057F63B /* PLTHeadsetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42082D631703C8E80057F63B /* PLTHeadsetManager.m */; };
+		42082D641703C8E80057F63B /* PLTDeviceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42082D631703C8E80057F63B /* PLTDeviceHandler.m */; };
 		42082D661703F7170057F63B /* SensorsViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42082D651703F7170057F63B /* SensorsViewController_iPad.xib */; };
 		42082D6A1703FB800057F63B /* SelectionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42082D681703FB800057F63B /* SelectionListViewController.m */; };
 		42082D6B1703FB800057F63B /* SelectionListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42082D691703FB800057F63B /* SelectionListViewController.xib */; };
@@ -44,7 +43,6 @@
 		422A300E17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422A300C17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib */; };
 		422A300F17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422A300D17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib */; };
 		422F40A01651AC3800735AB5 /* iToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F409F1651AC3800735AB5 /* iToast.m */; };
-		422F75BB16FBA121000DF717 /* StreetViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F75B916FBA121000DF717 /* StreetViewViewController.m */; };
 		422F75BC16FBA121000DF717 /* StreetViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422F75BA16FBA121000DF717 /* StreetViewViewController.xib */; };
 		424E640318E2111000698FAE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 424E640218E2111000698FAE /* Reachability.m */; };
 		424E640518E21D9300698FAE /* no_internet_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 424E640418E21D9300698FAE /* no_internet_ipad@2x.png */; };
@@ -109,7 +107,6 @@
 		42C76AA217FE392E00E6415D /* pltlabs_nav.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C76AA017FE392E00E6415D /* pltlabs_nav.png */; };
 		42C9E62E164C815200E3CBB3 /* GLGravityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C9E62D164C815200E3CBB3 /* GLGravityView.m */; };
 		42D59B251713B30600E98394 /* SegmentedControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D59B241713B30600E98394 /* SegmentedControlCell.m */; };
-		42D6099F16FA380C00BAFDEF /* ConfigTempViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D6099D16FA380C00BAFDEF /* ConfigTempViewController.m */; };
 		42D609A016FA380C00BAFDEF /* ConfigTempViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42D6099E16FA380C00BAFDEF /* ConfigTempViewController.xib */; };
 		42EC7B5C1648779A00A782BD /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EC7B4D1648779A00A782BD /* CC3Foundation.m */; };
 		42EC7B5D1648779A00A782BD /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EC7B4F1648779A00A782BD /* CC3GLMatrix.m */; };
@@ -144,6 +141,7 @@
 		42F2A55618ACBDB200177547 /* block_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55418ACBDB200177547 /* block_iphone@2x.png */; };
 		42F2A55918ACBFF800177547 /* paddle_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55718ACBFF800177547 /* paddle_iphone.png */; };
 		42F2A55A18ACBFF800177547 /* paddle_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F2A55818ACBFF800177547 /* paddle_iphone@2x.png */; };
+		42FA4D2D19B92CC70046F69F /* libPLTDevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42FA4D2C19B92CC70046F69F /* libPLTDevice.a */; };
 		42FC09F0170F6F3B007238A6 /* 50_yrs_icon_144.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E6170F6F3B007238A6 /* 50_yrs_icon_144.png */; };
 		42FC09F1170F6F3B007238A6 /* auth_status_icon_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E7170F6F3B007238A6 /* auth_status_icon_small.png */; };
 		42FC09F2170F6F3B007238A6 /* buildings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09E8170F6F3B007238A6 /* buildings_icon.png */; };
@@ -185,8 +183,8 @@
 		28D7ACF70DDB3853001CB0EB /* SettingsViewController_old.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController_old.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* CSR_Wireless_Sensor_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSR_Wireless_Sensor_Prefix.pch; sourceTree = "<group>"; };
-		42082D621703C8E80057F63B /* PLTHeadsetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTHeadsetManager.h; sourceTree = "<group>"; };
-		42082D631703C8E80057F63B /* PLTHeadsetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTHeadsetManager.m; sourceTree = "<group>"; };
+		42082D621703C8E80057F63B /* PLTDeviceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDeviceHandler.h; sourceTree = "<group>"; };
+		42082D631703C8E80057F63B /* PLTDeviceHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLTDeviceHandler.m; sourceTree = "<group>"; };
 		42082D651703F7170057F63B /* SensorsViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SensorsViewController_iPad.xib; sourceTree = "<group>"; };
 		42082D671703FB800057F63B /* SelectionListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionListViewController.h; sourceTree = "<group>"; };
 		42082D681703FB800057F63B /* SelectionListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionListViewController.m; sourceTree = "<group>"; };
@@ -328,6 +326,8 @@
 		42C9E62B164C7E9100E3CBB3 /* scarlett_no_bowl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = scarlett_no_bowl.h; path = ../scarlett_no_bowl.h; sourceTree = "<group>"; };
 		42C9E62C164C815200E3CBB3 /* GLGravityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLGravityView.h; path = ../3D/GLGravityView.h; sourceTree = "<group>"; };
 		42C9E62D164C815200E3CBB3 /* GLGravityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLGravityView.m; path = ../3D/GLGravityView.m; sourceTree = "<group>"; };
+		42D5845519C7BBB600446248 /* NSData+HexStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+HexStrings.h"; sourceTree = "<group>"; };
+		42D5845619C7BC2600446248 /* PLTDevice_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTDevice_Internal.h; sourceTree = "<group>"; };
 		42D59B231713B30600E98394 /* SegmentedControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegmentedControlCell.h; sourceTree = "<group>"; };
 		42D59B241713B30600E98394 /* SegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegmentedControlCell.m; sourceTree = "<group>"; };
 		42D6099C16FA380C00BAFDEF /* ConfigTempViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigTempViewController.h; sourceTree = "<group>"; };
@@ -379,6 +379,21 @@
 		42F2A55418ACBDB200177547 /* block_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "block_iphone@2x.png"; sourceTree = "<group>"; };
 		42F2A55718ACBFF800177547 /* paddle_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paddle_iphone.png; sourceTree = "<group>"; };
 		42F2A55818ACBFF800177547 /* paddle_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paddle_iphone@2x.png"; sourceTree = "<group>"; };
+		42FA4D1D19B92CC70046F69F /* PLTCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTCalibration.h; sourceTree = "<group>"; };
+		42FA4D1E19B92CC70046F69F /* PLTConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTConfiguration.h; sourceTree = "<group>"; };
+		42FA4D1F19B92CC70046F69F /* PLTDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDevice.h; sourceTree = "<group>"; };
+		42FA4D2019B92CC70046F69F /* PLTFreeFallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTFreeFallInfo.h; sourceTree = "<group>"; };
+		42FA4D2119B92CC70046F69F /* PLTGyroscopeCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTGyroscopeCalibrationInfo.h; sourceTree = "<group>"; };
+		42FA4D2219B92CC70046F69F /* PLTInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTInfo.h; sourceTree = "<group>"; };
+		42FA4D2319B92CC70046F69F /* PLTMagnetometerCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTMagnetometerCalibrationInfo.h; sourceTree = "<group>"; };
+		42FA4D2419B92CC70046F69F /* PLTOrientationTrackingCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingCalibration.h; sourceTree = "<group>"; };
+		42FA4D2519B92CC70046F69F /* PLTOrientationTrackingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingInfo.h; sourceTree = "<group>"; };
+		42FA4D2619B92CC70046F69F /* PLTPedometerCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerCalibration.h; sourceTree = "<group>"; };
+		42FA4D2719B92CC70046F69F /* PLTPedometerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerInfo.h; sourceTree = "<group>"; };
+		42FA4D2819B92CC70046F69F /* PLTProximityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTProximityInfo.h; sourceTree = "<group>"; };
+		42FA4D2919B92CC70046F69F /* PLTTapsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTTapsInfo.h; sourceTree = "<group>"; };
+		42FA4D2A19B92CC70046F69F /* PLTWearingStateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTWearingStateInfo.h; sourceTree = "<group>"; };
+		42FA4D2C19B92CC70046F69F /* libPLTDevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPLTDevice.a; sourceTree = "<group>"; };
 		42FC09E6170F6F3B007238A6 /* 50_yrs_icon_144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 50_yrs_icon_144.png; sourceTree = "<group>"; };
 		42FC09E7170F6F3B007238A6 /* auth_status_icon_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = auth_status_icon_small.png; sourceTree = "<group>"; };
 		42FC09E8170F6F3B007238A6 /* buildings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildings_icon.png; sourceTree = "<group>"; };
@@ -431,6 +446,7 @@
 				C300638615BF73E700068870 /* libicucore.dylib in Frameworks */,
 				42B36A53182C36940017F943 /* SystemConfiguration.framework in Frameworks */,
 				42EC7B7616487B0200A782BD /* QuartzCore.framework in Frameworks */,
+				42FA4D2D19B92CC70046F69F /* libPLTDevice.a in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				C300638115BF6D5C00068870 /* CFNetwork.framework in Frameworks */,
 				C300637F15BF6D4100068870 /* CoreLocation.framework in Frameworks */,
@@ -451,15 +467,15 @@
 			children = (
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
-				42082D621703C8E80057F63B /* PLTHeadsetManager.h */,
-				42082D631703C8E80057F63B /* PLTHeadsetManager.m */,
+				42082D621703C8E80057F63B /* PLTDeviceHandler.h */,
+				42082D631703C8E80057F63B /* PLTDeviceHandler.m */,
 				4274992A170D0BB900C8DD37 /* StatusWatcher.h */,
 				4274992B170D0BB900C8DD37 /* StatusWatcher.m */,
 				422F75C116FBAD70000DF717 /* Sensors */,
 				422F75BE16FBAD2E000DF717 /* 3D */,
 				4226343118A2511000FFA4F5 /* Street View 2 */,
 				422F75C216FBAD76000DF717 /* Street View */,
-				42F2A4EF18A9EE8A00177547 /* Breakout */,
+				42F2A4EF18A9EE8A00177547 /* Game */,
 				422F75BF16FBAD46000DF717 /* Settings */,
 			);
 			path = Classes;
@@ -493,6 +509,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				42D5845519C7BBB600446248 /* NSData+HexStrings.h */,
 				32CA4F630368D1EE00C91783 /* CSR_Wireless_Sensor_Prefix.pch */,
 				42A2363217022F6800329EC1 /* LocationMonitor.h */,
 				42A2363317022F6800329EC1 /* LocationMonitor.m */,
@@ -528,6 +545,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				42FA4D1B19B92CC70046F69F /* PLTDevice */,
 				4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */,
 				4226344518A25DAD00FFA4F5 /* GLKit.framework */,
 				4226344318A25D9600FFA4F5 /* CoreData.framework */,
@@ -814,7 +832,7 @@
 			path = ../3D/Cocos3DMathLib;
 			sourceTree = "<group>";
 		};
-		42F2A4EF18A9EE8A00177547 /* Breakout */ = {
+		42F2A4EF18A9EE8A00177547 /* Game */ = {
 			isa = PBXGroup;
 			children = (
 				42F2A50818A9EE8A00177547 /* BRKStageViewController.h */,
@@ -829,6 +847,7 @@
 				42F2A53B18AB36CD00177547 /* UIImage+Rotate.m */,
 				42F2A56118AE377100177547 /* Images */,
 			);
+			name = Game;
 			path = Breakout;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -867,6 +886,45 @@
 				42F2A55418ACBDB200177547 /* block_iphone@2x.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		42FA4D1B19B92CC70046F69F /* PLTDevice */ = {
+			isa = PBXGroup;
+			children = (
+				42FA4D1C19B92CC70046F69F /* include */,
+				42FA4D2B19B92CC70046F69F /* lib */,
+			);
+			path = PLTDevice;
+			sourceTree = SOURCE_ROOT;
+		};
+		42FA4D1C19B92CC70046F69F /* include */ = {
+			isa = PBXGroup;
+			children = (
+				42D5845619C7BC2600446248 /* PLTDevice_Internal.h */,
+				42FA4D1D19B92CC70046F69F /* PLTCalibration.h */,
+				42FA4D1E19B92CC70046F69F /* PLTConfiguration.h */,
+				42FA4D1F19B92CC70046F69F /* PLTDevice.h */,
+				42FA4D2019B92CC70046F69F /* PLTFreeFallInfo.h */,
+				42FA4D2119B92CC70046F69F /* PLTGyroscopeCalibrationInfo.h */,
+				42FA4D2219B92CC70046F69F /* PLTInfo.h */,
+				42FA4D2319B92CC70046F69F /* PLTMagnetometerCalibrationInfo.h */,
+				42FA4D2419B92CC70046F69F /* PLTOrientationTrackingCalibration.h */,
+				42FA4D2519B92CC70046F69F /* PLTOrientationTrackingInfo.h */,
+				42FA4D2619B92CC70046F69F /* PLTPedometerCalibration.h */,
+				42FA4D2719B92CC70046F69F /* PLTPedometerInfo.h */,
+				42FA4D2819B92CC70046F69F /* PLTProximityInfo.h */,
+				42FA4D2919B92CC70046F69F /* PLTTapsInfo.h */,
+				42FA4D2A19B92CC70046F69F /* PLTWearingStateInfo.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		42FA4D2B19B92CC70046F69F /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				42FA4D2C19B92CC70046F69F /* libPLTDevice.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 		C300637515BF6C4900068870 /* SocketRocket */ = {
@@ -1041,7 +1099,6 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
-				28D7ACF80DDB3853001CB0EB /* SettingsViewController_old.m in Sources */,
 				C300637015BF6B6800068870 /* PLTContextServer.m in Sources */,
 				42B36A4E182C36770017F943 /* AFURLConnectionOperation.m in Sources */,
 				C300637115BF6B6800068870 /* PLTContextServerMessage.m in Sources */,
@@ -1067,15 +1124,13 @@
 				42B36A4D182C36770017F943 /* AFSecurityPolicy.m in Sources */,
 				42BFCBFC16F3EDDB003057C1 /* SensorsViewController.m in Sources */,
 				42F2A53C18AB36CD00177547 /* UIImage+Rotate.m in Sources */,
-				42D6099F16FA380C00BAFDEF /* ConfigTempViewController.m in Sources */,
-				422F75BB16FBA121000DF717 /* StreetViewViewController.m in Sources */,
 				4217B0E716FBFFD1005FDA9C /* NSData+Base64.m in Sources */,
 				4217B13216FCEAFA005FDA9C /* UIDevice+ScreenSize.m in Sources */,
 				42082D541702A8070057F63B /* LocationMonitor.m in Sources */,
 				42A2362B17012CCC00329EC1 /* NSURLRequest+GETParams.m in Sources */,
 				42A236431702688C00329EC1 /* SettingsViewController.m in Sources */,
 				42A2364817028F0A00329EC1 /* SwitchTableViewCell.m in Sources */,
-				42082D641703C8E80057F63B /* PLTHeadsetManager.m in Sources */,
+				42082D641703C8E80057F63B /* PLTDeviceHandler.m in Sources */,
 				42082D6A1703FB800057F63B /* SelectionListViewController.m in Sources */,
 				4272371217064DCC00101B91 /* LocationOverrideViewController.m in Sources */,
 				42B4AD9117068069001F9CDB /* AddLocationViewController.m in Sources */,
@@ -1105,8 +1160,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1132,6 +1187,7 @@
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
 					"$(PROJECT_DIR)/TestFlight",
+					"$(PROJECT_DIR)/PLTDevice/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1139,7 +1195,7 @@
 				);
 				PRODUCT_NAME = "CSR Wireless Sensor";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F67CE612-C4AF-4094-B585-F4219D68E2C1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1149,8 +1205,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1169,6 +1225,7 @@
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
 					"$(PROJECT_DIR)/TestFlight",
+					"$(PROJECT_DIR)/PLTDevice/lib",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1176,7 +1233,7 @@
 				);
 				PRODUCT_NAME = "CSR Wireless Sensor";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7413B602-91E0-4118-9D44-B7476314C69F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

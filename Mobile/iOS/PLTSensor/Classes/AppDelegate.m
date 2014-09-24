@@ -13,7 +13,7 @@
 #import "SensorsViewController.h"
 #import "StreetView2ViewController.h"
 #import "LocationMonitor.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "PLTContextServer.h"
 #import "NSData+Base64.h"
 #import "SettingsNavigationController.h"
@@ -277,11 +277,11 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note
 {
-    if (DEVICE_REGISTERED) {
-		//[self sendInfoToContextServer:[note userInfo]];
-		//[self sendPacketToContextServer:[note userInfo][PLTHeadsetInfoKeyPacketData]];
-		[self sendPacketToContextServer:[note userInfo][PLTHeadsetInfoKeyCalibratedPacketData]];
-    }
+//    if (DEVICE_REGISTERED) {
+//		//[self sendInfoToContextServer:[note userInfo]];
+//		//[self sendPacketToContextServer:[note userInfo][PLTHeadsetInfoKeyPacketData]];
+//		[self sendPacketToContextServer:[note userInfo][PLTHeadsetInfoKeyCalibratedPacketData]];
+//    }
 }
 
 - (void)headsetHeadTrackingCalibrationDidUpdateNotification:(NSNotification *)note
@@ -304,7 +304,8 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     [self registerDefaults];
     
     [GMSServices provideAPIKey:GOOGLE_API_KEY];
-    [TestFlight takeOff:@"3b9e359c-4aa7-4f77-aefd-8d2ee925475e"];
+    //[TestFlight takeOff:@"3b9e359c-4aa7-4f77-aefd-8d2ee925475e"]; // ORIGINAL APP TOKEN
+	[TestFlight takeOff:@"df5ad1e2-ee16-4df9-b683-bfcab4dc3c75"];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -335,11 +336,11 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 
     [LocationMonitor sharedMonitor].delegate = self;
     [[LocationMonitor sharedMonitor] startUpdatingLocation];
-    [[PLTHeadsetManager sharedManager] setHeadTrackingCalibrationTriggers:[[DEFAULTS objectForKey:PLTDefaultsKeyHeadTrackingCalibrationTriggers] unsignedIntegerValue]];
+    [[PLTDeviceHandler sharedHandler] setHeadTrackingCalibrationTriggers:[[DEFAULTS objectForKey:PLTDefaultsKeyHeadTrackingCalibrationTriggers] unsignedIntegerValue]];
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-	[nc addObserver:self selector:@selector(headsetDidConnectNotification:) name:PLTHeadsetDidConnectNotification object:nil];
-    [nc addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-	[nc addObserver:self selector:@selector(headsetHeadTrackingCalibrationDidUpdateNotification:) name:PLTHeadsetHeadTrackingCalibrationDidUpdateNotification object:nil];
+//	[nc addObserver:self selector:@selector(headsetDidConnectNotification:) name:PLTHeadsetDidConnectNotification object:nil];
+//    [nc addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
+//	[nc addObserver:self selector:@selector(headsetHeadTrackingCalibrationDidUpdateNotification:) name:PLTHeadsetHeadTrackingCalibrationDidUpdateNotification object:nil];
 
 	[self checkAutoConnectToContextServer];
 	

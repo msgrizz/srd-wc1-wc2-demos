@@ -7,9 +7,10 @@
 //
 
 #import "StatusWatcher.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "PLTContextServer.h"
 #import "AppDelegate.h"
+#import "PLTDevice.h"
 
 
 typedef NS_ENUM(NSInteger, StatusWatcherState) {
@@ -376,8 +377,12 @@ typedef NS_ENUM(NSInteger, StatusWatcherState) {
 		self.state = StatusWatcherStateNone;
 		
 		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-		[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTHeadsetDidConnectNotification object:nil];
-		[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTHeadsetDidDisconnectNotification object:nil];
+		
+		
+		[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTDeviceDidOpenConnectionNotification object:nil];
+		[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTDeviceDidCloseConnectionNotification object:nil];
+		//[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTHeadsetDidConnectNotification object:nil];
+		//[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTHeadsetDidDisconnectNotification object:nil];
 		[nc addObserver:self selector:@selector(somethingChangedNotification:) name:PLTContextServerDidChangeStateNotification object:nil];
 	}
 	return self;

@@ -58,6 +58,8 @@ NSString *const LocationMonitorDidUpdateNotification =      @"LocationMonitorDid
 {
 	[self stopUpdatingLocation];
 	[self startUpdatingLocation];
+#warning Added 14/09/12 by Morgan
+	[self locationManager:self.locationManager didUpdateToLocation:self.realLocation fromLocation:nil];
 }
 
 #pragma mark -

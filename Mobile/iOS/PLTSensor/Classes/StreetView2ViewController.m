@@ -11,22 +11,29 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "AppDelegate.h"
 #import "PLTContextServer.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "LocationMonitor.h"
 #import "NSData+Base64.h"
 //#import "TestFlight.h"
 #import "Reachability.h"
 #import "LocationOverrideViewController.h"
+#import "PLTDevice.h"
 
 
 #define CAMERA_FOV						80.0
 #define COORD_SEARCH_RADIUS             100.0 // meters
 
 
-@interface StreetView2ViewController () <PLTContextServerDelegate, GMSPanoramaViewDelegate>
+@interface StreetView2ViewController () <PLTDeviceSubscriber, PLTContextServerDelegate, GMSPanoramaViewDelegate>
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
-- (void)headsetInfoDidUpdate:(NSDictionary *)info;
+//- (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
+//- (void)headsetInfoDidUpdate:(NSDictionary *)info;
+
+
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note;
+- (void)subscribeToServices;
+- (void)unsubscribeFromServices;
+
 
 @property(nonatomic,strong) GMSPanoramaView     *panoramaView;
 @property(nonatomic,assign) BOOL                panoramaConfigured;
@@ -46,19 +53,59 @@
     [self.panoramaView moveNearCoordinate:location radius:COORD_SEARCH_RADIUS];
 }
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note
 {
-    [self headsetInfoDidUpdate:note.userInfo];
+	[self subscribeToServices];
 }
 
-- (void)headsetInfoDidUpdate:(NSDictionary *)info
+- (void)subscribeToServices
 {
-    NSData *rotationVectorData = info[PLTHeadsetInfoKeyRotationVectorData];
-    Vec3 rotationVector;
-    [rotationVectorData getBytes:&rotationVector length:[rotationVectorData length]];
-    GMSPanoramaCamera *camera = [GMSPanoramaCamera cameraWithHeading:rotationVector.x pitch:rotationVector.y zoom:1.0 FOV:CAMERA_FOV];
-    self.panoramaView.camera = camera;
-    //[self.panoramaView animateToCamera:camera animationDuration:.05];
+	NSLog(@"subscribeToServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		NSError *err = nil;
+		
+//		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+//		
+//		[d subscribe:self toService:PLTServiceProximity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to proximity service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
+		
+//		[d subscribe:self toService:PLTServicePedometer withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to pedometer service: %@", err);
+//		
+//		[d subscribe:self toService:PLTServiceFreeFall withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to free fall service: %@", err);
+//		
+//		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to taps service: %@", err);
+//		
+//		[d subscribe:self toService:PLTServiceMagnetometerCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to magnetometer calibration service: %@", err);
+//		
+//		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to hyroscope calibration service: %@", err);
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
+}
+
+- (void)unsubscribeFromServices
+{
+	NSLog(@"unsubscribeFromServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		[d unsubscribeFromAll:self];
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
 }
 
 - (void)locationOverrideDidSelectNewLocationNotification:(NSDictionary *)info
@@ -81,14 +128,40 @@
     return NO;
 }
 
+#pragma mark - PLTDeviceSubscriber
+
+- (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
+{
+	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	
+	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
+		//NSData *rotationVectorData = info[PLTHeadsetInfoKeyRotationVectorData];
+		PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
+		Vec3 rotationVector = (Vec3){-eulerAngles.x, eulerAngles.y, eulerAngles.z};
+		//[rotationVectorData getBytes:&rotationVector length:[rotationVectorData length]];
+		GMSPanoramaCamera *camera = [GMSPanoramaCamera cameraWithHeading:rotationVector.x pitch:rotationVector.y zoom:1.0 FOV:CAMERA_FOV];
+		self.panoramaView.camera = camera;
+	}
+}
+
+- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription
+{
+	NSLog(@"PLTDevice: %@, didChangeSubscription: %@, toSubscription: %@", self, oldSubscription, newSubscription);
+}
+
 #pragma mark - GMSPanoramaViewDelegate
 
 - (void)panoramaView:(GMSPanoramaView *)view didMoveToPanorama:(GMSPanorama *)panorama
 {
-    if (!self.panoramaConfigured || ![[PLTHeadsetManager sharedManager] latestInfo]) {
-        self.panoramaView.camera = [GMSPanoramaCamera cameraWithHeading:0 pitch:0 zoom:1.0];
-        self.panoramaConfigured = YES;
-    }
+//    if (!self.panoramaConfigured || ![[PLTDeviceHandler sharedManager] latestInfo]) {
+//        self.panoramaView.camera = [GMSPanoramaCamera cameraWithHeading:0 pitch:0 zoom:1.0];
+//        self.panoramaConfigured = YES;
+//    }
+	
+	if (!self.panoramaConfigured || ![CONNECTED_DEVICE cachedInfoForService:PLTServiceOrientationTracking error:nil]) {
+		self.panoramaView.camera = [GMSPanoramaCamera cameraWithHeading:0 pitch:0 zoom:1.0];
+		self.panoramaConfigured = YES;
+	}
 }
 
 - (void)panoramaView:(GMSPanoramaView *)view error:(NSError *)erro onMoveNearCoordinate:(CLLocationCoordinate2D)coordinate
@@ -105,16 +178,16 @@
 
 - (void)server:(PLTContextServer *)sender didReceiveMessage:(PLTContextServerMessage *)message
 {
-    if (!HEADSET_CONNECTED) {
-        if ([message hasType:@"event"]) {
-			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
-                NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
-				if (info) {
-					[self headsetInfoDidUpdate:info];
-				}
-            }
-        }
-    }
+//    if (!HEADSET_CONNECTED) {
+//        if ([message hasType:@"event"]) {
+//			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
+//                NSDictionary *info = [[PLTDeviceHandler sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
+//				if (info) {
+//					[self headsetInfoDidUpdate:info];
+//				}
+//            }
+//        }
+//    }
 }
 
 #pragma mark - UIViewController
@@ -183,8 +256,10 @@
     [super viewWillAppear:animated];
     
     self.reachabilityImageView.alpha = 0.0;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidOpenConnectionNotification:) name:PLTDeviceDidOpenConnectionNotification object:nil];
+	
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(locationOverrideDidSelectNewLocationNotification:) name:LocationOverrideDidSelectNewLocation object:nil];
     [[PLTContextServer sharedContextServer] addDelegate:self];
     
@@ -212,7 +287,10 @@
 {
     [super viewDidDisappear:animated];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
+	[self unsubscribeFromServices];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceDidOpenConnectionNotification object:nil];
+	
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:LocationOverrideDidSelectNewLocation object:nil];
     [[PLTContextServer sharedContextServer] removeDelegate:self];
 }

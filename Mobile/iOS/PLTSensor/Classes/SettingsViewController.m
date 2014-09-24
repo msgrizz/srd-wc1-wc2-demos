@@ -17,7 +17,7 @@
 #import "ServerStatusViewController.h"
 #import "StatusWatcher.h"
 #import "ConfigTempViewController.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "HTCalibrationTriggersViewController.h"
 #import "TestFlight.h"
 

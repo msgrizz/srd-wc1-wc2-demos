@@ -14,7 +14,7 @@
 #import "NSURLRequest+GETParams.h"
 #import "LocationMonitor.h"
 #import "AppDelegate.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "CC3Foundation.h"
 #import "StatusWatcher.h"
 #import "HeadsetManager.h"
@@ -175,7 +175,7 @@ NSInteger roundToNearestMultiple(NSInteger input, NSInteger round_multiple) {
 		else if ([self.latestMessage.type isEqualToString:MESSAGE_TYPE_EVENT]) {
 			lat = self.latestMessage.location.coordinate.latitude;
 			lng = self.latestMessage.location.coordinate.longitude;
-			NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[self.latestMessage.payload[@"quaternion"] base64DecodedData]];
+			NSDictionary *info = [[PLTDeviceHandler sharedManager] infoFromPacketData:[self.latestMessage.payload[@"quaternion"] base64DecodedData]];
 			if (!info) return;
 			rotationVectorData = info[PLTHeadsetInfoKeyRotationVectorData];
 		}

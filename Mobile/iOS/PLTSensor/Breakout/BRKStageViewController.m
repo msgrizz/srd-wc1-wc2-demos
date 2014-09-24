@@ -27,9 +27,10 @@
 #import "BRKBall.h"
 #import "BRKBlock.h"
 #import "PLTContextServer.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "NSData+Base64.h"
 //#import "TestFlight.h"
+#import "PLTDevice.h"
 
 
 typedef enum {
@@ -39,18 +40,12 @@ typedef enum {
 } PLTGameState;
 
 
-double d2r(double d)
-{
-	return d * (M_PI/180.0);
-}
-
-double r2d(double d)
-{
-	return d * (180.0/M_PI);
-}
+// defined in PLTDevice...
+extern double d2r(double d);
+extern double r2d(double d);
 
 
-@interface BRKStageViewController () <PLTContextServerDelegate>
+@interface BRKStageViewController () <PLTDeviceSubscriber, PLTContextServerDelegate>
 {
     NSMutableArray *blocks;
     BRKPaddle *paddle;
@@ -61,7 +56,12 @@ double r2d(double d)
     UILabel *label;
     PLTGameState gameState;
     BOOL paused;
+	PLTTapsInfo *lastTapsInfo;
 }
+
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note;
+- (void)subscribeToServices;
+- (void)unsubscribeFromServices;
 
 - (void)gameLoop:(CADisplayLink *)sender;
 - (void)startOver;
@@ -74,95 +74,49 @@ double r2d(double d)
 
 #pragma mark - Private
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note
 {
-    [self headsetInfoDidUpdate:note.userInfo];
+	[self subscribeToServices];
 }
 
-- (void)headsetInfoDidUpdate:(NSDictionary *)info
+- (void)subscribeToServices
 {
-    BOOL donned = [(NSNumber *)info[PLTHeadsetInfoKeyIsDonned] boolValue];
-    paused = !donned;
-    BOOL taps = [info[PLTHeadsetInfoKeyTapCount] boolValue];
-    BOOL newTaps = taps && tapsDown;
-    tapsDown = !taps;
-    
-    
-    static int prevState = -1;
-    
-    if (gameState == PLTGameStateNotStarted && paused) {
-        label.text = @"Put headset on and tap to begin!";
-        label.alpha = 1.0;
-    }
-    else if (gameState == PLTGameStateNotStarted && !paused && !newTaps) {
-        label.text = @"Tap headset to begin!";
-        label.alpha = 1.0;
-    }
-    else if (gameState == PLTGameStateNotStarted && !paused && newTaps) {
-        [self startOver];
-    }
-    else if (gameState == PLTGameStateEnded && !paused && newTaps) {
-        [self startOver];
-        gameState = PLTGameStateStarted;
-    }
-    else if (gameState == PLTGameStateEnded && paused) {
-        label.text = @"Put headset on and tap to try again!";
-        label.alpha = 1.0;
-    }
-    else if (gameState == PLTGameStateEnded && !paused) {
-        label.text = @"Tap headset to try again!";
-        label.alpha = 1.0;
-    }
-    else if (gameState == PLTGameStateStarted && paused) {
-        label.text = @"Game paused. Put headset on to resume!";
-        label.alpha = 1.0;
-    }
-    else if (gameState == PLTGameStateStarted && !paused) {
-        label.alpha = 0.0;
-    }
-    
-    if (gameState == PLTGameStateStarted && !paused) {
-        Vec3 eulerAngles;
-        NSData *rotationData = [info objectForKey:PLTHeadsetInfoKeyRotationVectorData];
-        [rotationData getBytes:&eulerAngles.x length:[rotationData length]];
-        
-        CGFloat DISTANCE;
-        if (IPAD) DISTANCE = 425.0;
-        else DISTANCE = 420.0;
-        
-        if (eulerAngles.x > 85) {
-            eulerAngles.x = 85;
-        }
-        else if (eulerAngles.x < -85) {
-            eulerAngles.x = -85;
-        }
-        if (eulerAngles.y > 85) {
-            eulerAngles.y = 85;
-        }
-        else if (eulerAngles.y < -85) {
-            eulerAngles.y = -85;
-        }
-        
-        float screenWidth = self.view.frame.size.width;
-        
-        CGFloat xOffset = DISTANCE * tan(d2r(eulerAngles.x));
-        //NSLog(@"xOffset: %.2f", xOffset);
-        
-        float center = screenWidth/2.0;
-        float newXOffset = center + xOffset;
-        
-        // pin paddle to screen edges
-        if (newXOffset < paddle.frame.size.width/2.0) {
-            newXOffset = paddle.frame.size.width/2.0;
-        }
-        else if (newXOffset > self.view.frame.size.width - paddle.frame.size.width/2.0) {
-            newXOffset = self.view.frame.size.width - paddle.frame.size.width/2.0;
-        }
-        
-        [UIView animateWithDuration:.1 animations:^{
-            paddle.center = CGPointMake(newXOffset, paddle.center.y);
-        }];
-    }
+	NSLog(@"subscribeToServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		NSError *err = nil;
+		
+		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+
+		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
+
+		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to taps service: %@", err);
+		
+		// also query a few
+		
+		[d queryInfo:self forService:PLTServiceWearingState error:&err];
+		if (err) NSLog(@"Error querying wearing state service: %@", err);
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
+}
+
+- (void)unsubscribeFromServices
+{
+	NSLog(@"unsubscribeFromServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		[d unsubscribeFromAll:self];
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
 }
 
 - (void)spawnBlocks
@@ -292,20 +246,120 @@ double r2d(double d)
     displayLink.paused = NO;
 }
 
+#pragma mark - PLTDeviceSubscriber
+
+- (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
+{
+	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	
+	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
+		PLTWearingStateInfo *wearInfo = (PLTWearingStateInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceWearingState error:nil];
+		paused = !wearInfo.isBeingWorn;
+		PLTTapsInfo *tapsInfo = (PLTTapsInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceTaps error:nil];
+		//BOOL taps = tapsInfo.count;
+		//BOOL newTaps = taps && tapsDown;
+		BOOL newTaps = NO;
+		//tapsDown = !taps;
+		if (tapsInfo && ![tapsInfo isEqual:lastTapsInfo]) {
+			newTaps = YES;
+		}
+		lastTapsInfo = tapsInfo;
+		
+		
+		if (gameState == PLTGameStateNotStarted && paused) {
+			label.text = @"Put headset on and tap to begin!";
+			label.alpha = 1.0;
+		}
+		else if (gameState == PLTGameStateNotStarted && !paused && !newTaps) {
+			label.text = @"Tap headset to begin!";
+			label.alpha = 1.0;
+		}
+		else if (gameState == PLTGameStateNotStarted && !paused && newTaps) {
+			[self startOver];
+		}
+		else if (gameState == PLTGameStateEnded && !paused && newTaps) {
+			[self startOver];
+			gameState = PLTGameStateStarted;
+		}
+		else if (gameState == PLTGameStateEnded && paused) {
+			label.text = @"Put headset on and tap to try again!";
+			label.alpha = 1.0;
+		}
+		else if (gameState == PLTGameStateEnded && !paused) {
+			label.text = @"Tap headset to try again!";
+			label.alpha = 1.0;
+		}
+		else if (gameState == PLTGameStateStarted && paused) {
+			label.text = @"Game paused. Put headset on to resume!";
+			label.alpha = 1.0;
+		}
+		else if (gameState == PLTGameStateStarted && !paused) {
+			label.alpha = 0.0;
+		}
+		
+		if (gameState == PLTGameStateStarted && !paused) {
+			PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
+			eulerAngles.x = -eulerAngles.x;
+			
+			CGFloat DISTANCE;
+			if (IPAD) DISTANCE = 425.0;
+			else DISTANCE = 420.0;
+			
+			if (eulerAngles.x > 85) {
+				eulerAngles.x = 85;
+			}
+			else if (eulerAngles.x < -85) {
+				eulerAngles.x = -85;
+			}
+			if (eulerAngles.y > 85) {
+				eulerAngles.y = 85;
+			}
+			else if (eulerAngles.y < -85) {
+				eulerAngles.y = -85;
+			}
+			
+			float screenWidth = self.view.frame.size.width;
+			
+			CGFloat xOffset = DISTANCE * tan(d2r(eulerAngles.x));
+			//NSLog(@"xOffset: %.2f", xOffset);
+			
+			float center = screenWidth/2.0;
+			float newXOffset = center + xOffset;
+			
+			// pin paddle to screen edges
+			if (newXOffset < paddle.frame.size.width/2.0) {
+				newXOffset = paddle.frame.size.width/2.0;
+			}
+			else if (newXOffset > self.view.frame.size.width - paddle.frame.size.width/2.0) {
+				newXOffset = self.view.frame.size.width - paddle.frame.size.width/2.0;
+			}
+			
+			[UIView animateWithDuration:.1 animations:^{
+				paddle.center = CGPointMake(newXOffset, paddle.center.y);
+			}];
+		}
+	}
+}
+
+- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription
+{
+	NSLog(@"PLTDevice: %@, didChangeSubscription: %@, toSubscription: %@", self, oldSubscription, newSubscription);
+}
+
 #pragma mark - PLTContextServerDelegate
 
 - (void)server:(PLTContextServer *)sender didReceiveMessage:(PLTContextServerMessage *)message
 {
-    if (!HEADSET_CONNECTED) {
-        if ([message hasType:@"event"]) {
-			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
-                NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
-				if (info) {
-					[self headsetInfoDidUpdate:info];
-				}
-            }
-        }
-    }
+//    if (!HEADSET_CONNECTED) {
+//        if ([message hasType:@"event"]) {
+//			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
+//                NSDictionary *info = [[PLTDeviceHandler sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
+//				if (info) {
+//					[self headsetInfoDidUpdate:info];
+//				}
+//            }
+//        }
+//    }
 }
 
 #pragma mark - UIViewController
@@ -389,15 +443,20 @@ double r2d(double d)
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-    [[PLTContextServer sharedContextServer] addDelegate:self];
+	[self subscribeToServices];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidOpenConnectionNotification:) name:PLTDeviceDidOpenConnectionNotification object:nil];
+	
+	[[PLTContextServer sharedContextServer] addDelegate:self];
     
     [super viewWillAppear:animated];
     
     [self startOver];
     gameState = PLTGameStateNotStarted;
-    paused = ![(NSNumber *)[PLTHeadsetManager sharedManager].latestInfo[PLTHeadsetInfoKeyIsDonned] boolValue];
-    if (!paused) {
+    //paused = ![(NSNumber *)[PLTDeviceHandler sharedManager].latestInfo[PLTHeadsetInfoKeyIsDonned] boolValue];
+	PLTWearingStateInfo *wearInfo = (PLTWearingStateInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceWearingState error:nil];
+	paused = !wearInfo.isBeingWorn;
+    
+	if (!paused) {
         label.text = @"Tap headset to begin!";
     }
     else {
@@ -416,7 +475,10 @@ double r2d(double d)
     displayLink.paused = YES;
     //[self stopGameTimer];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
+	[self unsubscribeFromServices];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceDidOpenConnectionNotification object:nil];
+	
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
     [[PLTContextServer sharedContextServer] removeDelegate:self];
 }
 

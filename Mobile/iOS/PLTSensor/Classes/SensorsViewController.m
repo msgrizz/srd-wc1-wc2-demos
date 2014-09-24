@@ -8,60 +8,61 @@
 
 #import "SensorsViewController.h"
 #import "ConfigTempViewController.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "PLTContextServer.h"
 #import "NSData+Base64.h"
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
 //#import "TestFlight.h"
+#import "PLTDevice.h"
+#import "PLTDevice_Internal.h"
+#import "NSData+HexStrings.h"
 
 
 #define MAX_TABLE_UPDATE_RATE	40.0 // Hz
 
 
 typedef enum {
-    PLTSensorTableRowRotation,
+    PLTSensorTableRowOrientation,
 	PLTSensorTableRowWearingState,
+	PLTSensorTableRowLocalProximity,
+	PLTSensorTableRowRemoteProximity,
     //PLTSensorTableRowTemperature,
+	PLTSensorTableRowPedometer,
     PLTSensorTableRowFreeFall,
-    PLTSensorTableRowPedometer,
     PLTSensorTableRowTaps,
     //PLTSensorTableRowMagCal,
     PLTSensorTableRowGyroCal,
+	PLTSensorTableRowHSFWVersion,
+	PLTSensorTableRowHSHWVersion,
 	PLTSensorTableRowAppVersion,
-	PLTSensorTableRowHeadsetVersion,
 	PLTSensorTableRowPacketData
 } PLTSensorTableRow;
 
 
-@interface SensorsViewController () <PLTContextServerDelegate>//, ConfigTempViewControllerDelegate>
+@interface SensorsViewController () <PLTDeviceSubscriber, PLTContextServerDelegate>
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
-- (void)headsetInfoDidUpdate:(NSDictionary *)info;
-//- (void)updateTimer:(NSTimer *)aTimer;
+- (void)subscribeToServices;
+- (void)unsubscribeFromServices;
+- (void)calOrientation;
 - (void)resetPed:(id)sender;
-//- (void)configTemp:(id)sender;
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note;
+- (void)deviceWillSendDataNotification:(NSNotification *)note;
+- (void)deviceDidReceiveDataNotification:(NSNotification *)note;
 
-@property(nonatomic,assign) NSInteger                           temp;
-@property(nonatomic,assign) BOOL                                freeFall;
-@property(nonatomic,assign) NSUInteger                          pedCount;
-@property(nonatomic,assign) PLTTapDirection                     tapDir;
-@property(nonatomic,assign) NSUInteger                          tapCount;
-@property(nonatomic,assign) PLTMagnetometerCalibrationStatus    magCal;
-@property(nonatomic,assign) PLTGyroscopeCalibrationStatus       gyroCal;
-@property(nonatomic,assign) NSUInteger                          majVers;
-@property(nonatomic,assign) NSUInteger                          minVers;
-@property(nonatomic,assign) NSInteger                           roll;
-@property(nonatomic,assign) NSInteger                           pitch;
-@property(nonatomic,assign) NSInteger                           heading;
-@property(nonatomic,assign) NSUInteger                          pedStepOffset;
-@property(nonatomic,strong) NSData								*packetData;
-@property(nonatomic,assign) BOOL								isDonned;
-//@property(nonatomic,strong) NSTimer                             *updateTimer;
-@property(nonatomic,strong) NSDate								*lastTableUpdateDate;
-
-//@property(nonatomic,assign) BOOL                                celciusMetric;
-//@property(nonatomic,assign) float                               celciusOffset;
+//@property(nonatomic,strong) IBOutlet UITableView        *tableView;
+@property(nonatomic,strong) IBOutlet UITableViewCell    *rotationCell;
+@property(nonatomic,strong) IBOutlet UIProgressView     *headingProgressView;
+@property(nonatomic,strong) IBOutlet UIProgressView     *rollProgressView;
+@property(nonatomic,strong) IBOutlet UIProgressView     *pitchProgressView;
+@property(nonatomic,strong) IBOutlet UILabel            *headingTitleLabel;
+@property(nonatomic,strong) IBOutlet UILabel            *rollTitleLabel;
+@property(nonatomic,strong) IBOutlet UILabel            *pitchTitleLabel;
+@property(nonatomic,strong) IBOutlet UILabel            *headingValueLabel;
+@property(nonatomic,strong) IBOutlet UILabel            *rollValueLabel;
+@property(nonatomic,strong) IBOutlet UILabel            *pitchValueLabel;
+//@property(nonatomic,strong) IBOutlet UINavigationBar    *navBar;
+@property(nonatomic,strong) UILabel						*packetDataLabel;
 
 @end
 
@@ -70,86 +71,149 @@ typedef enum {
 
 #pragma mark - Private
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note
+- (void)subscribeToServices
 {
-    NSDictionary *userInfo = note.userInfo;
-	[self headsetInfoDidUpdate:userInfo];
-}
-
-- (void)headsetInfoDidUpdate:(NSDictionary *)info
-{
-	self.temp = [info[PLTHeadsetInfoKeyTemperature] integerValue];
-    self.freeFall = [info[PLTHeadsetInfoKeyFreeFall] boolValue];
-    self.pedCount = [info[PLTHeadsetInfoKeyPedometerCount] unsignedIntegerValue];
-    self.tapDir = [info[PLTHeadsetInfoKeyTapDirection] unsignedIntegerValue];
-    self.tapCount = [info[PLTHeadsetInfoKeyTapCount] unsignedIntegerValue];
-    self.magCal = [info[PLTHeadsetInfoKeyMagnetometerCalibrationStatus] unsignedIntegerValue];
-    self.gyroCal = [info[PLTHeadsetInfoKeyGyroscopeCalibrationStatus] unsignedIntegerValue];
-    self.majVers = [info[PLTHeadsetInfoKeyMajorVersion] unsignedIntegerValue];
-    self.minVers = [info[PLTHeadsetInfoKeyMinorVersion] unsignedIntegerValue];
-	self.packetData = info[PLTHeadsetInfoKeyPacketData];
-	self.isDonned = [(NSNumber *)info[PLTHeadsetInfoKeyIsDonned] boolValue];
+	NSLog(@"subscribeToServices");
 	
-	Vec3 rotationVector;
-    NSData *rotationData = [info objectForKey:PLTHeadsetInfoKeyRotationVectorData];
-    [rotationData getBytes:&rotationVector length:[rotationData length]];
-	
-    self.heading = lroundf(rotationVector.x);
-    self.pitch = lroundf(rotationVector.y);
-    self.roll = lroundf(rotationVector.z);
-	
-	BOOL animateProgressIndicators = NO;
-    
-    NSInteger heading = self.heading;
-    if (heading < -180) heading = (heading+360)%180;
-    if (heading > 180) heading = (heading-360)%180;
-    // turn the int into a float between 0.0 and 1.0 and update the heading scale
-    float fl_head = (heading+180) / 360.0;
-    [self.headingProgressView setProgress:fl_head animated:animateProgressIndicators];
-    self.headingValueLabel.text = [NSString stringWithFormat:@"%d°",heading];
-    
-    NSInteger roll = self.roll;
-    if (roll < -180) roll = (roll+360)%180;
-    if (roll > 180) roll = (roll-360)%180;
-    // turn the int into a float between 0.0 and 1.0 and update the roll scale
-    float fl_roll = ((roll) +180)/ 360.0;
-    [self.rollProgressView setProgress:fl_roll animated:animateProgressIndicators];
-    self.rollValueLabel.text = [NSString stringWithFormat:@"%d°",roll];
-	
-    NSInteger pitch = self.pitch;
-    if (pitch < -180) pitch = (pitch+360)%180;
-    if (pitch > 180) pitch = (pitch-360)%180;
-    // turn the int into a float between 0.0 and 1.0 and update the pitch scale
-    float fl_pitch = ((pitch) +90)/ 180.0;
-    [self.pitchProgressView setProgress:fl_pitch animated:animateProgressIndicators];
-    self.pitchValueLabel.text = [NSString stringWithFormat:@"%d°",pitch];
-	
-	NSTimeInterval gap = [[NSDate date] timeIntervalSinceDate:self.lastTableUpdateDate];
-	if (!self.lastTableUpdateDate || (gap > (1.0/MAX_TABLE_UPDATE_RATE))) {
-		[self.tableView reloadData];
-		self.lastTableUpdateDate = [NSDate date];
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (d) {
+		NSError *err = nil;
+		
+		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceProximity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to proximity service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
+		
+		[d subscribe:self toService:PLTServicePedometer withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to pedometer service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceFreeFall withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to free fall service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to taps service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceMagnetometerCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to magnetometer calibration service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to gyroscope calibration service: %@", err);
+		
+		// also query a few
+		
+		[d queryInfo:self forService:PLTServiceWearingState error:&err];
+		if (err) NSLog(@"Error querying wearing state service: %@", err);
+		
+		[d queryInfo:self forService:PLTServicePedometer error:&err];
+		if (err) NSLog(@"Error querying pedometer service: %@", err);
+		
+		[d queryInfo:self forService:PLTServiceMagnetometerCalibrationStatus error:&err];
+		if (err) NSLog(@"Error querying magnetometer calibration service: %@", err);
+		
+		[d queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus error:&err];
+		if (err) NSLog(@"Error querying gyroscope calibration service: %@", err);
+	}
+	else {
+		NSLog(@"No device conenctions open.");
 	}
 }
 
-//- (void)updateTimer:(NSTimer *)aTimer
-//{
-//    [self.tableView reloadData];
-//}
+- (void)unsubscribeFromServices
+{
+	NSLog(@"unsubscribeFromServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		[d unsubscribeFromAll:self];
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
+}
+
+- (void)calOrientation
+{
+	[CONNECTED_DEVICE setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+}
 
 - (void)resetPed:(id)sender
 {
-    self.pedStepOffset = self.pedCount;
+    //self.pedStepOffset = self.pedCount;
+	[CONNECTED_DEVICE setCalibration:nil forService:PLTServicePedometer error:nil];
+	[self.tableView reloadData];
 }
 
-//- (void)configTemp:(id)sender
-//{
-//    ConfigTempViewController *controller = [[ConfigTempViewController alloc] initWithNibName:nil bundle:nil];
-//    controller.delegate = self;
-//    controller.celciusMetric = self.celciusMetric;
-//    if (self.celciusOffset != FLT_MIN) controller.ambientTempCelcius = self.temp + self.celciusOffset;
-//    else controller.ambientTempCelcius = self.temp;
-//    [self presentViewController:controller animated:YES completion:nil];
-//}
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note
+{
+	[self subscribeToServices];
+}
+
+- (void)deviceWillSendDataNotification:(NSNotification *)note
+{
+	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
+	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	self.packetDataLabel.text = [NSString stringWithFormat:@"--> %@", hexString];
+}
+
+- (void)deviceDidReceiveDataNotification:(NSNotification *)note
+{
+	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
+	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	self.packetDataLabel.text = [NSString stringWithFormat:@"<-- %@", hexString];
+}
+
+#pragma mark - PLTDeviceSubscriber
+
+- (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
+{
+	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	
+	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
+		PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
+		
+		NSInteger heading = lroundf(eulerAngles.x);
+		NSInteger pitch = lroundf(eulerAngles.y);
+		NSInteger roll = lroundf(eulerAngles.z);
+		
+		BOOL animateProgressIndicators = NO;
+		
+		//NSInteger heading = self.heading;
+		if (heading < -180) heading = (heading+360)%180;
+		if (heading > 180) heading = (heading-360)%180;
+		// turn the int into a float between 0.0 and 1.0 and update the heading scale
+		float fl_head = (heading+180) / 360.0;
+		[self.headingProgressView setProgress:fl_head animated:animateProgressIndicators];
+		self.headingValueLabel.text = [NSString stringWithFormat:@"%d°",heading];
+		
+		//NSInteger roll = self.roll;
+		if (roll < -180) roll = (roll+360)%180;
+		if (roll > 180) roll = (roll-360)%180;
+		// turn the int into a float between 0.0 and 1.0 and update the roll scale
+		float fl_roll = ((roll) +180)/ 360.0;
+		[self.rollProgressView setProgress:fl_roll animated:animateProgressIndicators];
+		self.rollValueLabel.text = [NSString stringWithFormat:@"%d°",roll];
+		
+		//NSInteger pitch = self.pitch;
+		if (pitch < -180) pitch = (pitch+360)%180;
+		if (pitch > 180) pitch = (pitch-360)%180;
+		// turn the int into a float between 0.0 and 1.0 and update the pitch scale
+		float fl_pitch = ((pitch) +90)/ 180.0;
+		[self.pitchProgressView setProgress:fl_pitch animated:animateProgressIndicators];
+		self.pitchValueLabel.text = [NSString stringWithFormat:@"%d°",pitch];
+	}
+	else {
+		[self.tableView reloadData];
+	}
+}
+
+- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription
+{
+	NSLog(@"PLTDevice: %@, didChangeSubscription: %@, toSubscription: %@", self, oldSubscription, newSubscription);
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -162,7 +226,7 @@ typedef enum {
 {
 	UITableViewCell *cell = nil;
     
-    if (indexPath.row == PLTSensorTableRowRotation) {
+    if (indexPath.row == PLTSensorTableRowOrientation) {
         cell = self.rotationCell;
         if (IOS7) {
             UIColor *color = [UIColor colorWithRed:0.0/255.0 green:127.0/255.0 blue:255.0/248.0 alpha:1.0];
@@ -178,6 +242,7 @@ typedef enum {
 				cell = [[ExtendedLabelWidthTableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
 				cell.textLabel.font = [UIFont systemFontOfSize:28];
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:20];
+				cell.textLabel.adjustsFontSizeToFitWidth = YES;
 //                CGRect frame = cell.detailTextLabel.frame;
 //                frame.size.height += 8;
 //                frame.origin.y -= 4;
@@ -187,12 +252,15 @@ typedef enum {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"plain_auxcell"];
 			}
         }
+		
+		cell.textLabel.adjustsFontSizeToFitWidth = YES;
         
         switch (indexPath.row) {
 			case PLTSensorTableRowWearingState: {
 				cell.textLabel.text = @"wearing state";
 				NSString *state = @"";
-				if (self.isDonned) state = @"Wearing";
+				PLTWearingStateInfo *wearInfo = (PLTWearingStateInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceWearingState error:nil];
+				if (wearInfo.isBeingWorn) state = @"Wearing";
 				else state = @"Not Wearing";
                 cell.detailTextLabel.text = state;
 				break; }
@@ -208,62 +276,61 @@ typedef enum {
 //                                             (celciusMetric ? lroundf(temp_c_calibrated) : lroundf((temp_c_calibrated)*9.0/5.0+32.0)),
 //											 (celciusMetric ? @"C" : @"F")];
 //                break;
-            case PLTSensorTableRowFreeFall:
-                cell.textLabel.text = @"free fall?";
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",(self.freeFall?@"Yes":@"No")];
-                cell.detailTextLabel.textColor = (self.freeFall ? [UIColor redColor] : [UIColor grayColor]);
-                break;
+			case PLTSensorTableRowLocalProximity: {
+				cell.textLabel.text = @"local proximity";
+				PLTProximityInfo *proximityInfo = (PLTProximityInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceProximity error:nil];
+				if (proximityInfo) { 
+					cell.detailTextLabel.text = [NSStringFromProximity(proximityInfo.localProximity) capitalizedString];
+				}
+				else {
+					cell.detailTextLabel.text = @"-";
+				}
+				break; }
+			case PLTSensorTableRowRemoteProximity: {
+				cell.textLabel.text = @"remote proximity";
+				PLTProximityInfo *proximityInfo = (PLTProximityInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceProximity error:nil];
+				if (proximityInfo) { 
+					cell.detailTextLabel.text = [NSStringFromProximity(proximityInfo.remoteProximity) capitalizedString];
+				}
+				else {
+					cell.detailTextLabel.text = @"-";
+				}
+				break; }
+			case PLTSensorTableRowFreeFall: {
+                cell.textLabel.text = @"free fall";
+				PLTFreeFallInfo *freeFallInfo = (PLTFreeFallInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceFreeFall error:nil];
+				BOOL freeFall = freeFallInfo.isInFreeFall;
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",(freeFall?@"Yes":@"No")];
+                cell.detailTextLabel.textColor = (freeFall ? [UIColor redColor] : [UIColor blackColor]);
+				break; }
             case PLTSensorTableRowPedometer: {
                 cell.textLabel.text = @"pedometer";
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps",self.pedCount - self.pedStepOffset];
-                
-                static UIButton *clearButton = nil;
-                if (!clearButton) clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) clearButton.frame = CGRectMake(241, 5, 64, 34);
-				else clearButton.frame = CGRectMake(tableView.frame.size.width - 64 - 14, 12, 64, 34);
-                [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
-                clearButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-                [clearButton addTarget:self action:@selector(resetPed:) forControlEvents:UIControlEventTouchUpInside];
-                [cell.contentView addSubview:clearButton];
-                
+				PLTPedometerInfo *pedometerInfo = (PLTPedometerInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServicePedometer error:nil];
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps",pedometerInfo.steps];
+//                static UIButton *clearButton = nil;
+//                if (!clearButton) clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) clearButton.frame = CGRectMake(241, 5, 64, 34);
+//				else clearButton.frame = CGRectMake(tableView.frame.size.width - 64 - 14, 12, 64, 34);
+//                [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
+//                clearButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+//                [clearButton addTarget:self action:@selector(resetPed:) forControlEvents:UIControlEventTouchUpInside];
+//                [cell.contentView addSubview:clearButton];
                 break; }
             case PLTSensorTableRowTaps: {
                 cell.textLabel.text = @"taps";
-                if (self.tapCount) {
-                    NSString *tapDirStr = nil;
-                    switch (self.tapDir) {
-                        case PLTTapDirectionXUp:
-                            tapDirStr = @", X Up";
-                            break;
-                        case PLTTapDirectionXDown:
-                            tapDirStr = @", X Down";
-                            break;
-                        case PLTTapDirectionYUp:
-                            tapDirStr = @", Y Up";
-                            break;
-                        case PLTTapDirectionYDown:
-                            tapDirStr = @", Y Down";
-                            break;
-                        case PLTTapDirectionZUp:
-                            tapDirStr = @", Z Up";
-                            break;
-                        case PLTTapDirectionZDown:
-                            tapDirStr = @", Z Down";
-                            break;
-                        default:
-                            break;
-                    }
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d %@%@",self.tapCount,(self.tapCount==1 ? @"tap" : @"taps"),tapDirStr];
+				PLTTapsInfo *tapsInfo = (PLTTapsInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceTaps error:nil];
+                if (tapsInfo.count) {
+                    NSString *tapDirStr = [NSStringFromTapDirection(tapsInfo.direction) capitalizedString];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d %@, %@",tapsInfo.count,(tapsInfo.count==1 ? @"Tap" : @"Taps"),tapDirStr];
                     cell.detailTextLabel.textColor = [UIColor blackColor];
                 }
                 else {
                     cell.detailTextLabel.text = @"-";
-                    cell.detailTextLabel.textColor = [UIColor grayColor];
+                    cell.detailTextLabel.textColor = [UIColor blackColor];
                 }
                 break; }
 //            case PLTSensorTableRowMagCal: {
 //                cell.textLabel.text = @"magnetometer";
-//				cell.textLabel.adjustsFontSizeToFitWidth = YES;
 //                NSString *magCalStr = nil;
 //                UIColor *color = [UIColor blackColor];
 //                switch (self.magCal) {
@@ -288,44 +355,54 @@ typedef enum {
 //                break; }
             case PLTSensorTableRowGyroCal: {
                 cell.textLabel.text = @"gyroscope";
-                NSString *gyroCalStr = nil;
-                UIColor *color = [UIColor blackColor];
-                switch (self.gyroCal) {
-                    case PLTGyroscopeCalibrationStatusNotCalibrated:
-                        gyroCalStr = @"Not Calibrated";
-                        color = [UIColor redColor];
-                        break;
-                    case PLTGyroscopeCalibrationStatusCalibrating1:
-                    case PLTGyroscopeCalibrationStatusCalibrating2:
-                        gyroCalStr = [NSString stringWithFormat:@"%d",self.gyroCal];
-                        color = [UIColor orangeColor];
-                        break;
-                    case PLTGyroscopeCalibrationStatusCalibrated:
-                        gyroCalStr = @"Calibrated";
-                        color = [UIColor colorWithRed:0 green:(150.0/256.0) blue:0 alpha:1.0];
-                        break;
-                    default:
-                        break;
-                }
-                cell.detailTextLabel.text = gyroCalStr;
+				PLTGyroscopeCalibrationInfo	*gyroCalInfo = (PLTGyroscopeCalibrationInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceGyroscopeCalibrationStatus error:nil];
+				NSString *gyroCalStr = nil;
+				UIColor *color = [UIColor blackColor];
+				if (gyroCalInfo.isCalibrated) {
+					gyroCalStr = @"Calibrated";
+					color = [UIColor colorWithRed:0 green:(150.0/256.0) blue:0 alpha:1.0];
+				}
+				else {
+					gyroCalStr = @"Not Calibrated";
+					color = [UIColor redColor];
+				}
+				cell.detailTextLabel.text = gyroCalStr;
                 cell.detailTextLabel.textColor = color;
                 break; }
 			case PLTSensorTableRowAppVersion:
                 cell.textLabel.text = @"app version";
-                cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+                cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
                 break;
-			case PLTSensorTableRowHeadsetVersion:
-                cell.textLabel.text = @"headset version";
-				cell.textLabel.adjustsFontSizeToFitWidth = YES;
-                cell.detailTextLabel.text = [NSString stringWithFormat:@"%d.%d",self.majVers,self.minVers];
+			case PLTSensorTableRowHSFWVersion:
+                cell.textLabel.text = @"headset FW vers";
+				if (CONNECTED_DEVICE.firmwareVersion) {
+					cell.detailTextLabel.text = CONNECTED_DEVICE.firmwareVersion;
+				}
+				else {
+					cell.detailTextLabel.text = @"-";
+				}
                 break;
+			case PLTSensorTableRowHSHWVersion:
+				cell.textLabel.text = @"headset HW vers";
+				if (CONNECTED_DEVICE.hardwareVersion) {
+					cell.detailTextLabel.text = CONNECTED_DEVICE.hardwareVersion;
+				}
+				else {
+					cell.detailTextLabel.text = @"-";
+				}
+				break;
             case PLTSensorTableRowPacketData: {
 				cell.textLabel.text = @"packet data";
-				NSMutableString *hexStr = [NSMutableString string];
-				for (int i = 0; i < [self.packetData length]; i++) [hexStr appendFormat:@"%02x", ((uint8_t*)[self.packetData bytes])[i]];
-				cell.detailTextLabel.font = [UIFont fontWithName:@"CourierNewPS-BoldMT" size:12];
 				cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-				cell.detailTextLabel.text = hexStr;
+				//cell.detailTextLabel.minimumScaleFactor = 2.0;
+				self.packetDataLabel = cell.detailTextLabel;
+//				NSMutableString *hexStr = [NSMutableString string];
+//				for (int i = 0; i < [self.packetData length]; i++) [hexStr appendFormat:@"%02x", ((uint8_t*)[self.packetData bytes])[i]];
+//				cell.detailTextLabel.font = [UIFont fontWithName:@"CourierNewPS-BoldMT" size:12];
+//				cell.detailTextLabel.text = hexStr;
+				if (![cell.detailTextLabel.text length]) {
+					cell.detailTextLabel.text = @"-";
+				}
 				break; }
         }
     }
@@ -337,7 +414,7 @@ typedef enum {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == PLTSensorTableRowRotation) {
+    if (indexPath.row == PLTSensorTableRowOrientation) {
 		if (IPAD) {
 			return 126;
 		}
@@ -358,6 +435,7 @@ typedef enum {
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
+		case PLTSensorTableRowOrientation:
         case PLTSensorTableRowPedometer:
         //case PLTSensorTableRowTemperature:
             return YES;
@@ -371,6 +449,9 @@ typedef enum {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
+		case PLTSensorTableRowOrientation:
+			[self calOrientation];
+			break;
         case PLTSensorTableRowPedometer:
             [self resetPed:tableView];
             break;
@@ -388,33 +469,17 @@ typedef enum {
 
 - (void)server:(PLTContextServer *)sender didReceiveMessage:(PLTContextServerMessage *)message
 {
-	if (!HEADSET_CONNECTED) {
-		if ([message hasType:@"event"]) {
-			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
-				NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
-				if (info) {
-					[self headsetInfoDidUpdate:info];
-				}
-			}
-		}
-	}
+//	if (!HEADSET_CONNECTED) {
+//		if ([message hasType:@"event"]) {
+//			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
+//				NSDictionary *info = [[PLTDeviceHandler sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
+//				if (info) {
+//					[self headsetInfoDidUpdate:info];
+//				}
+//			}
+//		}
+//	}
 }
-
-//#pragma mark - ConfigTempViewControllerDelegate
-//
-//- (void)configTempViewController:(ConfigTempViewController *)controller didAcceptMetric:(BOOL)celcius ambientTemp:(float)ambientTempCelcius
-//{
-//    self.celciusMetric = celcius;
-//    self.celciusOffset = ambientTempCelcius - self.temp;
-//    [self.tableView reloadData];
-//    
-//    [self dismissModalViewControllerAnimated:YES];
-//}
-//
-//- (void)configTempViewControllerDidCancel:(ConfigTempViewController *)controller
-//{
-//    [self dismissModalViewControllerAnimated:YES];
-//}
 
 #pragma mark - UIViewController
 
@@ -470,9 +535,11 @@ typedef enum {
     
     [[PLTContextServer sharedContextServer] addDelegate:self];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-    //self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0/UPDATE_RATE) target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
-    
+	[self subscribeToServices];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidOpenConnectionNotification:) name:PLTDeviceDidOpenConnectionNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceWillSendDataNotification:) name:PLTDeviceWillSendDataNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidReceiveDataNotification:) name:PLTDeviceDidReceiveDataNotification object:nil];
+
     //[TestFlight passCheckpoint:@"SENSORS_TAB"];
 }
 
@@ -481,12 +548,11 @@ typedef enum {
     [super viewWillDisappear:animated];
     
     [[PLTContextServer sharedContextServer] removeDelegate:self];
-    
-//    if ([self.updateTimer isValid]) {
-//        [self.updateTimer invalidate];
-//        self.updateTimer = nil;
-//    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
+	
+	[self unsubscribeFromServices];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceDidOpenConnectionNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceWillSendDataNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceDidReceiveDataNotification object:nil];
 }
 
 @end

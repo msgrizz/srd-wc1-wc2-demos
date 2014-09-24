@@ -9,7 +9,7 @@
 #import "PLT3DViewController.h"
 #import "GLGravityView.h"
 #import "UIDevice+ScreenSize.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 #import "CC3Foundation.h"
 #import "iToast.h"
 #import "PLTContextServer.h"
@@ -17,6 +17,7 @@
 #import "StatusWatcher.h"
 #import "AppDelegate.h"
 //#import "TestFlight.h"
+#import "PLTDevice.h"
 
 
 typedef enum {
@@ -29,9 +30,12 @@ typedef enum {
 } gesture_states;
 
 
-@interface PLT3DViewController () <PLTContextServerDelegate>
+@interface PLT3DViewController () <PLTDeviceSubscriber, PLTContextServerDelegate>
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note;
+- (void)subscribeToServices;
+- (void)unsubscribeFromServices;
+
 - (void)gestureCheck:(long long)thetime noplane:(double) theta yesplane:(double)psi;
 
 @property(nonatomic,strong) IBOutlet GLGravityView      *threeDeeView;
@@ -47,22 +51,77 @@ typedef enum {
 
 #pragma mark - Private
 
-- (void)headsetInfoDidUpdateNotification:(NSNotification *)note
+- (void)deviceDidOpenConnectionNotification:(NSNotification *)note
 {
-    //if (![HeadsetManager sharedManager].isConnected || !DEVICE_REGISTERED) {
-        Vec4 quaternion;
-        NSData *quaternionData = [note userInfo][PLTHeadsetInfoKeyQuaternionData];
-        [quaternionData getBytes:&quaternion length:[quaternionData length]];
-        [self.threeDeeView updateRotation:quaternion];
-	
-	if ([DEFAULTS boolForKey:PLTDefaultsKeyGestureRecognition]) {
-		Vec3 rotationVector;
-        NSData *rotationVectorData = [note userInfo][PLTHeadsetInfoKeyRotationVectorData];
-        [rotationVectorData getBytes:&rotationVector length:[rotationVectorData length]];
-		[self gestureCheck:(long long)(1000*[[NSDate date] timeIntervalSince1970]) noplane:rotationVector.y yesplane:rotationVector.z];
-	}
-    //}
+	[self subscribeToServices];
 }
+
+- (void)subscribeToServices
+{
+	NSLog(@"subscribeToServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		NSError *err = nil;
+		
+		//		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		//		
+		//		[d subscribe:self toService:PLTServiceProximity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to proximity service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
+		
+		//		[d subscribe:self toService:PLTServicePedometer withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to pedometer service: %@", err);
+		//		
+		//		[d subscribe:self toService:PLTServiceFreeFall withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to free fall service: %@", err);
+		//		
+		//		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to taps service: %@", err);
+		//		
+		//		[d subscribe:self toService:PLTServiceMagnetometerCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to magnetometer calibration service: %@", err);
+		//		
+		//		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		//		if (err) NSLog(@"Error subscribing to hyroscope calibration service: %@", err);
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
+}
+
+- (void)unsubscribeFromServices
+{
+	NSLog(@"unsubscribeFromServices");
+	
+	PLTDevice *d = CONNECTED_DEVICE;
+	if (CONNECTED_DEVICE) {
+		[d unsubscribeFromAll:self];
+	}
+	else {
+		NSLog(@"No device conenctions open.");
+	}
+}
+
+//- (void)headsetInfoDidUpdateNotification:(NSNotification *)note
+//{
+//    //if (![HeadsetManager sharedManager].isConnected || !DEVICE_REGISTERED) {
+//        Vec4 quaternion;
+//        NSData *quaternionData = [note userInfo][PLTHeadsetInfoKeyQuaternionData];
+//        [quaternionData getBytes:&quaternion length:[quaternionData length]];
+//        [self.threeDeeView updateRotation:quaternion];
+//	
+//	if ([DEFAULTS boolForKey:PLTDefaultsKeyGestureRecognition]) {
+//		Vec3 rotationVector;
+//        NSData *rotationVectorData = [note userInfo][PLTHeadsetInfoKeyRotationVectorData];
+//        [rotationVectorData getBytes:&rotationVector length:[rotationVectorData length]];
+//		[self gestureCheck:(long long)(1000*[[NSDate date] timeIntervalSince1970]) noplane:rotationVector.y yesplane:rotationVector.z];
+//	}
+//    //}
+//}
 
 - (void)gestureCheck:(long long)thetime noplane:(double) theta yesplane:(double)psi
 {
@@ -112,23 +171,49 @@ typedef enum {
     }
 }
 
+#pragma mark - PLTDeviceSubscriber
+
+- (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
+{
+	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	
+	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
+		PLTQuaternion q = ((PLTOrientationTrackingInfo *)theInfo).quaternion;
+		
+		//Vec4 quaternion = { -nCalQuat[1], nCalQuat[2], -nCalQuat[3], nCalQuat[0] };
+		//Vec4 quaternion = {-q.w, q.x, -q.y, q.z};
+		Vec4 quaternion = {-q.x, q.y, -q.z, q.w};
+		[self.threeDeeView updateRotation:quaternion];
+		
+		if ([DEFAULTS boolForKey:PLTDefaultsKeyGestureRecognition]) {
+			PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
+			[self gestureCheck:(long long)(1000*[[NSDate date] timeIntervalSince1970]) noplane:eulerAngles.y yesplane:eulerAngles.z];
+		}
+	}
+}
+
+- (void)PLTDevice:(PLTDevice *)aDevice didChangeSubscription:(PLTSubscription *)oldSubscription toSubscription:(PLTSubscription *)newSubscription
+{
+	NSLog(@"PLTDevice: %@, didChangeSubscription: %@, toSubscription: %@", self, oldSubscription, newSubscription);
+}
+
 #pragma mark - PLTContextServerDelegate
 
 - (void)server:(PLTContextServer *)sender didReceiveMessage:(PLTContextServerMessage *)message
 {
-	if (!HEADSET_CONNECTED) {
-        if ([message hasType:@"event"]) {
-			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
-				NSDictionary *info = [[PLTHeadsetManager sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
-				if (info) {
-					NSData *quaternionData = info[PLTHeadsetInfoKeyQuaternionData];
-					Vec4 quaternion;
-					[quaternionData getBytes:&quaternion length:[quaternionData length]];
-					[self.threeDeeView updateRotation:quaternion];
-				}
-            }
-        }
-    }
+//	if (!HEADSET_CONNECTED) {
+//        if ([message hasType:@"event"]) {
+//			if ([[message messageId] isEqualToString:EVENT_HEAD_TRACKING]) {
+//				NSDictionary *info = [[PLTDeviceHandler sharedManager] infoFromPacketData:[message.payload[@"quaternion"] base64DecodedData]];
+//				if (info) {
+//					NSData *quaternionData = info[PLTHeadsetInfoKeyQuaternionData];
+//					Vec4 quaternion;
+//					[quaternionData getBytes:&quaternion length:[quaternionData length]];
+//					[self.threeDeeView updateRotation:quaternion];
+//				}
+//            }
+//        }
+//    }
 }
 
 #pragma mark - UIViewController
@@ -205,30 +290,23 @@ typedef enum {
 #warning navBar
 	[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:NO];
     [[PLTContextServer sharedContextServer] addDelegate:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-    
+	
+	[self subscribeToServices];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceDidOpenConnectionNotification:) name:PLTDeviceDidOpenConnectionNotification object:nil];
+
     //[TestFlight passCheckpoint:@"SKARLET_TAB"];
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//	[super viewDidAppear:animated];
-//	
-//	if (!IPHONE5) {
-//		CGRect newFrame = CGRectMake(self.threeDeeView.frame.origin.x,
-//									 self.threeDeeView.frame.origin.y + 88,
-//									 self.threeDeeView.frame.size.width,
-//									 self.threeDeeView.frame.size.height - 88);
-//		[self.threeDeeView setFrame:newFrame];
-//	}
-//}
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
     [[PLTContextServer sharedContextServer] removeDelegate:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:PLTHeadsetInfoDidUpdateNotification object:nil];
+	
+	[self unsubscribeFromServices];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:PLTDeviceDidOpenConnectionNotification object:nil];
 }
 
 @end

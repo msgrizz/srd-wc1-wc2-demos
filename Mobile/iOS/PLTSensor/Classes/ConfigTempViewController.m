@@ -8,7 +8,7 @@
 
 #import "ConfigTempViewController.h"
 #import "AppDelegate.h"
-#import "PLTHeadsetManager.h"
+#import "PLTDeviceHandler.h"
 
 
 @interface ConfigTempViewController ()
@@ -89,7 +89,7 @@
 	//controller.celciusMetric = self.celciusMetric;
 	self.celciusMetric = [DEFAULTS boolForKey:PLTDefaultsKeyMetricUnits];
     //if (self.celciusOffset != FLT_MIN) controller.ambientTempCelcius = self.temp + self.celciusOffset;
-	float temp = [[[PLTHeadsetManager sharedManager] latestInfo][PLTHeadsetInfoKeyTemperature] floatValue];
+	float temp = [[[PLTDeviceHandler sharedManager] latestInfo][PLTHeadsetInfoKeyTemperature] floatValue];
 	float offset = [DEFAULTS boolForKey:PLTDefaultsKeyTemperatureOffsetCelcius];
 	if (offset>.00001) self.ambientTempCelcius = temp + offset;
     else self.ambientTempCelcius = temp;
@@ -103,7 +103,7 @@
 	[super viewWillDisappear:animated];
 	
 	[DEFAULTS setBool:self.celciusMetric forKey:PLTDefaultsKeyMetricUnits];
-	[DEFAULTS setFloat:self.ambientTempCelcius - [[[PLTHeadsetManager sharedManager] latestInfo][PLTHeadsetInfoKeyTemperature] floatValue]
+	[DEFAULTS setFloat:self.ambientTempCelcius - [[[PLTDeviceHandler sharedManager] latestInfo][PLTHeadsetInfoKeyTemperature] floatValue]
 				forKey:PLTDefaultsKeyTemperatureOffsetCelcius];
 }
 
