@@ -15,6 +15,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.util.Log;
@@ -158,10 +159,16 @@ public class Device {
 		return new Device(btDevice);
 	}
 
-	public static void initialize(Context context, final InitializationCallback callback) {
+	public static void initialize(Context context, final InitializationCallback callback) throws UnsupportedAndroidVersionException {
 		Log.v(FN(), "initialize()");
 
 		if (!_isInitialized) {
+
+			if (Build.VERSION.SDK_INT < 15) {
+				throw new UnsupportedAndroidVersionException("PLTDevice requires Android version ICE_CREAM_SANDWICH_MR1 (API level 15) or later. " +
+						"Please update your device and try again.");
+			}
+
 			if (context == null) {
 				//TODO: throw exception
 			}
@@ -495,7 +502,7 @@ public class Device {
 		//return null;
 	}
 
-	public void subscribe(InfoListener listener, short service, byte mode, short period) throws ConnectionNotOpenException, InvalidServiceException, InvalidArgumentException {
+	public void subscribe(InfoListener listener, short service, byte mode, short period) throws ConnectionNotOpenException, InvalidServiceException, InvalidModeException, InvalidArgumentException {
 		Log.d(FN(), "subscribe(): listener=" + listener + ", service=" + service + ", mode=" + mode + ", period=" + period);
 
 		if (!_isConnectionOpen) {
@@ -518,6 +525,11 @@ public class Device {
 					Log.e(FN(), "Invalid service: " + service);
 					throw new InvalidServiceException("Invalid service.");
 					//return;
+			}
+
+			if (mode!=SUBSCRIPTION_MODE_ON_CHANGE && mode!=SUBSCRIPTION_MODE_ON_CHANGE) {
+				Log.e(FN(), "Invalid mode: " + mode);
+				throw new InvalidModeException("Invalid mode.");
 			}
 
 //			if (_subscriptions==null) {
@@ -2271,6 +2283,12 @@ public class Device {
 
 	public class InvalidModeException extends Exception {
 		public InvalidModeException(String message) {
+			super(message);
+		}
+	}
+
+	public static class UnsupportedAndroidVersionException extends Exception {
+		public UnsupportedAndroidVersionException(String message) {
 			super(message);
 		}
 	}

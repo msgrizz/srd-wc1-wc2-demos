@@ -157,24 +157,29 @@ public class MainActivity extends Activity implements PairingListener, Connectio
 
 		if (!Device.getIsInitialized()) {
 			Log.v(FN(), "Initializing PLTDevice...");
-			Device.initialize(this, new Device.InitializationCallback() {
-				@Override
-				public void onInitialized() {
-					Log.i(FN(), "onInitialized(). Devices: " + Device.getPairedDevices());
-					Device.registerPairingListener((PairingListener) _context);
-				}
-
-				@Override
-				public void onFailure(int error) {
-					Log.i(FN(), "onFailure()");
-
-					if (error == Device.ERROR_PLTHUB_NOT_AVAILABLE) {
-						Log.i(FN(), "PLTHub was not found.");
-					} else if (error == Device.ERROR_FAILED_GET_DEVICE_LIST) {
-						Log.i(FN(), "Failed to get device list.");
+			try {
+				Device.initialize(this, new Device.InitializationCallback() {
+					@Override
+					public void onInitialized() {
+						Log.i(FN(), "onInitialized(). Devices: " + Device.getPairedDevices());
+						Device.registerPairingListener((PairingListener) _context);
 					}
-				}
-			});
+
+					@Override
+					public void onFailure(int error) {
+						Log.i(FN(), "onFailure()");
+
+						if (error == Device.ERROR_PLTHUB_NOT_AVAILABLE) {
+							Log.i(FN(), "PLTHub was not found.");
+						} else if (error == Device.ERROR_FAILED_GET_DEVICE_LIST) {
+							Log.i(FN(), "Failed to get device list.");
+						}
+					}
+				});
+			}
+			catch (Exception e) {
+				Log.e(FN(), "Exception initializing PLTDevice: " + e);
+			}
 		}
 	}
 
