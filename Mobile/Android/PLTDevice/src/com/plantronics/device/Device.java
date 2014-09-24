@@ -1170,6 +1170,8 @@ public class Device {
 			@Override
 			public void onFailure(BladerunnerException exception) {
 				Log.e(FN(), "********* Get Genes GUID exception: " + exception + " *********");
+
+				onGUIDReceived(null);
 			}
 		});
 	}
@@ -1177,17 +1179,22 @@ public class Device {
 	private void onGUIDReceived(GenesGUIDResponse response) {
 		Log.v(FN(), "onGUIDReceived()");
 
-		byte[] guid = response.getGuid();
-		StringBuilder serialBuilder = new StringBuilder();
-		for (int i=0; i<guid.length; i++) {
-			byte g = guid[i];
-			serialBuilder.append(String.format("%02X", g));
-			if (i==3 || i==5 || i==7 || i==9) {
-				serialBuilder.append("-");
+		if (response != null) {
+			byte[] guid = response.getGuid();
+			StringBuilder serialBuilder = new StringBuilder();
+			for (int i=0; i<guid.length; i++) {
+				byte g = guid[i];
+				serialBuilder.append(String.format("%02X", g));
+				if (i==3 || i==5 || i==7 || i==9) {
+					serialBuilder.append("-");
+				}
 			}
-		}
 
-		_serialNumber = serialBuilder.toString(); // example: ACA367C5-E8F1-A64F-954D-F6ED817C7A69 (rev1 no. 057)
+			_serialNumber = serialBuilder.toString(); // example: ACA367C5-E8F1-A64F-954D-F6ED817C7A69 (rev1 no. 057)
+		}
+		else {
+			_serialNumber = null;
+		}
 
 		Log.i(FN(), "Serial Number: " + _serialNumber);
 
@@ -1979,7 +1986,11 @@ public class Device {
 	}
 
 	private int getPedometerCountFromData(byte[] data) {
-		return (((int)data[0]) << 24) + (((int)data[1]) << 16) + (((int)data[2]) << 8) + data[3];
+		int d0 = data[0] & 0xFF;
+		int d1 = data[1] & 0xFF;
+		int d2 = data[2] & 0xFF;
+		int d3 = data[3] & 0xFF;
+		return (d0 << 24) + (d1 << 16) + (d2 << 8) + d3;
 	}
 
 	private boolean getGyroIsCaldFromData(byte[] data) {
