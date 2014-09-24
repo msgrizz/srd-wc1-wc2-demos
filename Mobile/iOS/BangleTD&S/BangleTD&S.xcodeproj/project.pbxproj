@@ -1,0 +1,709 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		42195E051954DF94001613C9 /* NSArray+PrettyPrint.m in Sources */ = {isa = PBXBuildFile; fileRef = 42195E041954DF94001613C9 /* NSArray+PrettyPrint.m */; };
+		428057121958C8BE00E53BCF /* DialogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 428057111958C8BE00E53BCF /* DialogViewController.m */; };
+		428057151958C8CB00E53BCF /* ConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 428057141958C8CB00E53BCF /* ConfigurationViewController.m */; };
+		4283936D194918E2000C43E5 /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4283936C194918E2000C43E5 /* MusicViewController.m */; };
+		4283936F19491F0A000C43E5 /* gameofthrones.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4283936E19491F0A000C43E5 /* gameofthrones.mp3 */; };
+		4283937119491F47000C43E5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4283937019491F47000C43E5 /* AVFoundation.framework */; };
+		428393C119492A8E000C43E5 /* UITableView+Cells.m in Sources */ = {isa = PBXBuildFile; fileRef = 428393C019492A8E000C43E5 /* UITableView+Cells.m */; };
+		428393C419492E8F000C43E5 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 428393C319492E8F000C43E5 /* ExternalAccessory.framework */; };
+		428393C719493350000C43E5 /* NSData+HexStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 428393C619493350000C43E5 /* NSData+HexStrings.m */; };
+		4288A959194A7D4D003B89E8 /* libPLTDevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4288A958194A7D4D003B89E8 /* libPLTDevice.a */; };
+		4288A95C194A7F14003B89E8 /* NSData+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = 4288A95B194A7F14003B89E8 /* NSData+Hash.m */; };
+		4288A95E194A7FAF003B89E8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4288A95D194A7FAF003B89E8 /* Security.framework */; };
+		429B205E194917A5001B0DAB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 429B205D194917A5001B0DAB /* main.m */; };
+		429B2061194917A5001B0DAB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 429B2060194917A5001B0DAB /* AppDelegate.m */; };
+		429B2064194917A5001B0DAB /* LockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429B2063194917A5001B0DAB /* LockViewController.m */; };
+		429B2067194917A5001B0DAB /* SensorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 429B2066194917A5001B0DAB /* SensorsViewController.m */; };
+		429B206A194917A5001B0DAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 429B2068194917A5001B0DAB /* Main.storyboard */; };
+		429B206C194917A5001B0DAB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 429B206B194917A5001B0DAB /* Images.xcassets */; };
+		429B2078194917A5001B0DAB /* BangleTD_STests.m in Sources */ = {isa = PBXBuildFile; fileRef = 429B2077194917A5001B0DAB /* BangleTD_STests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		429B2072194917A5001B0DAB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 429B2050194917A5001B0DAB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 429B2057194917A5001B0DAB;
+			remoteInfo = "BangleTD&S";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		42195E031954DF94001613C9 /* NSArray+PrettyPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+PrettyPrint.h"; sourceTree = "<group>"; };
+		42195E041954DF94001613C9 /* NSArray+PrettyPrint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+PrettyPrint.m"; sourceTree = "<group>"; };
+		42195E1D1954E476001613C9 /* PLTDevice_Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDevice_Internal.h; sourceTree = "<group>"; };
+		42195E1E1954E555001613C9 /* BRApplicationActionResultEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRApplicationActionResultEvent.h; sourceTree = "<group>"; };
+		42195E201954E555001613C9 /* BRCalibratePedometerServiceCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCalibratePedometerServiceCommand.h; sourceTree = "<group>"; };
+		42195E221954E555001613C9 /* BRCloseSessionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCloseSessionMessage.h; sourceTree = "<group>"; };
+		42195E241954E555001613C9 /* BRCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCommand.h; sourceTree = "<group>"; };
+		42195E261954E555001613C9 /* BRConfigureApplicationCommad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRConfigureApplicationCommad.h; sourceTree = "<group>"; };
+		42195E281954E555001613C9 /* BRDevice_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDevice_Private.h; sourceTree = "<group>"; };
+		42195E291954E555001613C9 /* BRDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDevice.h; sourceTree = "<group>"; };
+		42195E2B1954E555001613C9 /* BRDeviceConnectedEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceConnectedEvent.h; sourceTree = "<group>"; };
+		42195E2D1954E555001613C9 /* BRDeviceDisconnectedEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceDisconnectedEvent.h; sourceTree = "<group>"; };
+		42195E2F1954E555001613C9 /* BRDeviceInfoSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceInfoSettingRequest.h; sourceTree = "<group>"; };
+		42195E311954E555001613C9 /* BRDeviceInfoSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceInfoSettingResponse.h; sourceTree = "<group>"; };
+		42195E331954E555001613C9 /* BRDeviceNotReadyException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceNotReadyException.h; sourceTree = "<group>"; };
+		42195E351954E555001613C9 /* BRDeviceProtocolVersionMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDeviceProtocolVersionMessage.h; sourceTree = "<group>"; };
+		42195E371954E555001613C9 /* BREvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BREvent.h; sourceTree = "<group>"; };
+		42195E391954E555001613C9 /* BRException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRException.h; sourceTree = "<group>"; };
+		42195E3B1954E555001613C9 /* BRFreeFallEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRFreeFallEvent.h; sourceTree = "<group>"; };
+		42195E3D1954E555001613C9 /* BRFreeFallSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRFreeFallSettingResponse.h; sourceTree = "<group>"; };
+		42195E3F1954E555001613C9 /* BRGenesGUIDSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGenesGUIDSettingRequest.h; sourceTree = "<group>"; };
+		42195E411954E555001613C9 /* BRGenesGUIDSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGenesGUIDSettingResponse.h; sourceTree = "<group>"; };
+		42195E431954E555001613C9 /* BRGyroscopeCalStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGyroscopeCalStatusEvent.h; sourceTree = "<group>"; };
+		42195E451954E555001613C9 /* BRGyroscopeCalStatusSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRGyroscopeCalStatusSettingResponse.h; sourceTree = "<group>"; };
+		42195E471954E555001613C9 /* BRHostVersionNegotiateMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRHostVersionNegotiateMessage.h; sourceTree = "<group>"; };
+		42195E491954E555001613C9 /* BRIllegalValueException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIllegalValueException.h; sourceTree = "<group>"; };
+		42195E4B1954E555001613C9 /* BRIncomingMessage_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIncomingMessage_Private.h; sourceTree = "<group>"; };
+		42195E4C1954E555001613C9 /* BRIncomingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRIncomingMessage.h; sourceTree = "<group>"; };
+		42195E4E1954E555001613C9 /* BRMagnetometerCalStatusEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMagnetometerCalStatusEvent.h; sourceTree = "<group>"; };
+		42195E501954E555001613C9 /* BRMagnetometerCalStatusSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMagnetometerCalStatusSettingResponse.h; sourceTree = "<group>"; };
+		42195E521954E555001613C9 /* BRMessage_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMessage_Private.h; sourceTree = "<group>"; };
+		42195E531954E555001613C9 /* BRMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMessage.h; sourceTree = "<group>"; };
+		42195E551954E555001613C9 /* BRMetadataMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMetadataMessage.h; sourceTree = "<group>"; };
+		42195E571954E555001613C9 /* BROrientationTrackingEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BROrientationTrackingEvent.h; sourceTree = "<group>"; };
+		42195E591954E555001613C9 /* BROrientationTrackingSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BROrientationTrackingSettingResponse.h; sourceTree = "<group>"; };
+		42195E5B1954E555001613C9 /* BROutgoingMessage_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BROutgoingMessage_Private.h; sourceTree = "<group>"; };
+		42195E5C1954E555001613C9 /* BROutgoingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BROutgoingMessage.h; sourceTree = "<group>"; };
+		42195E5E1954E555001613C9 /* BRPedometerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRPedometerEvent.h; sourceTree = "<group>"; };
+		42195E601954E555001613C9 /* BRPedometerSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRPedometerSettingResponse.h; sourceTree = "<group>"; };
+		42195E621954E555001613C9 /* BRPerformApplicationActionCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRPerformApplicationActionCommand.h; sourceTree = "<group>"; };
+		42195E641954E555001613C9 /* BRProductNameSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRProductNameSettingRequest.h; sourceTree = "<group>"; };
+		42195E661954E555001613C9 /* BRProductNameSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRProductNameSettingResponse.h; sourceTree = "<group>"; };
+		42195E681954E555001613C9 /* BRRawMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRawMessage.h; sourceTree = "<group>"; };
+		42195E6A1954E555001613C9 /* BRRemoteDevice_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRemoteDevice_Private.h; sourceTree = "<group>"; };
+		42195E6B1954E555001613C9 /* BRRemoteDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRemoteDevice.h; sourceTree = "<group>"; };
+		42195E6D1954E555001613C9 /* BRServiceCalibrationSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRServiceCalibrationSettingRequest.h; sourceTree = "<group>"; };
+		42195E6F1954E555001613C9 /* BRServiceDataSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRServiceDataSettingRequest.h; sourceTree = "<group>"; };
+		42195E711954E555001613C9 /* BRServiceSubscriptionChangedEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRServiceSubscriptionChangedEvent.h; sourceTree = "<group>"; };
+		42195E731954E555001613C9 /* BRSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSettingRequest.h; sourceTree = "<group>"; };
+		42195E751954E555001613C9 /* BRSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSettingResponse.h; sourceTree = "<group>"; };
+		42195E771954E555001613C9 /* BRSignalStrengthEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSignalStrengthEvent.h; sourceTree = "<group>"; };
+		42195E791954E555001613C9 /* BRSignalStrengthSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSignalStrengthSettingRequest.h; sourceTree = "<group>"; };
+		42195E7B1954E555001613C9 /* BRSignalStrengthSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSignalStrengthSettingResponse.h; sourceTree = "<group>"; };
+		42195E7D1954E555001613C9 /* BRSubscribeToServiceCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSubscribeToServiceCommand.h; sourceTree = "<group>"; };
+		42195E7F1954E555001613C9 /* BRSubscribeToSignalStrengthCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSubscribeToSignalStrengthCommand.h; sourceTree = "<group>"; };
+		42195E811954E555001613C9 /* BRTapsEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRTapsEvent.h; sourceTree = "<group>"; };
+		42195E831954E555001613C9 /* BRTapsSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRTapsSettingResponse.h; sourceTree = "<group>"; };
+		42195E851954E555001613C9 /* BRWearingStateEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRWearingStateEvent.h; sourceTree = "<group>"; };
+		42195E871954E555001613C9 /* BRWearingStateSettingRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRWearingStateSettingRequest.h; sourceTree = "<group>"; };
+		42195E891954E555001613C9 /* BRWearingStateSettingResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRWearingStateSettingResponse.h; sourceTree = "<group>"; };
+		42195E8B1954E555001613C9 /* PLTCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTCalibration.h; sourceTree = "<group>"; };
+		42195E8C1954E555001613C9 /* PLTConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTConfiguration.h; sourceTree = "<group>"; };
+		42195ED019550019001613C9 /* PLTSkinTemperatureInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTSkinTemperatureInfo.h; sourceTree = "<group>"; };
+		42195ED21955016C001613C9 /* PLTDevice_Bangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDevice_Bangle.h; sourceTree = "<group>"; };
+		42195EE119550BA5001613C9 /* PLTAmbientHumidityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTAmbientHumidityInfo.h; sourceTree = "<group>"; };
+		42195EE219550BA5001613C9 /* PLTAmbientPressureInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTAmbientPressureInfo.h; sourceTree = "<group>"; };
+		428057101958C8BE00E53BCF /* DialogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DialogViewController.h; sourceTree = "<group>"; };
+		428057111958C8BE00E53BCF /* DialogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DialogViewController.m; sourceTree = "<group>"; };
+		428057131958C8CB00E53BCF /* ConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationViewController.h; sourceTree = "<group>"; };
+		428057141958C8CB00E53BCF /* ConfigurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigurationViewController.m; sourceTree = "<group>"; };
+		4283936B194918E2000C43E5 /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
+		4283936C194918E2000C43E5 /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
+		4283936E19491F0A000C43E5 /* gameofthrones.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameofthrones.mp3; sourceTree = "<group>"; };
+		4283937019491F47000C43E5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		428393AC19492937000C43E5 /* PLTCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTCalibration.h; sourceTree = "<group>"; };
+		428393AD19492937000C43E5 /* PLTConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTConfiguration.h; sourceTree = "<group>"; };
+		428393AE19492937000C43E5 /* PLTDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDevice.h; sourceTree = "<group>"; };
+		428393AF19492937000C43E5 /* PLTFreeFallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTFreeFallInfo.h; sourceTree = "<group>"; };
+		428393B019492937000C43E5 /* PLTGyroscopeCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTGyroscopeCalibrationInfo.h; sourceTree = "<group>"; };
+		428393B119492937000C43E5 /* PLTInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTInfo.h; sourceTree = "<group>"; };
+		428393B219492937000C43E5 /* PLTMagnetometerCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTMagnetometerCalibrationInfo.h; sourceTree = "<group>"; };
+		428393B319492937000C43E5 /* PLTOrientationTrackingCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingCalibration.h; sourceTree = "<group>"; };
+		428393B419492937000C43E5 /* PLTOrientationTrackingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingInfo.h; sourceTree = "<group>"; };
+		428393B519492937000C43E5 /* PLTPedometerCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerCalibration.h; sourceTree = "<group>"; };
+		428393B619492937000C43E5 /* PLTPedometerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerInfo.h; sourceTree = "<group>"; };
+		428393B719492937000C43E5 /* PLTProximityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTProximityInfo.h; sourceTree = "<group>"; };
+		428393B819492937000C43E5 /* PLTTapsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTTapsInfo.h; sourceTree = "<group>"; };
+		428393B919492937000C43E5 /* PLTWearingStateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTWearingStateInfo.h; sourceTree = "<group>"; };
+		428393BF19492A8E000C43E5 /* UITableView+Cells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Cells.h"; sourceTree = "<group>"; };
+		428393C019492A8E000C43E5 /* UITableView+Cells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Cells.m"; sourceTree = "<group>"; };
+		428393C319492E8F000C43E5 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		428393C519493350000C43E5 /* NSData+HexStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+HexStrings.h"; sourceTree = "<group>"; };
+		428393C619493350000C43E5 /* NSData+HexStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HexStrings.m"; sourceTree = "<group>"; };
+		4288A958194A7D4D003B89E8 /* libPLTDevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPLTDevice.a; sourceTree = "<group>"; };
+		4288A95A194A7F14003B89E8 /* NSData+Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Hash.h"; sourceTree = "<group>"; };
+		4288A95B194A7F14003B89E8 /* NSData+Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Hash.m"; sourceTree = "<group>"; };
+		4288A95D194A7FAF003B89E8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		429B2058194917A5001B0DAB /* BangleTD&S.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BangleTD&S.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		429B205C194917A5001B0DAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		429B205D194917A5001B0DAB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		429B205F194917A5001B0DAB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		429B2060194917A5001B0DAB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		429B2062194917A5001B0DAB /* LockViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LockViewController.h; sourceTree = "<group>"; };
+		429B2063194917A5001B0DAB /* LockViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LockViewController.m; sourceTree = "<group>"; };
+		429B2065194917A5001B0DAB /* SensorsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SensorsViewController.h; sourceTree = "<group>"; };
+		429B2066194917A5001B0DAB /* SensorsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SensorsViewController.m; sourceTree = "<group>"; };
+		429B2069194917A5001B0DAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		429B206B194917A5001B0DAB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		429B2071194917A5001B0DAB /* BangleTD&STests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BangleTD&STests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		429B2076194917A5001B0DAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		429B2077194917A5001B0DAB /* BangleTD_STests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BangleTD_STests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		429B2055194917A5001B0DAB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4288A95E194A7FAF003B89E8 /* Security.framework in Frameworks */,
+				428393C419492E8F000C43E5 /* ExternalAccessory.framework in Frameworks */,
+				4283937119491F47000C43E5 /* AVFoundation.framework in Frameworks */,
+				4288A959194A7D4D003B89E8 /* libPLTDevice.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		429B206E194917A5001B0DAB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		428393AA19492937000C43E5 /* PLTDevice */ = {
+			isa = PBXGroup;
+			children = (
+				428393AB19492937000C43E5 /* include */,
+				428393BA19492937000C43E5 /* lib */,
+			);
+			path = PLTDevice;
+			sourceTree = SOURCE_ROOT;
+		};
+		428393AB19492937000C43E5 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				42195EE119550BA5001613C9 /* PLTAmbientHumidityInfo.h */,
+				42195EE219550BA5001613C9 /* PLTAmbientPressureInfo.h */,
+				42195ED21955016C001613C9 /* PLTDevice_Bangle.h */,
+				42195ED019550019001613C9 /* PLTSkinTemperatureInfo.h */,
+				42195E1E1954E555001613C9 /* BRApplicationActionResultEvent.h */,
+				42195E201954E555001613C9 /* BRCalibratePedometerServiceCommand.h */,
+				42195E221954E555001613C9 /* BRCloseSessionMessage.h */,
+				42195E241954E555001613C9 /* BRCommand.h */,
+				42195E261954E555001613C9 /* BRConfigureApplicationCommad.h */,
+				42195E281954E555001613C9 /* BRDevice_Private.h */,
+				42195E291954E555001613C9 /* BRDevice.h */,
+				42195E2B1954E555001613C9 /* BRDeviceConnectedEvent.h */,
+				42195E2D1954E555001613C9 /* BRDeviceDisconnectedEvent.h */,
+				42195E2F1954E555001613C9 /* BRDeviceInfoSettingRequest.h */,
+				42195E311954E555001613C9 /* BRDeviceInfoSettingResponse.h */,
+				42195E331954E555001613C9 /* BRDeviceNotReadyException.h */,
+				42195E351954E555001613C9 /* BRDeviceProtocolVersionMessage.h */,
+				42195E371954E555001613C9 /* BREvent.h */,
+				42195E391954E555001613C9 /* BRException.h */,
+				42195E3B1954E555001613C9 /* BRFreeFallEvent.h */,
+				42195E3D1954E555001613C9 /* BRFreeFallSettingResponse.h */,
+				42195E3F1954E555001613C9 /* BRGenesGUIDSettingRequest.h */,
+				42195E411954E555001613C9 /* BRGenesGUIDSettingResponse.h */,
+				42195E431954E555001613C9 /* BRGyroscopeCalStatusEvent.h */,
+				42195E451954E555001613C9 /* BRGyroscopeCalStatusSettingResponse.h */,
+				42195E471954E555001613C9 /* BRHostVersionNegotiateMessage.h */,
+				42195E491954E555001613C9 /* BRIllegalValueException.h */,
+				42195E4B1954E555001613C9 /* BRIncomingMessage_Private.h */,
+				42195E4C1954E555001613C9 /* BRIncomingMessage.h */,
+				42195E4E1954E555001613C9 /* BRMagnetometerCalStatusEvent.h */,
+				42195E501954E555001613C9 /* BRMagnetometerCalStatusSettingResponse.h */,
+				42195E521954E555001613C9 /* BRMessage_Private.h */,
+				42195E531954E555001613C9 /* BRMessage.h */,
+				42195E551954E555001613C9 /* BRMetadataMessage.h */,
+				42195E571954E555001613C9 /* BROrientationTrackingEvent.h */,
+				42195E591954E555001613C9 /* BROrientationTrackingSettingResponse.h */,
+				42195E5B1954E555001613C9 /* BROutgoingMessage_Private.h */,
+				42195E5C1954E555001613C9 /* BROutgoingMessage.h */,
+				42195E5E1954E555001613C9 /* BRPedometerEvent.h */,
+				42195E601954E555001613C9 /* BRPedometerSettingResponse.h */,
+				42195E621954E555001613C9 /* BRPerformApplicationActionCommand.h */,
+				42195E641954E555001613C9 /* BRProductNameSettingRequest.h */,
+				42195E661954E555001613C9 /* BRProductNameSettingResponse.h */,
+				42195E681954E555001613C9 /* BRRawMessage.h */,
+				42195E6A1954E555001613C9 /* BRRemoteDevice_Private.h */,
+				42195E6B1954E555001613C9 /* BRRemoteDevice.h */,
+				42195E6D1954E555001613C9 /* BRServiceCalibrationSettingRequest.h */,
+				42195E6F1954E555001613C9 /* BRServiceDataSettingRequest.h */,
+				42195E711954E555001613C9 /* BRServiceSubscriptionChangedEvent.h */,
+				42195E731954E555001613C9 /* BRSettingRequest.h */,
+				42195E751954E555001613C9 /* BRSettingResponse.h */,
+				42195E771954E555001613C9 /* BRSignalStrengthEvent.h */,
+				42195E791954E555001613C9 /* BRSignalStrengthSettingRequest.h */,
+				42195E7B1954E555001613C9 /* BRSignalStrengthSettingResponse.h */,
+				42195E7D1954E555001613C9 /* BRSubscribeToServiceCommand.h */,
+				42195E7F1954E555001613C9 /* BRSubscribeToSignalStrengthCommand.h */,
+				42195E811954E555001613C9 /* BRTapsEvent.h */,
+				42195E831954E555001613C9 /* BRTapsSettingResponse.h */,
+				42195E851954E555001613C9 /* BRWearingStateEvent.h */,
+				42195E871954E555001613C9 /* BRWearingStateSettingRequest.h */,
+				42195E891954E555001613C9 /* BRWearingStateSettingResponse.h */,
+				42195E8B1954E555001613C9 /* PLTCalibration.h */,
+				42195E8C1954E555001613C9 /* PLTConfiguration.h */,
+				42195E1D1954E476001613C9 /* PLTDevice_Internal.h */,
+				428393AC19492937000C43E5 /* PLTCalibration.h */,
+				428393AD19492937000C43E5 /* PLTConfiguration.h */,
+				428393AE19492937000C43E5 /* PLTDevice.h */,
+				428393AF19492937000C43E5 /* PLTFreeFallInfo.h */,
+				428393B019492937000C43E5 /* PLTGyroscopeCalibrationInfo.h */,
+				428393B119492937000C43E5 /* PLTInfo.h */,
+				428393B219492937000C43E5 /* PLTMagnetometerCalibrationInfo.h */,
+				428393B319492937000C43E5 /* PLTOrientationTrackingCalibration.h */,
+				428393B419492937000C43E5 /* PLTOrientationTrackingInfo.h */,
+				428393B519492937000C43E5 /* PLTPedometerCalibration.h */,
+				428393B619492937000C43E5 /* PLTPedometerInfo.h */,
+				428393B719492937000C43E5 /* PLTProximityInfo.h */,
+				428393B819492937000C43E5 /* PLTTapsInfo.h */,
+				428393B919492937000C43E5 /* PLTWearingStateInfo.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		428393BA19492937000C43E5 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				4288A958194A7D4D003B89E8 /* libPLTDevice.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		428393C219492A91000C43E5 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				428393C519493350000C43E5 /* NSData+HexStrings.h */,
+				428393C619493350000C43E5 /* NSData+HexStrings.m */,
+				42195E031954DF94001613C9 /* NSArray+PrettyPrint.h */,
+				42195E041954DF94001613C9 /* NSArray+PrettyPrint.m */,
+				428393BF19492A8E000C43E5 /* UITableView+Cells.h */,
+				428393C019492A8E000C43E5 /* UITableView+Cells.m */,
+				4288A95A194A7F14003B89E8 /* NSData+Hash.h */,
+				4288A95B194A7F14003B89E8 /* NSData+Hash.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		429B204F194917A5001B0DAB = {
+			isa = PBXGroup;
+			children = (
+				429B205A194917A5001B0DAB /* BangleTD&S */,
+				429B2074194917A5001B0DAB /* BangleTD&STests */,
+				4283937019491F47000C43E5 /* AVFoundation.framework */,
+				4288A95D194A7FAF003B89E8 /* Security.framework */,
+				428393C319492E8F000C43E5 /* ExternalAccessory.framework */,
+				429B2059194917A5001B0DAB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		429B2059194917A5001B0DAB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				429B2058194917A5001B0DAB /* BangleTD&S.app */,
+				429B2071194917A5001B0DAB /* BangleTD&STests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		429B205A194917A5001B0DAB /* BangleTD&S */ = {
+			isa = PBXGroup;
+			children = (
+				429B205F194917A5001B0DAB /* AppDelegate.h */,
+				429B2060194917A5001B0DAB /* AppDelegate.m */,
+				429B2062194917A5001B0DAB /* LockViewController.h */,
+				429B2063194917A5001B0DAB /* LockViewController.m */,
+				429B2065194917A5001B0DAB /* SensorsViewController.h */,
+				429B2066194917A5001B0DAB /* SensorsViewController.m */,
+				4283936B194918E2000C43E5 /* MusicViewController.h */,
+				4283936C194918E2000C43E5 /* MusicViewController.m */,
+				428057101958C8BE00E53BCF /* DialogViewController.h */,
+				428057111958C8BE00E53BCF /* DialogViewController.m */,
+				428057131958C8CB00E53BCF /* ConfigurationViewController.h */,
+				428057141958C8CB00E53BCF /* ConfigurationViewController.m */,
+				429B2068194917A5001B0DAB /* Main.storyboard */,
+				428393C219492A91000C43E5 /* Categories */,
+				428393AA19492937000C43E5 /* PLTDevice */,
+				429B206B194917A5001B0DAB /* Images.xcassets */,
+				4283936E19491F0A000C43E5 /* gameofthrones.mp3 */,
+				429B205B194917A5001B0DAB /* Supporting Files */,
+			);
+			path = "BangleTD&S";
+			sourceTree = "<group>";
+		};
+		429B205B194917A5001B0DAB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				429B205C194917A5001B0DAB /* Info.plist */,
+				429B205D194917A5001B0DAB /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		429B2074194917A5001B0DAB /* BangleTD&STests */ = {
+			isa = PBXGroup;
+			children = (
+				429B2077194917A5001B0DAB /* BangleTD_STests.m */,
+				429B2075194917A5001B0DAB /* Supporting Files */,
+			);
+			path = "BangleTD&STests";
+			sourceTree = "<group>";
+		};
+		429B2075194917A5001B0DAB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				429B2076194917A5001B0DAB /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		429B2057194917A5001B0DAB /* BangleTD&S */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 429B207B194917A5001B0DAB /* Build configuration list for PBXNativeTarget "BangleTD&S" */;
+			buildPhases = (
+				429B2054194917A5001B0DAB /* Sources */,
+				429B2055194917A5001B0DAB /* Frameworks */,
+				429B2056194917A5001B0DAB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BangleTD&S";
+			productName = "BangleTD&S";
+			productReference = 429B2058194917A5001B0DAB /* BangleTD&S.app */;
+			productType = "com.apple.product-type.application";
+		};
+		429B2070194917A5001B0DAB /* BangleTD&STests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 429B207E194917A5001B0DAB /* Build configuration list for PBXNativeTarget "BangleTD&STests" */;
+			buildPhases = (
+				429B206D194917A5001B0DAB /* Sources */,
+				429B206E194917A5001B0DAB /* Frameworks */,
+				429B206F194917A5001B0DAB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				429B2073194917A5001B0DAB /* PBXTargetDependency */,
+			);
+			name = "BangleTD&STests";
+			productName = "BangleTD&STests";
+			productReference = 429B2071194917A5001B0DAB /* BangleTD&STests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		429B2050194917A5001B0DAB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = Plantronics;
+				TargetAttributes = {
+					429B2057194917A5001B0DAB = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					429B2070194917A5001B0DAB = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 429B2057194917A5001B0DAB;
+					};
+				};
+			};
+			buildConfigurationList = 429B2053194917A5001B0DAB /* Build configuration list for PBXProject "BangleTD&S" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 429B204F194917A5001B0DAB;
+			productRefGroup = 429B2059194917A5001B0DAB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				429B2057194917A5001B0DAB /* BangleTD&S */,
+				429B2070194917A5001B0DAB /* BangleTD&STests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		429B2056194917A5001B0DAB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4283936F19491F0A000C43E5 /* gameofthrones.mp3 in Resources */,
+				429B206A194917A5001B0DAB /* Main.storyboard in Resources */,
+				429B206C194917A5001B0DAB /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		429B206F194917A5001B0DAB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		429B2054194917A5001B0DAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				429B2067194917A5001B0DAB /* SensorsViewController.m in Sources */,
+				428393C119492A8E000C43E5 /* UITableView+Cells.m in Sources */,
+				428057151958C8CB00E53BCF /* ConfigurationViewController.m in Sources */,
+				4288A95C194A7F14003B89E8 /* NSData+Hash.m in Sources */,
+				4283936D194918E2000C43E5 /* MusicViewController.m in Sources */,
+				42195E051954DF94001613C9 /* NSArray+PrettyPrint.m in Sources */,
+				429B2061194917A5001B0DAB /* AppDelegate.m in Sources */,
+				428057121958C8BE00E53BCF /* DialogViewController.m in Sources */,
+				429B2064194917A5001B0DAB /* LockViewController.m in Sources */,
+				428393C719493350000C43E5 /* NSData+HexStrings.m in Sources */,
+				429B205E194917A5001B0DAB /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		429B206D194917A5001B0DAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				429B2078194917A5001B0DAB /* BangleTD_STests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		429B2073194917A5001B0DAB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 429B2057194917A5001B0DAB /* BangleTD&S */;
+			targetProxy = 429B2072194917A5001B0DAB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		429B2068194917A5001B0DAB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				429B2069194917A5001B0DAB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		429B2079194917A5001B0DAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				METAL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		429B207A194917A5001B0DAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				METAL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		429B207C194917A5001B0DAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					"$(PROJECT_ROOT)/libPLTDevice/include/**",
+				);
+				INFOPLIST_FILE = "BangleTD&S/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PLTDevice/lib",
+				);
+				OTHER_CFLAGS = "-DTARGET_IOS";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		429B207D194917A5001B0DAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Applications/Xcode6-Beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+					"$(PROJECT_ROOT)/libPLTDevice/include/**",
+				);
+				INFOPLIST_FILE = "BangleTD&S/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PLTDevice/lib",
+				);
+				OTHER_CFLAGS = "-DTARGET_IOS";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		429B207F194917A5001B0DAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BangleTD&S.app/BangleTD&S";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "BangleTD&STests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+			};
+			name = Debug;
+		};
+		429B2080194917A5001B0DAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/BangleTD&S.app/BangleTD&S";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "BangleTD&STests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		429B2053194917A5001B0DAB /* Build configuration list for PBXProject "BangleTD&S" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				429B2079194917A5001B0DAB /* Debug */,
+				429B207A194917A5001B0DAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		429B207B194917A5001B0DAB /* Build configuration list for PBXNativeTarget "BangleTD&S" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				429B207C194917A5001B0DAB /* Debug */,
+				429B207D194917A5001B0DAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		429B207E194917A5001B0DAB /* Build configuration list for PBXNativeTarget "BangleTD&STests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				429B207F194917A5001B0DAB /* Debug */,
+				429B2080194917A5001B0DAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 429B2050194917A5001B0DAB /* Project object */;
+}
