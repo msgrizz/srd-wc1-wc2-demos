@@ -222,20 +222,20 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (IBAction)subscribeToServicesButton:(id)sender
 {
-//    BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDTaps
-//                                                                                        mode:BRServiceSubscriptionModeOnChange
-//                                                                                      period:0];
-//    [self.sensorsDevice sendMessage:message];
+    BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDOrientationTracking
+                                                                                        mode:BRServiceSubscriptionModeOnChange
+                                                                                      period:0];
+    [self.sensorsDevice sendMessage:message];
     
-    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-        if (i==1) continue;
-		if (i==BRServiceIDOrientationTracking) continue;
-        
-        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
-                                                                                            mode:BRServiceSubscriptionModeOnChange
-                                                                                          period:0];
-        [self.sensorsDevice sendMessage:message];
-    }
+//    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+//        if (i==1) continue;
+//		if (i==BRServiceIDOrientationTracking) continue;
+//        
+//        BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:i
+//                                                                                            mode:BRServiceSubscriptionModeOnChange
+//                                                                                          period:0];
+//        [self.sensorsDevice sendMessage:message];
+//    }
 }
 
 - (IBAction)unsubscribeFromServicesButton:(id)sender
@@ -337,8 +337,6 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	NSLog(@"lockButton:");
 	//[self setLockState:YES];
 	
-	NSLog(@"self.device.isConnected = %@", (self.device.isConnected ? @"YES" : @"NO"));
-	NSLog(@"self.sensorsDevice.isConnected = %@", (self.sensorsDevice.isConnected ? @"YES" : @"NO"));
 	
 //	NSLog(@"ADD CONTACTS");
 //	
@@ -611,7 +609,7 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event
 {
-    NSLog(@"BRDevice: %@ didReceiveEvent: %@", device, event);
+    //NSLog(@"BRDevice: %@ didReceiveEvent: %@", device, event);
 
     if ([event isKindOfClass:[BRWearingStateEvent class]]) {
         BRWearingStateEvent *e = (BRWearingStateEvent *)event;
@@ -731,9 +729,14 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
     }
 }
 
-- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
+- (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception
 {
-    NSLog(@"BRDevice: %@ didRaiseException: %@", device, exception);
+	NSLog(@"BRDevice: %@ didRaiseSettingException: %@", device, exception);
+}
+
+- (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception
+{
+	NSLog(@"BRDevice: %@ didRaiseCommandException: %@", device, exception);
 }
 
 - (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice
@@ -749,28 +752,27 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 
 - (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data
 {
-//    NSString *hexString = [data hexStringWithSpaceEvery:2];
-//    NSLog(@"--> %@", hexString);
-//    self.dataTextField.stringValue = [NSString stringWithFormat:@"--> %@", hexString];
+    NSString *hexString = [data hexStringWithSpaceEvery:2];
+    NSLog(@"--> %@", hexString);
+    self.dataTextField.stringValue = [NSString stringWithFormat:@"--> %@", hexString];
 }
 
 - (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data
 {
-//    NSString *hexString = [data hexStringWithSpaceEvery:2];
-//    NSLog(@"<-- %@", hexString);
-//    self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
+    NSString *hexString = [data hexStringWithSpaceEvery:2];
+    NSLog(@"<-- %@", hexString);
+    self.dataTextField.stringValue = [NSString stringWithFormat:@"<-- %@", hexString];
 }
 
 #pragma mark - NSWindowController
 
-- (id)init
-{
-	if (self = [super initWithWindowNibName:@"MainWindow.xib"]) {
-		_pltDLogLevel = DLogLevelTrace;
-		return self;
-	}
-	return nil;
-}
+//- (id)init
+//{
+//	if (self = [super initWithWindowNibName:@"MainWindow.xib"]) {
+//		return self;
+//	}
+//	return nil;
+//}
 
 - (NSString *)windowNibName
 {

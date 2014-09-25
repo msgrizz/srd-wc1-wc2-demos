@@ -9,11 +9,18 @@
 
 #import "PLTDevice.h"
 
+
+extern NSString *const PLTDeviceWillSendDataNotification;
+extern NSString *const PLTDeviceDidReceiveDataNotification;
+extern NSString *const PLTDeviceDataNotificationKey;
+
+
 @class BRDevice;
 
 #ifdef TARGET_IOS
 @class EAAccessory;
 #endif
+
 
 @interface PLTDevice ()
 

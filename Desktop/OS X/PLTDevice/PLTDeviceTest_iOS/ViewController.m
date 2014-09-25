@@ -78,13 +78,13 @@
 		//[self.device subscribe:self toService:PLTServiceOrientationTracking			withMode:PLTSubscriptionModeOnChange	andPeriod:1000];
 		//[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
 		
-//		[self.device subscribe:self toService:PLTServicePedometer					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
+		[self.device subscribe:self toService:PLTServicePedometer					withMode:PLTSubscriptionModeOnChange	andPeriod:0 error:nil];
 //		[self.device subscribe:self toService:PLTServiceFreeFall					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceTaps						withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceMagnetometerCalStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceWearingState				withMode:PLTSubscriptionModePeriodic	andPeriod:100 error:nil];
-		[self.device subscribe:self toService:PLTServiceProximity					withMode:PLTSubscriptionModePeriodic	andPeriod:100 error:nil];
+//		[self.device subscribe:self toService:PLTServiceProximity					withMode:PLTSubscriptionModePeriodic	andPeriod:100 error:nil];
 	}
 }
 

@@ -13,6 +13,11 @@
 #import "NSData+HexStrings.h"
 
 
+
+//#warning TESTING
+//extern BOOL _stopParsing;
+
+
 @interface MainWindowController () <PLTDeviceSubscriber>
 
 - (IBAction)openConnectionButton:(id)sender;
@@ -126,15 +131,17 @@
 {
 	NSLog(@"calibrateButton:");
 	
+//	_stopParsing = YES;
+	
 //	PLTOrientationTrackingInfo *oldOrientationInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientationTracking];
 //	PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceOrientationTrackingInfo:oldOrientationInfo];
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:oldOrientationInfo.quaternion];
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceEulerAngles:oldOrientationInfo.eulerAngles];
 //	[self.device setCalibration:orientationCal forService:PLTServiceOrientationTracking];
 	
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
-	
-	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
+//	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+//	
+//	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
 }
 
 - (void)setUIConnected:(BOOL)flag

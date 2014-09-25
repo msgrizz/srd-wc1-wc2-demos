@@ -19,4 +19,6 @@ typedef enum {
 
 + (BRException *)exceptionWithData:(NSData *)data;
 
+@property(nonatomic,readonly)	uint16_t  exceptionID;
+
 @end

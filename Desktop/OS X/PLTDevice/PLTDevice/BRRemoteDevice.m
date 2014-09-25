@@ -127,9 +127,14 @@
 	[self.delegate BRDevice:self didReceiveSettingResponse:settingResponse];
 }
 
-- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
+- (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception
 {
-	[self.delegate BRDevice:self didRaiseException:exception];
+	[self.delegate BRDevice:self didRaiseSettingException:exception];
+}
+
+- (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception
+{
+	[self.delegate BRDevice:self didRaiseCommandException:exception];
 }
 
 - (void)BRDevice:(BRDevice *)device willSendData:(NSData *)data

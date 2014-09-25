@@ -69,7 +69,8 @@ typedef NS_ENUM(NSInteger, BRDeviceError) {
 - (void)BRDevice:(BRDevice *)device didFailConnectWithError:(int)ioBTError;
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event;
 - (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse;
-- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception;
+- (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception;
+- (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception;
 - (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice;
 
 @optional

@@ -592,13 +592,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		420C23ED19A8021C0031AF57 /* Other Sources */ = {
+		420C23ED19A8021C0031AF57 /* PLTDLog */ = {
 			isa = PBXGroup;
 			children = (
 				420C23E919A800140031AF57 /* PLTDLog.h */,
 				420C23EA19A800140031AF57 /* PLTDLog.m */,
 			);
-			name = "Other Sources";
+			name = PLTDLog;
 			path = PLTDevice;
 			sourceTree = "<group>";
 		};
@@ -671,7 +671,7 @@
 				429E5F3B18BEBE7C003563D6 /* PLTDevice */,
 				429E60ED18BEE1AB003563D6 /* BRDevice */,
 				429E5FAC18BEBFC7003563D6 /* Categories */,
-				420C23ED19A8021C0031AF57 /* Other Sources */,
+				420C23ED19A8021C0031AF57 /* PLTDLog */,
 				429E5F3C18BEBE7C003563D6 /* Supporting Files */,
 				429E5FF018BEC510003563D6 /* BRDeviceTest_OSX */,
 				42FEA71B1938296E00B735E9 /* BRDeviceTest_iOS */,
@@ -1756,6 +1756,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				OTHER_CFLAGS = "-DTARGET_OSX";
 				PRODUCT_NAME = PLTDevice;
+				SDKROOT = macosx10.9;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1777,6 +1778,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				OTHER_CFLAGS = "-DTARGET_OSX";
 				PRODUCT_NAME = PLTDevice;
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -1830,6 +1832,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "-DTARGET_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1845,6 +1848,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = "-DTARGET_OSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

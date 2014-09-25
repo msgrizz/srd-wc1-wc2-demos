@@ -52,6 +52,11 @@
 #import "BRHeadsetCallStatusEvent.h"
 #import "BRHeadsetCallStatusSettingResponse.h"
 
+
+//#warning TESTING
+//BOOL _stopParsing = NO;
+
+
 #import "BRSubscribedServiceDataEvent.h"
 
 #ifdef BANGLE
@@ -649,9 +654,14 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				}
 				break; }
 				
-			case BRMessageTypeSettingResultException:
-			case BRMessageTypeCommandResultException: {
-				DLog(DLogLevelError, @"***** EXCEPTION(%d) *****", port);
+			case BRMessageTypeSettingResultException: {
+			//case BRMessageTypeCommandResultException: {
+				DLog(DLogLevelError, @"*** BRMessageTypeSettingResultException(%d) ***", port);
+				
+				BRException *e = [BRException exceptionWithData:data];
+				if ([self.delegate respondsToSelector:@selector(BRDevice:didRaiseSettingException:)]) {
+					[self.delegate BRDevice:self didRaiseSettingException:e];
+				}
 				
 				//            BRExceptionID exceptionID;
 				//            NSData *exceptionIDData = [data subdataWithRange:NSMakeRange(10, sizeof(uint16_t))];
@@ -684,9 +694,15 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 			case BRMessageTypeCommandResultSuccess:
 				DLog(DLogLevelTrace, @"BRMessageTypeCommandResultSuccess(%d)", port);
 				break;
-				//        case BRMessageTypeCommandResultException:
-				//            NSLog(@"***** COMMAND EXCEPTION *****");
-				//            break;
+				
+			case BRMessageTypeCommandResultException: {
+				DLog(DLogLevelError, @"*** BRMessageTypeSettingResultException(%d) ***", port);
+				
+				BRException *e = [BRException exceptionWithData:data];
+				if ([self.delegate respondsToSelector:@selector(BRDevice:didRaiseCommandException:)]) {
+					[self.delegate BRDevice:self didRaiseCommandException:e];
+				}
+				break; }
 				
 			case BRMessageTypeDeviceProtocolVersion: {
 				BRDeviceProtocolVersionMessage *protocolVersionMessage = (BRDeviceProtocolVersionMessage *)[BRDeviceProtocolVersionMessage messageWithData:data];
@@ -915,20 +931,43 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 #pragma mark - IOBluetoothRFCOMMChannelDelegate
 
 #ifdef TARGET_OSX
-- (void)rfcommChannelData:(IOBluetoothRFCOMMChannel *)rfcommChannel data:(void *)dataPointer length:(size_t)dataLength;
+- (void)rfcommChannelData:(IOBluetoothRFCOMMChannel *)rfcommChannel data:(void *)dataPointer length:(size_t)dataLength
 {
     NSData *data = [NSData dataWithBytes:dataPointer length:dataLength];
-    [self parseIncomingMessage:data];
+	//DLog(DLogLevelTrace, @"<== %@", [data hexStringWithSpaceEvery:2]);
+	
+	[self.inputBuffer appendData:data];
+	[self checkInputBuffer];
+	
+    //[self parseIncomingMessage:data];
 }
 
 - (void)rfcommChannelOpenComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel status:(IOReturn)error
 {
     DLog(DLogLevelTrace, @"rfcommChannelOpenComplete: %@, status: %d", rfcommChannel, error);
 	
+	self.inputBuffer = [NSMutableData data];
+	
 	if (!rfcommChannel.isOpen) {
 		// when an invalid BT address is supplied, error is 4. not sure where this comes from.
 		[self.delegate BRDevice:self didFailConnectWithError:error];
 	}
+	else {
+		if (self.state == BRDeviceStateOpeningLink) {
+			self.state = BRDeviceStateHostVersionNegotiating;
+#ifdef GENESIS
+			BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeHostProtocolVersion payload:[NSData dataWithHexString:@"646E"]];
+			[self sendMessage:message];	
+#else
+			BRHostVersionNegotiateMessage *message = (BRHostVersionNegotiateMessage *)[BRHostVersionNegotiateMessage messageWithMinimumVersion:1 maximumVersion:1];
+			[self sendMessage:message];	
+#endif
+		}
+	}
+	
+	
+//	IOReturn ret = [rfcommChannel setSerialParameters:38400 dataBits:8 parity:kBluetoothRFCOMMParityTypeNoParity stopBits:1];
+//	NSLog(@"setSerialParameters: %d", ret);
 }
 
 - (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel *)rfcommChannel
@@ -1151,9 +1190,9 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 - (NSString *)description
 {
 #ifdef TARGET_OSX
-    return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%d), delegate=%@",
+    return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%lu), delegate=%@",
             self, self.bluetoothAddress, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], 
-			(unsigned long)[self.events count], [self.remoteDevices count], self.delegate];
+			(unsigned long)[self.events count], (unsigned long)[self.remoteDevices count], self.delegate];
 #endif
 #ifdef TARGET_IOS
 	return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%d), delegate=%@",

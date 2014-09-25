@@ -61,6 +61,7 @@
 #import "BRGenesGUIDSettingResponse.h"
 #import "BRProductNameSettingRequest.h"
 #import "BRProductNameSettingResponse.h"
+#import "BRException.h"
 
 #import "NSData+HexStrings.h"
 #import "NSArray+PrettyPrint.h"
@@ -77,9 +78,13 @@ NSString *const PLTDeviceAvailableNotification =							@"PLTDeviceAvailableNotif
 NSString *const PLTDeviceDidOpenConnectionNotification =					@"PLTDeviceDidOpenConnectionNotification";
 NSString *const PLTDeviceDidFailOpenConnectionNotification =				@"PLTDeviceDidFailOpenConnectionNotification";
 NSString *const PLTDeviceDidCloseConnectionNotification =					@"PLTDeviceDidCloseConnectionNotification";
+NSString *const PLTDeviceWillSendDataNotification =							@"PLTDeviceWillSendDataNotification";
+NSString *const PLTDeviceDidReceiveDataNotification =						@"PLTDeviceDidReceiveDataNotification";
+
 
 NSString *const PLTDeviceNotificationKey =									@"PLTDeviceNotificationKey";
 NSString *const PLTDeviceConnectionErrorNotificationKey =					@"PLTDeviceConnectionErrorNotificationKey";
+NSString *const PLTDeviceDataNotificationKey =								@"PLTDeviceDataNotificationKey";
 
 NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 
@@ -842,7 +847,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	self.model = response.name;
 	
 	self.name = nil;
-	if ([self.model isEqualToString:@"PLT_WC1"]) {
+	if ([self.model isEqualToString:@"4"]) {
 		self.name = @"Wearable Concept 1";
 	}
 
@@ -860,20 +865,25 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 {
 	DLog(DLogLevelTrace, @"onGUIDReceived:");
 	
-	NSData *guidData = response.guidData;
-	uint8_t *guid = malloc([guidData length]);
-	[guidData getBytes:guid length:[guidData length]];
-	
-	NSString *serial = [guidData hexStringWithSpaceEvery:0];
-	NSMutableString *hyphenSerial = [NSMutableString string];
-	for (int i=0; i<[serial length]; i++) {
-		[hyphenSerial appendString:[serial substringWithRange:NSMakeRange(i, 1)]];
-		if (i==7 || i==11 || i==15 || i==19) {
-			[hyphenSerial appendString:@"-"];
+	if (response) {
+		NSData *guidData = response.guidData;
+		uint8_t *guid = malloc([guidData length]);
+		[guidData getBytes:guid length:[guidData length]];
+		
+		NSString *serial = [guidData hexStringWithSpaceEvery:0];
+		NSMutableString *hyphenSerial = [NSMutableString string];
+		for (int i=0; i<[serial length]; i++) {
+			[hyphenSerial appendString:[serial substringWithRange:NSMakeRange(i, 1)]];
+			if (i==7 || i==11 || i==15 || i==19) {
+				[hyphenSerial appendString:@"-"];
+			}
 		}
+		
+		self.serialNumber = hyphenSerial; // example: ACA367C5-E8F1-A64F-954D-F6ED817C7A69 (rev1 no. 057)
 	}
-	
-	self.serialNumber = hyphenSerial; // example: ACA367C5-E8F1-A64F-954D-F6ED817C7A69 (rev1 no. 057)
+	else {
+		self.serialNumber = nil;
+	}
 
 	// get versions/services info
 	BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
@@ -1524,9 +1534,21 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 }
 
-- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
+- (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception
 {
-    DLog(DLogLevelError, @"BRDevice: %@ didRaiseException: %@", device, exception);
+    DLog(DLogLevelError, @"BRDevice: %@ didRaiseSettingException: %@", device, exception);
+	
+	uint16_t exceptionID = exception.exceptionID;
+	if (exceptionID == 0x0A1E) {
+		if (!self.isConnectionOpen) { // really we should have states for all steps in the handshake... maybe add this later...
+			[self didGetGUID:nil];
+		}
+	}
+}
+
+- (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception
+{
+	DLog(DLogLevelError, @"BRDevice: %@ didRaiseCommandException: %@", device, exception);
 }
 
 - (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice
@@ -1556,12 +1578,18 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 {
     NSString *hexString = [data hexStringWithSpaceEvery:2];
     DLog(DLogLevelTrace, @"--> %@", hexString);
+	
+	NSDictionary *userInfo = @{PLTDeviceDataNotificationKey: data};
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceWillSendDataNotification object:nil userInfo:userInfo];
 }
 
 - (void)BRDevice:(BRDevice *)device didReceiveData:(NSData *)data
 {
     NSString *hexString = [data hexStringWithSpaceEvery:2];
     DLog(DLogLevelTrace, @"<-- %@", hexString);
+	
+	NSDictionary *userInfo = @{PLTDeviceDataNotificationKey: data};
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidReceiveDataNotification object:nil userInfo:userInfo];
 }
 
 #pragma mark - NSObject

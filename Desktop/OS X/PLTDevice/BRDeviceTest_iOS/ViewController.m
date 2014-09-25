@@ -971,9 +971,14 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	}
 }
 
-- (void)BRDevice:(BRDevice *)device didRaiseException:(BRException *)exception
+- (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception
 {
-	NSLog(@"BRDevice: %@ didRaiseException: %@", device, exception);
+	NSLog(@"BRDevice: %@ didRaiseSettingException: %@", device, exception);
+}
+
+- (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception
+{
+	NSLog(@"BRDevice: %@ didRaiseCommandException: %@", device, exception);
 }
 
 - (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice
