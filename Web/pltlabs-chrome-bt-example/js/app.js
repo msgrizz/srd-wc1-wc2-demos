@@ -357,6 +357,8 @@ function onEvent(info){
          $('#roll').text(info.payload.eulerAngles.roll);
 	 $('#pitch').text(info.payload.eulerAngles.pitch);
          $('#heading').text(info.payload.eulerAngles.heading);
+	 
+	 //TODO: fix still buggy - not a plt library issue - just an issue with integrating jsc3d.js
 	 var x = lastX == info.payload.eulerAngles.heading ? 0 : info.payload.eulerAngles.heading - lastX;
 	 var y = lastY == info.payload.eulerAngles.roll ? 0 : info.payload.eulerAngles.roll - lastY;
 	 var z = lastZ == info.payload.eulerAngles.pitch ? 0 : info.payload.eulerAngles.pitch - lastZ;

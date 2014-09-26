@@ -1,0 +1,76 @@
+@!XMLModel("deckard.xml")!
+@!Output("plt.msg.md")!
+#PLT Labs Javascript Library - Message Creation API reference
+=============
+[PltLabs](http://pltlabs.com) -
+An exaustive listing of how to create PLT API messages to be sent to the device
+* Twitter: [@pltlabs](http://twitter.com/pltlabs)
+* Author: [@carybran](http://twitter.com/carybran)
+
+
+Message Creation in a nutshell
+----------
+The plt.msg library is used to create and parse messages that are sent to or origniate from PLT devices
+that have M2M capabilities - for example the WC1, Voyager Edge
+
+```javascript
+//accessing the id's of message types
+var commandId = plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND; //value is 0x0400
+var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
+
+//parsing a raw message regardless of type returns a JSON object representation of the raw message
+var parsedMessage = plt.msg.parse(rawMessage);
+
+//JSON format of parsed message
+// {
+//  type: packetType,
+//  messageType: messageType,
+//  messageTypeName: "message type friendly name",
+//  length: length,
+//  address: address,
+//  payloadNibbles: arrayofnibbles,
+//  messageBytes: bytearray,
+//  payload: jsonobjectofnamevaluepairs
+// }
+   
+   
+//creating a command to send to the PLT device - this example shows enabling proximity
+var options = {}
+options.enable =  true;
+options.sensitivity = 5;
+options.nearThreshold = 0x3C;
+options.maxTimeout = 0xFFFF;
+var command = plt.msg.createCommand(plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND, options);
+
+//command.messageBytes - member has the PLT raw message byte array that would be sent to device
+
+//creating a get setting request = this example shows how to get battery level status
+var setting = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
+
+//how to create a command to enable headtracking sensor data output
+var sensorPortAddress = new ArrayBuffer(4);
+var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
+sensorPortAddress_view[0] = 0x50;
+var options = {};
+options.address = sensorPortAddress;
+options.serviceID = plt.msg.TYPE_SERVICEID_HEADORIENTATION;
+options.mode = plt.msg.TYPE_MODEONCCHANGE;
+var command = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options);
+```
+###Host Negotiate Messages
+When do you use this message?
+
+How do you use it?
+
+###PLT Setting Messages
+When do you use this message?
+
+@!Include("settingmd.jseance")!
+
+
+###PLT Command Messages
+When do you use this message?
+
+####Command Messages 
+
+@!End!
