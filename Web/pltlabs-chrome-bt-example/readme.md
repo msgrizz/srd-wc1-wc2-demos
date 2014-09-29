@@ -3,6 +3,7 @@
 * http://pltlabs.com
 * Twitter: [@pltlabs](http://twitter.com/pltlabs)
 * Author: [@carybran](http://twitter.com/carybran)
+
 ---------
 The source code in this repository is a Google Chrome packaged applicaiton.  The applicaiton highlights Plantronics device access over Bluetooth and will run on build 37 and greater of the Chrome browser (tested on Mac) as well as Chrome OS.  
 
