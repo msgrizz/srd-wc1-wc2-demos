@@ -3,8 +3,12 @@
 * http://pltlabs.com
 * Twitter: [@pltlabs](http://twitter.com/pltlabs)
 * Author: [@carybran](http://twitter.com/carybran)
-What does this library do?
 ---------
+The source code in this repository is a Google Chrome packaged applicaiton.  The applicaiton highlights Plantronics device access over Bluetooth and will run on build 37 and greater of the Chrome browser (tested on Mac) as well as Chrome OS.  
+
+Please make sure you have paired and connected your Plantronics Edge or Wearable Concept device with the host system.
+
+Install the packaged application on Chrome, load it as an unpackaged app and make sure you have enabled debug mode and have signed into Google on the browser.
 
 
 How to use this library
