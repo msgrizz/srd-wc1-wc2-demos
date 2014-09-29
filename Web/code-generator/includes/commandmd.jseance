@@ -1,5 +1,5 @@
  
-<h2>Settings Messages</h2>
+<h2>Command Messages</h2>
 @!For("section")!
   @!Code!   
      var title = Models['default'].currentNode.@title;
@@ -8,7 +8,7 @@
      var isTestInterfaceSection = title.indexOf('TESTING - TEST AUTOMATION MESSAGES');
   @!End!
   @!If(isNotTestSection == -1 || isTestInterfaceSection > -1)!
-    @!For("setting")!
+    @!For("command")!
       @!Code!
         var name = fixName(Models['default'].currentNode.@name);
         var settingName = Models['default'].currentNode.@name;
@@ -17,8 +17,8 @@
           name = replaceAll("-", "_", name);
           name = replaceAll("/", "_", name);
           name = replaceAll(" ", "_", name);
-          if(name.indexOf("_SETTING") == -1){
-            name += "_SETTING";
+          if(name.indexOf("_COMMAND") == -1){
+            name += "_COMMAND";
           }
           return name;
         }
@@ -31,7 +31,7 @@
         
         var options = "";
       @!End!
-<h3><a id="!Eval(name)!">!Eval(settingName)! Setting</a></h3>
+<h3><a id="!Eval(name)!">!Eval(settingName)! Command</a></h3>
 <b>Description:</b> !Eval(description)!<br>
 <b>Message Id:</b> <i>plt.msg.!Eval(name)!</i><br>
 <b>Options Object:</b>This object is optional if 'address' is the only attribute specified in the table below

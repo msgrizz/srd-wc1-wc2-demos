@@ -1,28 +1,62 @@
 @!XMLModel("deckard.xml")!
-@!Output("plt.msg.md")!
-#PLT Labs Javascript Library - Message Creation API reference
+@!Output("readme.md")!
+#PLT Labs Javascript Library
 =============
-[PltLabs](http://pltlabs.com) -
-An exaustive listing of how to create PLT API messages to be sent to the device
+* http://pltlabs.com
 * Twitter: [@pltlabs](http://twitter.com/pltlabs)
 * Author: [@carybran](http://twitter.com/carybran)
+What does this library do?
+---------
 
 
-Message Creation in a nutshell
+How to use this library
 ----------
 The plt.msg library is used to create and parse messages that are sent to or origniate from PLT devices
 that have M2M capabilities - for example the WC1, Voyager Edge
 
+##Connecting to Plantronics through Google Chrome/Chrome OS
 ```javascript
-//accessing the id's of message types
-var commandId = plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND; //value is 0x0400
-var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
+//connecting to the PLT device that is paired and connected via Bluetooth with Chrome
+
+//register event listeners for device lifecycle events
+plt.addEventListener(function(event){ console.log('event -> ' + JSON.stringify(event));});
+plt.addSettingsListener(function(settings){ console.log('settings -> ' + JSON.stringify(settings));});
+plt.addCommandSuccessListener(function(commandResult){ console.log('command result -> ' + JSON.stringify(commandResult));});
+plt.addOnConnectionListener(function(device){
+  console.log("connection opened: callback has been invoked from plt api");
+  console.log("device ->" + JSON.stringify(device));
+  });
+  
+plt.addOnDisconnectListener(function(device){
+  console.log("device disconnect from plt api -> device: " + JSON.stringify(device));
+  });
+
+
+//connecting to the PLT Labs device
+plt.addDeviceListener(function(deviceList){
+   console.log("device list connecting to device -> " + JSON.stringify(deviceList[0]));
+   plt.connect(deviceList[0]);
+   });
+
+//gets the devices and calls back to the device listener   
+plt.getDevices();
+
+```
+##Message Types:
+* [Settings](#settings)
+* [Commands](#commands)
+
+##How to use the PLT Labs message library
+```javascript
+//if you create your own library to connect to PLT over BT Smart or USB, you can use the plt.msg library to create and parse
+//messages that are sent and recieved from the PLT Device
 
 //parsing a raw message regardless of type returns a JSON object representation of the raw message
+
 var parsedMessage = plt.msg.parse(rawMessage);
 
-//JSON format of parsed message
-// {
+//JSON format of the parsed message returned from the plt.msg.parse function call
+// { 
 //  type: packetType,
 //  messageType: messageType,
 //  messageTypeName: "message type friendly name",
@@ -32,9 +66,20 @@ var parsedMessage = plt.msg.parse(rawMessage);
 //  messageBytes: bytearray,
 //  payload: jsonobjectofnamevaluepairs
 // }
+
+//all PLT messages, regardless if it is a get setting request or a command have a type.
+//A message type is a number the, plt.msg library contains constants for all
+//of the available message types.
+var commandId = plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND; //value is 0x0400
+var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
+  
    
-   
-//creating a command to send to the PLT device - this example shows enabling proximity
+//Regardless if you are creating a get setting or command message, the pattern is the same
+//the first thing is to determine if the message requires additional properites beyond the message type
+//to be passed into the plt.msg create message function.
+//For example, the command create below shows how you would enable proximity events on the
+//Plantronics device - to do so you create an options object and set the required attributes for
+//the message creation.  
 var options = {}
 options.enable =  true;
 options.sensitivity = 5;
@@ -42,35 +87,39 @@ options.nearThreshold = 0x3C;
 options.maxTimeout = 0xFFFF;
 var command = plt.msg.createCommand(plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND, options);
 
-//command.messageBytes - member has the PLT raw message byte array that would be sent to device
-
-//creating a get setting request = this example shows how to get battery level status
-var setting = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
+//In this example a get setting request message is created that does not require additional parameters
+//when this request returns from the device it will contain the device's battery level information
+var getSetting = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
 
 //how to create a command to enable headtracking sensor data output
+//This command takes advantage of the message addressing
+//note that we have specified the sensor port on the device - which is port 5
+//when the message is sent to the device, it will be routed to the address specified, which in this case is the sensor port
+//for headtracking data.
 var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
-var options = {};
+options = {};
 options.address = sensorPortAddress;
 options.serviceID = plt.msg.TYPE_SERVICEID_HEADORIENTATION;
 options.mode = plt.msg.TYPE_MODEONCCHANGE;
-var command = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options);
+var headtrackingCommand = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options);
+  
 ```
-###Host Negotiate Messages
-When do you use this message?
-
-How do you use it?
-
-###PLT Setting Messages
-When do you use this message?
-
+##<a name="settings"></a>PLT Setting Messages
+<b>When do you use this message?<br>
+Setting messages are used to retrieve settings from the device.  Think of them as reading the configuration from the device and returning it.
+To receive the settings response you must register a callback with the plt.addSettingsListener function.
+<br>
+Below is an exhaustive listing of all of the get settings messages that the device should support.
+<br>
 @!Include("settingmd.jseance")!
-
-
-###PLT Command Messages
-When do you use this message?
-
-####Command Messages 
+##<a name="commands"></a>PLT Command Messages
+<b>When do you use this message?<br>
+Command messages are used to set properties on the device or to enable sensors and or features on the device. To receive the command response you must register a callback with the plt.addCommandSuccessListener function.
+<br>
+Below is an exhaustive listing of all of the get command messages that the device should support.
+<br>
+@!Include("commandmd.jseance")!
 
 @!End!
