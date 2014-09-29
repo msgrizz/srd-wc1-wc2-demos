@@ -113,7 +113,7 @@ var headtrackingCommand = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_CO
 plt.sendMessage(device, headtrackingCommand);
   
 ```
-##<a name="settings"></a>PLT Setting Messages
+<h3><a name="settings"></a>PLT Setting Messages</h3>
 <b>When do you use this message?</b><br>
 Setting messages are used to retrieve settings from the device.  Think of them as reading the configuration from the device and returning it.
 To receive the settings response you must register a callback with the plt.addSettingsListener function.
@@ -1200,7 +1200,8 @@ Below is an exhaustive listing of all of the get settings messages that the devi
   
   
   
- ##<a name="commands"></a>PLT Command Messages
+ 
+<h3><a name="commands"></a>PLT Command Messages</h3>
 <b>When do you use this message?</b><br>
 Command messages are used to set properties on the device or to enable sensors and or features on the device. To receive the command response you must register a callback with the plt.addCommandSuccessListener function.
 <br>
