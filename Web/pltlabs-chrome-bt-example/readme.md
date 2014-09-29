@@ -5,7 +5,7 @@
 * Author: [@carybran](http://twitter.com/carybran)
 
 ---------
-The source code in this repository is a Google Chrome packaged applicaiton.  The application highlights Plantronics device access over Bluetooth and will run on build 37 and greater of the Chrome browser (tested on Mac) as well as Chrome OS.  
+The source code in this repository is a Google Chrome packaged application.  The application highlights Plantronics device access over Bluetooth and will run on build 37 and greater of the Chrome browser (tested on Mac) as well as Chrome OS.  
 
 Please make sure you have paired and connected your Plantronics Edge or Wearable Concept device with the host system.
 
@@ -73,6 +73,15 @@ var parsedMessage = plt.msg.parse(rawMessage);
 //all PLT messages, regardless if it is a get setting request or a command have a type.
 //A message type is a number the, plt.msg library contains constants for all
 //of the available message types.
+
+//TODO something Erik wants: 
+//all PLT Messages - settings and commands -  have a (data) type.
+//and I don't understand the intent of the two next lines (lines 74 and 75)
+
+//TODO something Erik wants:
+//The following are exaples of messages using constants from plt.msg.js
+//why is the hex value important, just for good hygene when working with constants?
+
 var commandId = plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND; //value is 0x0400
 var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
   
@@ -80,6 +89,11 @@ var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
 //Regardless if you are creating a get setting or command message, the pattern is the same
 //the first thing is to determine if the message requires additional properites beyond the message type
 //to be passed into the plt.msg create message function.
+
+//TODO somethng Erik wants: 
+// an explanation of how to determine if the message requires additional properties beyond the message type. For example, 
+//By looking at the plt.msg for the CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND commandID, one can choose desired command options. 
+
 //For example, the command create below shows how you would enable proximity events on the
 //Plantronics device - to do so you create an options object and set the required attributes for
 //the message creation.  
@@ -105,6 +119,11 @@ plt.sendMessage(device, getSetting);
 //note that we have specified the sensor port on the device - which is port 5
 //when the message is sent to the device, it will be routed to the address specified, which in this case is the sensor port
 //for headtracking data.
+
+//Something Erik Wants:
+//where can one go to look up sensor ports?
+//How does one determine whether it is necesary to use message addressing?
+
 var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
