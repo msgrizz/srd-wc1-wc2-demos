@@ -70,33 +70,31 @@ var parsedMessage = plt.msg.parse(rawMessage);
 //  payload: jsonobjectofnamevaluepairs
 // }
 
-//all PLT messages, regardless if it is a get setting request or a command have a type.
-//A message type is a number the, plt.msg library contains constants for all
-//of the available message types.
+//all PLT messages, regardless if it is a get setting request, command or event have a identifier that distguishes
+//the message type. The plt.msg library contains constants for all of the message identifiers.  
 
-//TODO something Erik wants: 
-//all PLT Messages - settings and commands -  have a (data) type.
-//and I don't understand the intent of the two next lines (lines 74 and 75)
+//The following are exaples of obtaining the message identifiers constants from the plt.msg.js library
+//In a real application you would likely just use these identifiers to either create command or get settings
+//messages or you would use the constants to determine what kind of message you received from the plt library.
 
-//TODO something Erik wants:
-//The following are exaples of messages using constants from plt.msg.js
-//why is the hex value important, just for good hygene when working with constants?
 
 var commandId = plt.msg.CONFIGURE_MUTE_TONE_VOLUME_COMMAND; //value is 0x0400
 var settingId = plt.msg.DEVICE_STATUS_SETTING; //value is 0x1006
-  
+
+//The constants are postfixed for each type of message.  Commands identifiers will be postfixed with _COMMAND, setting 
+//identifiers are postfixed with _SETTING, events with _EVENTS.
    
 //Regardless if you are creating a get setting or command message, the pattern is the same
 //the first thing is to determine if the message requires additional properites beyond the message type
-//to be passed into the plt.msg create message function.
+//to be passed into the plt.msg create message function.  To determine if additional properties are required
+//for creating the message, please review the setting and command sectionss below.
 
-//TODO somethng Erik wants: 
-// an explanation of how to determine if the message requires additional properties beyond the message type. For example, 
-//By looking at the plt.msg for the CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND commandID, one can choose desired command options. 
 
 //For example, the command create below shows how you would enable proximity events on the
 //Plantronics device - to do so you create an options object and set the required attributes for
 //the message creation.  
+
+//For more information about the command options, see the command section plt.msg.CONFIGURE_SIGNAL_STRENGTH_EVENTS_COMMAND
 var options = {}
 options.enable =  true;
 options.sensitivity = 5;
@@ -119,11 +117,8 @@ plt.sendMessage(device, getSetting);
 //note that we have specified the sensor port on the device - which is port 5
 //when the message is sent to the device, it will be routed to the address specified, which in this case is the sensor port
 //for headtracking data.
-
-//Something Erik Wants:
-//where can one go to look up sensor ports?
-//How does one determine whether it is necesary to use message addressing?
-
+//Note: The sensor port is only used for plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND and is currently only applicable to 
+//the PLT Labs WC1 device
 var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
