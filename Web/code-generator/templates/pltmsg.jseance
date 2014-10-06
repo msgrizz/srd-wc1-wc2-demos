@@ -131,8 +131,12 @@ plt.msg = (function (){
       case my.COMMAND_RESULT_SUCCESS_TYPE:
         parsedMessage.payload = parseCommandSuccess(message);
         break;
-      
-        
+      case my.GET_REQUEST_TYPE:
+      case my.COMMAND_TYPE:
+        //include the message id
+        parsedMessage.payload = {};
+        parsedMessage.payload.messageId =  parseShort(BR_HEADER_SIZE, data_view);
+        break;
     }
     return parsedMessage;
   };
