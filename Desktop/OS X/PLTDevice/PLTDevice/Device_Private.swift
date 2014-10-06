@@ -43,10 +43,10 @@ extension Device {
 //	@property(nonatomic,assign)				BOOL								waitingForLocalSignalStrengthEvent;
 //	@property(nonatomic,strong)				BRSignalStrengthEvent				*localQuerySignalStrengthEvent;
 //	@property(nonatomic,strong)				BRSignalStrengthEvent				*remoteQuerySignalStrengthEvent;
-//	@property(nonatomic,assign)				BOOL								waitingForRemoteSignalStrengthSettingResponse;
-//	@property(nonatomic,assign)				BOOL								waitingForLocalSignalStrengthSettingResponse;
-//	@property(nonatomic,strong)				BRSignalStrengthSettingResponse		*localQuerySignalStrengthResponse;
-//	@property(nonatomic,strong)				BRSignalStrengthSettingResponse		*remoteQuerySignalStrengthResponse;
+//	@property(nonatomic,assign)				BOOL								waitingForRemoteSignalStrengthSettingResult;
+//	@property(nonatomic,assign)				BOOL								waitingForLocalSignalStrengthSettingResult;
+//	@property(nonatomic,strong)				BRSignalStrengthSettingResult		*localQuerySignalStrengthResponse;
+//	@property(nonatomic,strong)				BRSignalStrengthSettingResult		*remoteQuerySignalStrengthResponse;
 //	
 //	#warning reset these on open/close/whatever
 //	@property(nonatomic,strong)				PLTOrientationTrackingCalibration	*orientationTrackingCalibration;
@@ -63,15 +63,15 @@ extension Device {
 		
 	}
 	
-//	func didGet(productNameSettingResponce : BRProductNameSettingResponse) {
+//	func didGet(productNameSettingResponce : BRProductNameSettingResult) {
 //		
 //	}
 //	
-//	func didGet(genesGUIDSettingResponse : BRGenesGUIDSettingResponse) {
+//	func didGet(genesGUIDSettingResult : BRGenesGUIDSettingResult) {
 //		
 //	}
 //	
-//	func didGet(deviceInfoSettingResponse : BRDeviceInfoSettingResponse) {
+//	func didGet(deviceInfoSettingResult : BRDeviceInfoSettingResult) {
 //		
 //	}
 

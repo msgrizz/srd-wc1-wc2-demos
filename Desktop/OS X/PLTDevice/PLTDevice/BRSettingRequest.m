@@ -9,13 +9,6 @@
 #import "BRSettingRequest.h"
 
 
-//@interface BRSettingRequest ()
-//
-//@property(nonatomic,strong,readwrite)   NSData  *data;
-//
-//@end
-
-
 @implementation BRSettingRequest
 
 #pragma mark - Public

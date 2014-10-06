@@ -26,17 +26,17 @@
 #import "BRFreeFallEvent.h"
 #import "BRPedometerEvent.h"
 #import "BRGyroscopeCalStatusEvent.h"
-#import "BRWearingStateSettingResponse.h"
-#import "BRSignalStrengthSettingResponse.h"
-#import "BROrientationTrackingSettingResponse.h"
-#import "BRTapsSettingResponse.h"
-#import "BRFreeFallSettingResponse.h"
-#import "BRPedometerSettingResponse.h"
-#import "BRGyroscopeCalStatusSettingResponse.h"
+#import "BRWearingStateSettingResult.h"
+#import "BRSignalStrengthSettingResult.h"
+#import "BROrientationTrackingSettingResult.h"
+#import "BRTapsSettingResult.h"
+#import "BRFreeFallSettingResult.h"
+#import "BRPedometerSettingResult.h"
+#import "BRGyroscopeCalStatusSettingResult.h"
 #import "BRCalibratePedometerServiceCommand.h"
 #import "BRServiceCalibrationSettingRequest.h"
 #import "BRHeadsetCallStatusSettingRequest.h"
-#import "BRHeadsetCallStatusSettingResponse.h"
+#import "BRHeadsetCallStatusSettingResult.h"
 
 #import "BRDeviceConnectedEvent.h"
 
@@ -933,40 +933,40 @@ BREulerAngles BREulerAnglesFromQuaternion(BRQuaternion q)
 	}
 }
 
-- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)response
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResult:(BRSettingResult *)response
 {
-	NSLog(@"BRDevice: %@ didReceiveSettingResponse: %@", device, response);
+	NSLog(@"BRDevice: %@ didReceiveSettingResult: %@", device, response);
 	
-	if ([response isKindOfClass:[BRWearingStateSettingResponse class]]) {
-		BRWearingStateSettingResponse *r = (BRWearingStateSettingResponse *)response;
+	if ([response isKindOfClass:[BRWearingStateSettingResult class]]) {
+		BRWearingStateSettingResult *r = (BRWearingStateSettingResult *)response;
 		self.wearingStateLabel.text = (r.isBeingWorn ? @"Yes" : @"No");
 	}
-	else if ([response isKindOfClass:[BRSignalStrengthSettingResponse class]]) {
-		BRSignalStrengthSettingResponse *r = (BRSignalStrengthSettingResponse *)response;
+	else if ([response isKindOfClass:[BRSignalStrengthSettingResult class]]) {
+		BRSignalStrengthSettingResult *r = (BRSignalStrengthSettingResult *)response;
 		self.signalStrengthLabel.text = [NSString stringWithFormat:@"%d", r.strength];
 	}
-	else if ([response isKindOfClass:[BROrientationTrackingSettingResponse class]]) {
-		BROrientationTrackingSettingResponse *r = (BROrientationTrackingSettingResponse *)response;
+	else if ([response isKindOfClass:[BROrientationTrackingSettingResult class]]) {
+		BROrientationTrackingSettingResult *r = (BROrientationTrackingSettingResult *)response;
 		BREulerAngles eulerAngles = BREulerAnglesFromQuaternion(r.quaternion);		
 //		[self.headingIndicator setDoubleValue:-eulerAngles.x];
 //		[self.pitchIndicator setDoubleValue:eulerAngles.y];
 //		[self.rollIndicator setDoubleValue:eulerAngles.z];
 	}
-	else if ([response isKindOfClass:[BRTapsSettingResponse class]]) {
-		BRTapsSettingResponse *r = (BRTapsSettingResponse *)response;
+	else if ([response isKindOfClass:[BRTapsSettingResult class]]) {
+		BRTapsSettingResult *r = (BRTapsSettingResult *)response;
 		if (r.count) self.tapsLabel.text = [NSString stringWithFormat:@"%d in %@", r.count, NSStringFromTapDirection(r.direction)];
 		else self.tapsLabel.text = @"-";
 	}
-	else if ([response isKindOfClass:[BRFreeFallSettingResponse class]]) {
-		BRFreeFallSettingResponse *r = (BRFreeFallSettingResponse *)response;
+	else if ([response isKindOfClass:[BRFreeFallSettingResult class]]) {
+		BRFreeFallSettingResult *r = (BRFreeFallSettingResult *)response;
 		self.freeFallLabel.text = (r.isInFreeFall ? @"Yes" : @"No");
 	}
-	else if ([response isKindOfClass:[BRPedometerSettingResponse class]]) {
-		BRPedometerSettingResponse *r = (BRPedometerSettingResponse *)response;
+	else if ([response isKindOfClass:[BRPedometerSettingResult class]]) {
+		BRPedometerSettingResult *r = (BRPedometerSettingResult *)response;
 		self.pedometerLabel.text = [NSString stringWithFormat:@"%d", r.steps];
 	}
-	else if ([response isKindOfClass:[BRGyroscopeCalStatusSettingResponse class]]) {
-		BRGyroscopeCalStatusSettingResponse *r = (BRGyroscopeCalStatusSettingResponse *)response;
+	else if ([response isKindOfClass:[BRGyroscopeCalStatusSettingResult class]]) {
+		BRGyroscopeCalStatusSettingResult *r = (BRGyroscopeCalStatusSettingResult *)response;
 		self.gyroCalLabel.text = (r.isCalibrated ? @"Yes" : @"No");
 	}
 }

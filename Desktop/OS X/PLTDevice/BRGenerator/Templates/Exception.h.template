@@ -1,0 +1,20 @@
+//
+//  BR<#message_name#>.h
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v<#deckard_version#> on <#mdy#>.
+//  Copyright (c) <#yyyy#> Plantronics. All rights reserved.
+//
+
+#import "BRException.h"
+
+
+#define <#identifier_constant_name#> <#message_identifier#>
+
+<#public_defined_values_block#>
+
+@interface BR<#message_name#> : BRException
+
+<#public_properties_block#>
+
+@end

@@ -122,9 +122,9 @@
 	[self.delegate BRDevice:self didReceiveEvent:event];
 }
 
-- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResult:(BRSettingResult *)SettingResult
 {
-	[self.delegate BRDevice:self didReceiveSettingResponse:settingResponse];
+	[self.delegate BRDevice:self didReceiveSettingResult:SettingResult];
 }
 
 - (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception

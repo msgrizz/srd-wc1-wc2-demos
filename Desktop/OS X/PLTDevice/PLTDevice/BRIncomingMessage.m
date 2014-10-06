@@ -11,7 +11,6 @@
 #import "BRMessage_Private.h"
 
 
-
 #import "NSData+HexStrings.h"
 
 
@@ -73,6 +72,101 @@
 	// X bytes payload
 	
 	self.payload = [self.data subdataWithRange:NSMakeRange(6, [self.data length] - 6)];
+	
+	
+	// use payloadDescriptors to parse the payload body and populate object properties
+	
+	NSUInteger offset = 2;
+	
+	for (NSDictionary *item in [self payloadDescriptors]) {
+		NSString *name = item[@"name"];
+		BRPayloadItemType type = [item[@"type"] intValue];
+		id value;
+		
+		switch (type) {
+			case BRPayloadItemTypeBoolean:
+			case BRPayloadItemTypeByte: {
+				uint8_t unpacked;
+				NSRange range = NSMakeRange(offset, sizeof(uint8_t));
+				[self.payload getBytes:&unpacked range:range];
+				value = @(unpacked);
+				offset += sizeof(uint8_t);
+				break; }
+				
+			case BRPayloadItemTypeShort: {
+				int16_t unpacked;
+				NSRange range = NSMakeRange(offset, sizeof(int16_t));
+				[self.payload getBytes:&unpacked range:range];
+				unpacked = htons(unpacked);
+				value = @(unpacked);
+				offset += sizeof(int16_t);
+				break; }
+				
+			case BRPayloadItemTypeUnsignedShort: {
+				uint16_t unpacked;
+				NSRange range = NSMakeRange(offset, sizeof(uint16_t));
+				[self.payload getBytes:&unpacked range:range];
+				unpacked = htons(unpacked);
+				value = @(unpacked);
+				offset += sizeof(uint16_t);
+				break; }
+				
+			case BRPayloadItemTypeLong:
+			case BRPayloadItemTypeInt: {
+				int32_t unpacked;
+				NSRange range = NSMakeRange(offset, sizeof(int32_t));
+				[self.payload getBytes:&unpacked range:range];
+				unpacked = htonl(unpacked);
+				value = @(unpacked);
+				offset += sizeof(int32_t);
+				break; }
+				
+			case BRPayloadItemTypeUnsignedLong:
+			case BRPayloadItemTypeUnsignedInt: {
+				uint32_t unpacked;
+				NSRange range = NSMakeRange(offset, sizeof(uint32_t));
+				[self.payload getBytes:&unpacked range:range];
+				unpacked = htonl(unpacked);
+				value = @(unpacked);
+				offset += sizeof(uint32_t);
+				break; }
+				
+			case BRPayloadItemTypeByteArray: {
+				uint16_t len;
+				NSRange range = NSMakeRange(offset, sizeof(uint16_t));
+				[self.payload getBytes:&len range:range];
+				len = ntohs(len);
+				offset += sizeof(uint16_t);
+				range = NSMakeRange(offset, len);
+				value = [self.payload subdataWithRange:range];
+				offset += len;
+				break; }
+				
+			case BRPayloadItemTypeShortArray: {
+				uint16_t len;
+				NSRange range = NSMakeRange(offset, sizeof(uint16_t));
+				[self.payload getBytes:&len range:range];
+				len = ntohs(len);
+				offset += sizeof(uint16_t);
+				int16_t array[len];
+				range = NSMakeRange(offset, len*2);
+				[self.payload getBytes:array range:range];
+				for (uint16_t i=0; i<len; i++) {
+					array[i] = ntohs(array[i]);
+				}
+				value = [NSData dataWithBytes:array length:len*2];
+				offset += len*2;
+				break; }
+				
+			case BRPayloadItemTypeString: {
+				
+				break; }
+		}
+		
+		if (value) {
+			[self setValue:value forKey:name];
+		}
+	}
 }
 
 @end

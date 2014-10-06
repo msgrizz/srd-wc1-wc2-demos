@@ -33,35 +33,31 @@
 
 #import "BRDevice.h"
 #import "BRRemoteDevice.h"
-#import "BRSubscribeToServiceCommand.h"
-#import "BRSubscribeToSignalStrengthCommand.h"
-#import "BROrientationTrackingEvent.h"
-#import "BRTapsEvent.h"
-#import "BRFreeFallEvent.h"
-#import "BRPedometerEvent.h"
-#import "BRMagnetometerCalStatusEvent.h"
-#import "BRGyroscopeCalStatusEvent.h"
-#import "BRWearingStateEvent.h"
-#import "BRSignalStrengthEvent.h"
-#import "BRSettingResponse.h"
-#import "BRServiceDataSettingRequest.h"
-#import "BRDeviceInfoSettingRequest.h"
-#import "BRDeviceInfoSettingResponse.h"
+#import "BRMessage_Private.h"
+#import "BRIncomingMessage_Private.h"
+
+#import "BRSubscribeToServicesCommand.h"
+#import "BRConfigureSignalStrengthEventsCommand.h"
+
 #import "BRWearingStateSettingRequest.h"
-#import "BRWearingStateSettingResponse.h"
-#import "BRSignalStrengthSettingRequest.h"
-#import "BRSignalStrengthSettingResponse.h"
-#import "BROrientationTrackingSettingResponse.h"
-#import "BRTapsSettingResponse.h"
-#import "BRPedometerSettingResponse.h"
-#import "BRFreeFallSettingResponse.h"
-#import "BRMagnetometerCalStatusSettingResponse.h"
-#import "BRGyroscopeCalStatusSettingResponse.h"
-#import "BRGenesGUIDSettingRequest.h"
-#import "BRGenesGUIDSettingResponse.h"
+#import "BRQueryServicesDataSettingRequest.h"
 #import "BRProductNameSettingRequest.h"
-#import "BRProductNameSettingResponse.h"
+#import "BRGenesGUIDSettingRequest.h"
+#import "BRGetDeviceInfoSettingRequest.h"
+#import "BRCurrentSignalStrengthSettingRequest.h"
+
+#import "BRProductNameSettingResult.h"
+#import "BRGenesGUIDSettingResult.h"
+#import "BRGetDeviceInfoSettingResult.h"
+#import "BRCurrentSignalStrengthSettingResult.h"
+#import "BRQueryServicesDataSettingResult.h"
+#import "BRWearingStateSettingResult.h"
+
+#import "BRSignalStrengthEvent.h"
+#import "BRWearingStateChangedEvent.h"
+
 #import "BRException.h"
+
 
 #import "NSData+HexStrings.h"
 #import "NSArray+PrettyPrint.h"
@@ -96,10 +92,10 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 
-PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
-{
-	return (PLTQuaternion){ brQuaternion.w, brQuaternion.x, brQuaternion.y, brQuaternion.z };
-}
+//PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
+//{
+//	return (PLTQuaternion){ brQuaternion.w, brQuaternion.x, brQuaternion.y, brQuaternion.z };
+//}
 
 
 @interface PLTSubscription ()
@@ -122,11 +118,10 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (void)didOpenBRConnection;
 - (void)didCloseConnection:(BOOL)notify;
-- (void)didGetProductName:(BRProductNameSettingResponse *)response;
-- (void)didGetGUID:(BRGenesGUIDSettingResponse *)response;
-- (void)didGetDeviceInfo:(BRDeviceInfoSettingResponse *)response;
+- (void)didGetProductName:(BRProductNameSettingResult *)result;
+- (void)didGetGUID:(BRGenesGUIDSettingResult *)result;
+- (void)didGetDeviceInfo:(BRGetDeviceInfoSettingResult *)result;
 - (void)didFinishHandshake;
-//- (void)didTimeoutOpenConnection:(NSTimer *)aTimer;
 - (void)configureSignalStrengthEventsEnabled:(BOOL)enabled connectionID:(uint8_t)connectionID;
 - (void)queryWearingState;
 - (void)querySignalStrength:(uint8_t)connectionID;
@@ -136,44 +131,41 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 - (void)signalStrengthTimer:(NSTimer *)aTimer;
 - (NSError *)checkConnectionOpenError;
 
-//@property(nonatomic,strong,readwrite)	BRDevice							*brDevice;
-@property(nonatomic,strong)				BRDevice							*brSensorsDevice;
-
-@property(nonatomic,readwrite)			BOOL								isConnectionOpen;
-
-@property(nonatomic,strong)				NSMutableDictionary					*subscriptions;
-@property(nonatomic,strong)				NSMutableDictionary					*querySubscribers;
-@property(nonatomic,strong)				NSMutableDictionary					*cachedInfo;
+@property(nonatomic,strong)				BRDevice								*brSensorsDevice;
+@property(nonatomic,readwrite)			BOOL									isConnectionOpen;
+@property(nonatomic,strong)				NSMutableDictionary						*subscriptions;
+@property(nonatomic,strong)				NSMutableDictionary						*querySubscribers;
+@property(nonatomic,strong)				NSMutableDictionary						*cachedInfo;
 
 //#ifdef TARGET_OSX
-@property(nonatomic,strong,readwrite)	NSString							*address;
+@property(nonatomic,strong,readwrite)	NSString								*address;
 //#endif
-@property(nonatomic,strong,readwrite)	NSString							*model;
-@property(nonatomic,strong,readwrite)	NSString							*name;
-@property(nonatomic,strong,readwrite)	NSString							*serialNumber;
-@property(nonatomic,strong,readwrite)	NSString							*hardwareVersion;
-@property(nonatomic,strong,readwrite)	NSString							*firmwareVersion;
+@property(nonatomic,strong,readwrite)	NSString								*model;
+@property(nonatomic,strong,readwrite)	NSString								*name;
+@property(nonatomic,strong,readwrite)	NSString								*serialNumber;
+@property(nonatomic,strong,readwrite)	NSString								*hardwareVersion;
+@property(nonatomic,strong,readwrite)	NSString								*firmwareVersion;
 
-@property(nonatomic,strong,readwrite)	NSArray								*supportedServices;
+@property(nonatomic,strong,readwrite)	NSArray									*supportedServices;
 
-@property(nonatomic,assign)				int8_t								remotePort;
-@property(nonatomic,strong)				NSTimer								*wearingStateTimer;
-@property(nonatomic,strong)				NSTimer								*signalStrengthTimer;
+@property(nonatomic,assign)				int8_t									remotePort;
+@property(nonatomic,strong)				NSTimer									*wearingStateTimer;
+@property(nonatomic,strong)				NSTimer									*signalStrengthTimer;
 
-@property(nonatomic,assign)				BOOL								waitingForWearingStatePrimer;
-@property(nonatomic,assign)				BOOL								waitingForRemoteSignalStrengthEvent;
-@property(nonatomic,assign)				BOOL								waitingForLocalSignalStrengthEvent;
-@property(nonatomic,strong)				BRSignalStrengthEvent				*localQuerySignalStrengthEvent;
-@property(nonatomic,strong)				BRSignalStrengthEvent				*remoteQuerySignalStrengthEvent;
-@property(nonatomic,assign)				BOOL								waitingForRemoteSignalStrengthSettingResponse;
-@property(nonatomic,assign)				BOOL								waitingForLocalSignalStrengthSettingResponse;
-@property(nonatomic,strong)				BRSignalStrengthSettingResponse		*localQuerySignalStrengthResponse;
-@property(nonatomic,strong)				BRSignalStrengthSettingResponse		*remoteQuerySignalStrengthResponse;
+@property(nonatomic,assign)				BOOL									waitingForWearingStatePrimer;
+@property(nonatomic,assign)				BOOL									waitingForRemoteSignalStrengthEvent;
+@property(nonatomic,assign)				BOOL									waitingForLocalSignalStrengthEvent;
+@property(nonatomic,strong)				BRSignalStrengthEvent					*localQuerySignalStrengthEvent;
+@property(nonatomic,strong)				BRSignalStrengthEvent					*remoteQuerySignalStrengthEvent;
+@property(nonatomic,assign)				BOOL									waitingForRemoteSignalStrengthSettingResult;
+@property(nonatomic,assign)				BOOL									waitingForLocalSignalStrengthSettingResult;
+@property(nonatomic,strong)				BRCurrentSignalStrengthSettingResult	*localQuerySignalStrengthResult;
+@property(nonatomic,strong)				BRCurrentSignalStrengthSettingResult	*remoteQuerySignalStrengthResult;
 
 #warning reset these on open/close/whatever
-@property(nonatomic,strong)				PLTOrientationTrackingCalibration	*orientationTrackingCalibration;
-@property(nonatomic,assign)				NSUInteger							pedometerOffset;
-@property(nonatomic,assign)				BOOL								queryingOrientationTrackingForCalibration;
+@property(nonatomic,strong)				PLTOrientationTrackingCalibration		*orientationTrackingCalibration;
+@property(nonatomic,assign)				NSUInteger								pedometerOffset;
+@property(nonatomic,assign)				BOOL									queryingOrientationTrackingForCalibration;
 
 @end
 
@@ -208,13 +200,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 	
 	[PLTDLogger sharedLogger];
-	
-//	static BOOL initdLog = NO;
-//	if (!initdLog) {
-//		_pltDLogLevel = DLogLevelError;
-//		initdLog = YES;
-//	}
-	
+
 	return [[PLTDeviceWatcher sharedWatcher] devices];
 }
 
@@ -459,9 +445,10 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			
 			if (service!=PLTServiceWearingState && service!=PLTServiceProximity) {
 				
-				BRSubscribeToServiceCommand *command = [BRSubscribeToServiceCommand commandWithServiceID:newSubscription.service
-																									mode:newSubscription.mode
-																								  period:newSubscription.period];
+				BRSubscribeToServicesCommand *command = [BRSubscribeToServicesCommand commandWithServiceID:newSubscription.service
+																							characteristic:0
+																									  mode:newSubscription.mode
+																									period:newSubscription.period];
 				
 				[self.brSensorsDevice sendMessage:command];
 			}
@@ -575,7 +562,10 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 					}
 				}
 				else {
-					BRSubscribeToServiceCommand *command = [BRSubscribeToServiceCommand commandWithServiceID:service mode:BRServiceSubscriptionModeOff period:0];
+					BRSubscribeToServicesCommand *command = [BRSubscribeToServicesCommand commandWithServiceID:service
+																								characteristic:0
+																										  mode:BRServiceSubscriptionModeOff
+																										period:0];
 					[self.brSensorsDevice sendMessage:command];
 				}
 			}
@@ -601,7 +591,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		
 		NSArray *services = self.supportedServices;
 		for (NSNumber *service in services) {
-			[self unsubscribe:aSubscriber fromService:[service unsignedIntegerValue]];
+			[self unsubscribe:aSubscriber fromService:[service unsignedShortValue]];
 		}
 	}
 	else {
@@ -679,13 +669,13 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 				if (subscription) {
 					// since signal strength is already configured, we can query it right away
 					
-					self.waitingForLocalSignalStrengthSettingResponse = YES;
-					self.localQuerySignalStrengthResponse = nil;
+					self.waitingForLocalSignalStrengthSettingResult = YES;
+					self.localQuerySignalStrengthResult = nil;
 					
 					[self querySignalStrength:0];
 					if (self.remotePort > 0) {
-						self.waitingForRemoteSignalStrengthSettingResponse = YES;
-						self.remoteQuerySignalStrengthResponse = nil;
+						self.waitingForRemoteSignalStrengthSettingResult = YES;
+						self.remoteQuerySignalStrengthResult = nil;
 						[self querySignalStrength:self.remotePort];
 					}
 				}
@@ -706,7 +696,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 				}
 			}
 			else {
-				BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:service];
+				BRQueryServicesDataSettingRequest *request = [BRQueryServicesDataSettingRequest requestWithServiceID:service characteristic:0];
 				[self.brSensorsDevice sendMessage:request];
 			}
 		}
@@ -785,10 +775,10 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	self.waitingForLocalSignalStrengthEvent = false;
 	self.localQuerySignalStrengthEvent = nil;
 	self.remoteQuerySignalStrengthEvent = nil;
-	self.waitingForRemoteSignalStrengthSettingResponse = false;
-	self.waitingForLocalSignalStrengthSettingResponse = false;
-	self.localQuerySignalStrengthResponse = nil;
-	self.remoteQuerySignalStrengthResponse = nil;
+	self.waitingForRemoteSignalStrengthSettingResult = false;
+	self.waitingForLocalSignalStrengthSettingResult = false;
+	self.localQuerySignalStrengthResult = nil;
+	self.remoteQuerySignalStrengthResult = nil;
 	self.queryingOrientationTrackingForCalibration = false;
 	self.orientationTrackingCalibration = nil;
 	self.pedometerOffset = 0;
@@ -802,13 +792,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 - (void)didCloseConnection:(BOOL)notify
 {
 	DLog(DLogLevelInfo, @"didCloseConnection");
-	
-	//#warning open connection timer
-	//	if (self.openConnectionTimer) {
-	//		[self.openConnectionTimer invalidate];
-	//		self.openConnectionTimer = nil;
-	//	}
-	
+
 	self.isConnectionOpen = NO;
 	self.subscriptions = NO;
 	self.querySubscribers = nil;
@@ -828,10 +812,10 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	self.waitingForLocalSignalStrengthEvent = false;
 	self.localQuerySignalStrengthEvent = nil;
 	self.remoteQuerySignalStrengthEvent = nil;
-	self.waitingForRemoteSignalStrengthSettingResponse = false;
-	self.waitingForLocalSignalStrengthSettingResponse = false;
-	self.localQuerySignalStrengthResponse = nil;
-	self.remoteQuerySignalStrengthResponse = nil;
+	self.waitingForRemoteSignalStrengthSettingResult = false;
+	self.waitingForLocalSignalStrengthSettingResult = false;
+	self.localQuerySignalStrengthResult = nil;
+	self.remoteQuerySignalStrengthResult = nil;
 	self.queryingOrientationTrackingForCalibration = false;
 	
 	if (notify) {
@@ -840,11 +824,11 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 }
 
-- (void)didGetProductName:(BRProductNameSettingResponse *)response
+- (void)didGetProductName:(BRProductNameSettingResult *)result
 {
 	DLog(DLogLevelTrace, @"didGetDeviceInfo:");
 	
-	self.model = response.name;
+	self.model = result.productName;
 	
 	self.name = nil;
 	if ([self.model isEqualToString:@"4"]) {
@@ -861,12 +845,12 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 #endif
 }
 
-- (void)didGetGUID:(BRGenesGUIDSettingResponse *)response
+- (void)didGetGUID:(BRGenesGUIDSettingResult *)result
 {
 	DLog(DLogLevelTrace, @"onGUIDReceived:");
 	
-	if (response) {
-		NSData *guidData = response.guidData;
+	if (result) {
+		NSData *guidData = result.guid;
 		uint8_t *guid = malloc([guidData length]);
 		[guidData getBytes:guid length:[guidData length]];
 		
@@ -886,38 +870,128 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 
 	// get versions/services info
-	BRDeviceInfoSettingRequest *request = (BRDeviceInfoSettingRequest *)[BRDeviceInfoSettingRequest request];
+	BRGetDeviceInfoSettingRequest *request = (BRGetDeviceInfoSettingRequest *)[BRGetDeviceInfoSettingRequest request];
 	[self.brSensorsDevice sendMessage:request];
 }
 
-- (void)didGetDeviceInfo:(BRDeviceInfoSettingResponse *)response
+- (void)didGetDeviceInfo:(BRGetDeviceInfoSettingResult *)result
 {
 	DLog(DLogLevelTrace, @"didGetDeviceInfo:");
 	
-	BRDeviceInfoSettingResponse *info = (BRDeviceInfoSettingResponse *)response;
+	BRGetDeviceInfoSettingResult *info = (BRGetDeviceInfoSettingResult *)result;
+	
+	// this is a weird mix of how the "old" (hand-written) BR object parsed the data and the existing code to further process it externally...
+	
+	NSMutableArray *majorHardwareVersions = [NSMutableArray array];
+	NSMutableArray *minorHardwareVersions = [NSMutableArray array];
+	NSMutableArray *majorSoftwareVersions = [NSMutableArray array];
+	NSMutableArray *minorSoftwareVersions = [NSMutableArray array];
+	NSMutableArray *supportedServices = [NSMutableArray array];
+	
+	enum DeviceInfo {
+		DeviceInfoMajorHWVersion = 0,
+		DeviceInfoMinorHWVersion,
+		DeviceInfoMajorSWVersion,
+		DeviceInfoMinorSWVersion,
+		DeviceInfoSupportedServices
+	};
+	
+	uint16_t offset = 2;
+	uint16_t len = 0;
+	uint8_t *vers;
+	
+	for (enum DeviceInfo i = DeviceInfoMajorHWVersion; i < DeviceInfoSupportedServices; i++) {
+		
+		[[info.payload subdataWithRange:NSMakeRange(offset, sizeof(uint16_t))] getBytes:&len length:sizeof(uint16_t)];
+		len = ntohs(len);
+		
+		offset += sizeof(uint16_t);
+		
+		vers = malloc(len);
+		[[info.payload subdataWithRange:NSMakeRange(offset, len)] getBytes:vers length:len];
+		
+		for (int v=0; v<len; v++) {
+			uint8_t version = vers[v];
+			switch (i) {
+				case DeviceInfoMajorHWVersion:
+					[majorHardwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMinorHWVersion:
+					[minorHardwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMajorSWVersion:
+					[majorSoftwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoMinorSWVersion:
+					[minorSoftwareVersions addObject:@(version)];
+					break;
+				case DeviceInfoSupportedServices: // suppress compiler warnings
+					break;
+			}
+		}
+		
+		free(vers);
+		
+		offset += len;
+	}
+	
+	[[info.payload subdataWithRange:NSMakeRange(offset, sizeof(uint16_t))] getBytes:&len length:sizeof(uint16_t)];
+	len = ntohs(len);
+	
+	offset += sizeof(uint16_t);
+	
+	uint16_t services[len];
+	[[info.payload subdataWithRange:NSMakeRange(offset, len)] getBytes:&services length:len];
+	
+	for (int s=0; s<(len/2); s++) {
+		[supportedServices addObject:@(htons(services[s]))];
+	}
+
+	// previous start to this method before "new" BR library
 	
 	self.hardwareVersion = [NSMutableString string];
 	self.firmwareVersion = [NSMutableString string];
 	
-	for (int v = 0; v<[info.majorHardwareVersions count]; v++) {
-		NSString *commaString = ((v == [info.majorHardwareVersions count]-1) ? @"" : @", ");
-		[(NSMutableString *)self.hardwareVersion appendFormat:@"%@.%@%@", info.majorHardwareVersions[v], info.minorHardwareVersions[v], commaString];
+	for (int v = 0; v<[majorHardwareVersions count]; v++) {
+		NSString *commaString = ((v == [majorHardwareVersions count]-1) ? @"" : @", ");
+		[(NSMutableString *)self.hardwareVersion appendFormat:@"%@.%@%@", majorHardwareVersions[v], minorHardwareVersions[v], commaString];
 	}
 	
-	for (int v = 0; v<[info.majorSoftwareVersions count]; v++) {
-		NSString *commaString = ((v == [info.majorSoftwareVersions count]-1) ? @"" : @", ");
-		[(NSMutableString *)self.firmwareVersion appendFormat:@"%@.%@%@", info.majorSoftwareVersions[v], info.minorSoftwareVersions[v], commaString];
+	for (int v = 0; v<[majorSoftwareVersions count]; v++) {
+		NSString *commaString = ((v == [majorSoftwareVersions count]-1) ? @"" : @", ");
+		[(NSMutableString *)self.firmwareVersion appendFormat:@"%@.%@%@", majorSoftwareVersions[v], minorSoftwareVersions[v], commaString];
 	}
 	
 	self.supportedServices = [@[@(PLTServiceWearingState), @(PLTServiceProximity)] mutableCopy];
-	[(NSMutableArray *)self.supportedServices addObjectsFromArray:info.supportedServices];
-	
-//	NSLog(@"self.hardwareVersion: %@", self.hardwareVersion);
-//	NSLog(@"self.firmwareVersion: %@", self.firmwareVersion);
-//	NSLog(@"self.supportedServices: %@", self.supportedServices);
+	[(NSMutableArray *)self.supportedServices addObjectsFromArray:supportedServices];
 	
 	[self didFinishHandshake];
 }
+
+//- (void)didGetDeviceInfo:(BRGetDeviceInfoSettingResult *)result
+//{
+//	DLog(DLogLevelTrace, @"didGetDeviceInfo:");
+//	
+//	BRGetDeviceInfoSettingResult *info = (BRGetDeviceInfoSettingResult *)result;
+//
+//	self.hardwareVersion = [NSMutableString string];
+//	self.firmwareVersion = [NSMutableString string];
+//	
+//	for (int v = 0; v<[info.majorHardwareVersions count]; v++) {
+//		NSString *commaString = ((v == [info.majorHardwareVersions count]-1) ? @"" : @", ");
+//		[(NSMutableString *)self.hardwareVersion appendFormat:@"%@.%@%@", info.majorHardwareVersions[v], info.minorHardwareVersions[v], commaString];
+//	}
+//	
+//	for (int v = 0; v<[info.majorSoftwareVersions count]; v++) {
+//		NSString *commaString = ((v == [info.majorSoftwareVersions count]-1) ? @"" : @", ");
+//		[(NSMutableString *)self.firmwareVersion appendFormat:@"%@.%@%@", info.majorSoftwareVersions[v], info.minorSoftwareVersions[v], commaString];
+//	}
+//	
+//	self.supportedServices = [@[@(PLTServiceWearingState), @(PLTServiceProximity)] mutableCopy];
+//	[(NSMutableArray *)self.supportedServices addObjectsFromArray:info.supportedServices];
+//	
+//	[self didFinishHandshake];
+//}
 
 - (void)didFinishHandshake
 {
@@ -935,18 +1009,20 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	[[NSNotificationCenter defaultCenter] postNotificationName:PLTDeviceDidOpenConnectionNotification object:nil userInfo:userInfo];
 }
 
-//- (void)didTimeoutOpenConnection:(NSTimer *)aTimer
-//{
-//	NSLog(@"didTimeoutOpenConnection:");
-//	
-//	#warning open connection timer
-//}
-
 - (void)configureSignalStrengthEventsEnabled:(BOOL)enabled connectionID:(uint8_t)connectionID
 {
 	DLog(DLogLevelDebug, @"configureSignalStrengthEventsEnabled: %@ connectionID: %d", (enabled?@"YES":@"NO"), connectionID);
 	
-	BRSubscribeToSignalStrengthCommand *command = [BRSubscribeToSignalStrengthCommand commandWithSubscription:enabled connectionID:connectionID];
+	BRConfigureSignalStrengthEventsCommand *command = [BRConfigureSignalStrengthEventsCommand commandWithConnectionId:connectionID
+																											   enable:YES
+																											  dononly:NO
+																												trend:NO
+																									  reportRssiAudio:NO 
+																								   reportNearFarAudio:NO
+																								  reportNearFarToBase:NO 
+																										  sensitivity:0
+																										nearThreshold:71
+																										   maxTimeout:UINT16_MAX];
 	[self.brDevice sendMessage:command];
 }
 
@@ -964,7 +1040,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 {
 	DLog(DLogLevelDebug, @"querySignalStrength: %d", connectionID);
 	
-	BRSignalStrengthSettingRequest *request = [BRSignalStrengthSettingRequest requestWithConnectionID:connectionID];
+	BRCurrentSignalStrengthSettingRequest *request = [BRCurrentSignalStrengthSettingRequest requestWithConnectionId:connectionID];
 	[self.brDevice sendMessage:request];
 }
 					   
@@ -972,7 +1048,8 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 {
 	DLog(DLogLevelDebug, @"queryOrientationTrackingForCal");
 	
-	BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:PLTServiceOrientationTracking];
+	BRQueryServicesDataSettingRequest *request = [BRQueryServicesDataSettingRequest requestWithServiceID:PLTServiceOrientationTracking
+																						  characteristic:0];
 	self.queryingOrientationTrackingForCalibration = YES;
 	[self.brSensorsDevice sendMessage:request];
 }
@@ -1051,6 +1128,77 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	return nil;
 }
 
+#pragma mark - WC1 Parsing Helpers
+
+- (PLTQuaternion)quaternionFromServiceData:(NSData *)serviceData
+{
+	int32_t w, x, y, z;
+	
+	[[serviceData subdataWithRange:NSMakeRange(0, sizeof(int32_t))] getBytes:&w length:sizeof(int32_t)];
+	[[serviceData subdataWithRange:NSMakeRange(4, sizeof(int32_t))] getBytes:&x length:sizeof(int32_t)];
+	[[serviceData subdataWithRange:NSMakeRange(8, sizeof(int32_t))] getBytes:&y length:sizeof(int32_t)];
+	[[serviceData subdataWithRange:NSMakeRange(12, sizeof(int32_t))] getBytes:&z length:sizeof(int32_t)];
+	
+	w = ntohl(w);
+	x = ntohl(x);
+	y = ntohl(y);
+	z = ntohl(z);
+	
+	if (w > 32767) w -= 65536;
+	if (x > 32767) x -= 65536;
+	if (y > 32767) y -= 65536;
+	if (z > 32767) z -= 65536;
+	
+	double fw = ((double)w) / 16384.0f;
+	double fx = ((double)x) / 16384.0f;
+	double fy = ((double)y) / 16384.0f;
+	double fz = ((double)z) / 16384.0f;
+	
+	PLTQuaternion q = (PLTQuaternion){fw, fx, fy, fz};
+	if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
+		NSLog(@"Bad quaternion! { %f, %f, %f, %f }", q.w, q.x, q.y, q.z);
+	}
+	else {
+		return q;
+	}
+	
+	return (PLTQuaternion){1, 0, 0, 0};
+}
+
+- (uint32_t)pedometerCountFromServiceData:(NSData *)serviceData
+{
+	uint32_t steps;
+	[serviceData getBytes:&steps length:sizeof(uint32_t)];
+	steps = ntohl(steps);
+	return steps;
+}
+
+- (BOOL)freeFallFromServiceData:(NSData *)serviceData
+{
+	uint8_t ff;
+	[serviceData getBytes:&ff length:sizeof(uint8_t)];
+	return ff;
+}
+
+- (void)getTapsFromServiceData:(NSData *)serviceData count:(uint8_t *)count direction:(uint8_t *)direction
+{
+	uint8_t c;
+	uint8_t d;
+	
+	[[serviceData subdataWithRange:NSMakeRange(0, sizeof(uint8_t))] getBytes:&d length:sizeof(uint8_t)];
+	[[serviceData subdataWithRange:NSMakeRange(1, sizeof(uint8_t))] getBytes:&c length:sizeof(uint8_t)];
+	
+	*count = c;
+	*direction = d;
+}
+
+- (BOOL)calibrationFromServiceData:(NSData *)serviceData
+{
+	uint8_t cal;
+	[serviceData getBytes:&cal length:sizeof(uint8_t)];
+	return (cal == 3);
+}
+
 #pragma mark - BRDeviceDelegate
 
 - (void)BRDeviceDidConnect:(BRDevice *)device
@@ -1107,76 +1255,86 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	NSMutableArray *subscribers = [NSMutableArray array];
 	PLTService service = -1;
 	
-	if ([event isKindOfClass:[BROrientationTrackingEvent class]]) {
-		service = PLTServiceOrientationTracking;
-		BROrientationTrackingEvent *e = (BROrientationTrackingEvent *)event;
-		PLTQuaternion quaternion = PLTQuaternionFromBRQuaternion(e.quaternion);
+	if ([event isKindOfClass:[BRSubscribedServiceDataEvent class]]) {
+		BRSubscribedServiceDataEvent *serviceDataEvent = (BRSubscribedServiceDataEvent *)event;
+		uint16_t serviceID = serviceDataEvent.serviceID;
+		NSData *serviceData = serviceDataEvent.serviceData;
 		
-		if (self.queryingOrientationTrackingForCalibration) {
-			self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
-			self.queryingOrientationTrackingForCalibration = NO;
-		}
-		
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
-															 timestamp:timestamp
-														   calibration:self.orientationTrackingCalibration
-															quaternion:quaternion];
-	}
-	else if ([event isKindOfClass:[BRPedometerEvent class]]) {
-		service = PLTServicePedometer;
-		BRPedometerEvent *e = (BRPedometerEvent *)event;
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTPedometerInfo alloc] initWithRequestType:requestType
-												   timestamp:timestamp
-												calibration:nil
+		switch (serviceID) {
+			case BRServiceIDOrientationTracking: {
+				service = PLTServiceOrientationTracking;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
+				if (self.queryingOrientationTrackingForCalibration) {
+					self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
+					self.queryingOrientationTrackingForCalibration = NO;
+				}
+				info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
+																	 timestamp:timestamp
+																   calibration:self.orientationTrackingCalibration
+																	quaternion:quaternion];
+				break; }
+			case BRServiceIDPedometer: {
+				service = PLTServicePedometer;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				uint32_t steps = [self pedometerCountFromServiceData:serviceData];
+				info = [[PLTPedometerInfo alloc] initWithRequestType:requestType
+														   timestamp:timestamp
+														 calibration:nil
 #warning temporary cal
-													   steps:e.steps - self.pedometerOffset];
+															   steps:steps - self.pedometerOffset];
+				break; }
+			case BRServiceIDFreeFall: {
+				service = PLTServiceFreeFall;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				BOOL isInFreeFall = [self freeFallFromServiceData:serviceData];
+				info = [[PLTFreeFallInfo alloc] initWithRequestType:requestType
+														  timestamp:timestamp
+														calibration:nil
+														   freeFall:isInFreeFall];
+				break; }
+			case BRServiceIDTaps: {
+				
+				
+				service = PLTServiceTaps;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				uint8_t count;
+				uint8_t direction;
+				[self getTapsFromServiceData:serviceData count:&count direction:&direction];
+				info = [[PLTTapsInfo alloc] initWithRequestType:requestType
+													  timestamp:timestamp
+													calibration:nil
+													  direction:direction
+														  count:count];
+			case BRServiceIDGyroCal: {
+				service = PLTServiceGyroscopeCalibrationStatus;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
+				info = [[PLTGyroscopeCalibrationInfo alloc] initWithRequestType:requestType
+																	  timestamp:timestamp
+																	calibration:nil
+															  calibrationStatus:isCalibrated];
+				break; }
+				
+			case BRServiceIDMagCal: {
+				service = PLTServiceMagnetometerCalibrationStatus;
+				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
+				info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
+																		 timestamp:timestamp
+																	   calibration:nil
+																 calibrationStatus:isCalibrated];
+				break; }
+			}
+		}
 	}
-	else if ([event isKindOfClass:[BRFreeFallEvent class]]) {
-		service = PLTServiceFreeFall;
-		BRFreeFallEvent *e = (BRFreeFallEvent *)event;
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTFreeFallInfo alloc] initWithRequestType:requestType
-												  timestamp:timestamp
-												calibration:nil
-												   freeFall:e.isInFreeFall];
-	}
-	else if ([event isKindOfClass:[BRTapsEvent class]]) {
-		service = PLTServiceTaps;
-		BRTapsEvent *e = (BRTapsEvent *)event;
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTTapsInfo alloc] initWithRequestType:requestType
-											  timestamp:timestamp
-											calibration:nil
-											  direction:e.direction
-												  count:e.count];
-	}
-	else if ([event isKindOfClass:[BRMagnetometerCalStatusEvent class]]) {
-		service = PLTServiceMagnetometerCalibrationStatus;
-		BRMagnetometerCalStatusEvent *e = (BRMagnetometerCalStatusEvent *)event;
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
-																 timestamp:timestamp
-															   calibration:nil
-														 calibrationStatus:e.isCalibrated];
-	}
-	else if ([event isKindOfClass:[BRGyroscopeCalStatusEvent class]]) {
-		service = PLTServiceGyroscopeCalibrationStatus;
-		BRGyroscopeCalStatusEvent *e = (BRGyroscopeCalStatusEvent *)event;
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		info = [[PLTGyroscopeCalibrationInfo alloc] initWithRequestType:requestType
-															  timestamp:timestamp
-															calibration:nil
-													  calibrationStatus:e.isCalibrated];
-	}
-	else if ([event isKindOfClass:[BRWearingStateEvent class]]) {
+	else if ([event isKindOfClass:[BRWearingStateChangedEvent class]]) {
 		service = PLTServiceWearingState;
-		BRWearingStateEvent *e = (BRWearingStateEvent *)event;
+		BRWearingStateChangedEvent *e = (BRWearingStateChangedEvent *)event;
 		info = [[PLTWearingStateInfo alloc] initWithRequestType:requestType
 													  timestamp:timestamp
 													calibration:nil
-												   wearingState:e.isBeingWorn];
+												   wearingState:e.worn];
 		
 		PLTSubscription *subscription = self.subscriptions[@(service)];
 		if (subscription) {
@@ -1195,44 +1353,34 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		service = PLTServiceProximity;
 		BRSignalStrengthEvent *e = (BRSignalStrengthEvent *)event;
 		PLTProximityInfo *cachedInfo = (PLTProximityInfo *)self.cachedInfo[@(service)];
-		uint8_t connectionID = e.connectionID;
+		uint8_t connectionID = e.connectionId;
 		
 		// if temporarily turning on signal strength events, it can take several "unknown" distance events before a near/far value is generated.
 		// wait until then to return distance query.
-		if (e.distance != PLTProximityUnknown) {
+		if (e.nearFar != PLTProximityUnknown) {
 			// check if we're waiting on a signal strength query
 			PLTProximityInfo *queryInfo = nil;
 			if (connectionID == self.remotePort) {
-				//Log.i(FN(), "REMOTE");
 				if (self.waitingForRemoteSignalStrengthEvent) {
-					//Log.i(FN(), "SET REMOTE INFO");
 					self.remoteQuerySignalStrengthEvent = e;
-					
 					if (self.localQuerySignalStrengthEvent) {
-						//Log.i(FN(), "WE GOT LOCAL. DONE.");
 						// we're got both.
 						queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-																   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
+																   localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:self.remoteQuerySignalStrengthEvent.nearFar];
 					}
 				}
 			}
 			else {
-				//Log.i(FN(), "LOCAL");
 				if (self.waitingForLocalSignalStrengthEvent) {
-					//Log.i(FN(), "SET LOCAL INFO");
 					self.localQuerySignalStrengthEvent = e;
-					
 					if (self.waitingForRemoteSignalStrengthEvent) {
-						//Log.i(FN(), "WAITING ON REMOTE, TOO");
 						if (self.remoteQuerySignalStrengthEvent) {
 							// we're got both.
-							//Log.i(FN(), "WE GOT REMOTE. DONE.");
 							queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-																	   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
+																	   localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:self.remoteQuerySignalStrengthEvent.nearFar];
 						}
 					}
 					else {
-						//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
 						// not waiting on remote. we've got just the one.
 						PLTProximity cachedRemoteProximity = PLTProximityUnknown;
 						if (cachedInfo) {
@@ -1240,14 +1388,12 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 						}
 						
 						queryInfo = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-																   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:cachedRemoteProximity];
+																   localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:cachedRemoteProximity];
 					}
 				}
 			}
 			
 			if (queryInfo) {
-				//Log.i(FN(), "QUERYINFO: " + queryInfo);
-				
 				NSArray *querySubscribers = self.querySubscribers[@(service)];
 				if (querySubscribers) {
 					for (id<PLTDeviceSubscriber> s in querySubscribers) {
@@ -1287,7 +1433,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			remoteProximity = cachedInfo.remoteProximity;
 		}
 		
-		PLTProximity proximity = (PLTProximity)e.distance; // maps directly
+		PLTProximity proximity = (PLTProximity)e.nearFar; // maps directly
 		if (connectionID == self.remotePort) {
 			remoteProximity = proximity;
 		}
@@ -1321,39 +1467,39 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 		}
 	}
 	
-#warning BANGLE
-	else if ([event isKindOfClass:[BRSubscribedServiceDataEvent class]]) {
-		BRSubscribedServiceDataEvent *serviceDataEvent = (BRSubscribedServiceDataEvent *)event;
-		//NSLog(@"service: 0x%04X, characteristic: 0x%04X, data: %@", serviceDataEvent.serviceID, serviceDataEvent.characteristic, [serviceDataEvent.serviceData hexStringWithSpaceEvery:2]);
-		
-		Class class = nil;
-		service = serviceDataEvent.serviceID; // BR IDs map directly to PLTLabs IDs
-		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
-		
-		switch (serviceDataEvent.serviceID) {
-			case BRServiceIDSkinTemperature:
-				class = [PLTSkinTemperatureInfo class];
-				break;
-				
-			case BRServiceIDAmbientHumidity:
-				class = [PLTAmbientHumidityInfo class];
-				break;
-				
-			case BRServiceIDAmbientPressure:
-				class = [PLTAmbientPressureInfo class];
-				break;
-				
-			default:
-				break;
-		}
-		
-		if (class) {
-			info = [[class alloc] initWithRequestType:requestType
-											timestamp:timestamp
-										  calibration:nil
-										  serviceData:serviceDataEvent.serviceData];
-		}
-	}
+//#warning BANGLE
+//	else if ([event isKindOfClass:[BRSubscribedServiceDataEvent class]]) {
+//		BRSubscribedServiceDataEvent *serviceDataEvent = (BRSubscribedServiceDataEvent *)event;
+//		//NSLog(@"service: 0x%04X, characteristic: 0x%04X, data: %@", serviceDataEvent.serviceID, serviceDataEvent.characteristic, [serviceDataEvent.serviceData hexStringWithSpaceEvery:2]);
+//		
+//		Class class = nil;
+//		service = serviceDataEvent.serviceID; // BR IDs map directly to PLTLabs IDs
+//		subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
+//		
+//		switch (serviceDataEvent.serviceID) {
+//			case BRServiceIDSkinTemperature:
+//				class = [PLTSkinTemperatureInfo class];
+//				break;
+//				
+//			case BRServiceIDAmbientHumidity:
+//				class = [PLTAmbientHumidityInfo class];
+//				break;
+//				
+//			case BRServiceIDAmbientPressure:
+//				class = [PLTAmbientPressureInfo class];
+//				break;
+//				
+//			default:
+//				break;
+//		}
+//		
+//		if (class) {
+//			info = [[class alloc] initWithRequestType:requestType
+//											timestamp:timestamp
+//										  calibration:nil
+//										  serviceData:serviceDataEvent.serviceData];
+//		}
+//	}
 
 	if (info) {
 		self.cachedInfo[@(service)] = info;
@@ -1366,9 +1512,9 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	}
 }
 
-- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)response
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResult:(BRSettingResult *)result
 {
-    DLog(DLogLevelDebug, @"BRDevice: %@ didReceiveSettingResponse: %@", device, response);
+    DLog(DLogLevelDebug, @"BRDevice: %@ didReceiveSettingResult: %@", device, result);
 	
 	PLTInfoRequestType requestType = PLTInfoRequestTypeQuery;
 	NSDate *timestamp = [NSDate date];
@@ -1376,71 +1522,86 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 	int service = -1; // not PLTService because it must be signed
 	NSArray *subscribers = nil;
 	
-	if ([response isKindOfClass:[BROrientationTrackingSettingResponse class]]) {
-		BROrientationTrackingSettingResponse *r = (BROrientationTrackingSettingResponse *)response;
-		PLTQuaternion quaternion = PLTQuaternionFromBRQuaternion(r.quaternion);
+	
+	
+	if ([result isKindOfClass:[BRQueryServicesDataSettingResult class]]) {
+		BRQueryServicesDataSettingResult *serviceDataResult = (BRQueryServicesDataSettingResult *)result;
+		uint16_t serviceID = serviceDataResult.serviceID;
+		NSData *serviceData = serviceDataResult.servicedata;
 		
-		if (self.queryingOrientationTrackingForCalibration) {
-			self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
-			self.queryingOrientationTrackingForCalibration = NO;
-		}
-		else {
-			service = PLTServiceOrientationTracking;
-			info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
-																 timestamp:timestamp
-															   calibration:self.orientationTrackingCalibration
-																quaternion:quaternion];
-		}
-	}
-	else if ([response isKindOfClass:[BRTapsSettingResponse class]]) {
-		BRTapsSettingResponse *r = (BRTapsSettingResponse *)response;
-		service = PLTServiceTaps;
-		info = [[PLTTapsInfo alloc] initWithRequestType:requestType
-											  timestamp:timestamp
-											calibration:nil
-											  direction:r.direction
+		switch (serviceID) {
+			case BRServiceIDOrientationTracking: {
+				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
+				if (self.queryingOrientationTrackingForCalibration) {
+					self.orientationTrackingCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
+					self.queryingOrientationTrackingForCalibration = NO;
+				}
+				else {
+					service = PLTServiceOrientationTracking;
+					info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
+																		 timestamp:timestamp
+																	   calibration:self.orientationTrackingCalibration
+																		quaternion:quaternion];
+				}
+				break; }
+				
+			case BRServiceIDPedometer: {
+				service = PLTServicePedometer;
+				uint32_t steps = [self pedometerCountFromServiceData:serviceData];
+				info = [[PLTPedometerInfo alloc] initWithRequestType:requestType
+														   timestamp:timestamp
+														 calibration:nil
 #warning temporary cal
-												  count:r.count - self.pedometerOffset];
+															   steps:steps - self.pedometerOffset];
+				break; }
+				
+			case BRServiceIDFreeFall: {
+				service = PLTServiceFreeFall;
+				BOOL isInFreeFall = [self freeFallFromServiceData:serviceData];
+				info = [[PLTFreeFallInfo alloc] initWithRequestType:requestType
+														  timestamp:timestamp
+														calibration:nil
+														   freeFall:isInFreeFall];
+				break; }
+				
+			case BRServiceIDTaps: {
+				service = PLTServiceTaps;
+				uint8_t count;
+				uint8_t direction;
+				[self getTapsFromServiceData:serviceData count:&count direction:&direction];
+				info = [[PLTTapsInfo alloc] initWithRequestType:requestType
+													  timestamp:timestamp
+													calibration:nil
+													  direction:direction
+														  count:count];
+				break; }
+
+			case BRServiceIDGyroCal: {
+				service = PLTServiceGyroscopeCalibrationStatus;
+				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
+				info = [[PLTGyroscopeCalibrationInfo alloc] initWithRequestType:requestType
+																	  timestamp:timestamp
+																	calibration:nil
+															  calibrationStatus:isCalibrated];
+				break; }
+				
+			case BRServiceIDMagCal: {
+				service = PLTServiceMagnetometerCalibrationStatus;
+				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
+				info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
+																		 timestamp:timestamp
+																	   calibration:nil
+																 calibrationStatus:isCalibrated];
+				break; }
+		}
 	}
-	else if ([response isKindOfClass:[BRPedometerSettingResponse class]]) {
-		BRPedometerSettingResponse *r = (BRPedometerSettingResponse *)response;
-		service = PLTServicePedometer;
-		info = [[PLTPedometerInfo alloc] initWithRequestType:requestType
-												   timestamp:timestamp
-												 calibration:nil
-													   steps:r.steps];
-	}
-	else if ([response isKindOfClass:[BRFreeFallSettingResponse class]]) {
-		BRFreeFallSettingResponse *r = (BRFreeFallSettingResponse *)response;
-		service = PLTServiceFreeFall;
-		info = [[PLTFreeFallInfo alloc] initWithRequestType:requestType
-												  timestamp:timestamp
-												calibration:nil
-												   freeFall:r.isInFreeFall];
-	}
-	else if ([response isKindOfClass:[BRMagnetometerCalStatusSettingResponse class]]) {
-		BRMagnetometerCalStatusSettingResponse *r = (BRMagnetometerCalStatusSettingResponse *)response;
-		service = PLTServiceMagnetometerCalibrationStatus;
-		info = [[PLTMagnetometerCalibrationInfo alloc] initWithRequestType:requestType
-																 timestamp:timestamp
-															   calibration:nil
-														 calibrationStatus:r.isCalibrated];
-	}
-	else if ([response isKindOfClass:[BRGyroscopeCalStatusSettingResponse class]]) {
-		BRGyroscopeCalStatusSettingResponse *r = (BRGyroscopeCalStatusSettingResponse *)response;
-		service = PLTServiceGyroscopeCalibrationStatus;
-		info = [[PLTGyroscopeCalibrationInfo alloc] initWithRequestType:requestType
-															  timestamp:timestamp
-															calibration:nil
-													  calibrationStatus:r.isCalibrated];
-	}
-	else if ([response isKindOfClass:[BRWearingStateSettingResponse class]]) {
-		BRWearingStateSettingResponse *r = (BRWearingStateSettingResponse *)response;
+	else if ([result isKindOfClass:[BRWearingStateSettingResult class]]) {
+		BRWearingStateSettingResult *r = (BRWearingStateSettingResult *)result;
 		service = PLTServiceWearingState;
 		info = [[PLTWearingStateInfo alloc] initWithRequestType:requestType
 													  timestamp:timestamp
 													calibration:nil
-												   wearingState:r.isBeingWorn];
+												   wearingState:r.worn];
 		
 		if (self.waitingForWearingStatePrimer) {
 			self.waitingForWearingStatePrimer = NO;
@@ -1450,45 +1611,35 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 			info = nil; // probably not necessary since querySubscribers wouldn't have any wearing state listeners...
 		}
 	}
-	else if ([response isKindOfClass:[BRSignalStrengthSettingResponse class]]) {
-		BRSignalStrengthSettingResponse *r = (BRSignalStrengthSettingResponse *)response;
+	else if ([result isKindOfClass:[BRCurrentSignalStrengthSettingResult class]]) {
+		BRCurrentSignalStrengthSettingResult *r = (BRCurrentSignalStrengthSettingResult *)result;
 		service = PLTServiceProximity;
 		
 		PLTProximityInfo *cachedInfo = (PLTProximityInfo *)self.cachedInfo[@(service)];
-		uint8_t connectionID = r.connectionID;
+		uint8_t connectionID = r.connectionId;
 		
 		// check if we're waiting on a signal strength query
 		if (connectionID == self.remotePort) {
-			//Log.i(FN(), "REMOTE");
-			if (self.waitingForRemoteSignalStrengthSettingResponse) {
-				//Log.i(FN(), "SET REMOTE INFO");
-				self.remoteQuerySignalStrengthResponse = r;
-				
-				if (self.localQuerySignalStrengthResponse) {
-					//Log.i(FN(), "WE GOT LOCAL. DONE.");
+			if (self.waitingForRemoteSignalStrengthSettingResult) {
+				self.remoteQuerySignalStrengthResult = r;
+				if (self.localQuerySignalStrengthResult) {
 					// we're got both.
 					info = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-															   localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
+															   localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:self.remoteQuerySignalStrengthEvent.nearFar];
 				}
 			}
 		}
 		else {
-			//Log.i(FN(), "LOCAL");
-			if (self.waitingForLocalSignalStrengthSettingResponse) {
-				//Log.i(FN(), "SET LOCAL INFO");
-				self.localQuerySignalStrengthResponse = r;
-				
-				if (self.waitingForRemoteSignalStrengthSettingResponse) {
-					//Log.i(FN(), "WAITING ON REMOTE, TOO");
-					if (self.remoteQuerySignalStrengthResponse) {
-						//Log.i(FN(), "WE GOT REMOTE. DONE.");
+			if (self.waitingForLocalSignalStrengthSettingResult) {
+				self.localQuerySignalStrengthResult = r;
+				if (self.waitingForRemoteSignalStrengthSettingResult) {
+					if (self.remoteQuerySignalStrengthResult) {
 						// we're got both.
 						info = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-															  localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:self.remoteQuerySignalStrengthEvent.distance];
+															  localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:self.remoteQuerySignalStrengthEvent.nearFar];
 					}
 				}
 				else {
-					//Log.i(FN(), "WAITING ON LOCAL ONLY. DONE.");
 					// not waiting on remote. we've got just the one.
 					PLTProximity cachedRemoteProximity = PLTProximityUnknown;
 					if (cachedInfo) {
@@ -1496,27 +1647,26 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 					}
 					
 					info = [[PLTProximityInfo alloc] initWithRequestType:PLTInfoRequestTypeQuery timestamp:timestamp calibration:nil
-														  localProximity:self.localQuerySignalStrengthEvent.distance remoteProximity:cachedRemoteProximity];
+														  localProximity:self.localQuerySignalStrengthEvent.nearFar remoteProximity:cachedRemoteProximity];
 				}
 			}
 		}
 		
 		if (info) {
-			//Log.d(FN(),"INFO: " + info);
-			self.waitingForRemoteSignalStrengthSettingResponse = NO;
-			self.waitingForLocalSignalStrengthSettingResponse = NO;
-			self.localQuerySignalStrengthResponse = nil;
-			self.remoteQuerySignalStrengthResponse = nil;
+			self.waitingForRemoteSignalStrengthSettingResult = NO;
+			self.waitingForLocalSignalStrengthSettingResult = NO;
+			self.localQuerySignalStrengthResult = nil;
+			self.remoteQuerySignalStrengthResult = nil;
 		}
 	}
-	else if ([response isKindOfClass:[BRDeviceInfoSettingResponse class]]) {
-		[self didGetDeviceInfo:(BRDeviceInfoSettingResponse *)response];
+	else if ([result isKindOfClass:[BRGetDeviceInfoSettingResult class]]) {
+		[self didGetDeviceInfo:(BRGetDeviceInfoSettingResult *)result];
     }
-	else if ([response isKindOfClass:[BRGenesGUIDSettingResponse class]]) {
-		[self didGetGUID:(BRGenesGUIDSettingResponse *)response];
+	else if ([result isKindOfClass:[BRGenesGUIDSettingResult class]]) {
+		[self didGetGUID:(BRGenesGUIDSettingResult *)result];
 	}
-	else if ([response isKindOfClass:[BRProductNameSettingResponse class]]) {
-		[self didGetProductName:(BRProductNameSettingResponse *)response];
+	else if ([result isKindOfClass:[BRProductNameSettingResult class]]) {
+		[self didGetProductName:(BRProductNameSettingResult *)result];
 	}
 	
 	subscribers = self.querySubscribers[@(service)];
@@ -1538,7 +1688,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 {
     DLog(DLogLevelError, @"BRDevice: %@ didRaiseSettingException: %@", device, exception);
 	
-	uint16_t exceptionID = exception.exceptionID;
+	uint16_t exceptionID = exception.deckardID;
 	if (exceptionID == 0x0A1E) {
 		if (!self.isConnectionOpen) { // really we should have states for all steps in the handshake... maybe add this later...
 			[self didGetGUID:nil];
@@ -1663,7 +1813,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (NSString *)privateDescription
 {
-	return [NSString stringWithFormat:@"<PLTInternalSubscription %p> service=0x%04lX, mode=0x%02lX, period=0x%04X, subscribers=%@",
+	return [NSString stringWithFormat:@"<PLTInternalSubscription %p> service=0x%04X, mode=0x%02X, period=0x%04X, subscribers=%@",
 			self, self.service, self.mode, self.period, self.subscribers];
 }
 
@@ -1671,7 +1821,7 @@ PLTQuaternion PLTQuaternionFromBRQuaternion(BRQuaternion brQuaternion)
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"<PLTSubscription %p> service=0x%04lX, mode=0x%02lX, period=0x%04X",
+	return [NSString stringWithFormat:@"<PLTSubscription %p> service=0x%04X, mode=0x%02X, period=0x%04X",
 			self, self.service, self.mode, self.period];
 }
 

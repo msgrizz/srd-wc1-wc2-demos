@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
+#ifdef BANGLE
+
 @class PLTDialogInteractionResult;
 @class BRApplicationActionResultEvent;
 
@@ -17,3 +19,4 @@
 
 @end
 
+#endif

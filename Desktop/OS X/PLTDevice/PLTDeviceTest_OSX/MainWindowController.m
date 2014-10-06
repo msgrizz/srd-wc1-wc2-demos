@@ -77,8 +77,8 @@
 	NSLog(@"subscribeToServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-		[self.device subscribe:self toService:PLTServiceOrientationTracking				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+//		[self.device subscribe:self toService:PLTServiceOrientationTracking				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
 		
 //		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 //		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
@@ -86,7 +86,7 @@
 //		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 //		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 //		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 	}
 }
 
@@ -139,9 +139,9 @@
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceEulerAngles:oldOrientationInfo.eulerAngles];
 //	[self.device setCalibration:orientationCal forService:PLTServiceOrientationTracking];
 	
-//	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
-//	
-//	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
+	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+	
+	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
 }
 
 - (void)setUIConnected:(BOOL)flag

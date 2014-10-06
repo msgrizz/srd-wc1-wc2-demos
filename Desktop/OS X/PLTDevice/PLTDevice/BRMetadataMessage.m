@@ -50,13 +50,6 @@
     return message;
 }
 
-//- (id)initWithData:(NSData *)data
-//{
-//    self = [super init];
-//    self.data = data;
-//    return self;
-//}
-
 - (void)parseData
 {
 	[super parseData];

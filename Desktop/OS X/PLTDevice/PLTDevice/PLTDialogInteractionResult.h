@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef BANGLE
 
 @interface PLTDialogInteractionResult : NSObject
 
 @property(nonatomic,readonly) NSInteger result;
 
 @end
+
+#endif

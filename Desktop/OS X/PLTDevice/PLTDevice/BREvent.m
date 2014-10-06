@@ -14,7 +14,8 @@
 
 #pragma mark - Public
 
-+ (BREvent *)eventWithData:(NSData *)data
+//+ (BREvent *)eventWithData:(NSData *)data
++ (BRIncomingMessage *)messageWithData:(NSData *)data
 {
     BREvent *event = [[[super class] alloc] init];
 	event.data = data;

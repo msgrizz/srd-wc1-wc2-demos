@@ -9,16 +9,14 @@
 #import "BRIncomingMessage.h"
 
 
-typedef enum {
-    BRExceptionIDDeviceNotReady =   0xFF94,
-    BRExceptionIDIllegalValue =     0x0808
-} BRExceptionID;
+//typedef enum {
+//    BRExceptionIDDeviceNotReady =   0xFF94,
+//    BRExceptionIDIllegalValue =     0x0808
+//} BRExceptionID;
 
 
 @interface BRException : BRIncomingMessage
 
 + (BRException *)exceptionWithData:(NSData *)data;
-
-@property(nonatomic,readonly)	uint16_t  exceptionID;
 
 @end

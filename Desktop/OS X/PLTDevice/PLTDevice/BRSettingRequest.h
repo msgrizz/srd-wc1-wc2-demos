@@ -12,6 +12,5 @@
 @interface BRSettingRequest : BROutgoingMessage
 
 + (BRSettingRequest *)request;
-//- (void)parseData;
 
 @end

@@ -10,13 +10,6 @@
 #import "BRIncomingMessage_Private.h"
 
 
-@interface BRException()
-
-@property(nonatomic,assign,readwrite)	uint16_t  exceptionID;
-
-@end
-
-
 @implementation BRException
 
 #pragma mark - Public
@@ -30,18 +23,8 @@
 
 #pragma mark - Private
 
-- (void)parseData
-{
-	[super parseData];
-	
-	uint16_t exceptionID;
-	[[self.payload subdataWithRange:NSMakeRange(0, sizeof(uint16_t))] getBytes:&exceptionID length:sizeof(uint16_t)];
-	self.exceptionID = ntohs(exceptionID);
-}
-
 - (BRMessageType)type
 {
-	//return BRMessageTypeSettingResultSuccess;
 	return 0; // whatever
 }
 

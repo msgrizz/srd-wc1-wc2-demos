@@ -10,7 +10,7 @@
 
 @class BRMessage;
 @class BREvent;
-@class BRSettingResponse;
+@class BRSettingResult;
 @class BRException;
 @class BRMetadataMessage;
 @class BRRemoteDevice;
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, BRDeviceError) {
 - (void)BRDeviceDidDisconnect:(BRDevice *)device;
 - (void)BRDevice:(BRDevice *)device didFailConnectWithError:(int)ioBTError;
 - (void)BRDevice:(BRDevice *)device didReceiveEvent:(BREvent *)event;
-- (void)BRDevice:(BRDevice *)device didReceiveSettingResponse:(BRSettingResponse *)settingResponse;
+- (void)BRDevice:(BRDevice *)device didReceiveSettingResult:(BRSettingResult *)settingResult;
 - (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception;
 - (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception;
 - (void)BRDevice:(BRDevice *)device didFindRemoteDevice:(BRRemoteDevice *)remoteDevice;

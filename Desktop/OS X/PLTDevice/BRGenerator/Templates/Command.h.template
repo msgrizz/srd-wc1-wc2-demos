@@ -1,0 +1,22 @@
+//
+//  BR<#message_name#>.h
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v<#deckard_version#> on <#mdy#>.
+//  Copyright (c) <#yyyy#> Plantronics. All rights reserved.
+//
+
+#import "BRCommand.h"
+
+
+#define <#identifier_constant_name#> <#message_identifier#>
+
+<#public_defined_values_block#>
+
+@interface BR<#message_name#> : BRCommand
+
+<#constructor_prototype#>;
+
+<#public_properties_block#>
+
+@end

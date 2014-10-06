@@ -12,6 +12,6 @@
 @interface PLTMagnetometerCalibrationInfo()
 
 - (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp
-		 calibration:(PLTCalibration *)calibration calibrationStatus:(BOOL)isCalibrated;
+			  calibration:(PLTCalibration *)calibration calibrationStatus:(BOOL)isCalibrated;
 
 @end

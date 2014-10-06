@@ -1,0 +1,38 @@
+//
+//  BRIndirectEventSimulationCommand.h
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Copyright (c) 2014 Plantronics. All rights reserved.
+//
+
+#import "BRCommand.h"
+
+
+#define BR_INDIRECT_EVENT_SIMULATION 0x1004
+
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventHeadsetWearingState;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventBatteryStatusMonitoring;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventVoiceRecognition;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventProximity;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventVoicePromptGeneration;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventLedIndicationGeneration;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventChargerConnectionState;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventBatteryLevelChange;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventUSBAudioChange;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventQDConnectionState;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventAalAcousticIncidentReport;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventAalTwaReport;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventConversationDynamicsReport;
+extern const uint16_t IndirectEventSimulationCommand_IndirectEvent_IndirectEventYCableConnectionState;
+
+
+@interface BRIndirectEventSimulationCommand : BRCommand
+
++ (BRIndirectEventSimulationCommand *)commandWithIndirectEvent:(uint16_t)indirectEvent eventParameter:(NSData *)eventParameter;
+
+@property(nonatomic,assign) uint16_t indirectEvent;
+@property(nonatomic,strong) NSData * eventParameter;
+
+
+@end

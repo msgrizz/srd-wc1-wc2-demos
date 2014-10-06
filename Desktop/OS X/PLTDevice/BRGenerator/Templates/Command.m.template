@@ -1,0 +1,50 @@
+//
+//  BR<#message_name#>.m
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v<#deckard_version#> on <#mdy#>.
+//  Copyright (c) <#yyyy#> Plantronics. All rights reserved.
+//
+
+#import "BR<#message_name#>.h"
+#import "BRMessage_Private.h"
+
+
+<#private_defined_values_block#>
+
+@implementation BR<#message_name#>
+
+#pragma mark - Public
+
+<#constructor_prototype#>
+{
+	BR<#message_name#> *instance = [[BR<#message_name#> alloc] init];
+<#constructor_properties_init_block#>
+	return instance;
+}
+
+@dynamic deckardID;
+- (uint16_t)deckardID
+{
+	return <#identifier_constant_name#>;
+}
+
+#pragma mark BRMessage
+
+- (NSArray *)payloadDescriptors
+{
+	// auto-generated to hold name, order and type information for payload items
+	return @[
+<#payload_descriptors_block#>
+			 ];
+}
+
+#pragma mark - NSObject
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<BR<#message_name#> %p><#description_format#>",
+            self<#description_arguments#>];
+}
+
+@end

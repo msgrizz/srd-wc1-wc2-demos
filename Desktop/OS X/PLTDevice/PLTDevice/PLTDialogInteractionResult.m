@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
+#ifdef BANGLE
+
 #import "PLTDialogInteractionResult.h"
 #import "PLTDialogInteractionResult_Internal.h"
 #import "BRApplicationActionResultEvent.h"
@@ -40,3 +42,5 @@
 }
 
 @end
+
+#endif
