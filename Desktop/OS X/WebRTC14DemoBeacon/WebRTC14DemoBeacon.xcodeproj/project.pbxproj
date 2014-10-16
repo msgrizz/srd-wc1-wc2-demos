@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		423FE1A619F0668300EF10B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423FE1A519F0668300EF10B9 /* AppDelegate.swift */; };
+		423FE1A819F0668300EF10B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423FE1A719F0668300EF10B9 /* ViewController.swift */; };
+		423FE1AA19F0668300EF10B9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 423FE1A919F0668300EF10B9 /* Images.xcassets */; };
+		423FE1AD19F0668300EF10B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 423FE1AB19F0668300EF10B9 /* Main.storyboard */; };
+		423FE1B919F0668400EF10B9 /* WebRTC14DemoBeaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423FE1B819F0668400EF10B9 /* WebRTC14DemoBeaconTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		423FE1B319F0668400EF10B9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 423FE19819F0668300EF10B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 423FE19F19F0668300EF10B9;
+			remoteInfo = WebRTC14DemoBeacon;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		423FE1A019F0668300EF10B9 /* WebRTC14DemoBeacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebRTC14DemoBeacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		423FE1A419F0668300EF10B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		423FE1A519F0668300EF10B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		423FE1A719F0668300EF10B9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		423FE1A919F0668300EF10B9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		423FE1AC19F0668300EF10B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		423FE1B219F0668400EF10B9 /* WebRTC14DemoBeaconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WebRTC14DemoBeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		423FE1B719F0668400EF10B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		423FE1B819F0668400EF10B9 /* WebRTC14DemoBeaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTC14DemoBeaconTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		423FE19D19F0668300EF10B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		423FE1AF19F0668400EF10B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		423FE19719F0668300EF10B9 = {
+			isa = PBXGroup;
+			children = (
+				423FE1A219F0668300EF10B9 /* WebRTC14DemoBeacon */,
+				423FE1B519F0668400EF10B9 /* WebRTC14DemoBeaconTests */,
+				423FE1A119F0668300EF10B9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		423FE1A119F0668300EF10B9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				423FE1A019F0668300EF10B9 /* WebRTC14DemoBeacon.app */,
+				423FE1B219F0668400EF10B9 /* WebRTC14DemoBeaconTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		423FE1A219F0668300EF10B9 /* WebRTC14DemoBeacon */ = {
+			isa = PBXGroup;
+			children = (
+				423FE1A519F0668300EF10B9 /* AppDelegate.swift */,
+				423FE1A719F0668300EF10B9 /* ViewController.swift */,
+				423FE1A919F0668300EF10B9 /* Images.xcassets */,
+				423FE1AB19F0668300EF10B9 /* Main.storyboard */,
+				423FE1A319F0668300EF10B9 /* Supporting Files */,
+			);
+			path = WebRTC14DemoBeacon;
+			sourceTree = "<group>";
+		};
+		423FE1A319F0668300EF10B9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				423FE1A419F0668300EF10B9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		423FE1B519F0668400EF10B9 /* WebRTC14DemoBeaconTests */ = {
+			isa = PBXGroup;
+			children = (
+				423FE1B819F0668400EF10B9 /* WebRTC14DemoBeaconTests.swift */,
+				423FE1B619F0668400EF10B9 /* Supporting Files */,
+			);
+			path = WebRTC14DemoBeaconTests;
+			sourceTree = "<group>";
+		};
+		423FE1B619F0668400EF10B9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				423FE1B719F0668400EF10B9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		423FE19F19F0668300EF10B9 /* WebRTC14DemoBeacon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 423FE1BC19F0668400EF10B9 /* Build configuration list for PBXNativeTarget "WebRTC14DemoBeacon" */;
+			buildPhases = (
+				423FE19C19F0668300EF10B9 /* Sources */,
+				423FE19D19F0668300EF10B9 /* Frameworks */,
+				423FE19E19F0668300EF10B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WebRTC14DemoBeacon;
+			productName = WebRTC14DemoBeacon;
+			productReference = 423FE1A019F0668300EF10B9 /* WebRTC14DemoBeacon.app */;
+			productType = "com.apple.product-type.application";
+		};
+		423FE1B119F0668400EF10B9 /* WebRTC14DemoBeaconTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 423FE1BF19F0668400EF10B9 /* Build configuration list for PBXNativeTarget "WebRTC14DemoBeaconTests" */;
+			buildPhases = (
+				423FE1AE19F0668400EF10B9 /* Sources */,
+				423FE1AF19F0668400EF10B9 /* Frameworks */,
+				423FE1B019F0668400EF10B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				423FE1B419F0668400EF10B9 /* PBXTargetDependency */,
+			);
+			name = WebRTC14DemoBeaconTests;
+			productName = WebRTC14DemoBeaconTests;
+			productReference = 423FE1B219F0668400EF10B9 /* WebRTC14DemoBeaconTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		423FE19819F0668300EF10B9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Plantronics;
+				TargetAttributes = {
+					423FE19F19F0668300EF10B9 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					423FE1B119F0668400EF10B9 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = 423FE19F19F0668300EF10B9;
+					};
+				};
+			};
+			buildConfigurationList = 423FE19B19F0668300EF10B9 /* Build configuration list for PBXProject "WebRTC14DemoBeacon" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 423FE19719F0668300EF10B9;
+			productRefGroup = 423FE1A119F0668300EF10B9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				423FE19F19F0668300EF10B9 /* WebRTC14DemoBeacon */,
+				423FE1B119F0668400EF10B9 /* WebRTC14DemoBeaconTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		423FE19E19F0668300EF10B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				423FE1AA19F0668300EF10B9 /* Images.xcassets in Resources */,
+				423FE1AD19F0668300EF10B9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		423FE1B019F0668400EF10B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		423FE19C19F0668300EF10B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				423FE1A819F0668300EF10B9 /* ViewController.swift in Sources */,
+				423FE1A619F0668300EF10B9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		423FE1AE19F0668400EF10B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				423FE1B919F0668400EF10B9 /* WebRTC14DemoBeaconTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		423FE1B419F0668400EF10B9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 423FE19F19F0668300EF10B9 /* WebRTC14DemoBeacon */;
+			targetProxy = 423FE1B319F0668400EF10B9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		423FE1AB19F0668300EF10B9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				423FE1AC19F0668300EF10B9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		423FE1BA19F0668400EF10B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		423FE1BB19F0668400EF10B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		423FE1BD19F0668400EF10B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WebRTC14DemoBeacon/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		423FE1BE19F0668400EF10B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WebRTC14DemoBeacon/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		423FE1C019F0668400EF10B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WebRTC14DemoBeaconTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WebRTC14DemoBeacon.app/Contents/MacOS/WebRTC14DemoBeacon";
+			};
+			name = Debug;
+		};
+		423FE1C119F0668400EF10B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WebRTC14DemoBeaconTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WebRTC14DemoBeacon.app/Contents/MacOS/WebRTC14DemoBeacon";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		423FE19B19F0668300EF10B9 /* Build configuration list for PBXProject "WebRTC14DemoBeacon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				423FE1BA19F0668400EF10B9 /* Debug */,
+				423FE1BB19F0668400EF10B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		423FE1BC19F0668400EF10B9 /* Build configuration list for PBXNativeTarget "WebRTC14DemoBeacon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				423FE1BD19F0668400EF10B9 /* Debug */,
+				423FE1BE19F0668400EF10B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		423FE1BF19F0668400EF10B9 /* Build configuration list for PBXNativeTarget "WebRTC14DemoBeaconTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				423FE1C019F0668400EF10B9 /* Debug */,
+				423FE1C119F0668400EF10B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 423FE19819F0668300EF10B9 /* Project object */;
+}
