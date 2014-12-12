@@ -15,10 +15,6 @@ var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
 
-//U2F stuff ported from sample app
-var CHROME_FIDO_EXTENSION_ID = "dlfcjilkjfhdnfiecknlnddkmmiofjbg";
-
-
 //End U2F
 
 //UI initialization via JQuery
@@ -37,9 +33,25 @@ function init(){
   }
   );
   
-  $('#btnEnroll').click(function(){
-    enrollDevice();
+  $('#btnPing').attr("disabled", true);
+  $('#btnPing').click(function(){
+    ping();
   });
+  
+  $('#btnEnroll').click(function(){
+    enroll();
+  });
+ $('#chkTouchSecureElement').attr("disabled", true);
+ $('#chkTouchSecureElement').change(function(){
+    if(this.checked){
+      touch();
+    }
+  }
+  );
+  
+  
+  
+  
   
   log("init() - registering listeners with plt library");
   plt.addEventListener(onEvent);
@@ -55,84 +67,63 @@ function init(){
   
 }
 
+function ping(){
+  var apdu = createPingAPDU();
+  var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
+  var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
+  if (connectedDevice) {
+    plt.sendMessage(connectedDevice, command);
+  }
+}
 
-function enrollDevice() {
-  var username = $('#username').val();
-  var password = $('#password').val();
-  
-  getChallenge(username, password, function(){log('callback called');});
-  
-  //first step to enrolling the device is to create generate the challenge for the device
+var serverURL = "http://localhost:8080";
+function enroll(){
+  getEnrollDataFromServer("joe", "1234",  onEnrollData);
+}
+
+function onEnrollData(data){
+  log("onEnrollData: got back the enroll data from the server");
+  log("onEnrollData: JSON -> " + JSON.stringify(data));
+  log("onEnrollData: creating enroll APDU");
+  var apdu = createEnrollAPDU(data);
+  //todo create the enroll APDU
+  //send the APDU to the SE
+  //send the results back to the server
   
 }
 
-
-
-function getChallenge(userName, password, callback)
-{
-	var serverAddress = $('#serverAddress').val().trim();
-	var url = "http://" + serverAddress + "/signData.js?userName=" + userName + "&password=" + password;
-	    $.ajax({
-	    url: url,
-	    type: 'get',
-	    crossDomain: true,
-	    success: function (result) { 
-			// Execute javascript to set the signData JSON object variable
-			//into global scope
-			//TODO: modify servlet code to return JSON instead of executable JS
-			var signData = result;
-			log("getChallenge: server returned" + JSON.stringify(signData));
-			var numItems = signData.length;
-			validKeyHandles = [];
-			for (i = 0; i < signData.length; i++)
-			{
-	  
-				// Add index to allow for identification when deleting
-				signData[i].index = i;
-				log('signData i = ' + signData[i]);
-				//$FIXME - TODO - add the call to the device here
-				// Check the key handle and call last one with a callback
-				// This is NOT robust, becuse it won't check for failures of the last check (e.g. timeout)
-				//if (i == (signData.length - 1))
-				 // checkKeyHandle(signData[i], callback);
-				//else
-				 // checkKeyHandle(signData[i]);
-	  
-			}
-	  
-			// To notify it that there are none
-			if (numItems == 0)
-			   callback(validKeyHandles);
-			}
-	    })
-    .fail( function(e) {
-	    switch (e.status)
-	    {
-		    case 400:
-			    log("Bad Request");
-			    break;
-		    case 401:
-			    log("Bad Password");	
-			    break;
-		    case 404:
-			    log("Invalid User");
-			    break;
-		    default:
-			    log("Unknown / other error: " + e.status);
-			    break;
-		    
-	    }
-    
+function getEnrollDataFromServer(userName, password, callback){
+  var url = serverURL + "/enrollData.js?userName=" + userName + "&password=" + password;
+  $.ajax({
+    url: url,
+    type: 'get',
+    crossDomain: true,
+    success: function (result) {
+	  callback(result);
+	  }
+    }).fail( function(e) {
+      log("getEnrollDataFromServer: error getting data " + e)
     });
-	
-	
-	
+}
+
+function touch() {
+  var apdu = createTouchAPDU();
+  var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
+  var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
+  if (connectedDevice) {
+    plt.sendMessage(connectedDevice, command);
+  }
+
+}
+
+function touchBack(obj){
+  log("touchBack called: ")
 }
 
 
 
 function onCommandSuccess(commandSuccessMessage){
-   // console.log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
+   log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
 }
 
 //connect to the PLT Labs device
@@ -175,8 +166,11 @@ function onDisconnect(device){
   }
   log("\nonDisconnect(device): device disconnect from plt api -> device: " + JSON.stringify(device))
   connectedDevice = null;
+  
   clearSettings();
   $('#chkPLTDevice').attr("checked", false);
+   $('#btnPing').attr("disabled", true);
+  $('#chkTouchSecureElement').attr("disabled", true);
 }
 
 
@@ -188,6 +182,8 @@ function onConnectionOpened(device) {
   log("\nonConnectionOpened(device): callback has been invoked from plt api");
   log("onConnectionOpened(device): connected PLT device ->" + JSON.stringify(connectedDevice));
   $('#chkProximity').attr("disabled",false);
+  $('#chkTouchSecureElement').attr("disabled", false);
+  $('#btnPing').attr("disabled", false);
   getSettings();
   
 }
@@ -268,7 +264,7 @@ function log(message){
 
 function onEvent(info){
  // log('\nonEvent(info): event received');
-//  log('onEvent(info): event -> ' + JSON.stringify(info));
+  log('onEvent(info): event -> ' + JSON.stringify(info));
   switch (info.payload.messageId) {
 
     case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:

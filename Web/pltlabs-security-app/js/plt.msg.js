@@ -71,6 +71,7 @@ plt.msg = (function (){
   my.CONFIGURE_AUTO_LOCK_CALL_BUTTON_EVENT = 0x0210;
   my.CONFIGURE_WEARING_SENSOR_ENABLED_EVENT = 0x0216;
   my.CONFIGURE_AUTO_MUTE_CALL_EVENT = 0x0218;
+  my.MIC_BOOM_POSITION_EVENT = 0x021C;
   //Section General Configuration (0x04nn)
   my.CONFIGURE_MUTE_TONE_VOLUME_EVENT = 0x0400;
   my.CONFIGURATION_FOR_A_CONNECTED_HEADSET_EVENT = 0x0401;
@@ -126,7 +127,7 @@ plt.msg = (function (){
   my.LED_STATUS_GENERIC_EVENT = 0x0E07;
   my.HEADSET_AVAILABLE_EVENT = 0x0E09;
   my.SPEAKER_VOLUME_EVENT = 0x0E0A;
-  my.Y_CABLE_CONNECTION_EVENT = 0x0E0B;
+  my.TRAINING_HEADSET_CONNECTION_EVENT = 0x0E0B;
   my.CURRENT_SELECTED_LANGUAGE_CHANGED_EVENT = 0x0E1A;
   my.AUDIO_STATUS_EVENT = 0x0E1E;
   my.HEADSET_CALL_STATUS_EVENT = 0x0E22;
@@ -163,7 +164,7 @@ plt.msg = (function (){
   my.HAL_EQ_CHANGED_EVENT = 0x1104;
   //Section Global Exceptions (0x00nn)
   //Section Specific Exceptions
-  //Section BaDangle messages (0xFFnn)
+  //Section Wearable messages (0xFFnn)
   my.SUBSCRIBE_TO_SERVICES_EVENT = 0xFF0A;
   my.SUBSCRIBED_SERVICE_DATA_EVENT = 0xFF0D;
   my.SERVICE_CONFIGURATION_CHANGED_EVENT = 0xFF00;
@@ -242,7 +243,7 @@ plt.msg = (function (){
   my.SET_AUDIO_TRANSMIT_GAIN_COMMAND = 0x0E08;
   my.HEADSET_AVAILABLE_COMMAND = 0x0E09;
   my.SET_SPEAKER_VOLUME_COMMAND = 0x0E0A;
-  my.Y_CABLE_CONNECTION_COMMAND = 0x0E0B;
+  my.TRAINING_HEADSET_CONNECTION_COMMAND = 0x0E0B;
   my.MAKE_CALL_COMMAND = 0x0E0C;
   my.REDIAL_COMMAND = 0x0E0E;
   my.FLASH_CALL_COMMAND = 0x0E10;
@@ -292,7 +293,7 @@ plt.msg = (function (){
   my.HAL_CONFIGURE_EQ_COMMAND = 0x1104;
   //Section Global Exceptions (0x00nn)
   //Section Specific Exceptions
-  //Section BaDangle messages (0xFFnn)
+  //Section Wearable messages (0xFFnn)
   my.CONFIGURE_SERVICES_COMMAND = 0xFF00;
   my.CALIBRATE_SERVICES_COMMAND = 0xFF01;
   my.CONFIGURE_APPLICATION_COMMAND = 0xFF02;
@@ -363,7 +364,7 @@ plt.msg = (function (){
   supportedCommands.push(my.SET_AUDIO_TRANSMIT_GAIN_COMMAND);
   supportedCommands.push(my.HEADSET_AVAILABLE_COMMAND);
   supportedCommands.push(my.SET_SPEAKER_VOLUME_COMMAND);
-  supportedCommands.push(my.Y_CABLE_CONNECTION_COMMAND);
+  supportedCommands.push(my.TRAINING_HEADSET_CONNECTION_COMMAND);
   supportedCommands.push(my.MAKE_CALL_COMMAND);
   supportedCommands.push(my.REDIAL_COMMAND);
   supportedCommands.push(my.FLASH_CALL_COMMAND);
@@ -598,6 +599,7 @@ plt.msg = (function (){
   my.TYPE_SERVICEID_ACCELERATION = 0x0013;
   my.TYPE_SERVICEID_ANGULARVELOCITY = 0x0014;
   my.TYPE_SERVICEID_MAGNETICFIELD = 0x0015;
+  my.TYPE_SERVICEID_VOICEEVENT = 0x0016;
   my.TYPE_CHARACTERISTIC_HEADORIENTATION_QUATERNIONDATA = 0x0000;
   my.TYPE_CHARACTERISTIC_HEADORIENTATION_EULERANGLESDATA = 0x0001;
   my.TYPE_CHARACTERISTIC_PEDOMETER_SERVICEDATA = 0x0000;
@@ -646,6 +648,7 @@ plt.msg = (function (){
   my.TYPE_CHARACTERISTIC_ACCELERATION_SERVICEDATA = 0x0000;
   my.TYPE_CHARACTERISTIC_ANGULARVELOCITY_SERVICEDATA = 0x0000;
   my.TYPE_CHARACTERISTIC_MAGNETICFIELD_SERVICEDATA = 0x0000;
+  my.TYPE_CHARACTERISTIC_LAUNCHIT = 0x0000;
   my.TYPE_MODEOFF = 0;
   my.TYPE_MODEONCCHANGE = 1;
   my.TYPE_MODEPERIODIC = 2;
@@ -673,6 +676,7 @@ plt.msg = (function (){
   my.GET_AUTO_LOCK_CALL_BUTTON_SETTING = 0x0212;
   my.WEARING_SENSOR_ENABLED_SETTING = 0x0214;
   my.AUTO_MUTE_CALL_SETTING = 0x021A;
+  my.MIC_BOOM_POSITION_SETTING = 0x021C;
   //Section General Configuration (0x04nn)
   my.CONFIGURATION_FOR_A_CONNECTED_HEADSET_SETTING = 0x0401;
   my.GET_MUTE_TONE_VOLUME_SETTING = 0x0402;
@@ -726,7 +730,7 @@ plt.msg = (function (){
   my.RECEIVE_AUDIO_STATE_SETTING = 0x0E05;
   my.LED_STATUS_GENERIC_SETTING = 0x0E07;
   my.HEADSET_AVAILABLE_SETTING = 0x0E09;
-  my.Y_CABLE_CONNECTION_SETTING = 0x0E0B;
+  my.TRAINING_HEADSET_CONNECTION_SETTING = 0x0E0B;
   my.SPEAKER_VOLUME_SETTING = 0x0E0A;
   my.SPOKEN_LANGUAGE_SETTING = 0x0E1A;
   my.SUPPORTED_LANGUAGES_SETTING = 0x0E1B;
@@ -778,7 +782,7 @@ plt.msg = (function (){
   my.HAL_GENERIC_SETTING = 0x1106;
   //Section Global Exceptions (0x00nn)
   //Section Specific Exceptions
-  //Section BaDangle messages (0xFFnn)
+  //Section Wearable messages (0xFFnn)
   my.QUERY_SERVICES_CONFIGURATION_DATA_SETTING = 0xFF00;
   my.QUERY_SERVICES_CALIBRATION_DATA_SETTING = 0xFF01;
   my.QUERY_APPLICATION_CONFIGURATION_DATA_SETTING = 0xFF02;
@@ -802,6 +806,7 @@ plt.msg = (function (){
   supportedSettings.push(my.GET_AUTO_LOCK_CALL_BUTTON_SETTING);
   supportedSettings.push(my.WEARING_SENSOR_ENABLED_SETTING);
   supportedSettings.push(my.AUTO_MUTE_CALL_SETTING);
+  supportedSettings.push(my.MIC_BOOM_POSITION_SETTING);
   supportedSettings.push(my.CONFIGURATION_FOR_A_CONNECTED_HEADSET_SETTING);
   supportedSettings.push(my.GET_MUTE_TONE_VOLUME_SETTING);
   supportedSettings.push(my.GET_SECOND_INBOUND_CALL_RING_TYPE_SETTING);
@@ -850,7 +855,7 @@ plt.msg = (function (){
   supportedSettings.push(my.RECEIVE_AUDIO_STATE_SETTING);
   supportedSettings.push(my.LED_STATUS_GENERIC_SETTING);
   supportedSettings.push(my.HEADSET_AVAILABLE_SETTING);
-  supportedSettings.push(my.Y_CABLE_CONNECTION_SETTING);
+  supportedSettings.push(my.TRAINING_HEADSET_CONNECTION_SETTING);
   supportedSettings.push(my.SPEAKER_VOLUME_SETTING);
   supportedSettings.push(my.SPOKEN_LANGUAGE_SETTING);
   supportedSettings.push(my.SUPPORTED_LANGUAGES_SETTING);
@@ -1652,17 +1657,7 @@ plt.msg = (function (){
       data_view[index++] = msg.gain;
       msg.messageData = data;
       break;
-  
-  case my.HEADSET_AVAILABLE_COMMAND:
-    var bufferSize = 1;
-      var data = new ArrayBuffer(bufferSize);
-      var data_view = new Uint8Array(data);
-      var index = 0;
-      //default to off if no enabled flag is present
-      data_view[index] = boolToByte(msg.enable);
-      msg.messageData = data;
-      break;
-  
+    
   case my.SET_SPEAKER_VOLUME_COMMAND:
     var bufferSize = 3;
       var data = new ArrayBuffer(bufferSize);
@@ -1673,17 +1668,7 @@ plt.msg = (function (){
       data_view[index++] = (0x00FF & msg.volume);
       msg.messageData = data;
       break;
-  
-  case my.Y_CABLE_CONNECTION_COMMAND:
-    var bufferSize = 1;
-      var data = new ArrayBuffer(bufferSize);
-      var data_view = new Uint8Array(data);
-      var index = 0;
-      //default to off if no enabled flag is present
-      data_view[index] = boolToByte(msg.enable);
-      msg.messageData = data;
-      break;
-  
+    
   case my.MAKE_CALL_COMMAND:
     var bufferSize = 0;
       var digitsLength = msg.digits.length + 2;
@@ -2221,18 +2206,18 @@ plt.msg = (function (){
   
   case my.PASS_THROUGH_PROTOCOL_COMMAND:
     var bufferSize = 2;
-      var data_view = new Uint8Array(msg.data);
-      bufferSize += (data_view.length + 2);
+      var dataBlob_view = new Uint8Array(msg.dataBlob);
+      bufferSize += (dataBlob_view.length + 2);
       var data = new ArrayBuffer(bufferSize);
       var data_view = new Uint8Array(data);
       var index = 0;
       data_view[index++] = (0xFF00 & msg.protocolid) >>  8;
       data_view[index++] = (0x00FF & msg.protocolid);
       msg.messageData = data;      //store the array length before adding the array
-      data_view[index++] = (0xFF00 & data_view.length) >> 8;
-      data_view[index++] = (0x00FF & data_view.length);
-      for(i = 0; i < data_view.length; i++){
-        data_view[index++] = data_view[i];
+      data_view[index++] = (0xFF00 & dataBlob_view.length) >> 8;
+      data_view[index++] = (0x00FF & dataBlob_view.length);
+      for(i = 0; i < dataBlob_view.length; i++){
+        data_view[index++] = dataBlob_view[i];
       }
       msg.messageData = data;
       break;
@@ -2288,7 +2273,7 @@ plt.msg = (function (){
           data_view[index++] = (0x000000000000FF00 & msg.configurationItemAddress) >>  8;
           data_view[index++] = (0x00000000000000FF & msg.configurationItemAddress);
           msg.messageData = data;  
-                                                                                                                       
+                                                                                                                              
        case my.CURRENT_SIGNAL_STRENGTH_SETTING:
           var bufferSize = 1;
           var data = new ArrayBuffer(bufferSize);
@@ -2652,6 +2637,16 @@ plt.msg = (function (){
 
          break;    
        
+       case my.MIC_BOOM_POSITION_SETTING:
+         var index = 2;
+         var bounds = 0;
+         var arrayLength = 0;
+         payload.name = 'Mic Boom Position';
+         payload.orientation = data_view[index];
+         index++;
+
+         break;    
+       
        case my.CONFIGURATION_FOR_A_CONNECTED_HEADSET_SETTING:
          var index = 2;
          var bounds = 0;
@@ -2782,6 +2777,8 @@ plt.msg = (function (){
          var arrayLength = 0;
          payload.name = 'Find Headset LED Alert Status';
          payload.enable = byteToBool(data_view[index]);
+         index++;
+         payload.timeout = data_view[index];
          index++;
 
          break;    
@@ -3277,11 +3274,11 @@ plt.msg = (function (){
 
          break;    
        
-       case my.Y_CABLE_CONNECTION_SETTING:
+       case my.TRAINING_HEADSET_CONNECTION_SETTING:
          var index = 2;
          var bounds = 0;
          var arrayLength = 0;
-         payload.name = 'Y Cable Connection';
+         payload.name = 'Training Headset Connection';
          payload.state = byteToBool(data_view[index]);
          index++;
 
@@ -4121,6 +4118,16 @@ plt.msg = (function (){
 
          break;    
        
+       case my.MIC_BOOM_POSITION_EVENT:
+         var index = 2;
+         var bounds = 0;
+         var arrayLength = 0;
+         payload.name = 'Mic Boom Position';
+         payload.orientation = data_view[index];
+         index++;
+
+         break;    
+       
        case my.CONFIGURE_MUTE_TONE_VOLUME_EVENT:
          var index = 2;
          var bounds = 0;
@@ -4711,11 +4718,11 @@ plt.msg = (function (){
 
          break;    
        
-       case my.Y_CABLE_CONNECTION_EVENT:
+       case my.TRAINING_HEADSET_CONNECTION_EVENT:
          var index = 2;
          var bounds = 0;
          var arrayLength = 0;
-         payload.name = 'Y Cable Connection';
+         payload.name = 'Training Headset Connection';
          payload.state = byteToBool(data_view[index]);
          index++;
 
@@ -5246,7 +5253,7 @@ plt.msg = (function (){
          arrayLength = parseShort(index, data_view) ;
          index += 2;
          bounds = index + arrayLength;
-         payload.data = parseByteArray(index, data_view, bounds);
+         payload.dataBlob = parseByteArray(index, data_view, bounds);
          index = bounds;
 
          break;    
@@ -5466,8 +5473,12 @@ plt.msg = (function (){
       case my.COMMAND_RESULT_SUCCESS_TYPE:
         parsedMessage.payload = parseCommandSuccess(message);
         break;
-      
-        
+      case my.GET_REQUEST_TYPE:
+      case my.COMMAND_TYPE:
+        //include the message id
+        parsedMessage.payload = {};
+        parsedMessage.payload.messageId =  parseShort(BR_HEADER_SIZE, data_view);
+        break;
     }
     return parsedMessage;
   };

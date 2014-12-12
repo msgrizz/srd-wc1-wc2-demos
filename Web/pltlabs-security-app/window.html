@@ -62,13 +62,26 @@
                             <td><span>Connect to Server</span></td>
                             <td><input id="serverAddress" type="text" size="20" maxlength="15" value="10.0.1.37:8080"><span>server address:port</span><br>
                                 <input type="text" name="username" id="username" value="joe"> Username (Valid users: joe, mary)<br>
-                                <input type="password" name="password" id="password" value="1234">Password (default: 1234)<br>
-                                <button id="btnEnroll">Enroll This Device</button>
+                                <input type="password" name="password" id="password" value="1234">Password (default: 1234)<br>                         
                             </td>
                         </tr>
                         <tr>
-                            <td><span>Product Name:</span></td>
-                            <td><span class="sensor-data" id="productName"></span></td>
+                            <td><span>Touch Secure Element</span></td>
+                            <td>
+                                <input type="checkbox" name="chkTouchSecureElement" id="chkTouchSecureElement"/>         
+                            </td>
+                        </tr>
+                         <tr>
+                            <td><span>Ping Secure Element</span></td>
+                            <td>
+                                <input type="button" name="btnPing" id="btnPing" value="Ping"/>         
+                            </td>
+                        </tr>
+                         <tr>
+                            <td><span>Enroll</span></td>
+                            <td>
+                                <input type="button" name="btnEnroll" id="btnEnroll" value="Enroll"/>         
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -77,8 +90,12 @@
        </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script>
       <script src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>
+      <script src="js/vendor/core-min.js"></script>
+      <script src="js/vendor/enc-utf16-min.js"></script>
+      <script src="js/vendor/enc-base64-min.js"></script>
       <script src="js/plt.chrome.bt.js"></script>
       <script src="js/plt.msg.js"></script>
+      <script src="js/plt.fido.js"></script>
       <script src="js/app.js"></script>
       
     </body>
