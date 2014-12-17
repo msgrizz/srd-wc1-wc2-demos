@@ -15,7 +15,18 @@ var sensorPortAddress = new ArrayBuffer(4);
 var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
 
-//End U2F
+//FIDO stuff
+var IDLE_STATE = -1;
+var PINGING_STATE = 0;
+var ENROLLING_STATE = 1;
+var SIGNING_STATE = 2;
+var TOUCHING_STATE = 3;
+
+var currentFidoState = IDLE_STATE;
+var isEnrolled = false;
+var sessionId;
+
+
 
 //UI initialization via JQuery
 $(function() {
@@ -38,6 +49,7 @@ function init(){
     ping();
   });
   
+  $('#btnEnroll').attr("disabled", true);
   $('#btnEnroll').click(function(){
     enroll();
   });
@@ -67,28 +79,166 @@ function init(){
   
 }
 
-function ping(){
-  var apdu = createPingAPDU();
-  var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
-  var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
-  if (connectedDevice) {
-    plt.sendMessage(connectedDevice, command);
-  }
-}
+
 
 var serverURL = "http://localhost:8080";
 function enroll(){
   getEnrollDataFromServer("joe", "1234",  onEnrollData);
 }
 
+function onEvent(info){
+  switch (info.payload.messageId) {
+    case plt.msg.BATTERY_STATUS_CHANGED_EVENT:
+      updateBatterySettings(info);
+      break;
+    case plt.msg.CONNECTED_DEVICE_EVENT:
+      connectionOpened(info);
+      break;
+    case plt.msg.PASS_THROUGH_PROTOCOL_EVENT:
+      
+      log("onEvent: Pass through event recieved");
+      switch(currentFidoState){
+	case IDLE_STATE:
+	  throw "onEvent: fido event recieved during idle state";
+	  break;
+	case SIGNING_STATE:
+	  log("onEvent: processing APDU signing result from device");
+	  break;
+	case ENROLLING_STATE:
+	  log("onEvent: processing APDU enrollment result from device");
+	  break;
+	case TOUCHING_STATE:
+	  log("onEvent: processing APDU touch result from device");
+	  touchResponse(info);
+	  break;
+	case PINGING_STATE:
+	  log("onEvent: processing APDU ping result from device");
+	  validatePing(info);
+	  break;
+      }
+      //resent the state
+      currentFidoState = IDLE_STATE;
+      break;
+  }
+}
+
+function touchResponse(event){
+  var touchResponse = unPackBinaryToHex(event.payload.dataBlob);
+  $('#touchState').text("Secure element touched: " + touchResponse);
+  $('#chkTouchSecureElement').attr("disabled", true);
+  $('#btnEnroll').attr("disabled", false);
+}
+
+function validatePing(event){
+  var pingReturnStringHex = "0102030405060708090a0b0c0d0e0f10199000";	// Includes return status
+  var pingSuccessStatus = "9000";
+
+  if (!event) {
+    return;
+  }
+  log("validatePing: validating secure element ping");
+  var validPingResponse = "0102030405060708090a0b0c0d0e0f109000";
+  var binaryArray = event.payload.dataBlob;
+  var pingResponse = unPackBinaryToHex(binaryArray);
+  log("validatePing: response from secure element :" + pingResponse);
+
+  // Validate status code which is the last 4 characters of the response
+  var status = pingResponse.substring(pingResponse.length - 4);
+  console.log("validatePing: status = " + status);
+  if (status != pingSuccessStatus){
+    $('#pingResult').text("validatePing: Bad APDU return status: " + status);
+    return;
+  }
+
+  // Extra version string - need to find NULL terminator
+  var endOfString = -1;
+  var version;
+  for (var i = 0; i < pingResponse.length - 4; i += 2){
+    var hexVal = pingResponse.substring(i, i + 2);
+    if (hexVal === "00"){
+      endOfString = i;
+      version = pingResponse.substring(0, i);
+      break;
+    }
+  }
+  console.log("validatePing: version = " + version);
+  // Validate ping return
+  var pingReturnString = pingResponse.substring(endOfString + 2);
+  if (pingReturnString != pingReturnStringHex){
+    $('#pingResult').text("Invalid Ping: " + pingReturnString);
+    return;
+  }
+  
+  $('#pingResult').text("Ping successful!");
+}
+
 function onEnrollData(data){
   log("onEnrollData: got back the enroll data from the server");
   log("onEnrollData: JSON -> " + JSON.stringify(data));
-  log("onEnrollData: creating enroll APDU");
-  var apdu = createEnrollAPDU(data);
-  //todo create the enroll APDU
-  //send the APDU to the SE
-  //send the results back to the server
+  sessionId = data.sessionId;
+  var enrollRequest = {
+        type: "enroll_web_request",
+        enrollChallenges: [
+            {
+              "appId": data.appId,
+              "challenge": data.challenge,
+              "version": data.version
+            }
+        ]
+    };
+  var apdu = createEnrollAPDU(enrollRequest);
+  var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
+  var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
+  if (connectedDevice) {
+    currentFidoState = ENROLLING_STATE;
+    plt.sendMessage(connectedDevice, command);
+  }  
+}
+
+function enrollDevice(event){
+  if (!event) {
+    return;
+  }
+  log("enrollDevice: sending device enrollment back to server");
+  var apdu = unPackBinaryToHex(event.payload.dataBlob);
+  var words = CryptoJS.enc.Hex.parse(apdu);
+  var base64Apdu = CryptoJS.enc.Base64.stringify(words);
+  var urlSafeApdu = base64ToURLSafe(base64Apdu);
+  
+  
+  //var url = serverURL + "/enrollFinish?browserData=" + userName + "&password=" + password;
+  /*
+   *
+   *if (command === "enroll")
+		{
+			callbackData = {
+				responseData:
+				{
+			 		browserData:btoa(JSON.stringify(browserData)), 
+					challenge: "challenge",	// This is not being used
+					enrollData:webEncodedReturnData
+				
+				}
+			};
+			
+			
+		}
+		
+		
+			  // Return OK results with data in a structure
+      var responseData = extensionResult.responseData;
+      callback({
+        browserData: responseData.browserData,
+        challenge: responseData.challenge,
+        enrollData: responseData.enrollData,
+        sessionId: sessionId
+      });
+   document.location = "/enrollFinish"
+		            + "?browserData=" + result.browserData
+		            + "&challenge=" + result.challenge
+		            + "&enrollData=" + result.enrollData
+		            + "&sessionId=" + result.sessionId;
+   */
   
 }
 
@@ -106,21 +256,26 @@ function getEnrollDataFromServer(userName, password, callback){
     });
 }
 
+function ping(){
+  var apdu = createPingAPDU();
+  var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
+  var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
+  if (connectedDevice) {
+    currentFidoState = PINGING_STATE;
+    plt.sendMessage(connectedDevice, command);
+  }
+}
+
 function touch() {
   var apdu = createTouchAPDU();
   var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
   var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
   if (connectedDevice) {
+    currentFidoState = TOUCHING_STATE;
     plt.sendMessage(connectedDevice, command);
   }
 
 }
-
-function touchBack(obj){
-  log("touchBack called: ")
-}
-
-
 
 function onCommandSuccess(commandSuccessMessage){
    log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
@@ -168,6 +323,7 @@ function onDisconnect(device){
   connectedDevice = null;
   
   clearSettings();
+  sessionId = null;
   $('#chkPLTDevice').attr("checked", false);
    $('#btnPing').attr("disabled", true);
   $('#chkTouchSecureElement').attr("disabled", true);
@@ -189,8 +345,6 @@ function onConnectionOpened(device) {
 }
 
 function onSettings(message){
-  log("\nonSettings(message): setting callback from plt api");
-  log("onSettings(message): setting ->" + JSON.stringify(message));
      switch (message.payload.messageId){
       case plt.msg.BATTERY_INFO_SETTING:
 	       updateBatterySettings(message);
@@ -233,26 +387,17 @@ function clearSettings(){
 
 function getSettings(){
   var message = plt.msg.createGetSetting(plt.msg.PRODUCT_NAME_SETTING);
-  log('\ngetSettings(): getting product name by creating a message to send to plt api -> var message = plt.msg.createGetSetting(plt.msg.PRODUCT_NAME_SETTING);');
-  log('getSettings(): sending message to get product name -> plt.sendMessage(connectedDevice, message);');
   plt.sendMessage(connectedDevice, message);
   
   message = plt.msg.createGetSetting(plt.msg.FIRMWARE_VERSION_SETTING);
-  log('\ngetSettings(): getting firmware version by creating a message to send to plt api -> var message = plt.msg.createGetSetting(plt.msg.FIRMWARE_VERSION_SETTING);');
-  log('getSettings(): sending message to get firmware version -> plt.sendMessage(connectedDevice, message);');
   plt.sendMessage(connectedDevice,message);
   
   message = plt.msg.createGetSetting(plt.msg.DECKARD_VERSION_SETTING);
-  log('\ngetSettings(): getting m2m version by creating a message to send to plt api -> var message = plt.msg.createGetSetting(plt.msg.DECKARD_VERSION_SETTING);');
-  log('getSettings(): sending message to get m2m version -> plt.sendMessage(connectedDevice, message);');
   plt.sendMessage(connectedDevice,message);
   
   message = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);
-  log('\ngetSettings(): getting device battery status by creating a message to send to plt api -> var message = plt.msg.createGetSetting(plt.msg.BATTERY_INFO_SETTING);');
-  log('getSettings(): sending message to get device battery status version -> plt.sendMessage(connectedDevice, message);');
   plt.sendMessage(connectedDevice,message);
   
-  log('\ngetSettings() device bluetooth address accessed from connected device -> connectedDevice.address')
   $('#bdAddress').text(connectedDevice.address);
   
 }
@@ -260,37 +405,7 @@ function getSettings(){
 function log(message){
   console.log(message);
 }
-
-
-function onEvent(info){
- // log('\nonEvent(info): event received');
-  log('onEvent(info): event -> ' + JSON.stringify(info));
-  switch (info.payload.messageId) {
-
-    case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
-     break;
-    case plt.msg.BATTERY_STATUS_CHANGED_EVENT:
-      updateBatterySettings(info);
-      break;
-    case plt.msg.CONNECTED_DEVICE_EVENT:
-	connectionOpened(info);
-	break;
-    case plt.msg.DISCONNECTED_DEVICE_EVENT:
-	break;
-   case plt.msg.WEARING_STATE_CHANGED_EVENT:
-     var state = info.payload.worn ? "On" : "Off";
-      $('#dondoff').text(state);
-      break;
-   case plt.msg.SIGNAL_STRENGTH_EVENT:
-      var range = info.payload.nearFar == 1 ? "Near" : "Far"; 
-      $('#rssi').text(range);
-      break;
-   case plt.msg.RAW_BUTTON_TEST_EVENT:
-     $('#buttons').text(info.payload.buttonIdName);
-     break;
-    }
-  
-};  
+ 
 //END PLT FUNCTIONS
 
 init();

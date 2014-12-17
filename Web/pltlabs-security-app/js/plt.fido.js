@@ -111,16 +111,6 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
 
   function handleRawAPDUReturn(result, callback, browserData, command, sessionID)
   {
- /*
-  	console.log("===================HANDLE APDU======================");
-  	console.log("Callback:");
-  	console.log(callback);
-  	console.log("Brower Data:");
-  	console.log(browserData);
-
-	console.log("APDU results");
-	console.log(result);
-*/
 
 	// Decode the escape sequences
 	resultDecodedURLSafe = decodeURIComponent(result);
@@ -305,27 +295,7 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
 
   function fauxSendEnrollRequest(jsonData, callback)
   {
-	  
-	  // Test objects
-/*
-	     var testResult = {code:"Fake Error"};
- 
- 	     var testResult = {responseData:
-		 	{
-			 	browserData:"browserData", 
-				challenge: "challenge",
-				enrollData:"enrollData"
-				
-		 	}
-		};
-		 
-
-	  callback(testResult);
-*/
-	  
-	  
-	  
-	//	alert(JSON.stringify(jsonData));  
+	  //	alert(JSON.stringify(jsonData));  
 		// Add the browser data to the JSON object
 		// I.e. Embed the challenge from the JSON object into the new JSON item
 		var browserData = {typ:"navigator.id.finishEnrollment", challenge:JSON.stringify(jsonData.enrollChallenges[0].challenge)};
@@ -712,7 +682,13 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
       var data_view = new Uint8Array(byteArray);
       var hexString = "";
       for(var i = 0; i < data_view.length; i++){
-            hexString += data_view[i].toString(16);
+           var hexVal = data_view[i].toString(16);
+           if (hexVal.length == 1) {
+            //if the hex return only takes up 4-bits, pad the value to include the leading 0
+            //so all 8 bits are represented
+            hexVal = "0" + hexVal;
+           }
+           hexString += hexVal;
       }
       return hexString;
   }
@@ -737,7 +713,7 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
       return packHexToBinary(APDUHex);
   }
   
-  function creareEnrollAPDU(jsonData){
+  function createEnrollAPDU(jsonData){
 	  
       var browserData = {typ:"navigator.id.finishEnrollment", challenge:JSON.stringify(jsonData.enrollChallenges[0].challenge)};
       

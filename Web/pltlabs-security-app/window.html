@@ -68,19 +68,27 @@
                         <tr>
                             <td><span>Touch Secure Element</span></td>
                             <td>
-                                <input type="checkbox" name="chkTouchSecureElement" id="chkTouchSecureElement"/>         
+                                <input type="checkbox" name="chkTouchSecureElement" id="chkTouchSecureElement"/>
+                                <span id="touchState">Not Touched</span>
                             </td>
                         </tr>
                          <tr>
                             <td><span>Ping Secure Element</span></td>
                             <td>
-                                <input type="button" name="btnPing" id="btnPing" value="Ping"/>         
+                                <input type="button" name="btnPing" id="btnPing" value="Ping"/>
+                                <span id="pingResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Enroll</span></td>
+                            <td>
+                                <input type="button" name="btnEnroll" id="btnEnroll" value="Enroll"/> <span id="enrollstate">Not Enrolled</span>
                             </td>
                         </tr>
                          <tr>
-                            <td><span>Enroll</span></td>
+                            <td><span>Authenticate (Sign)</span></td>
                             <td>
-                                <input type="button" name="btnEnroll" id="btnEnroll" value="Enroll"/>         
+                                <input type="button" name="btnSign" id="btnSign" value="Sign"/> <img src="img/vault.jpeg" width="96" ></img> <span id="signingstate"></span>
                             </td>
                         </tr>
                     </table>
@@ -93,6 +101,7 @@
       <script src="js/vendor/core-min.js"></script>
       <script src="js/vendor/enc-utf16-min.js"></script>
       <script src="js/vendor/enc-base64-min.js"></script>
+      <script src="js/vendor/sha256.js"></script>
       <script src="js/plt.chrome.bt.js"></script>
       <script src="js/plt.msg.js"></script>
       <script src="js/plt.fido.js"></script>
