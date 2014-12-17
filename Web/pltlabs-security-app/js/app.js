@@ -187,10 +187,12 @@ function onEnrollData(data){
         ]
     };
   var apdu = createEnrollAPDU(enrollRequest);
+  log("onEnrollData: enroll apdu is " + apdu.byteLength + " bytes")
   var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apdu, "address": sensorPortAddress};
   var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
   if (connectedDevice) {
     currentFidoState = ENROLLING_STATE;
+    log("onEnrollData: sending ADPU enroll command to device");
     plt.sendMessage(connectedDevice, command);
   }  
 }
