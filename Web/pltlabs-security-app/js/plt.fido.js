@@ -698,42 +698,32 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
       // Build up APDU
       var APDUHex = "00" + U2F_ECHO_PHYSICAL_PRESENCE + "0000" + "00";
       console.log("checkTouchPLTDevice: APDU hex: " + APDUHex);
-      
-      return packHexToBinary(APDUHex);
+      return APDUHex;
   }
   
   function createPingAPDU(){
       var FIDO_INS_VERSION = "06";
       var pingStringHex = "000102030405060708090a0b0c0d0e0f";
-
       var len = pingStringHex.length / 2;
       var lenHex = len.toString(16);
       var APDUHex = "00" + FIDO_INS_VERSION + "0000" + lenHex + pingStringHex;
       console.log("createPingAPDU - length of APDU = " + APDUHex);
-      return packHexToBinary(APDUHex);
+      return APDUHex;
   }
   
-  function createEnrollAPDU(jsonData){
+  function createEnrollAPDU(enrollInfo){
 	  
-      var browserData = {typ:"navigator.id.finishEnrollment", challenge:JSON.stringify(jsonData.enrollChallenges[0].challenge)};
-      
-      jsonData.enrollChallenges[0].browserData = browserData;
+      var browserData = enrollInfo.enrollChallenge.browserData;
             
       // Hash browser data
       var browserDataString = JSON.stringify(browserData);
-      //console.log("Browser data: " + browserDataString);
-      //console.log("Hash: ");
       var hashBrowserData = CryptoJS.SHA256(browserDataString);
       var hashBrowserDataHex = hashBrowserData.toString(CryptoJS.enc.Hex);
-      //console.log(hashBrowserDataHex);
 
       // Hash app id
-      var AppIDString = jsonData.enrollChallenges[0].appId
-      //console.log("AppID: " + AppIDString);
-      //console.log("Hash: ");
+      var AppIDString = enrollInfo.enrollChallenge.appId
       var hashAppID = CryptoJS.SHA256(AppIDString);
       var hashAppIDHex = hashAppID.toString(CryptoJS.enc.Hex);
-      //console.log(hashAppIDHex);
 
       // Build up APDU
       var len = hashBrowserDataHex.length / 2 + hashAppIDHex.length / 2 + 1;
@@ -742,31 +732,7 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
       //console.log("Hex length is: " + lenHex);
       var APDUHex = "00" + U2F_ENROLL + "0000" + lenHex + XAPDU_XMIT_BIT + hashBrowserDataHex + hashAppIDHex;
       console.log("createEnrollAPDU: APDU = " + APDUHex);
-      return packHexToBinary(APDUHex);
-      // Remember header to get more return data when needed
-      // Leave out the 1 byte of data as this will be added
-      //moreCommandHeader = APDUHex.substring(0, 8) + "01";
-      //console.log("Repeat header: " + moreCommandHeader);
-      //largeAPDUReturnChunk = 0;	// Reset this to 0 as we track the chunks
-
-
-      // Convert to base 64
-    //  var words = CryptoJS.enc.Hex.parse(APDUHex);
-      //var APDUbase64 = CryptoJS.enc.Base64.stringify(words);
-      //var APDUbase64URLSafe = base64ToURLSafe(APDUbase64);
-      //console.log("Base64 APDU: " + APDUbase64URLSafe);
-
-      // Convert it back (to test)
-      //words = CryptoJS.enc.Base64.parse(APDUbase64);
-      //var convertedHex = CryptoJS.enc.Hex.stringify(words);
-      //console.log("Converted back: " + convertedHex);
-
-      // Prepare for large APDU return
-      //returnLargeAPDUHex = "";
-
-      // Send APDU command recursively
-      //sendAPDUCommand(APDUbase64URLSafe, callback, browserData, "enroll", null);
-      
+      return APDUHex;
 	  
   }
 
