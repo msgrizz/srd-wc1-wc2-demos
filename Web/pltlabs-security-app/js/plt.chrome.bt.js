@@ -159,7 +159,7 @@ var plt = (function(my){
       throw "device and message parameters are required"
     }
     //this variable is required to maintain correct scoping when calling the send function
-    chrome.bluetoothSocket.send(device.socketId, message.messageBytes);
+    chrome.bluetoothSocket.send(device.socketId, message.messageBytes, function(bytesSent){console.log("device has been sent " + bytesSent + " bytes");});
   };
   
   my.calibrateHeadOrientation = function(device){

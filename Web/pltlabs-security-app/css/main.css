@@ -22,27 +22,6 @@ html {
     color: #ffff00;
 }
 
-#incoming-call {
-    position: relative;
-    width: 400px;
-    height: 140px;
-    z-index: 3;
-    margin: auto;
-    text-align: center;
-    background-color: rgba(0,0,0,0.75);
-    display: none;
-}
-
-#remote-video {
-    position:relative;
-    width: 200px;
-    height: auto;
-    background-color: #eee;
-}
-
-#video-container {
-    display: none;
-}
 
 
 #options{
@@ -94,18 +73,21 @@ html {
     top:8px;
 }
 
-
-#sensorpane{
-    height:580px;
-    background-color: #FE481A;
-    border:1px solid #000000;
+table{
+  table-layout: fixed;
+  width: 800px;
 }
 
-#sensortable{
-    margin-right:50px;
-    margin-left:50px;
-    font-size: large;
+.row-left{
+  width:20%;
+  text-align: center;
 }
+
+.row-right{
+  width:80%;
+  text-align: left;
+}
+
 
 #accordion img{
     height: 80px;
@@ -114,12 +96,5 @@ html {
     display: block;
 }
 
-#sensortable tr, td{
-    background-color: #ffffff;
-}
 
-#sensortable td{
-    padding-left: 10px;
-    padding-right: 10px;
-}
 

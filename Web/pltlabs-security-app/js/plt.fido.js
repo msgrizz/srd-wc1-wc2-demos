@@ -735,6 +735,75 @@ var largeAPDUReturnChunk;	// Keeping track of chunks returned
       return APDUHex;
 	  
   }
+  
+  function createSignAPDU(jsonData){
+       // Isolate variables to send back on callback
+      var sessionIDExtracted = jsonData.signData.sessionId;
+      var browserData = {typ:"navigator.id.getAssertion", challenge:JSON.stringify(jsonData.signData.challenge)};
+      
+      // Determine if this is a check key handle
+      var checkOnly = jsonData.type.localeCompare("sign_check_keyhandle") ? 0 : 1;
+	
+
+      // Command - Check only vs. sign
+      var typeCommand = undefined;
+      var commandString = undefined;
+      if (checkOnly)
+      {
+              typeCommand = "07";
+              commandString = "sign_check";
+      }
+      else
+      {
+              typeCommand = "03";
+              commandString = "sign";
+      }
+
+      // Hash browser data
+      var browserDataString = JSON.stringify(browserData);
+      //console.log("Browser data: " + browserDataString);
+      //console.log("Hash: ");
+      var hashBrowserData = CryptoJS.SHA256(browserDataString);
+      var hashBrowserDataHex = hashBrowserData.toString(CryptoJS.enc.Hex);
+      //console.log(hashBrowserDataHex);
+
+      // Hash app id
+      var AppIDString = jsonData.signData.appId;
+      //console.log("AppID: " + AppIDString);
+      //console.log("Hash: ");
+      var hashAppID = CryptoJS.SHA256(AppIDString);
+      var hashAppIDHex = hashAppID.toString(CryptoJS.enc.Hex);
+      //console.log(hashAppIDHex);
+
+      // Key Handle
+      var keyHandleBase64UrlSafe = jsonData.signData.keyHandle;
+      var keyHandleBase64 = base64FromURLSafe(keyHandleBase64UrlSafe);
+
+      //console.log("Key handle URL Safe base64:");
+      //console.log(keyHandleBase64UrlSafe);
+      //console.log("Key handle base64:");
+      //console.log(keyHandleBase64);
+      var words = CryptoJS.enc.Base64.parse(keyHandleBase64);
+      var keyHandleHex = CryptoJS.enc.Hex.stringify(words);
+
+      //console.log("Key Handle hex:");
+      //console.log(keyHandleHex);
+
+
+      // Build up APDU
+      var len = hashBrowserDataHex.length / 2 + hashAppIDHex.length / 2 + keyHandleHex.length / 2 + 2;
+      //console.log("Length is: " + len);
+      var lenHex = len.toString(16);
+      //console.log("Hex length is: " + lenHex);
+      var APDUHex = "00" + U2F_SIGN + "0000" + lenHex + XAPDU_XMIT_BIT + typeCommand + hashBrowserDataHex + hashAppIDHex + keyHandleHex;
+      //console.log("APDU HEX: " + APDUHex);
+
+      
+
+      return APDUHex;
+
+
+  }
 
   
 	

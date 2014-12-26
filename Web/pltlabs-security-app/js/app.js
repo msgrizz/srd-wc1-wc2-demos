@@ -16,22 +16,36 @@ var sensorPortAddress_view = new Uint8Array(sensorPortAddress);
 sensorPortAddress_view[0] = 0x50;
 
 //FIDO stuff
+//to get chunks of messages and to know what kind of
+//message we are getting back from the WC2 SE we need to
+//maintain state - the reason for this is the the messages
+//we receive back from the WC2 are opaque to us and we are
+//unable to tell what type of messages they are (yet)
 var IDLE_STATE = -1;
 var PINGING_STATE = 0;
 var ENROLLING_STATE = 1;
 var SIGNING_STATE = 2;
 var TOUCHING_STATE = 3;
+var CHECKING_ENROLLMENTS = 4;
+
 
 var currentFidoState = IDLE_STATE;
 var isEnrolled = false;
-var sessionId;
+var validEnrollmentKey;
+var enrollRequest;
+var signRequest;
 
+var serverURL = "http://localhost:8080";
 
+//this global is needed because sometimes APDUs come back in fragments
+//from the WC2 secure element - we need to reconsitute them within the app
+var currentAPDU = "";
+var apduChunkCount = 0;
 
-//UI initialization via JQuery
-$(function() {
-  $( "#accordion" ).accordion();
-});
+//this header is what you send to the WC2 secure element to ask for more chunks of the APDU
+var apduGetChunkHeader;
+
+//END FIDO stuff
 
 function init(){
   $('#chkPLTDevice').change(function(){
@@ -43,13 +57,16 @@ function init(){
     }
   }
   );
-  
+  $('#btnCheckEnrollment').attr("disabled", true);
+    $('#btnCheckEnrollment').click(function(){
+      checkForDeviceEnrollments();
+    });
   $('#btnSign').attr("disabled", true);
   $('#btnSign').click(function(){
     sign();
   });
     
-  $('#btnPing').attr("disabled", true);
+  $('#btnPing').attr("disabled", false);
   $('#btnPing').click(function(){
     ping();
   });
@@ -65,11 +82,6 @@ function init(){
     }
   }
   );
-  
-  
-  
-  
-  
   log("init() - registering listeners with plt library");
   plt.addEventListener(onEvent);
   log("init() - events -> plt.addEventListener(onEvent);");
@@ -84,12 +96,6 @@ function init(){
   
 }
 
-
-
-var serverURL = "http://localhost:8080";
-var currentAPDU = "";
-var apduChunkCount = 0;
-var apduGetChunkHeader;
 
 function onEvent(info){
   switch (info.payload.messageId) {
@@ -115,6 +121,7 @@ function onEvent(info){
 	  break;
 	case SIGNING_STATE:
 	  log("onEvent: processing APDU signing result from device");
+	  checkSignatureWithServer(info);
 	  break;
 	case ENROLLING_STATE:
 	  log("onEvent: processing APDU enrollment result from device");
@@ -128,8 +135,10 @@ function onEvent(info){
 	  log("onEvent: processing APDU ping result from device");
 	  validatePing(info);
 	  break;
+	case CHECKING_ENROLLMENTS:
+	  log("onEvent: checking enrollments for device");
+	  validateEnrollment(info);
       }
-      //resent the state
       currentFidoState = IDLE_STATE;
       break;
   }
@@ -141,7 +150,13 @@ function processRawAPDU(event){
   var chunkLength = apduChunk.length;
   var statusWord = apduChunk.substring(chunkLength - 4);
   if (statusWord != '9000') {
-    //this is an error condition
+    // Handle sign check results
+    // This should NEVER return a 9000....TODO: Check on this and the use of sign_check below
+    if (currentFidoState == CHECKING_ENROLLMENTS){
+      log("processRawAPDU: checking enrollments and statusWord = " +  statusWord);
+      return (statusWord == "6985" ? "1" : "0");
+    }
+    
     log('processRawAPDU: error condition, state = ' + currentFidoState + ' statusWord = ' + statusWord);
     currentFidoState = IDLE_STATE;
     currentAPDU = "";
@@ -149,7 +164,10 @@ function processRawAPDU(event){
   }
   //if the first two hex chunks are equal to "80" then we have to get more data
   var needMoreChunks = (apduChunk.substring(0, 2)  === "80");
-  log('processRawAPDU: chunk length = ' + chunkLength + ' status = ' + status + ' needs more APDU chunks = ' + needMoreChunks);
+  log('processRawAPDU: chunk length = ' + chunkLength + ' status = ' + statusWord + ' needs more APDU chunks = ' + needMoreChunks);
+  //FIXUP! - we are getting back the length of the chunk here - this is coming from our firmware and
+  //serves no purpose in when reconstructing the APDUs.
+  //TODO - remove the size of the byte arrays from the last byte of the array
   currentAPDU += apduChunk.substring(2, chunkLength - 6);
   if (!needMoreChunks) {
     //we are done - no need to append chunks any longer
@@ -165,14 +183,18 @@ function processRawAPDU(event){
   
 }
 
+//packages up a PLT pass through protocol deckard message and sends it to the device for processing
 function sendApduToDevice(apdu){
   var apduByteArray = packHexToBinary(apdu);
   var options = {"protocolid": plt.msg.TYPE_PROTOCOLAPDU, "dataBlob": apduByteArray, "address": sensorPortAddress};
   var command = plt.msg.createCommand(plt.msg.PASS_THROUGH_PROTOCOL_EVENT, options);
+  log("sendApduToDevice: sending pass through protocol command  (byte size) = " + command.messageBytes.byteLength)
   if (connectedDevice) {
     plt.sendMessage(connectedDevice, command);
   }
 }
+
+
 //creates a touch apdu and sends it to the device
 function touch() {
   currentAPDU = "";
@@ -191,6 +213,72 @@ function touchResponse(event){
   $('#btnEnroll').attr("disabled", false);
 }
 
+//BEGIN CHECK FOR ENROLLMENTS - use this when fix is in place for WC2
+//This function is call upon connection of the WC2
+//It will ask the security server for device enrollments based
+//upon the user account, a user account may have many device enrollments
+//however they may not belong to this particular device
+//if we do find a valid enrollment key for the this device we can use it
+//to sign our requests with.
+function checkForDeviceEnrollments(){
+  isLastEnrollment = false;
+  validEnrollmentKey = null;
+  getEnrollments("joe", "1234", signTestEnrollmentKeys); 
+}
+
+function signTestEnrollmentKeys(enrollments){
+  if (currentFidoState != IDLE_STATE) {
+    //wait a few more seconds to get back the results from the server
+    log("signTestEnrollmentKeys: waiting for idle state")
+    setTimeout(function(){signTestEnrollmentKeys(enrollments); }, 2000);
+  }
+  
+  log("signTestEnrollmentKeys: number of enrollments returned = " + enrollments.length);
+  //pop off the first key in the array
+  testEnrollmentKey = enrollments.shift();
+  
+  //create the check sign request
+  signRequest = {
+        type: "sign_check_keyhandle",
+        signData: testEnrollmentKey
+    };
+  log("signTestEnrollmentKeys: creating sign APDU with " + JSON.stringify(signRequest));
+  var apdu = createSignAPDU(signRequest);
+  apduChunkCount = 0;
+  apduGetChunkHeader = apdu.substring(0, 8) + "01";
+  currentFidoState = CHECKING_ENROLLMENTS;
+  sendApduToDevice(apdu);
+  
+  if (enrollments.length > 0) {
+    log("signTestEnrollmentKeys: recursing on the remaining enrollments.")
+    setTimeout(function(){signTestEnrollmentKeys(enrollments); }, 1500);
+  }
+  else{
+    isLastEnrollment = true;
+  }
+}
+
+function validateEnrollment(event){
+   log("validateEnrollment: validating enrollment: APDU response " + event.payload.apdu);
+  if (event.payload.apdu == "1") {
+    log("validateEnrollment: valid enrollment found");
+    validEnrollmentKey = testEnrollmentKey;
+    $('#btnEnroll').attr("disabled", true);
+  }
+  
+  if(isLastEnrollment){
+    //enable buttons to interact with the SE
+    $('#btnPing').attr("disabled", false);
+    $('#chkTouchSecureElement').attr("disabled", false);
+    $('#btnEnroll').attr("disabled", (validEnrollmentKey ? true : false));
+    $('#btnSign').attr("disabled", (validEnrollmentKey ? false : true));
+  }
+}
+
+//END CHECK FOR ENROLLMENTS
+
+
+//BEGIN PING
 //creates a ping APDU and sends it to the device
 function ping(){
   currentAPDU = "";
@@ -235,73 +323,122 @@ function validatePing(event){
   
   $('#pingResult').text("Ping successful!");
 }
+//END PING
 
 
+//BEGIN SIGN
 function sign(){
-  getEnrollments("joe", "1234", processEnrollments)
+  currentAPDU = "";
+  getEnrollments("joe", "1234", signWithEnrollment);
 }
 
-function processEnrollments(keyHandles){
+function signWithEnrollment(keyHandle){
+  if (!keyHandle) {
+    throw "signWithEnrollment: no keyHandle to sign with";
+  }
+  log("signWithEnrollment: keyHandle = " + JSON.stringify(keyHandle[0]));
+  signRequest = {
+        type: "sign_web_request",
+        signData: keyHandle[0]
+      };
+  log("signWithEnrollment: creating sign APDU with " + JSON.stringify(signRequest));
+  var apdu = createSignAPDU(signRequest);
+  apduChunkCount = 0;
+  apduGetChunkHeader = apdu.substring(0, 8) + "01";
+  currentFidoState = SIGNING_STATE;
+  log("signWithEnrollment: sending signing APDU to device: " + apdu);
+  sendApduToDevice(apdu);
+}
+
+function checkSignatureWithServer(event){
+  
+  var bd = {typ:"navigator.id.getAssertion", challenge:JSON.stringify(signRequest.signData.challenge)};
+  var sessionId = signRequest.signData.sessionId;
+  var challenge = "challenge";
+  var appId = "appId";
+  var apdu = event.payload.apdu;
+  log("checkSignatureWithServer: APDU returned from device " + apdu);
+  var words = CryptoJS.enc.Hex.parse(apdu);
+  log("checkSignatureWithServer: words = " + words);
+  var base64Apdu = CryptoJS.enc.Base64.stringify(words);
+  log("checkSignatureWithServer: base64Adpdu = " + base64Apdu);
+  var urlSafeApdu = base64ToURLSafe(base64Apdu);
+  log("checkSignatureWithServer: urlSaftApdu = " + urlSafeApdu);
+  var webEncodedApdu = encodeURIComponent(urlSafeApdu);
+  log("checkSignatureWithServer: webEncodedApdu = " + webEncodedApdu);
+  var browserData = btoa(JSON.stringify(bd));
+  
+  
+  var url = serverURL + "/signFinish?sessionId="+ sessionId +"&appId=" + appId + "&browserData=" + browserData + "&challenge="+ challenge +"&signData=" + webEncodedApdu;
+  log("checkSignatureWithServer: URL to server = " + url);
+  $.ajax({
+      url: url,
+      type: 'get',
+      crossDomain: true,
+      success: function (result) {
+	      log("checkSignatureWithServer: result from server : " + JSON.stringify(result));
+	      if (result.result == "success") {
+		log("checkSignatureWithServer: secure element has been authenticated with server - success!");
+		$('#authResultImg').attr("src", "img/success.jpeg");
+	      }
+	      else{
+		log("checkSignatureWithServer: secure element has FAILED authenticated with server!");
+		$('#authResultImg').attr("src", "img/fail.jpeg");
+	      }
+	      setTimeout(function(){$('#authResultImg').attr("src", "img/vault.jpeg");}, 5000);
+	    }
+      }).fail( function(e) {
+	log("enrollDevice: error getting data " + e)
+      });
   
 }
 
-function getEnrollments(userName, password, callback)
-{
-	
-	var url = serverURL + "/signData.js?userName=" + userName + "&password=" + password;
-	//var url = "http://localhost:4107/getversion";
-		$.ajax({
-		url: url,
-		type: 'get',
-		crossDomain: true,
-		success: function (result) {
-		  var signData = result;
-		  var numItems = signData.length;
-		  console.log("getEnrollments: signData = " + signData);
-		  validKeyHandles = [];
-		  for (i = 0; i < numItems; i++){
-		      // Add index to allow for identification when deleting
-		      signData[i].index = i;
-		      // Check the key handle and call last one with a callback
-		      // This is NOT robust, becuse it won't check for failures of the last check (e.g. timeout)
-		      if (i == (numItems - 1))
-			      checkKeyHandle(signData[i], callback);
-		      else
-			      checkKeyHandle(signData[i]);
+//END SIGN
 
-		  }
-
-		  // To notify it that there are none
-		  if (numItems == 0)
-			  callback(validKeyHandles);
-		}
-	})
-	.fail( function(e) {
-		switch (e.status)
-		{
-			case 400:
-				log("Bad Request");
-				break;
-			case 401:
-				log("Bad Password");	
-				break;
-			case 404:
-				log("Invalid User");
-				break;
-			default:
-				log("Unknown / other error: " + e.status);
-				break;
-			
-		}
-	
-	});
-	
-	
-	
+//currently just going with the assumption that there is one valid enrollment
+//for the device - I know this is not robust but am doing it for speed of completion
+function getEnrollments(userName, password, callback){
+  var url = serverURL + "/signData.js?userName=" + userName + "&password=" + password;
+  $.ajax({
+    url: url,
+    type: 'get',
+    crossDomain: true,
+    success: function (result) {
+      var signData = result;
+      var numItems = signData.length;
+      if (numItems == 0) {
+	log("getEnrollments: no enrollments found on server");
+      }
+      
+      callback(signData);
+      //assume (bad) that the enrollment if returned is valid
+      //TODO return the list of enrollments to the keycheck
+     // console.log("getEnrollments: enrollment found = " + signData[0]);
+     // signWithEnrollment(signData[0]);
+    }
+  })
+  .fail( function(e) {
+	  switch (e.status)
+	  {
+		  case 400:
+			  log("getEnrollments: Bad Request");
+			  break;
+		  case 401:
+			  log("getEnrollments: Bad Password");	
+			  break;
+		  case 404:
+			  log("getEnrollments: Invalid User");
+			  break;
+		  default:
+			  log("getEnrollments: Unknown / other error: " + e.status);
+			  break;
+		  
+	  }
+  
+  });
 }
 
-var enrollRequest;
-
+//BEGIN ENROLLMENTS
 //step 1 of the enrollement process 
 function enroll(){
   currentAPDU = "";
@@ -394,6 +531,7 @@ function enrollDevice(event){
       });
   
 }
+//END ENROLLMENTS
 
 function onCommandSuccess(commandSuccessMessage){
    log('onCommandSuccess: command successfully executed: ' + JSON.stringify(commandSuccessMessage));
@@ -447,6 +585,7 @@ function onDisconnect(device){
   $('#btnSign').attr("disabled", true);
   $('#btnEnroll').attr("disabled", true);
   $('#chkTouchSecureElement').attr("disabled", true);
+  $('#btnCheckEnrollment').attr("disabled", true);
   var currentFidoState = IDLE_STATE;
   isEnrolled = false;
   apduChunkCount = 0;
@@ -462,10 +601,13 @@ function onConnectionOpened(device) {
   connectedDevice = device;
   log("\nonConnectionOpened(device): callback has been invoked from plt api");
   log("onConnectionOpened(device): connected PLT device ->" + JSON.stringify(connectedDevice));
+  getSettings();
+  $('#btnPing').attr("disabled", false);
+  $('#btnSign').attr("disabled", false);
   $('#btnEnroll').attr("disabled", false);
   $('#chkTouchSecureElement').attr("disabled", false);
-  $('#btnPing').attr("disabled", false);
-  getSettings();
+  $('#btnCheckEnrollment').attr("disabled", false);
+  
   
 }
 
