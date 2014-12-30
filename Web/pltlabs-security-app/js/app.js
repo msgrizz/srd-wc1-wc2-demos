@@ -35,8 +35,6 @@ var validEnrollmentKey;
 var enrollRequest;
 var signRequest;
 
-var serverURL = "http://localhost:8080";
-
 //this global is needed because sometimes APDUs come back in fragments
 //from the WC2 secure element - we need to reconsitute them within the app
 var currentAPDU = "";
@@ -96,6 +94,28 @@ function init(){
   
 }
 
+//gets the server connection information from the
+//screen - will default to localhost and joe/1234 if fields are blank
+function getServerConnection(){
+  var result = {"url":  "http://localhost:8080",
+		"username": "joe",
+		"password": "1234"};
+		
+  
+  var url = $('#serverAddress').val();
+  var username = $('#username').val();
+  var password = $('#password').val();
+  
+  if (url.trim() != "") {
+    result.url = url;
+  }
+  if (username.trim() != "") {
+    result.username  = username;
+    result.password = password;
+  }
+  
+  return result;
+}
 
 function onEvent(info){
   switch (info.payload.messageId) {
@@ -333,8 +353,11 @@ function sign(){
 }
 
 function signWithEnrollment(keyHandle){
-  if (!keyHandle) {
-    throw "signWithEnrollment: no keyHandle to sign with";
+  if (!keyHandle || keyHandle.length == 0) {
+    log("signWithEnrollment: No enrollments for this account - authentication failed!");
+    $('#authResultImg').attr("src", "img/fail.jpeg");
+    setTimeout(function(){$('#authResultImg').attr("src", "img/vault.jpeg");}, 10000);
+    return;
   }
   log("signWithEnrollment: keyHandle = " + JSON.stringify(keyHandle[0]));
   signRequest = {
@@ -368,8 +391,9 @@ function checkSignatureWithServer(event){
   log("checkSignatureWithServer: webEncodedApdu = " + webEncodedApdu);
   var browserData = btoa(JSON.stringify(bd));
   
+  var connInfo = getServerConnection();
   
-  var url = serverURL + "/signFinish?sessionId="+ sessionId +"&appId=" + appId + "&browserData=" + browserData + "&challenge="+ challenge +"&signData=" + webEncodedApdu;
+  var url = connInfo.url + "/signFinish?sessionId="+ sessionId +"&appId=" + appId + "&browserData=" + browserData + "&challenge="+ challenge +"&signData=" + webEncodedApdu;
   log("checkSignatureWithServer: URL to server = " + url);
   $.ajax({
       url: url,
@@ -398,7 +422,8 @@ function checkSignatureWithServer(event){
 //currently just going with the assumption that there is one valid enrollment
 //for the device - I know this is not robust but am doing it for speed of completion
 function getEnrollments(userName, password, callback){
-  var url = serverURL + "/signData.js?userName=" + userName + "&password=" + password;
+  var connInfo = getServerConnection();
+  var url = connInfo.url + "/signData.js?userName=" + connInfo.username + "&password=" + connInfo.password;
   $.ajax({
     url: url,
     type: 'get',
@@ -448,7 +473,8 @@ function enroll(){
 //step 2 of the enrollment process - call the server with the username and password
 //of the user that you want to enroll the device with
 function getEnrollDataFromServer(userName, password, callback){
-  var url = serverURL + "/enrollData.js?userName=" + userName + "&password=" + password;
+  var connInfo = getServerConnection();
+  var url = connInfo.url + "/enrollData.js?userName=" + connInfo.username + "&password=" + connInfo.password;
   $.ajax({
     url: url,
     type: 'get',
@@ -505,7 +531,8 @@ function enrollDevice(event){
   log("enrollDevice: webEncodedApdu = " + webEncodedApdu);
   
   var browserData = btoa(JSON.stringify(enrollRequest.enrollChallenge.browserData));
-  var url = serverURL + "/enrollFinish?sessionId="+ enrollRequest.sessionId +"&browserData=" + browserData + "&challenge=challenge&enrollData=" + webEncodedApdu;
+  var connInfo = getServerConnection();
+  var url = connInfo.url + "/enrollFinish?sessionId="+ enrollRequest.sessionId +"&browserData=" + browserData + "&challenge=challenge&enrollData=" + webEncodedApdu;
   log("enrollDevice: URL to server = " + url);
   $.ajax({
       url: url,
