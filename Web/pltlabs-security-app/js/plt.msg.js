@@ -5166,6 +5166,10 @@ plt.msg = (function (){
           case my.TYPE_SERVICEID_FREEFALL:
             payload.freefall = byteToBool(payload.serviceData[0]);
             break;
+          case my.TYPE_SERVICEID_VOICEEVENT:
+            payload.voiceEventId = payload.serviceData[0];
+            payload.voiceEventName = voiceEventIdToString(payload.voiceEventId);
+            break;
          }
 
          break;    
@@ -5589,6 +5593,61 @@ plt.msg = (function (){
      payload.availablePorts = parseByteArray(index, data_view, bounds)
     
     return payload;
+  };
+  
+  var voiceEventIdToString = function(voiceEventId){
+    var s = "";
+    switch(voiceEventId){
+      case 1:
+        s = "Distance";
+        break;    
+      case 2:
+        s = "What time is it";
+        break;
+      case 3:
+        s = "Pair mode";
+        break;
+      case 4:
+        s = "Talk to Cortana";
+        break;
+      case 5:
+        s = "Launch it";
+        break;
+      case 6:
+        s = "Redial";
+        break;
+      case 7:
+        s = "Voice memo";
+        break;
+      case 8:
+        s = "Secure";
+        break;
+      case 9:
+        s = "Talk to Siri";
+        break;
+      case 10:
+        s = "Step count";
+        break;
+      case 11:
+        s = "Unlock";
+        break;
+      case 12:
+        s = "Talk to Google";
+        break;
+      case 13:
+        s = "Help me";
+        break;
+      case 14:
+        s = "Call";
+        break;
+      case 15:
+        s = "Return call";
+        break;
+      default:
+        s = "Unknown event";
+        break
+    }
+    return s;
   };
   
   var muteToneVolumeIdToString = function(muteToneVolume){

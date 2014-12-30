@@ -133,6 +133,10 @@
                           outCode += "          case my.TYPE_SERVICEID_FREEFALL:\r\n";
                           outCode += "            payload.freefall = byteToBool(payload.serviceData[0]);\r\n";
                           outCode += "            break;\r\n";
+                          outCode += "          case my.TYPE_SERVICEID_VOICEEVENT:\r\n";
+                          outCode += "            payload.voiceEventId = payload.serviceData[0];\r\n";
+                          outCode += "            payload.voiceEventName = voiceEventIdToString(payload.voiceEventId);\r\n";
+                          outCode += "            break;\r\n";
                           outCode += "         }\r\n";        
                        }
                        if(name == "RAW_BUTTON_TEST_EVENT"){

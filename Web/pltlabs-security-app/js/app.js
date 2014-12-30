@@ -80,6 +80,13 @@ function init(){
     }
   }
   );
+ 
+ $('#chkEnableVoice').attr("disabled", true);
+ $('#chkEnableVoice').change(function(){
+      enableVoiceEvents(this.checked);
+    }
+  );
+ 
   log("init() - registering listeners with plt library");
   plt.addEventListener(onEvent);
   log("init() - events -> plt.addEventListener(onEvent);");
@@ -92,6 +99,14 @@ function init(){
   plt.addOnDisconnectListener(onDisconnect);
   log("init() - device socket disconnect -> plt.addOnDisconnectListener(onDisconnect);");
   
+}
+
+function enableVoiceEvents(on) {
+  var options = {"serviceId" : plt.msg.TYPE_SERVICEID_VOICEEVENT};
+  options.mode = on ? plt.msg.TYPE_MODEONCCHANGE : plt.msg.TYPE_MODEOFF;
+  options.address = sensorPortAddress;
+  var message = plt.msg.createCommand(plt.msg.SUBSCRIBE_TO_SERVICES_COMMAND, options) 
+  plt.sendMessage(connectedDevice, message)
 }
 
 //gets the server connection information from the
@@ -124,6 +139,14 @@ function onEvent(info){
       break;
     case plt.msg.CONNECTED_DEVICE_EVENT:
       connectionOpened(info);
+      break;
+    case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
+      switch(info.payload.serviceID) {
+	case plt.msg.TYPE_SERVICEID_VOICEEVENT:
+	  log("onEvent: voice event received: " + JSON.stringify(info));
+	  $('#voiceEvent').text(info.payload.voiceEventName);
+	  break;
+      }
       break;
     case plt.msg.PASS_THROUGH_PROTOCOL_EVENT:
       info.payload.apdu = processRawAPDU(info);
@@ -613,6 +636,7 @@ function onDisconnect(device){
   $('#btnEnroll').attr("disabled", true);
   $('#chkTouchSecureElement').attr("disabled", true);
   $('#btnCheckEnrollment').attr("disabled", true);
+  $('#chkEnableVoice').attr("disabled", true);
   var currentFidoState = IDLE_STATE;
   isEnrolled = false;
   apduChunkCount = 0;
@@ -634,6 +658,7 @@ function onConnectionOpened(device) {
   $('#btnEnroll').attr("disabled", false);
   $('#chkTouchSecureElement').attr("disabled", false);
   $('#btnCheckEnrollment').attr("disabled", false);
+  $('#chkEnableVoice').attr("disabled", false);
   
   
 }
