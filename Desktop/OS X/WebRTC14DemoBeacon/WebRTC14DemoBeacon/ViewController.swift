@@ -35,7 +35,7 @@ class ViewController: NSViewController, CBPeripheralManagerDelegate {
 				}
 				else {
 					NSLog("Starting advertising (service UUID %@)...", self.serviceUUID)
-					var advertisingData = [CBAdvertisementDataLocalNameKey : "PLTBeacon",
+					var advertisingData = [CBAdvertisementDataLocalNameKey: "PLTBeacon",
 						CBAdvertisementDataServiceUUIDsKey: [CBUUID(string: self.serviceUUID)],
 						CBAdvertisementDataIsConnectable: false]
 					

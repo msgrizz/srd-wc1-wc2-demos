@@ -93,7 +93,7 @@
     NSLog(@"updateCalibration");
 	
 	NSError *err = nil;
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:&err];
+	[self.device setCalibration:nil forService:PLTServiceOrientation error:&err];
 	if (err) {
 		NSLog(@"Error calibrating orientation tracking: %@", err);
 	}
@@ -163,7 +163,7 @@
 
 			// "zero" orientation tracking to current orientation
 			
-			[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:&err];
+			[self.device setCalibration:nil forService:PLTServiceOrientation error:&err];
 			if (err) NSLog(@"Error calibrating orientation tracking: %@", err);
 		}];
 		

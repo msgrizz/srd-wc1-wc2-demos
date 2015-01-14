@@ -77,8 +77,8 @@
 	NSLog(@"subscribeToServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-//		[self.device subscribe:self toService:PLTServiceOrientationTracking				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+		[self.device subscribe:self toService:PLTServiceOrientation				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device setCalibration:nil forService:PLTServiceOrientation error:nil];
 		
 //		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 //		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
@@ -102,7 +102,7 @@
 	NSLog(@"queryServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-		[self.device queryInfo:self forService:PLTServiceOrientationTracking			error:nil];
+		[self.device queryInfo:self forService:PLTServiceOrientation			error:nil];
 		[self.device queryInfo:self forService:PLTServicePedometer						error:nil];
 		[self.device queryInfo:self forService:PLTServiceFreeFall						error:nil];
 		[self.device queryInfo:self forService:PLTServiceTaps							error:nil];
@@ -117,7 +117,7 @@
 {
 	NSLog(@"getCachedInfoButton:");
 	
-	NSLog(@"PLTServiceOrientationTracking: %@", [self.device cachedInfoForService:PLTServiceOrientationTracking error:nil]);
+	NSLog(@"PLTServiceOrientation: %@", [self.device cachedInfoForService:PLTServiceOrientation error:nil]);
 	NSLog(@"PLTServicePedometer: %@", [self.device cachedInfoForService:PLTServicePedometer error:nil]);
 	NSLog(@"PLTServiceFreeFall: %@", [self.device cachedInfoForService:PLTServiceFreeFall error:nil]);
 	NSLog(@"PLTServiceTaps: %@", [self.device cachedInfoForService:PLTServiceTaps error:nil]);
@@ -133,13 +133,13 @@
 	
 //	_stopParsing = YES;
 	
-//	PLTOrientationTrackingInfo *oldOrientationInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientationTracking];
+//	PLTOrientationTrackingInfo *oldOrientationInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientation];
 //	PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceOrientationTrackingInfo:oldOrientationInfo];
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:oldOrientationInfo.quaternion];
 //	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceEulerAngles:oldOrientationInfo.eulerAngles];
-//	[self.device setCalibration:orientationCal forService:PLTServiceOrientationTracking];
+//	[self.device setCalibration:orientationCal forService:PLTServiceOrientation];
 	
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+	[self.device setCalibration:nil forService:PLTServiceOrientation error:nil];
 	
 	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
 }

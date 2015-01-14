@@ -306,7 +306,7 @@ NSString *const LocationOverrideDidSelectNewLocation =  @"LocationOverrideDidSel
 {
     self = [super initWithNibName:@"LocationOverrideViewController" bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"Location Override";
+        self.title = @"Location Spoof";
     }
     return self;
 }

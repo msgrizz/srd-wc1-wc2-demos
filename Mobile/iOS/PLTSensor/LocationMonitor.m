@@ -46,7 +46,7 @@ NSString *const LocationMonitorDidUpdateNotification =      @"LocationMonitorDid
 
 - (void)startUpdatingLocation
 {
-    [self.locationManager startUpdatingLocation];
+	[self.locationManager startUpdatingLocation];
 }
 
 - (void)stopUpdatingLocation
@@ -59,28 +59,87 @@ NSString *const LocationMonitorDidUpdateNotification =      @"LocationMonitorDid
 	[self stopUpdatingLocation];
 	[self startUpdatingLocation];
 #warning Added 14/09/12 by Morgan
-	[self locationManager:self.locationManager didUpdateToLocation:self.realLocation fromLocation:nil];
+	//[self locationManager:self.locationManager didUpdateToLocation:self.realLocation fromLocation:nil];
+	[self locationManager:self.locationManager didUpdateLocations:@[self.realLocation]];
 }
 
 #pragma mark -
 #pragma mark CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-	//AOLogL(AODebugLogLevel,@"newLocation: %@",newLocation);
-    
-    self.realLocation = newLocation;
-    self.location = [self.delegate locationMonitor:self overrideAtLocation:newLocation];
-    if (!self.location ) {
-		self.location = newLocation;
+	NSLog(@"locationManager:didChangeAuthorizationStatus: %d", status);
+	
+	switch (status) {
+		case kCLAuthorizationStatusNotDetermined:
+			NSLog(@"kCLAuthorizationStatusNotDetermined");
+			break;
+		case kCLAuthorizationStatusRestricted:
+			NSLog(@"kCLAuthorizationStatusRestricted");
+			break;
+		case kCLAuthorizationStatusDenied:
+			NSLog(@"kCLAuthorizationStatusDenied");
+			break;
+//		case kCLAuthorizationStatusAuthorized:
+//			NSLog(@"kCLAuthorizationStatusAuthorized");
+//			break;
+		case kCLAuthorizationStatusAuthorizedAlways:
+			NSLog(@"kCLAuthorizationStatusAuthorizedAlways");
+			break;
+		case kCLAuthorizationStatusAuthorizedWhenInUse:
+			NSLog(@"kCLAuthorizationStatusAuthorizedWhenInUse");
+			break;
+  default:
+			break;
 	}
-
-	[self updateFullAddress];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:LocationMonitorDidUpdateNotification object:nil];
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+#warning 14/12/03 Morgan: DEPRECATED. Doesn't appear to be called anymore in iOS 8. Replaced with locationManager:didUpdateLocations: below.
+//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+//{
+//	//AOLogL(AODebugLogLevel,@"newLocation: %@",newLocation);
+//    
+//    self.realLocation = newLocation;
+//    self.location = [self.delegate locationMonitor:self overrideAtLocation:newLocation];
+//    if (!self.location ) {
+//		self.location = newLocation;
+//	}
+//
+//	[self updateFullAddress];
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:LocationMonitorDidUpdateNotification object:nil];
+//}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+	// looks like this holds a history of locations, and the most recent location is always last
+	
+	NSLog(@"locationManager:didUpdateLocations: %@", locations);
+	
+	CLLocation *newLocation = [locations lastObject];
+	
+	self.realLocation = newLocation;
+	self.location = [self.delegate locationMonitor:self overrideAtLocation:newLocation];
+	if (!self.location ) {
+		self.location = newLocation;
+	}
+	
+	[self updateFullAddress];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:LocationMonitorDidUpdateNotification object:nil];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+	NSLog(@"*** locationManager:didFailWithError: %@ ***", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+{
+	NSLog(@"*** didFinishDeferredUpdatesWithError: %@ ***", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     if (newHeading.headingAccuracy < 0) return;
     
@@ -96,11 +155,19 @@ NSString *const LocationMonitorDidUpdateNotification =      @"LocationMonitorDid
 
 - (id)init
 {
-	if( self = [super init] ) {
+	if (self = [super init]) {
 		self.locationManager = [[CLLocationManager alloc] init];
+//		if (!self.locationManager.locationServicesEnabled) {
+//			NSLog(@"*** Location Services not enabled!!! ***");
+//		}
+		if (OS_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")) {
+			[self.locationManager requestWhenInUseAuthorization];
+		}
 		self.locationManager.activityType = CLActivityTypeOther;
+		//self.locationManager.distanceFilter = 0;
+		self.locationManager.pausesLocationUpdatesAutomatically = NO;
         self.locationManager.delegate = self;
-        self.designedAccuracy = kCLLocationAccuracyBestForNavigation;
+        self.designedAccuracy = kCLLocationAccuracyBest;
 	}
 	return self;
 }

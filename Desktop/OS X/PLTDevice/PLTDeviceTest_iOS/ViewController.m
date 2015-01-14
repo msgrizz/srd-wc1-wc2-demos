@@ -75,16 +75,22 @@
 		//[self.device subscribe:self toService:(PLTService)PLTServiceSkinTemperature	withMode:PLTSubscriptionModePeriodic	andPeriod:1000];
 		//[self.device subscribe:self toService:(PLTService)PLTServiceAmbientHumidity	withMode:PLTSubscriptionModePeriodic	andPeriod:1000];
 		
-		//[self.device subscribe:self toService:PLTServiceOrientationTracking			withMode:PLTSubscriptionModeOnChange	andPeriod:1000];
-		//[self.device setCalibration:nil forService:PLTServiceOrientationTracking];
+		[self.device subscribe:self toService:PLTServiceOrientation					withMode:PLTSubscriptionModePeriodic	andPeriod:100	error:nil];
+		//[self.device setCalibration:nil forService:PLTServiceOrientation	error:nil];
 		
-		[self.device subscribe:self toService:PLTServicePedometer					withMode:PLTSubscriptionModeOnChange	andPeriod:0 error:nil];
+//		[self.device subscribe:self toService:PLTServicePedometer					withMode:PLTSubscriptionModeOnChange	andPeriod:0 error:nil];
 //		[self.device subscribe:self toService:PLTServiceFreeFall					withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceTaps						withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceMagnetometerCalStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0];
 //		[self.device subscribe:self toService:PLTServiceWearingState				withMode:PLTSubscriptionModePeriodic	andPeriod:100 error:nil];
 //		[self.device subscribe:self toService:PLTServiceProximity					withMode:PLTSubscriptionModePeriodic	andPeriod:100 error:nil];
+		
+		
+//		[self.device subscribe:self toService:PLTServiceHeading			withMode:PLTSubscriptionModeOnChange	andPeriod:0	 error:nil];
+//		[self.device subscribe:self toService:PLTServiceAcceleration	withMode:PLTSubscriptionModeOnChange	andPeriod:0	 error:nil];
+//		[self.device subscribe:self toService:PLTServiceAngularVelocity	withMode:PLTSubscriptionModeOnChange	andPeriod:0	 error:nil];
+//		[self.device subscribe:self toService:PLTServiceMagnetism		withMode:PLTSubscriptionModeOnChange	andPeriod:0	 error:nil];
 	}
 }
 
@@ -101,14 +107,19 @@
 	
 	if (self.device.isConnectionOpen) {
 		NSError *err = nil;
-		[self.device queryInfo:self forService:PLTServiceOrientationTracking				error:&err];
-		[self.device queryInfo:self forService:PLTServicePedometer							error:&err];
-		[self.device queryInfo:self forService:PLTServiceFreeFall							error:&err];
-		[self.device queryInfo:self forService:PLTServiceTaps								error:&err];
-		[self.device queryInfo:self forService:PLTServiceMagnetometerCalibrationStatus		error:&err];
-		[self.device queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus			error:&err];
-		[self.device queryInfo:self forService:PLTServiceWearingState						error:&err];
-		[self.device queryInfo:self forService:PLTServiceProximity							error:&err];
+//		[self.device queryInfo:self forService:PLTServiceOrientation						error:&err];
+//		[self.device queryInfo:self forService:PLTServicePedometer							error:&err];
+//		[self.device queryInfo:self forService:PLTServiceFreeFall							error:&err];
+//		[self.device queryInfo:self forService:PLTServiceTaps								error:&err];
+//		[self.device queryInfo:self forService:PLTServiceMagnetometerCalibrationStatus		error:&err];
+//		[self.device queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus			error:&err];
+//		[self.device queryInfo:self forService:PLTServiceWearingState						error:&err];
+//		[self.device queryInfo:self forService:PLTServiceProximity							error:&err];
+		
+		[self.device queryInfo:self forService:PLTServiceHeading							error:&err];
+		[self.device queryInfo:self forService:PLTServiceAcceleration						error:&err];
+		[self.device queryInfo:self forService:PLTServiceAngularVelocity					error:&err];
+		[self.device queryInfo:self forService:PLTServiceMagnetism							error:&err];
 	}
 }
 
@@ -116,7 +127,7 @@
 {
 	NSLog(@"getCachedInfoButton:");
 	
-	NSLog(@"PLTServiceOrientationTracking: %@", [self.device cachedInfoForService:PLTServiceOrientationTracking error:nil]);
+	NSLog(@"PLTServiceOrientation: %@", [self.device cachedInfoForService:PLTServiceOrientation error:nil]);
 	NSLog(@"PLTServicePedometer: %@", [self.device cachedInfoForService:PLTServicePedometer error:nil]);
 	NSLog(@"PLTServiceFreeFall: %@", [self.device cachedInfoForService:PLTServiceFreeFall error:nil]);
 	NSLog(@"PLTServiceTaps: %@", [self.device cachedInfoForService:PLTServiceTaps error:nil]);
@@ -124,19 +135,24 @@
 	NSLog(@"PLTServiceGyroscopeCalibrationStatus: %@", [self.device cachedInfoForService:PLTServiceGyroscopeCalibrationStatus error:nil]);
 	NSLog(@"PLTServiceWearingState: %@", [self.device cachedInfoForService:PLTServiceWearingState error:nil]);
 	NSLog(@"PLTServiceProximity: %@", [self.device cachedInfoForService:PLTServiceProximity error:nil]);
+	
+	NSLog(@"PLTServiceHeading: %@", [self.device cachedInfoForService:PLTServiceHeading error:nil]);
+	NSLog(@"PLTServiceAcceleration: %@", [self.device cachedInfoForService:PLTServiceAcceleration error:nil]);
+	NSLog(@"PLTServiceAngularVelocity: %@", [self.device cachedInfoForService:PLTServiceAngularVelocity error:nil]);
+	NSLog(@"PLTServiceMagnetism: %@", [self.device cachedInfoForService:PLTServiceMagnetism error:nil]);
 }
 
 - (IBAction)calibrateButton:(id)sender
 {
 	NSLog(@"calibrateButton:");
 	
-	//	PLTOrientationTrackingInfo *oldOrientationInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientationTracking];
+	//	PLTOrientationTrackingInfo *oldOrientationInfo = (PLTOrientationTrackingInfo *)[self.device cachedInfoForService:PLTServiceOrientation];
 	//	PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceOrientationTrackingInfo:oldOrientationInfo];
 	//	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:oldOrientationInfo.quaternion];
 	//	//PLTOrientationTrackingCalibration *orientationCal = [PLTOrientationTrackingCalibration calibrationWithReferenceEulerAngles:oldOrientationInfo.eulerAngles];
-	//	[self.device setCalibration:orientationCal forService:PLTServiceOrientationTracking];
+	//	[self.device setCalibration:orientationCal forService:PLTServiceOrientation];
 	
-	[self.device setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+	[self.device setCalibration:nil forService:PLTServiceOrientation error:nil];
 	
 	[self.device setCalibration:nil forService:PLTServicePedometer error:nil];
 }

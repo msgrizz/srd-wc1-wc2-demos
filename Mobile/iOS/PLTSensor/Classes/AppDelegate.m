@@ -10,8 +10,11 @@
 #import "SettingsViewController.h"
 #import <Foundation/Foundation.h>
 #import "PLT3DViewController.h"
+#import "HeadViewController.h"
 #import "SensorsViewController.h"
-#import "StreetView2ViewController.h"
+#import "StreetViewViewController.h"
+#import "KubiViewController.h"
+#import "SecurityViewController.h"
 #import "LocationMonitor.h"
 #import "PLTDeviceHandler.h"
 #import "PLTContextServer.h"
@@ -20,6 +23,12 @@
 #import "BRKStageViewController.h"
 #import "UIDevice+ScreenSize.h"
 #import "TestFlight.h"
+
+
+@interface PLTDLogger : NSObject
++ (PLTDLogger *)sharedLogger;
+@property(nonatomic,assign)	NSInteger	level;
+@end
 
 
 #define MAX_PACKET_ROADCAST_RATE        20.0 // Hz
@@ -44,13 +53,16 @@ NSString *const PLTDefaultsKeyOverrideLocations =							@"OverrideLocations";
 NSString *const PLTDefaultsKeyOverrideSelectedLocation =					@"SelectedOverrideLocation";
 NSString *const PLTDefaultsKeyGestureRecognition =							@"GestureRecognition";
 NSString *const PLTDefaultsKey3DHeadMirrorImage =							@"3DHeadMirrorImage";
-NSString *const PLTDefaultsKey3DHeadDebugOverlay =                          @"3DHeadDebugOverlay";
-NSString *const PLTDefaultsKeyStreetViewInfoOverlay =                       @"StreetViewInfoOverlay";
-NSString *const PLTDefaultsKeyStreetViewDebugOverlay =                      @"StreetViewDebugOverlay";
-NSString *const PLTDefaultsKeyStreetViewRoundingMultiple =                  @"StreetViewRoundingMultiple";
-NSString *const PLTDefaultsKeyTemperatureOffsetCelcius =					@"TemperatureOffsetCelcius";
 NSString *const PLTDefaultsKeySendOldSkewlEvents =							@"SendOldSkewlEvents";
 NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackingCalibrationTriggers";
+NSString *const PLTDefaultsKeySecurityEnabled =								@"SecurityEnabled";
+NSString *const PLTDefaultsKeySecurityLockID =								@"SecurityLockID";
+NSString *const PLTDefaultsKeyKubiEnabled =									@"KubiEnabled";
+NSString *const PLTDefaultsKeyKubiOpenTokAPIKey =							@"KubiOpenTokAPIKey";
+NSString *const PLTDefaultsKeyKubiOpenTokSessionID =						@"KubiOpenTokSessionID";
+NSString *const PLTDefaultsKeyKubiOpenTokPublisherID =						@"KubiOpenTokPublisherID";
+NSString *const PLTDefaultsKeyKubiMode =									@"KubiMode";
+NSString *const PLTDefaultsKeyKubiMirror =									@"KubiMirror";
 
 
 @interface AppDelegate () <UIApplicationDelegate, UIPopoverControllerDelegate, PLTContextServerDelegate, LocationMonitorDelegate, SettingsViewControllerDelegate>
@@ -65,12 +77,17 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 - (void)headsetDidConnectNotification:(NSNotification *)note;
 - (void)headsetInfoDidUpdateNotification:(NSNotification *)note;
 - (void)headsetHeadTrackingCalibrationDidUpdateNotification:(NSNotification *)note;
+- (void)securityEnabledChangedNotification:(NSNotification *)aNotification;
+- (void)kubiEnabledChangedNotification:(NSNotification *)aNotification;
 
 @property(nonatomic,retain) SettingsViewController      *settingsViewController;
-@property(nonatomic,retain) PLT3DViewController         *threeDViewController;
+//@property(nonatomic,retain) PLT3DViewController         *threeDViewController;
+@property(nonatomic,retain) HeadViewController			*headViewController;
 @property(nonatomic,retain) SensorsViewController       *sensorsViewController;
-@property(nonatomic,retain) StreetView2ViewController   *streetView2ViewController;
+@property(nonatomic,retain) StreetViewViewController	*streetViewViewController;
 @property(nonatomic,retain) BRKStageViewController      *gameViewController;
+@property(nonatomic,retain) KubiViewController			*kubiViewController;
+@property(nonatomic,retain) SecurityViewController		*securityViewController;
 @property(strong,nonatomic) UITabBarController          *tabBarController;
 @property(nonatomic,strong) NSDate                      *lastPacketBroadcastDate;
 @property(nonatomic,strong) UIPopoverController         *settingsPopoverController;
@@ -90,7 +107,7 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     NSString *password = [DEFAULTS objectForKey:PLTDefaultsKeyContextServerPassword];
     BOOL secure = [DEFAULTS boolForKey:PLTDefaultsKeyContextServerSecureSockets];
     
-    NSMutableString *urlstring = [NSString stringWithFormat:@"%@://%@:%@/context-server/context-websocket", (secure ? @"wss" : @"ws"), address, port];
+    NSString *urlstring = [NSString stringWithFormat:@"%@://%@:%@/context-server/context-websocket", (secure ? @"wss" : @"ws"), address, port];
 	PLTContextServer *server = [PLTContextServer sharedContextServerWithURL:urlstring
 													 username:username
 													 password:password
@@ -144,7 +161,6 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 }
 
 #pragma mark - Private
-
 
 - (void)registerDefaults
 {
@@ -297,10 +313,41 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 	}
 }
 
+- (void)securityEnabledChangedNotification:(NSNotification *)aNotification
+{
+	NSMutableArray *controllers = [self.tabBarController.viewControllers mutableCopy];
+	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
+		if ([controllers lastObject] == self.kubiViewController.navigationController) {
+			[controllers insertObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController] atIndex:[controllers count]-1]; // insert before Kubi
+		}
+		else {
+			[controllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
+		}
+	}
+	else {
+		[controllers removeObject:self.securityViewController.navigationController];
+	}
+	[self.tabBarController setViewControllers:controllers animated:YES];
+}
+
+- (void)kubiEnabledChangedNotification:(NSNotification *)aNotification
+{
+	NSMutableArray *controllers = [self.tabBarController.viewControllers mutableCopy];
+	if ([DEFAULTS boolForKey:PLTDefaultsKeyKubiEnabled]) {
+		[controllers addObject:[[UINavigationController alloc] initWithRootViewController:self.kubiViewController]]; // insert last
+	}
+	else {
+		[controllers removeObject:self.kubiViewController.navigationController];
+	}
+	[self.tabBarController setViewControllers:controllers animated:YES];
+}
+
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[PLTDLogger sharedLogger].level = 0;
+	
     [self registerDefaults];
     
     [GMSServices provideAPIKey:GOOGLE_API_KEY];
@@ -309,22 +356,33 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    self.threeDViewController = [[PLT3DViewController alloc] initWithNibName:nil bundle:nil];
+    //self.threeDViewController = [[PLT3DViewController alloc] initWithNibName:nil bundle:nil];
+	self.headViewController = [[HeadViewController alloc] initWithNibName:nil bundle:nil];
 	self.sensorsViewController = [[SensorsViewController alloc] initWithNibName:nil bundle:nil];
-    //self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
-    self.streetView2ViewController = [[StreetView2ViewController alloc] initWithNibName:nil bundle:nil];
+    self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
     self.gameViewController = [[BRKStageViewController alloc] initWithNibName:nil bundle:nil];
-    self.settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
-    self.settingsViewController.delegate = self;
+	self.securityViewController = [[SecurityViewController alloc] initWithNibName:nil bundle:nil];
+	self.kubiViewController = [[KubiViewController alloc] initWithNibName:nil bundle:nil];
+	self.settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
+	self.settingsViewController.delegate = self;
     
-    self.tabBarController = [[UITabBarController alloc] init];
-    NSMutableArray *viewControllers = [@[[[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
-                                        [[UINavigationController alloc] initWithRootViewController:self.threeDViewController],
-                                        //[[UINavigationController alloc] initWithRootViewController:self.streetViewViewController],
-                                        [[UINavigationController alloc] initWithRootViewController:self.streetView2ViewController]] mutableCopy];
-    if ((IPHONE5 || IPAD) && IOS7) {
+	self.tabBarController = [[UITabBarController alloc] init];
+	NSMutableArray *viewControllers = [@[[[UINavigationController alloc] initWithRootViewController:self.headViewController],
+										 [[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
+										 [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController]] mutableCopy];
+	
+	if ((IPHONE5 || IPAD) && IOS7) {
         [viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.gameViewController]];
     }
+	
+	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
+		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
+	}
+	
+	if ([DEFAULTS boolForKey:PLTDefaultsKeyKubiEnabled]) {
+		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.kubiViewController]];
+	}
+	
 	self.tabBarController.viewControllers = viewControllers;
     self.window.rootViewController = self.tabBarController;
     
@@ -338,9 +396,8 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
     [[LocationMonitor sharedMonitor] startUpdatingLocation];
     [[PLTDeviceHandler sharedHandler] setHeadTrackingCalibrationTriggers:[[DEFAULTS objectForKey:PLTDefaultsKeyHeadTrackingCalibrationTriggers] unsignedIntegerValue]];
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-//	[nc addObserver:self selector:@selector(headsetDidConnectNotification:) name:PLTHeadsetDidConnectNotification object:nil];
-//    [nc addObserver:self selector:@selector(headsetInfoDidUpdateNotification:) name:PLTHeadsetInfoDidUpdateNotification object:nil];
-//	[nc addObserver:self selector:@selector(headsetHeadTrackingCalibrationDidUpdateNotification:) name:PLTHeadsetHeadTrackingCalibrationDidUpdateNotification object:nil];
+	[nc addObserver:self selector:@selector(securityEnabledChangedNotification:) name:PLTSettingsSecurityEnabledChangedNotification object:nil];
+	[nc addObserver:self selector:@selector(kubiEnabledChangedNotification:) name:PLTSettingsKubiEnabledChangedNotification object:nil];
 
 	[self checkAutoConnectToContextServer];
 	
@@ -399,9 +456,11 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 {
 	PLTContextServerMessage *message = [PLTContextServer sharedContextServer].latestMessage;
 	NSString *selectedLabel = [DEFAULTS objectForKey:PLTDefaultsKeyOverrideSelectedLocation];
-	BOOL override = [selectedLabel isEqualToString:@"__none"];
+	BOOL override = ![selectedLabel isEqualToString:@"__none"];
 	
-	if (HEADSET_CONNECTED && !override) {
+	//if (HEADSET_CONNECTED && override) {
+	// updated 14/12/03 by Morgan: HEADSET_CONNECTED is an easy way to tell if we're using the context server, but it causes weirdity when we don't care about the CS but the HS is not connected...
+	if (override) {
 		NSDictionary *location = nil;
 		for (NSDictionary *l in (NSArray *)[DEFAULTS objectForKey:PLTDefaultsKeyOverrideLocations]) {
 			NSString *label = l[PLTDefaultsKeyOverrideLocationLabel];
@@ -419,9 +478,10 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 			//NSLog(@"*** Error: no location \"%@\" found.",selectedLabel);
 		}
 	}
-	else if (!HEADSET_CONNECTED && [message.type isEqualToString:MESSAGE_TYPE_EVENT]) {
-		return message.location;
-	}
+#warning Probably needs to be enabled for context server to work correctly
+//	else if (!HEADSET_CONNECTED && [message.type isEqualToString:MESSAGE_TYPE_EVENT]) {
+//		return message.location;
+//	}
 	
     return nil;
 }
@@ -431,7 +491,6 @@ NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers =				@"HeadTrackin
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
 	[DEFAULTS synchronize];
-	[[NSNotificationCenter defaultCenter] postNotificationName:PLTSettingsPopoverDidDismissNotification object:nil];
 }
 
 #pragma mark - SettingsViewControllerDelegate

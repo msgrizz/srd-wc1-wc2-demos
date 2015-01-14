@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
+#import "Configuration.h"
+
 #import "BRRemoteDevice.h"
 #import "BRDevice_Private.h"
 #import "BRMessage_Private.h"
@@ -16,12 +18,6 @@
 #import <ExternalAccessory/ExternalAccessory.h>
 #endif
 
-//typedef enum {
-//    BRRemoteDeviceStateDisconnected,
-//    BRRemoteDeviceStateHostVersionNegotiating,
-//	BRRemoteDeviceStateConnected
-//} BRDeviceState;
-
 
 @interface BRRemoteDevice ()
 
@@ -29,11 +25,6 @@
 
 @property(nonatomic,strong,readwrite)	BRDevice		*parent;
 @property(nonatomic,readwrite)			uint8_t			port;
-
-
-//@property(nonatomic,assign,readwrite)   BOOL			isConnected;
-//@property(nonatomic,assign)             BRDeviceState	state;
-//@property(nonatomic,strong,readwrite)   BRMetadata		*metadata;
 
 @end
 
@@ -153,14 +144,24 @@
 - (NSString *)description
 {
 #ifdef TARGET_OSX
-    return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
-            self, self.bluetoothAddress, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
-			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
+	#ifdef TERSE_LOGGING
+		return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@",
+				self, self.bluetoothAddress];
+	#else
+		return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
+				self, self.bluetoothAddress, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
+				(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
+	#endif
 #endif
 #ifdef TARGET_IOS
-	return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
-            self, self.accessory.name, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
-			(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
+	#ifdef TERSE_LOGGING
+		return [NSString stringWithFormat:@"<BRDevice %p> accessory.name=%@, port=%d",
+				self, self.accessory.name, self.port];
+	#else
+		return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, port=%d, parent=%p, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), delegate=%@",
+				self, self.accessory.name, self.port, self.parent, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], 
+				(unsigned long)[self.settings count], (unsigned long)[self.events count], self.delegate];
+	#endif
 #endif
 }
 

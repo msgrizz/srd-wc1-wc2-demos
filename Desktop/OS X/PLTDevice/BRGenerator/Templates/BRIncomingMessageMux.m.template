@@ -32,8 +32,6 @@
 
 		case BRMessageTypeCommandResultException:
 		case BRMessageTypeSettingResultException:
-			DLog(DLogLevelError, @"*** BRMessageType...ResultException ***");
-
 			switch (deckardID) {
 <#exception_mux_case_block#>
 				default:
@@ -44,8 +42,6 @@
 			break;
 			
 		case BRMessageTypeSettingResultSuccess:
-			DLog(DLogLevelTrace, @"BRMessageTypeSettingResultSuccess");
-			
 			switch (deckardID) {
 <#setting_result_success_mux_case_block#>
 				default:
@@ -56,8 +52,6 @@
 			break;
 
 		case BRMessageTypeEvent:
-			DLog(DLogLevelTrace, @"BRMessageTypeEvent");
-
 			switch (deckardID) {
 <#event_mux_case_block#>
 				default:

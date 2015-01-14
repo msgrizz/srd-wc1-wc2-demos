@@ -89,5 +89,9 @@
 	<true/>
 	<key>HeadTrackingCalibrationTriggers</key>
 	<integer>3</integer>
+	<key>EnableKubi</key>
+	<true/>
+	<key>EnableSecurity</key>
+	<true/>
 </dict>
 </plist>

@@ -19,6 +19,7 @@
 
 @property(nonatomic,readwrite)			PLTInfoRequestType	requestType;
 @property(nonatomic,strong,readwrite)	NSDate				*timestamp;
+@property(nonatomic,strong,readwrite)	PLTCalibration		*calibration;
 @property(nonatomic,strong)				NSData				*serviceData;
 
 @end

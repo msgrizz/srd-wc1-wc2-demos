@@ -43,11 +43,16 @@
 @end
 
 
+static NSLock *lock;
+
 void DLog(DLogLevel level, NSString *format, ...)
 {
+	if (!lock) lock = [[NSLock alloc] init];
+	[lock lock];
 	va_list args;
 	va_start(args, format);
 	NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
 	[[PLTDLogger sharedLogger] log:level message:message];
 	va_end(args);
+	[lock unlock];
 }

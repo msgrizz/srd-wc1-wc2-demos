@@ -86,7 +86,8 @@
 				break; }
 				
 			case BRPayloadItemTypeByteArray: {
-				NSData *data = [value pointerValue];
+				//NSData *data = [value pointerValue];
+				NSData *data = (NSData *)value;
 				uint16_t len = [data length];
 				len = htons(len);
 				[payloadData appendBytes:&len length:sizeof(uint16_t)];
@@ -96,7 +97,8 @@
 			case BRPayloadItemTypeShortArray: {
 				// need to unpack shorts and htons them
 				
-				NSData *data = [value pointerValue];
+				//NSData *data = [value pointerValue];
+				NSData *data = (NSData *)value;
 				uint16_t len = [data length];
 				len = htons(len);
 				uint16_t shorts[len];

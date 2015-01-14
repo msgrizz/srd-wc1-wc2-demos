@@ -62,7 +62,7 @@
 	GLint backingWidth;
 	GLint backingHeight;
 	
-	EAGLContext *context;
+	EAGLContext *eaglContext;
 	
 	// OpenGL names for the renderbuffer and framebuffers used to render to this view
 	GLuint viewRenderbuffer, viewFramebuffer;

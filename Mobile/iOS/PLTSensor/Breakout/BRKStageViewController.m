@@ -90,7 +90,7 @@ extern double r2d(double d);
 		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
 		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
 
-		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		[d subscribe:self toService:PLTServiceOrientation withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
 		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
 
 		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
@@ -250,7 +250,7 @@ extern double r2d(double d);
 
 - (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
 {
-	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	//NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
 	
 	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
 		PLTWearingStateInfo *wearInfo = (PLTWearingStateInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceWearingState error:nil];

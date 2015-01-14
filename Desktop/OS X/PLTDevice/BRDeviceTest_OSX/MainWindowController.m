@@ -29,9 +29,7 @@
 #import "BRSignalStrengthEvent.h"
 #import "BRSubscribedServiceDataEvent.h"
 
-#import "PLTDevice.h"
-#import "PLTDevice_Internal.h"
-//#import <IOBluetooth/IOBluetooth.h>
+#import "PLTDevice.h" // PLTQuaternion, etc
 
 #import "BRRawMessage.h"
 
@@ -41,10 +39,8 @@
 //#import "BRApplicationActionResultEvent.h"
 //#import "BRConfigureApplicationCommad.h"
 
-
-
-#warning TEMPORARY
-#import "Configuration.h"
+#warning temp for PassThroughProtocol message debugging
+#import "BRPassThroughProtocolCommand.h"
 
 
 typedef struct {
@@ -173,7 +169,12 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 
 - (IBAction)closeConnectionButton:(id)sender
 {
-    [self.device closeConnection];
+    //[self.device closeConnection];
+	
+		NSData *pingAPDU = [NSData dataWithHexString:@"834734646FF3774"];
+		BRPassThroughProtocolCommand *cmd = [BRPassThroughProtocolCommand commandWithProtocolid:BRDefinedValue_PassThroughProtocolCommand_Protocolid_ProtocolAPDU
+																					messageData:pingAPDU];
+		[self.sensorsDevice sendMessage:cmd];
 }
 
 - (IBAction)queryWearingStateButton:(id)sender
@@ -205,28 +206,13 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 
 - (IBAction)queryDeviceInfoButton:(id)sender
 {
-//	NSString *msg = @"FF0300030000000100";
-//	BRRawMessage *message = [BRRawMessage messageWithType:BRMessageTypeCommand payload:[NSData dataWithHexString:msg]];
-//	[self.sensorsDevice sendMessage:message];
-	
     BRGetDeviceInfoSettingRequest *request = (BRGetDeviceInfoSettingRequest *)[BRGetDeviceInfoSettingRequest request];
     [self.sensorsDevice sendMessage:request];
 }
 
 - (IBAction)queryServicesButton:(id)sender
 {
-//	[self performSelectorInBackground:@selector(ya) withObject:nil];
-	
-//	BRServiceDataSettingRequest *request = [BRServiceDataSettingRequest requestWithServiceID:BRServiceIDPedometer];
-//	[self.sensorsDevice sendMessage:request];
-	
-//	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:BRServiceIDFreeFall
-//                                                                                        mode:BRServiceSubscriptionModePeriodic
-//                                                                                      period:1000];
-//	[self.sensorsDevice sendMessage:message];
-
-	
-    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+    for (int i = 0; i <= BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_GyroscopeCalibrationStatus; i++) {
         if (i==1) continue;
         
 		BRQueryServicesDataSettingRequest *request = [BRQueryServicesDataSettingRequest requestWithServiceID:i characteristic:0];
@@ -236,45 +222,85 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 
 - (IBAction)subscribeToServicesButton:(id)sender
 {
-//	BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:BRServiceIDOrientationTracking
-//																				characteristic:0
-//																						  mode:BRServiceSubscriptionModeOnChange
-//																						period:0];
-//    [self.sensorsDevice sendMessage:message];
-    
-    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
-        if (i==1) continue;
-		if (i==BRServiceIDOrientationTracking) continue;
-        
-		BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:i
-																					characteristic:0
-																							  mode:BRServiceSubscriptionModeOnChange
-																							period:0];
-        [self.sensorsDevice sendMessage:message];
-    }
+	BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Heading
+																				characteristic:0
+																						  mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+																						period:0];
+	[self.sensorsDevice sendMessage:message];
+	
+	BRSubscribeToServicesCommand *message2 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Acceleration
+																				characteristic:0
+																						  mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+																						period:0];
+	[self.sensorsDevice sendMessage:message2];
+	
+	BRSubscribeToServicesCommand *message3 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_MagneticField
+																				 characteristic:0
+																						   mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+																						 period:0];
+	[self.sensorsDevice sendMessage:message3];
+	
+	BRSubscribeToServicesCommand *message4 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_AngularVelocity
+																				 characteristic:0
+																						   mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+																						 period:0];
+	[self.sensorsDevice sendMessage:message4];
+	
+	BRSubscribeToServicesCommand *message5 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Orientation
+																				 characteristic:0
+																						   mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+																						 period:0];
+	[self.sensorsDevice sendMessage:message5];
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	for (int i = 0; i <= BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_GyroscopeCalibrationStatus; i++) {
+//        if (i==1) continue;
+//		if (i==BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Orientation) continue;
+//        
+//		BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:i
+//																					characteristic:0
+//																							  mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOnChange
+//																							period:0];
+//        [self.sensorsDevice sendMessage:message];
+//    }
 }
 
 - (IBAction)unsubscribeFromServicesButton:(id)sender
 {
-//	BRConnectionStatusSettingRequest *message = [BRConnectionStatusSettingRequest request];
-//	[self.device sendMessage:message];
+	BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Heading
+																				characteristic:0
+																						  mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOff
+																						period:0];
+	[self.sensorsDevice sendMessage:message];
 	
+	BRSubscribeToServicesCommand *message2 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Acceleration
+																				 characteristic:0
+																						   mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOff
+																						 period:0];
+	[self.sensorsDevice sendMessage:message2];
 	
-//	BRSubscribeToServiceCommand *message = [BRSubscribeToServiceCommand commandWithServiceID:0x00
-//																						mode:BRServiceSubscriptionModeOff
-//																					  period:0];
-//	[self.sensorsDevice sendMessage:message];
-
+	BRSubscribeToServicesCommand *message3 = [BRSubscribeToServicesCommand commandWithServiceID:BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_MagneticField
+																				 characteristic:0
+																						   mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOff
+																						 period:0];
+	[self.sensorsDevice sendMessage:message3];
 	
-    for (int i = 0; i <= BRServiceIDGyroCal; i++) {
+/*    for (int i = 0; i <= BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_GyroscopeCalibrationStatus; i++) {
         if (i==1) continue;
         
 		BRSubscribeToServicesCommand *message = [BRSubscribeToServicesCommand commandWithServiceID:i
 																					characteristic:0
-																							  mode:BRServiceSubscriptionModeOff
+																							  mode:BRDefinedValue_SubscribeToServicesCommand_Mode_ModeOff
 																							period:0];
         [self.sensorsDevice sendMessage:message];
-    }
+    } */
 }
 
 - (void)enableUI
@@ -713,22 +739,22 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 		NSData *serviceData = serviceDataEvent.serviceData;
 
 		switch (serviceID) {
-			case BRServiceIDOrientationTracking: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Orientation: {
 				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
 				PLTEulerAngles eulerAngles = BREulerAnglesFromQuaternion(quaternion);		
 				[self.headingIndicator setDoubleValue:-eulerAngles.x];
 				[self.pitchIndicator setDoubleValue:eulerAngles.y];
 				[self.rollIndicator setDoubleValue:eulerAngles.z];
 				break; }
-			case BRServiceIDPedometer: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Pedometer: {
 				uint32_t steps = [self pedometerCountFromServiceData:serviceData];
 				self.pedometerTextField.stringValue = [NSString stringWithFormat:@"%d", steps];
 				break; }
-			case BRServiceIDFreeFall: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_FreeFall: {
 				BOOL isInFreeFall = [self freeFallFromServiceData:serviceData];
 				self.freeFallTextField.stringValue = (isInFreeFall ? @"Yes" : @"No");
 				break; }
-			case BRServiceIDTaps: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Taps: {
 				uint8_t count;
 				uint8_t direction;
 				[self getTapsFromServiceData:serviceData count:&count direction:&direction];
@@ -738,39 +764,54 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 //			case BRServiceIDMagCal: {
 //				BOOL cal = [self calibrationFromServiceData:serviceData];
 //				break; }
-			case BRServiceIDGyroCal: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_GyroscopeCalibrationStatus: {
 				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
 				self.gyroCalTextField.stringValue = (isCalibrated ? @"Yes" : @"No");
 				break; }
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Heading: {
+				uint16_t whole;
+				[serviceData getBytes:&whole length:sizeof(uint16_t)];
+				whole = ntohs(whole);
+				NSLog(@"*********** integer: %u ***********", whole);
+				
+				uint16_t fraction;
+				NSLog(@"length: %lu", (unsigned long)[serviceData length]);
+				[[serviceData subdataWithRange:NSMakeRange(1, sizeof(uint16_t))] getBytes:&fraction length:sizeof(uint16_t)];
+				fraction = ntohs(fraction);
+				NSLog(@"*********** fraction: %u ***********", fraction);
+				
+				float heading = whole + ((float)UINT16_MAX) / ((float)fraction);
+				NSLog(@"*********** heading: %.2f ***********", heading);
+			}
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_MagneticField: {
+				uint32_t x;
+				[serviceData getBytes:&x length:sizeof(uint32_t)];
+				x = ntohl(x);
+				uint32_t y;
+				[[serviceData subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] getBytes:&y length:sizeof(uint32_t)];
+				y = ntohl(y);
+				uint32_t z;
+				[[serviceData subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] getBytes:&z length:sizeof(uint32_t)];
+				z = ntohl(z);
+				
+				NSLog(@"*********** Magnetic Field: (%d, %d, %d) ***********", x, y, z);
+			}
+//			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Acceleration: {
+//				uint32_t x;
+//				[serviceData getBytes:&x length:sizeof(uint32_t)];
+//				x = ntohl(x);
+//				uint32_t y;
+//				[[serviceData subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] getBytes:&y length:sizeof(uint32_t)];
+//				y = ntohl(y);
+//				uint32_t z;
+//				[[serviceData subdataWithRange:NSMakeRange(2, sizeof(uint32_t))] getBytes:&z length:sizeof(uint32_t)];
+//				z = ntohl(z);
+//				
+//				NSLog(@"*********** Magnetic Field: (%d, %d, %d) ***********", x, y, z);
+//			}
 		}
 	}
-	
-//    else if ([event isKindOfClass:[BROrientationTrackingEvent class]]) {
-//        BROrientationTrackingEvent *e = (BROrientationTrackingEvent *)event;
-//		BREulerAngles eulerAngles = BREulerAnglesFromQuaternion(e.quaternion);		
-//        [self.headingIndicator setDoubleValue:-eulerAngles.x];
-//        [self.pitchIndicator setDoubleValue:eulerAngles.y];
-//        [self.rollIndicator setDoubleValue:eulerAngles.z];
-//    }
-//    else if ([event isKindOfClass:[BRTapsEvent class]]) {
-//        BRTapsEvent *e = (BRTapsEvent *)event;
-//        if (e.count) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", e.count, NSStringFromTapDirection(e.direction)];
-//        else self.tapsTextField.stringValue = @"-";
-//    }
-//    else if ([event isKindOfClass:[BRFreeFallEvent class]]) {
-//        BRFreeFallEvent *e = (BRFreeFallEvent *)event;
-//        self.freeFallTextField.stringValue = (e.isInFreeFall ? @"Yes" : @"No");
-//    }
-//    else if ([event isKindOfClass:[BRPedometerEvent class]]) {
-//        BRPedometerEvent *e = (BRPedometerEvent *)event;
-//        self.pedometerTextField.stringValue = [NSString stringWithFormat:@"%d", e.steps];
-//    }
-//    else if ([event isKindOfClass:[BRGyroscopeCalStatusEvent class]]) {
-//        BRGyroscopeCalStatusEvent *e = (BRGyroscopeCalStatusEvent *)event;
-//        self.gyroCalTextField.stringValue = (e.isCalibrated ? @"Yes" : @"No");
-//    }
-//	
-//	
+
 //#warning BANGLE
 //	else if ([event isKindOfClass:[BRApplicationActionResultEvent class]]) {
 //		BRApplicationActionResultEvent *e = (BRApplicationActionResultEvent *)event;
@@ -835,22 +876,22 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 		NSData *serviceData = serviceDataResult.servicedata;
 		
 		switch (serviceID) {
-			case BRServiceIDOrientationTracking: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Orientation: {
 				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
 				PLTEulerAngles eulerAngles = BREulerAnglesFromQuaternion(quaternion);		
 				[self.headingIndicator setDoubleValue:-eulerAngles.x];
 				[self.pitchIndicator setDoubleValue:eulerAngles.y];
 				[self.rollIndicator setDoubleValue:eulerAngles.z];
 				break; }
-			case BRServiceIDPedometer: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Pedometer: {
 				uint32_t steps = [self pedometerCountFromServiceData:serviceData];
 				self.pedometerTextField.stringValue = [NSString stringWithFormat:@"%d", steps];
 				break; }
-			case BRServiceIDFreeFall: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_FreeFall: {
 				BOOL isInFreeFall = [self freeFallFromServiceData:serviceData];
 				self.freeFallTextField.stringValue = (isInFreeFall ? @"Yes" : @"No");
 				break; }
-			case BRServiceIDTaps: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Taps: {
 				uint8_t count;
 				uint8_t direction;
 				[self getTapsFromServiceData:serviceData count:&count direction:&direction];
@@ -860,37 +901,12 @@ PLTEulerAngles BREulerAnglesFromQuaternion(PLTQuaternion q)
 //			case BRServiceIDMagCal: {
 //				BOOL cal = [self calibrationFromServiceData:serviceData];
 //				break; }
-			case BRServiceIDGyroCal: {
+			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_GyroscopeCalibrationStatus: {
 				BOOL isCalibrated = [self calibrationFromServiceData:serviceData];
 				self.gyroCalTextField.stringValue = (isCalibrated ? @"Yes" : @"No");
 				break; }
 		}
 	}
-	
-//    else if ([result isKindOfClass:[BROrientationTrackingSettingResult class]]) {
-//        BROrientationTrackingSettingResult *r = (BROrientationTrackingSettingResult *)result;
-//		BREulerAngles eulerAngles = BREulerAnglesFromQuaternion(r.quaternion);		
-//        [self.headingIndicator setDoubleValue:-eulerAngles.x];
-//        [self.pitchIndicator setDoubleValue:eulerAngles.y];
-//        [self.rollIndicator setDoubleValue:eulerAngles.z];
-//    }
-//    else if ([result isKindOfClass:[BRTapsSettingResult class]]) {
-//        BRTapsSettingResult *r = (BRTapsSettingResult *)result;
-//        if (r.count) self.tapsTextField.stringValue = [NSString stringWithFormat:@"%d in %@", r.count, NSStringFromTapDirection(r.direction)];
-//        else self.tapsTextField.stringValue = @"-";
-//    }
-//    else if ([result isKindOfClass:[BRFreeFallSettingResult class]]) {
-//        BRFreeFallSettingResult *r = (BRFreeFallSettingResult *)result;
-//        self.freeFallTextField.stringValue = (r.isInFreeFall ? @"Yes" : @"No");
-//    }
-//    else if ([result isKindOfClass:[BRPedometerSettingResult class]]) {
-//        BRPedometerSettingResult *r = (BRPedometerSettingResult *)result;
-//        self.pedometerTextField.stringValue = [NSString stringWithFormat:@"%d", r.steps];
-//    }
-//    else if ([result isKindOfClass:[BRGyroscopeCalStatusSettingResult class]]) {
-//        BRGyroscopeCalStatusSettingResult *r = (BRGyroscopeCalStatusSettingResult *)result;
-//        self.gyroCalTextField.stringValue = (r.isCalibrated ? @"Yes" : @"No");
-//    }
 }
 
 - (void)BRDevice:(BRDevice *)device didRaiseSettingException:(BRException *)exception

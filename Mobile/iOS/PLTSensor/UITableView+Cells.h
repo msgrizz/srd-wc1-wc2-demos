@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class SwitchTableViewCell;
+@class SliderTableViewCell;
 
 
 @interface UITableView (Cells)
@@ -19,6 +20,7 @@
 - (UITableViewCell *)subtitleCell;
 - (UITableViewCell *)buttonCell;
 - (SwitchTableViewCell *)switchCell;
+- (SliderTableViewCell *)sliderCell;
 //- (SwitchTableViewCell *)switchCellValue2;
 - (UITableViewCell *)textFieldCell;
 - (UITableViewCell *)segmentedControlCellWithItems:(NSArray *)items;

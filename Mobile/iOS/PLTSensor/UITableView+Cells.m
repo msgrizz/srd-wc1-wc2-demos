@@ -8,6 +8,7 @@
 
 #import "UITableView+Cells.h"
 #import "SwitchTableViewCell.h"
+#import "SliderTableViewCell.h"
 #import "SegmentedControlCell.h"
 
 
@@ -70,6 +71,19 @@
         cell.on = NO;
     }
     return cell;
+}
+
+- (SliderTableViewCell *)sliderCell
+{
+	// Morgan 141229: This doesn't work right.
+	SliderTableViewCell *cell = [self dequeueReusableCellWithIdentifier:@"SliderCell"];
+	if (!cell) {
+		cell = [[SliderTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SliderCell"];
+		cell.accessoryType = UITableViewCellAccessoryNone;
+		cell.textLabel.textAlignment = NSTextAlignmentLeft;
+		cell.target = self;
+	}
+	return cell;
 }
 
 //- (SwitchTableViewCell *)switchCellValue2

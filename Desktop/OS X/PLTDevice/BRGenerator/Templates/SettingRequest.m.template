@@ -10,8 +10,6 @@
 #import "BRMessage_Private.h"
 
 
-<#private_defined_values_block#>
-
 @implementation BR<#message_name#>
 
 #pragma BRSettingRequest

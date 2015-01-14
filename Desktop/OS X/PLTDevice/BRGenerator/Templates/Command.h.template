@@ -11,7 +11,7 @@
 
 #define <#identifier_constant_name#> <#message_identifier#>
 
-<#public_defined_values_block#>
+<#defined_values_block#>
 
 @interface BR<#message_name#> : BRCommand
 

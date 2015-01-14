@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>SecurityDeviceName</key>
+		<string>Enterprise 1</string>
+		<key>SecurityDeviceID</key>
+		<string>33572b6a-0ca4-4361-804c-15801719a31c</string>
+		<key>SecurityFIDOUsername</key>
+		<string>plt01</string>
+	</dict>
+	<dict>
+		<key>SecurityDeviceName</key>
+		<string>Enterprise 2</string>
+		<key>SecurityDeviceID</key>
+		<string>0ca67ee8-1fc4-407e-8826-a47b3aaadc63</string>
+		<key>SecurityFIDOUsername</key>
+		<string>plt02</string>
+	</dict>
+</array>
+</plist>

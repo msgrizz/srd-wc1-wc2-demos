@@ -13,7 +13,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
-		2899E5220DE3E06400AC0155 /* SettingsViewController_old.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* SettingsViewController_old.xib */; };
 		42082D541702A8070057F63B /* LocationMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A2363317022F6800329EC1 /* LocationMonitor.m */; };
 		42082D641703C8E80057F63B /* PLTDeviceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 42082D631703C8E80057F63B /* PLTDeviceHandler.m */; };
 		42082D661703F7170057F63B /* SensorsViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42082D651703F7170057F63B /* SensorsViewController_iPad.xib */; };
@@ -26,7 +25,19 @@
 		4217B0ED16FC0DBC005FDA9C /* house_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4217B0EA16FC0DBC005FDA9C /* house_icon@2x.png */; };
 		4217B12E16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4217B12D16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png */; };
 		4217B13216FCEAFA005FDA9C /* UIDevice+ScreenSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */; };
-		4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */; };
+		42229BBF1A37C43600C707EE /* kubi_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42229BBD1A37C43600C707EE /* kubi_icon.png */; };
+		42229BC01A37C43600C707EE /* kubi_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42229BBE1A37C43600C707EE /* kubi_icon@2x.png */; };
+		42229BC41A37C4C500C707EE /* KubiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42229BC21A37C4C500C707EE /* KubiViewController.m */; };
+		42229BC51A37C4C500C707EE /* KubiViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42229BC31A37C4C500C707EE /* KubiViewController.xib */; };
+		42229BFB1A39152300C707EE /* OpenTok.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42229BFA1A39152300C707EE /* OpenTok.framework */; };
+		42229BFD1A39155E00C707EE /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42229BFC1A39155E00C707EE /* libstdc++.6.0.9.dylib */; };
+		42229BFF1A39156600C707EE /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42229BFE1A39156600C707EE /* libsqlite3.dylib */; };
+		42229C011A39157500C707EE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42229C001A39157500C707EE /* CoreTelephony.framework */; };
+		42229C041A39294B00C707EE /* lock_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42229C021A39294B00C707EE /* lock_icon.png */; };
+		42229C051A39294B00C707EE /* lock_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42229C031A39294B00C707EE /* lock_icon@2x.png */; };
+		42229C091A39297200C707EE /* SecurityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42229C071A39297200C707EE /* SecurityViewController.m */; };
+		42229C0A1A39297200C707EE /* SecurityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42229C081A39297200C707EE /* SecurityViewController.xib */; };
+		4226342F18A2510B00FFA4F5 /* StreetViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4226342D18A2510B00FFA4F5 /* StreetViewViewController.m */; };
 		4226343A18A25BB500FFA4F5 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343918A25BB500FFA4F5 /* libobjc.dylib */; };
 		4226343C18A25BBA00FFA4F5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343B18A25BBA00FFA4F5 /* libz.dylib */; };
 		4226343E18A25D4F00FFA4F5 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4226343D18A25D4F00FFA4F5 /* libc++.dylib */; };
@@ -43,11 +54,19 @@
 		422A300E17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422A300C17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib */; };
 		422A300F17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422A300D17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib */; };
 		422F40A01651AC3800735AB5 /* iToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 422F409F1651AC3800735AB5 /* iToast.m */; };
-		422F75BC16FBA121000DF717 /* StreetViewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 422F75BA16FBA121000DF717 /* StreetViewViewController.xib */; };
 		424E640318E2111000698FAE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 424E640218E2111000698FAE /* Reachability.m */; };
 		424E640518E21D9300698FAE /* no_internet_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 424E640418E21D9300698FAE /* no_internet_ipad@2x.png */; };
 		424E640718E2257600698FAE /* no_internet_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 424E640618E2257600698FAE /* no_internet_iphone@2x.png */; };
 		424E640C18E2338100698FAE /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 424E640818E2338100698FAE /* libTestFlight.a */; };
+		424FB9431A52330D00BD62C7 /* PickOneSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424FB9421A52330D00BD62C7 /* PickOneSettingsTableViewController.m */; };
+		424FB9461A52416000BD62C7 /* SliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 424FB9451A52416000BD62C7 /* SliderTableViewCell.m */; };
+		424FB9C71A52853300BD62C7 /* HeadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424FB9C61A52853300BD62C7 /* HeadViewController.m */; };
+		424FB9CE1A52855200BD62C7 /* hair.png in Resources */ = {isa = PBXBuildFile; fileRef = 424FB9C91A52855200BD62C7 /* hair.png */; };
+		424FB9CF1A52855200BD62C7 /* leye.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 424FB9CA1A52855200BD62C7 /* leye.jpg */; };
+		424FB9D01A52855200BD62C7 /* reye.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 424FB9CB1A52855200BD62C7 /* reye.jpg */; };
+		424FB9D11A52855200BD62C7 /* scarlett.dae in Resources */ = {isa = PBXBuildFile; fileRef = 424FB9CC1A52855200BD62C7 /* scarlett.dae */; };
+		424FB9D21A52855200BD62C7 /* skin.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 424FB9CD1A52855200BD62C7 /* skin.jpg */; };
+		424FB9D41A52866B00BD62C7 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424FB9D31A52866B00BD62C7 /* SceneKit.framework */; };
 		426FAB95170E7B0A0054D216 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 426FAB94170E7B0A0054D216 /* Default-Landscape@2x~ipad.png */; };
 		4272370D17062EDA00101B91 /* signal_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4272370C17062EDA00101B91 /* signal_icon@2x.png */; };
 		4272371217064DCC00101B91 /* LocationOverrideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4272371017064DCC00101B91 /* LocationOverrideViewController.m */; };
@@ -57,6 +76,8 @@
 		42749928170D0B6C00C8DD37 /* reg_status_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42749925170D0B6C00C8DD37 /* reg_status_icon@2x.png */; };
 		4274992C170D0BB900C8DD37 /* StatusWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4274992B170D0BB900C8DD37 /* StatusWatcher.m */; };
 		427622B2171C76E400940355 /* NSProcessInfo+Debugging.m in Sources */ = {isa = PBXBuildFile; fileRef = 427622B1171C76E400940355 /* NSProcessInfo+Debugging.m */; };
+		427C5BA91A436F9100CBDCAF /* ZeroNavIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 427C5BA81A436F9100CBDCAF /* ZeroNavIcon@2x.png */; };
+		427C5BAB1A43710600CBDCAF /* ZeroNavIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 427C5BAA1A43710600CBDCAF /* ZeroNavIcon.png */; };
 		4282215A16FBB53000B637A4 /* 50_yrs_icon_114@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4282215816FBB53000B637A4 /* 50_yrs_icon_114@2x.png */; };
 		4282215B16FBB53000B637A4 /* 50_yrs_icon_144@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4282215916FBB53000B637A4 /* 50_yrs_icon_144@2x.png */; };
 		4285583E18C10C4E00D82E72 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4285583D18C10C4E00D82E72 /* GoogleMaps.framework */; };
@@ -151,7 +172,6 @@
 		42FC09F7170F6F3B007238A6 /* plt_logo_nav.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09ED170F6F3B007238A6 /* plt_logo_nav.png */; };
 		42FC09F8170F6F3B007238A6 /* reg_status_icon_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09EE170F6F3B007238A6 /* reg_status_icon_small.png */; };
 		42FC09F9170F6F3B007238A6 /* signal_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09EF170F6F3B007238A6 /* signal_icon.png */; };
-		42FC09FD170F7068007238A6 /* StreetViewViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09FC170F7068007238A6 /* StreetViewViewController_iPad.xib */; };
 		42FC09FF170F9C40007238A6 /* head_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC09FE170F9C40007238A6 /* head_icon.png */; };
 		42FC0A01170F9C61007238A6 /* hs_status_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC0A00170F9C61007238A6 /* hs_status_icon.png */; };
 		42FC0A03170F9E88007238A6 /* 50_yrs_icon_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FC0A02170F9E88007238A6 /* 50_yrs_icon_72.png */; };
@@ -166,8 +186,6 @@
 		C300638D15C0C51500068870 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = C300637915BF6CA200068870 /* NSData+SRB64Additions.m */; };
 		C300638E15C0C51800068870 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C300637B15BF6CA200068870 /* SRWebSocket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C3E602BA15C5B4D70057ADD7 /* PLTAppSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = C3E602B915C5B4D70057ADD7 /* PLTAppSettings.plist */; };
-		C3F97B681607CF7D00BC0B84 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3F97B671607CF7D00BC0B84 /* InfoViewController.m */; };
-		C3F97B6A1607CFDB00BC0B84 /* InfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3F97B691607CFDB00BC0B84 /* InfoView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -178,9 +196,6 @@
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2899E5210DE3E06400AC0155 /* SettingsViewController_old.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController_old.xib; path = ../SettingsViewController_old.xib; sourceTree = "<group>"; };
-		28D7ACF60DDB3853001CB0EB /* SettingsViewController_old.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController_old.h; sourceTree = "<group>"; };
-		28D7ACF70DDB3853001CB0EB /* SettingsViewController_old.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController_old.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* CSR_Wireless_Sensor_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSR_Wireless_Sensor_Prefix.pch; sourceTree = "<group>"; };
 		42082D621703C8E80057F63B /* PLTDeviceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDeviceHandler.h; sourceTree = "<group>"; };
@@ -198,9 +213,23 @@
 		4217B12D16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plt_logo_nav_2@2x.png"; sourceTree = "<group>"; };
 		4217B13016FCEAFA005FDA9C /* UIDevice+ScreenSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+ScreenSize.h"; sourceTree = "<group>"; };
 		4217B13116FCEAFA005FDA9C /* UIDevice+ScreenSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+ScreenSize.m"; sourceTree = "<group>"; };
-		4226342C18A2510B00FFA4F5 /* StreetView2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetView2ViewController.h; sourceTree = "<group>"; };
-		4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreetView2ViewController.m; sourceTree = "<group>"; };
-		4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleMaps.bundle; sourceTree = "<group>"; };
+		42229BBD1A37C43600C707EE /* kubi_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kubi_icon.png; sourceTree = "<group>"; };
+		42229BBE1A37C43600C707EE /* kubi_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kubi_icon@2x.png"; sourceTree = "<group>"; };
+		42229BC11A37C4C500C707EE /* KubiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KubiViewController.h; sourceTree = "<group>"; };
+		42229BC21A37C4C500C707EE /* KubiViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KubiViewController.m; sourceTree = "<group>"; };
+		42229BC31A37C4C500C707EE /* KubiViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KubiViewController.xib; sourceTree = "<group>"; };
+		42229BFA1A39152300C707EE /* OpenTok.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenTok.framework; sourceTree = "<group>"; };
+		42229BFC1A39155E00C707EE /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
+		42229BFE1A39156600C707EE /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		42229C001A39157500C707EE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		42229C021A39294B00C707EE /* lock_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock_icon.png; sourceTree = "<group>"; };
+		42229C031A39294B00C707EE /* lock_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lock_icon@2x.png"; sourceTree = "<group>"; };
+		42229C061A39297200C707EE /* SecurityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityViewController.h; sourceTree = "<group>"; };
+		42229C071A39297200C707EE /* SecurityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityViewController.m; sourceTree = "<group>"; };
+		42229C081A39297200C707EE /* SecurityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SecurityViewController.xib; sourceTree = "<group>"; };
+		4226342C18A2510B00FFA4F5 /* StreetViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetViewViewController.h; sourceTree = "<group>"; };
+		4226342D18A2510B00FFA4F5 /* StreetViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreetViewViewController.m; sourceTree = "<group>"; };
+		4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../../Desktop/GoogleMaps-iOS-1.6.2/GoogleMaps.framework/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		4226343718A25A5800FFA4F5 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		4226343918A25BB500FFA4F5 /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
 		4226343B18A25BBA00FFA4F5 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -219,9 +248,6 @@
 		422A300D17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PL3DViewController_iPhone4.xib; sourceTree = "<group>"; };
 		422F409E1651AC3800735AB5 /* iToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iToast.h; path = Classes/iToast.h; sourceTree = "<group>"; };
 		422F409F1651AC3800735AB5 /* iToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = iToast.m; path = Classes/iToast.m; sourceTree = "<group>"; };
-		422F75B816FBA121000DF717 /* StreetViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetViewViewController.h; sourceTree = "<group>"; };
-		422F75B916FBA121000DF717 /* StreetViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = StreetViewViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		422F75BA16FBA121000DF717 /* StreetViewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreetViewViewController.xib; sourceTree = "<group>"; };
 		42335DC7171F8916009AE9D5 /* NSData+ShortDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ShortDescription.h"; sourceTree = "<group>"; };
 		42335DC8171F8916009AE9D5 /* NSData+ShortDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ShortDescription.m"; sourceTree = "<group>"; };
 		424E640118E2111000698FAE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -232,7 +258,24 @@
 		424E640918E2338100698FAE /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = TestFlight/TestFlight.h; sourceTree = SOURCE_ROOT; };
 		424E640A18E2338100698FAE /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+AsyncLogging.h"; path = "TestFlight/TestFlight+AsyncLogging.h"; sourceTree = SOURCE_ROOT; };
 		424E640B18E2338100698FAE /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+ManualSessions.h"; path = "TestFlight/TestFlight+ManualSessions.h"; sourceTree = SOURCE_ROOT; };
+		424FB9411A52330D00BD62C7 /* PickOneSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickOneSettingsTableViewController.h; sourceTree = "<group>"; };
+		424FB9421A52330D00BD62C7 /* PickOneSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickOneSettingsTableViewController.m; sourceTree = "<group>"; };
+		424FB9441A52416000BD62C7 /* SliderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderTableViewCell.h; sourceTree = "<group>"; };
+		424FB9451A52416000BD62C7 /* SliderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderTableViewCell.m; sourceTree = "<group>"; };
+		424FB9C51A52853300BD62C7 /* HeadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadViewController.h; sourceTree = "<group>"; };
+		424FB9C61A52853300BD62C7 /* HeadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadViewController.m; sourceTree = "<group>"; };
+		424FB9C91A52855200BD62C7 /* hair.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hair.png; sourceTree = "<group>"; };
+		424FB9CA1A52855200BD62C7 /* leye.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = leye.jpg; sourceTree = "<group>"; };
+		424FB9CB1A52855200BD62C7 /* reye.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = reye.jpg; sourceTree = "<group>"; };
+		424FB9CC1A52855200BD62C7 /* scarlett.dae */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml.dae; path = scarlett.dae; sourceTree = "<group>"; };
+		424FB9CD1A52855200BD62C7 /* skin.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = skin.jpg; sourceTree = "<group>"; };
+		424FB9D31A52866B00BD62C7 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		42518A3F1641F2E1005C0E33 /* WebSocketTest1-Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebSocketTest1-Defines.h"; sourceTree = "<group>"; };
+		42548ACA1A48FF76002C9E3F /* PLTAccelerationInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTAccelerationInfo.h; sourceTree = "<group>"; };
+		42548ACB1A48FF76002C9E3F /* PLTAngularVelocityInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTAngularVelocityInfo.h; sourceTree = "<group>"; };
+		42548ACC1A48FF76002C9E3F /* PLTHeadingInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTHeadingInfo.h; sourceTree = "<group>"; };
+		42548ACD1A48FF76002C9E3F /* PLTMagnetismInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTMagnetismInfo.h; sourceTree = "<group>"; };
+		42548ACE1A49004D002C9E3F /* PLTDevice_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTDevice_Internal.h; sourceTree = "<group>"; };
 		426FAB94170E7B0A0054D216 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		4272370C17062EDA00101B91 /* signal_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signal_icon@2x.png"; sourceTree = "<group>"; };
 		4272370F17064DCC00101B91 /* LocationOverrideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationOverrideViewController.h; sourceTree = "<group>"; };
@@ -245,6 +288,8 @@
 		4274992B170D0BB900C8DD37 /* StatusWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusWatcher.m; sourceTree = "<group>"; };
 		427622B0171C76E400940355 /* NSProcessInfo+Debugging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSProcessInfo+Debugging.h"; sourceTree = "<group>"; };
 		427622B1171C76E400940355 /* NSProcessInfo+Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProcessInfo+Debugging.m"; sourceTree = "<group>"; };
+		427C5BA81A436F9100CBDCAF /* ZeroNavIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ZeroNavIcon@2x.png"; sourceTree = "<group>"; };
+		427C5BAA1A43710600CBDCAF /* ZeroNavIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZeroNavIcon.png; sourceTree = "<group>"; };
 		4282215816FBB53000B637A4 /* 50_yrs_icon_114@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "50_yrs_icon_114@2x.png"; sourceTree = "<group>"; };
 		4282215916FBB53000B637A4 /* 50_yrs_icon_144@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "50_yrs_icon_144@2x.png"; sourceTree = "<group>"; };
 		4285583D18C10C4E00D82E72 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
@@ -327,7 +372,6 @@
 		42C9E62C164C815200E3CBB3 /* GLGravityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLGravityView.h; path = ../3D/GLGravityView.h; sourceTree = "<group>"; };
 		42C9E62D164C815200E3CBB3 /* GLGravityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLGravityView.m; path = ../3D/GLGravityView.m; sourceTree = "<group>"; };
 		42D5845519C7BBB600446248 /* NSData+HexStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+HexStrings.h"; sourceTree = "<group>"; };
-		42D5845619C7BC2600446248 /* PLTDevice_Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTDevice_Internal.h; sourceTree = "<group>"; };
 		42D59B231713B30600E98394 /* SegmentedControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegmentedControlCell.h; sourceTree = "<group>"; };
 		42D59B241713B30600E98394 /* SegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SegmentedControlCell.m; sourceTree = "<group>"; };
 		42D6099C16FA380C00BAFDEF /* ConfigTempViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigTempViewController.h; sourceTree = "<group>"; };
@@ -403,7 +447,6 @@
 		42FC09ED170F6F3B007238A6 /* plt_logo_nav.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plt_logo_nav.png; sourceTree = "<group>"; };
 		42FC09EE170F6F3B007238A6 /* reg_status_icon_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reg_status_icon_small.png; sourceTree = "<group>"; };
 		42FC09EF170F6F3B007238A6 /* signal_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = signal_icon.png; sourceTree = "<group>"; };
-		42FC09FC170F7068007238A6 /* StreetViewViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StreetViewViewController_iPad.xib; sourceTree = "<group>"; };
 		42FC09FE170F9C40007238A6 /* head_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head_icon.png; sourceTree = "<group>"; };
 		42FC0A00170F9C61007238A6 /* hs_status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hs_status_icon.png; sourceTree = "<group>"; };
 		42FC0A02170F9E88007238A6 /* 50_yrs_icon_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 50_yrs_icon_72.png; sourceTree = "<group>"; };
@@ -425,9 +468,6 @@
 		C300638015BF6D5C00068870 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C300638515BF73E600068870 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		C3E602B915C5B4D70057ADD7 /* PLTAppSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PLTAppSettings.plist; sourceTree = "<group>"; };
-		C3F97B661607CF7D00BC0B84 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoViewController.h; path = ../InfoViewController.h; sourceTree = "<group>"; };
-		C3F97B671607CF7D00BC0B84 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoViewController.m; path = ../InfoViewController.m; sourceTree = "<group>"; };
-		C3F97B691607CFDB00BC0B84 /* InfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoView.xib; path = ../InfoView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -435,6 +475,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				424FB9D41A52866B00BD62C7 /* SceneKit.framework in Frameworks */,
+				42229C011A39157500C707EE /* CoreTelephony.framework in Frameworks */,
+				42229BFF1A39156600C707EE /* libsqlite3.dylib in Frameworks */,
+				42229BFD1A39155E00C707EE /* libstdc++.6.0.9.dylib in Frameworks */,
 				4226343C18A25BBA00FFA4F5 /* libz.dylib in Frameworks */,
 				4226344618A25DAD00FFA4F5 /* GLKit.framework in Frameworks */,
 				42EC7B7416487ADA00A782BD /* OpenGLES.framework in Frameworks */,
@@ -456,6 +500,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				4285583E18C10C4E00D82E72 /* GoogleMaps.framework in Frameworks */,
 				00F93BF5104573EE00022230 /* ExternalAccessory.framework in Frameworks */,
+				42229BFB1A39152300C707EE /* OpenTok.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,10 +517,11 @@
 				4274992A170D0BB900C8DD37 /* StatusWatcher.h */,
 				4274992B170D0BB900C8DD37 /* StatusWatcher.m */,
 				422F75C116FBAD70000DF717 /* Sensors */,
-				422F75BE16FBAD2E000DF717 /* 3D */,
-				4226343118A2511000FFA4F5 /* Street View 2 */,
-				422F75C216FBAD76000DF717 /* Street View */,
+				422F75BE16FBAD2E000DF717 /* Head */,
+				4226343118A2511000FFA4F5 /* Street View */,
 				42F2A4EF18A9EE8A00177547 /* Game */,
+				42229C0B1A39297D00C707EE /* Security */,
+				42229BC61A37C4CF00C707EE /* Kubi */,
 				422F75BF16FBAD46000DF717 /* Settings */,
 			);
 			path = Classes;
@@ -513,6 +559,8 @@
 				32CA4F630368D1EE00C91783 /* CSR_Wireless_Sensor_Prefix.pch */,
 				42A2363217022F6800329EC1 /* LocationMonitor.h */,
 				42A2363317022F6800329EC1 /* LocationMonitor.m */,
+				424FB9441A52416000BD62C7 /* SliderTableViewCell.h */,
+				424FB9451A52416000BD62C7 /* SliderTableViewCell.m */,
 				42A2364617028F0A00329EC1 /* SwitchTableViewCell.h */,
 				42A2364717028F0A00329EC1 /* SwitchTableViewCell.m */,
 				42D59B231713B30600E98394 /* SegmentedControlCell.h */,
@@ -531,7 +579,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4226343418A254ED00FFA4F5 /* Resources */,
+				4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */,
 				C3E602B915C5B4D70057ADD7 /* PLTAppSettings.plist */,
 				426FAB93170E774B0054D216 /* Images */,
 				8D1107310486CEB800E47090 /* CSR_Wireless_Sensor-Info.plist */,
@@ -545,6 +593,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				424FB9D31A52866B00BD62C7 /* SceneKit.framework */,
+				42229C001A39157500C707EE /* CoreTelephony.framework */,
+				42229BFE1A39156600C707EE /* libsqlite3.dylib */,
+				42229BFC1A39155E00C707EE /* libstdc++.6.0.9.dylib */,
+				42229BFA1A39152300C707EE /* OpenTok.framework */,
 				42FA4D1B19B92CC70046F69F /* PLTDevice */,
 				4285583F18C10C7B00D82E72 /* GoogleMaps.bundle */,
 				4226344518A25DAD00FFA4F5 /* GLKit.framework */,
@@ -600,27 +653,40 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		4226343118A2511000FFA4F5 /* Street View 2 */ = {
+		42229BC61A37C4CF00C707EE /* Kubi */ = {
 			isa = PBXGroup;
 			children = (
-				4226342C18A2510B00FFA4F5 /* StreetView2ViewController.h */,
-				4226342D18A2510B00FFA4F5 /* StreetView2ViewController.m */,
+				42229BC11A37C4C500C707EE /* KubiViewController.h */,
+				42229BC21A37C4C500C707EE /* KubiViewController.m */,
+				42229BC31A37C4C500C707EE /* KubiViewController.xib */,
 			);
-			name = "Street View 2";
+			name = Kubi;
 			sourceTree = "<group>";
 		};
-		4226343418A254ED00FFA4F5 /* Resources */ = {
+		42229C0B1A39297D00C707EE /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				4226343518A254ED00FFA4F5 /* GoogleMaps.bundle */,
+				42229C061A39297200C707EE /* SecurityViewController.h */,
+				42229C071A39297200C707EE /* SecurityViewController.m */,
+				42229C081A39297200C707EE /* SecurityViewController.xib */,
 			);
-			name = Resources;
-			path = "../../../../../Desktop/GoogleMaps-iOS-1.6.2/GoogleMaps.framework/Resources";
+			name = Security;
 			sourceTree = "<group>";
 		};
-		422F75BE16FBAD2E000DF717 /* 3D */ = {
+		4226343118A2511000FFA4F5 /* Street View */ = {
 			isa = PBXGroup;
 			children = (
+				4226342C18A2510B00FFA4F5 /* StreetViewViewController.h */,
+				4226342D18A2510B00FFA4F5 /* StreetViewViewController.m */,
+			);
+			name = "Street View";
+			sourceTree = "<group>";
+		};
+		422F75BE16FBAD2E000DF717 /* Head */ = {
+			isa = PBXGroup;
+			children = (
+				424FB9C51A52853300BD62C7 /* HeadViewController.h */,
+				424FB9C61A52853300BD62C7 /* HeadViewController.m */,
 				42EC7B6B1648796E00A782BD /* PLT3DViewController.h */,
 				42EC7B6C1648796E00A782BD /* PLT3DViewController.m */,
 				422A300D17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib */,
@@ -628,9 +694,10 @@
 				42C6DBF816532EF100739A62 /* PL3DViewController_iPad.xib */,
 				42C9E62C164C815200E3CBB3 /* GLGravityView.h */,
 				42C9E62D164C815200E3CBB3 /* GLGravityView.m */,
+				424FB9C81A52855200BD62C7 /* Scarlett DAE */,
 				42EC7B4B1648779A00A782BD /* Cocos3DMathLib */,
 			);
-			name = 3D;
+			name = Head;
 			sourceTree = "<group>";
 		};
 		422F75BF16FBAD46000DF717 /* Settings */ = {
@@ -662,7 +729,8 @@
 				42995D3F1796392100B19FEF /* HTCalibrationTriggersViewController.h */,
 				42995D401796392100B19FEF /* HTCalibrationTriggersViewController.m */,
 				42995D421796394C00B19FEF /* HTCalibrationTriggersViewController.xib */,
-				42A236451702689400329EC1 /* Old */,
+				424FB9411A52330D00BD62C7 /* PickOneSettingsTableViewController.h */,
+				424FB9421A52330D00BD62C7 /* PickOneSettingsTableViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -694,20 +762,27 @@
 			name = Sensors;
 			sourceTree = "<group>";
 		};
-		422F75C216FBAD76000DF717 /* Street View */ = {
+		424FB9C81A52855200BD62C7 /* Scarlett DAE */ = {
 			isa = PBXGroup;
 			children = (
-				422F75B816FBA121000DF717 /* StreetViewViewController.h */,
-				422F75B916FBA121000DF717 /* StreetViewViewController.m */,
-				422F75BA16FBA121000DF717 /* StreetViewViewController.xib */,
-				42FC09FC170F7068007238A6 /* StreetViewViewController_iPad.xib */,
+				424FB9C91A52855200BD62C7 /* hair.png */,
+				424FB9CA1A52855200BD62C7 /* leye.jpg */,
+				424FB9CB1A52855200BD62C7 /* reye.jpg */,
+				424FB9CC1A52855200BD62C7 /* scarlett.dae */,
+				424FB9CD1A52855200BD62C7 /* skin.jpg */,
 			);
-			name = "Street View";
-			sourceTree = "<group>";
+			path = "Scarlett DAE";
+			sourceTree = SOURCE_ROOT;
 		};
 		426FAB93170E774B0054D216 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				427C5BA81A436F9100CBDCAF /* ZeroNavIcon@2x.png */,
+				427C5BAA1A43710600CBDCAF /* ZeroNavIcon.png */,
+				42229C021A39294B00C707EE /* lock_icon.png */,
+				42229C031A39294B00C707EE /* lock_icon@2x.png */,
+				42229BBD1A37C43600C707EE /* kubi_icon.png */,
+				42229BBE1A37C43600C707EE /* kubi_icon@2x.png */,
 				424E640418E21D9300698FAE /* no_internet_ipad@2x.png */,
 				424E640618E2257600698FAE /* no_internet_iphone@2x.png */,
 				4226344718A27B4100FFA4F5 /* locationIcon@2x.png */,
@@ -749,19 +824,6 @@
 				4282215916FBB53000B637A4 /* 50_yrs_icon_144@2x.png */,
 			);
 			name = Images;
-			sourceTree = "<group>";
-		};
-		42A236451702689400329EC1 /* Old */ = {
-			isa = PBXGroup;
-			children = (
-				28D7ACF60DDB3853001CB0EB /* SettingsViewController_old.h */,
-				28D7ACF70DDB3853001CB0EB /* SettingsViewController_old.m */,
-				2899E5210DE3E06400AC0155 /* SettingsViewController_old.xib */,
-				C3F97B661607CF7D00BC0B84 /* InfoViewController.h */,
-				C3F97B671607CF7D00BC0B84 /* InfoViewController.m */,
-				C3F97B691607CFDB00BC0B84 /* InfoView.xib */,
-			);
-			name = Old;
 			sourceTree = "<group>";
 		};
 		42B369DD182B0C0F0017F943 /* AFNetworking */ = {
@@ -900,7 +962,11 @@
 		42FA4D1C19B92CC70046F69F /* include */ = {
 			isa = PBXGroup;
 			children = (
-				42D5845619C7BC2600446248 /* PLTDevice_Internal.h */,
+				42548ACE1A49004D002C9E3F /* PLTDevice_Internal.h */,
+				42548ACA1A48FF76002C9E3F /* PLTAccelerationInfo.h */,
+				42548ACB1A48FF76002C9E3F /* PLTAngularVelocityInfo.h */,
+				42548ACC1A48FF76002C9E3F /* PLTHeadingInfo.h */,
+				42548ACD1A48FF76002C9E3F /* PLTMagnetismInfo.h */,
 				42FA4D1D19B92CC70046F69F /* PLTCalibration.h */,
 				42FA4D1E19B92CC70046F69F /* PLTConfiguration.h */,
 				42FA4D1F19B92CC70046F69F /* PLTDevice.h */,
@@ -970,7 +1036,7 @@
 				ORGANIZATIONNAME = "Plantronics, Inc";
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = SKWK2Q7JJV;
+						DevelopmentTeam = 7M73RDQWJ4;
 					};
 				};
 			};
@@ -999,13 +1065,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2899E5220DE3E06400AC0155 /* SettingsViewController_old.xib in Resources */,
 				C3E602BA15C5B4D70057ADD7 /* PLTAppSettings.plist in Resources */,
 				4226344818A27B4100FFA4F5 /* locationIcon@2x.png in Resources */,
-				C3F97B6A1607CFDB00BC0B84 /* InfoView.xib in Resources */,
 				42EC7B621648779A00A782BD /* SimpleFragment.glsl in Resources */,
 				42EC7B631648779A00A782BD /* SimpleVertex.glsl in Resources */,
 				42C6DB321651BA8300739A62 /* h02diff.jpg in Resources */,
+				424FB9D21A52855200BD62C7 /* skin.jpg in Resources */,
+				424FB9CE1A52855200BD62C7 /* hair.png in Resources */,
 				42F2A55618ACBDB200177547 /* block_iphone@2x.png in Resources */,
 				42C6DB381651BD5300739A62 /* hair_resized.jpeg in Resources */,
 				42C6DBE416532A4600739A62 /* hair_1024.png in Resources */,
@@ -1014,6 +1080,7 @@
 				42C6DBE816532A4600739A62 /* Scarlet_eye_left.jpg in Resources */,
 				424E640518E21D9300698FAE /* no_internet_ipad@2x.png in Resources */,
 				42C6DBE916532A4600739A62 /* Scarlet_eye_right.jpg in Resources */,
+				424FB9CF1A52855200BD62C7 /* leye.jpg in Resources */,
 				42C6DBEA16532A4600739A62 /* Scarlet2.jpg in Resources */,
 				42F2A52C18A9F51000177547 /* game_icon.png in Resources */,
 				42C6DBF916532EF100739A62 /* PL3DViewController_iPad.xib in Resources */,
@@ -1021,11 +1088,11 @@
 				42BFCBFD16F3EDDB003057C1 /* SensorsViewController.xib in Resources */,
 				42F2A54C18AB49E900177547 /* ball_f6@2x.png in Resources */,
 				42D609A016FA380C00BAFDEF /* ConfigTempViewController.xib in Resources */,
-				422F75BC16FBA121000DF717 /* StreetViewViewController.xib in Resources */,
 				42C76AA117FE392E00E6415D /* pltlabs_nav_ios7.png in Resources */,
 				422A2FFE17FCD7140040C7F1 /* SensorsViewController_iOS7.xib in Resources */,
 				4282215A16FBB53000B637A4 /* 50_yrs_icon_114@2x.png in Resources */,
 				4282215B16FBB53000B637A4 /* 50_yrs_icon_144@2x.png in Resources */,
+				424FB9D01A52855200BD62C7 /* reye.jpg in Resources */,
 				42F2A52418A9EE8A00177547 /* cracks.png in Resources */,
 				42F2A54B18AB49E900177547 /* ball_f5@2x.png in Resources */,
 				42F2A55A18ACBFF800177547 /* paddle_iphone@2x.png in Resources */,
@@ -1033,26 +1100,32 @@
 				4217B0EB16FC0DBC005FDA9C /* diode_icon@2x.png in Resources */,
 				4217B0EC16FC0DBC005FDA9C /* head_icon@2x.png in Resources */,
 				4217B0ED16FC0DBC005FDA9C /* house_icon@2x.png in Resources */,
+				42229BC51A37C4C500C707EE /* KubiViewController.xib in Resources */,
 				42F2A54918AB49E900177547 /* ball_f3@2x.png in Resources */,
 				422A300F17FE270C0040C7F1 /* PL3DViewController_iPhone4.xib in Resources */,
+				42229BC01A37C43600C707EE /* kubi_icon@2x.png in Resources */,
 				4217B12E16FCE1D0005FDA9C /* plt_logo_nav_2@2x.png in Resources */,
 				42F2A54A18AB49E900177547 /* ball_f4@2x.png in Resources */,
 				42C76AA217FE392E00E6415D /* pltlabs_nav.png in Resources */,
 				42BC99E01700E84E00DF6FC7 /* buildings_icon@2x.png in Resources */,
 				42BC99E31700F5B000DF6FC7 /* buildings_icon_2@2x.png in Resources */,
+				427C5BA91A436F9100CBDCAF /* ZeroNavIcon@2x.png in Resources */,
 				42A2363A1702658200329EC1 /* cogBarButton@2x.png in Resources */,
 				42A236441702688C00329EC1 /* SettingsViewController.xib in Resources */,
+				42229BBF1A37C43600C707EE /* kubi_icon.png in Resources */,
 				422A300517FE16250040C7F1 /* settings_ios7.png in Resources */,
 				42082D661703F7170057F63B /* SensorsViewController_iPad.xib in Resources */,
 				42F2A54718AB49E900177547 /* ball_f1@2x.png in Resources */,
 				42F2A53918AB2ED300177547 /* ball@2x.png in Resources */,
 				42082D6B1703FB800057F63B /* SelectionListViewController.xib in Resources */,
+				42229C041A39294B00C707EE /* lock_icon.png in Resources */,
 				4272370D17062EDA00101B91 /* signal_icon@2x.png in Resources */,
 				4272371317064DCC00101B91 /* LocationOverrideViewController.xib in Resources */,
 				42B4AD9217068069001F9CDB /* AddLocationViewController.xib in Resources */,
 				42F2A54818AB49E900177547 /* ball_f2@2x.png in Resources */,
 				42F2A55918ACBFF800177547 /* paddle_iphone.png in Resources */,
 				42B4ADA2170A6B71001F9CDB /* Default-568h@2x.png in Resources */,
+				42229C0A1A39297200C707EE /* SecurityViewController.xib in Resources */,
 				42F2A55218ACAD9E00177547 /* paddle_ipad.png in Resources */,
 				42B4ADA4170A6B8D001F9CDB /* Default-Portrait@2x~ipad.png in Resources */,
 				42B4ADA5170A6D4F001F9CDB /* Default@2x.png in Resources */,
@@ -1063,6 +1136,7 @@
 				42749926170D0B6C00C8DD37 /* auth_status_icon@2x.png in Resources */,
 				42749927170D0B6C00C8DD37 /* hs_status_icon@2x.png in Resources */,
 				42749928170D0B6C00C8DD37 /* reg_status_icon@2x.png in Resources */,
+				424FB9D11A52855200BD62C7 /* scarlett.dae in Resources */,
 				4285584018C10C7B00D82E72 /* GoogleMaps.bundle in Resources */,
 				426FAB95170E7B0A0054D216 /* Default-Landscape@2x~ipad.png in Resources */,
 				422A300217FCDA840040C7F1 /* pltlabs_nav@2x.png in Resources */,
@@ -1073,6 +1147,7 @@
 				42FC09F2170F6F3B007238A6 /* buildings_icon.png in Resources */,
 				422A300E17FE270C0040C7F1 /* PL3DViewController_iPhone5.xib in Resources */,
 				42F2A54E18AC866500177547 /* block_ipad@2x.png in Resources */,
+				427C5BAB1A43710600CBDCAF /* ZeroNavIcon.png in Resources */,
 				422A300617FE16250040C7F1 /* settings_ios7@2x.png in Resources */,
 				42F2A55518ACBDB200177547 /* block_iphone.png in Resources */,
 				42FC09F3170F6F3B007238A6 /* cogBarButton.png in Resources */,
@@ -1081,11 +1156,11 @@
 				42FC09F7170F6F3B007238A6 /* plt_logo_nav.png in Resources */,
 				42FC09F8170F6F3B007238A6 /* reg_status_icon_small.png in Resources */,
 				42FC09F9170F6F3B007238A6 /* signal_icon.png in Resources */,
-				42FC09FD170F7068007238A6 /* StreetViewViewController_iPad.xib in Resources */,
 				42FC09FF170F9C40007238A6 /* head_icon.png in Resources */,
 				42FC0A01170F9C61007238A6 /* hs_status_icon.png in Resources */,
 				42FC0A03170F9E88007238A6 /* 50_yrs_icon_72.png in Resources */,
 				429959261714E97600C2A724 /* ServerLogViewController.xib in Resources */,
+				42229C051A39294B00C707EE /* lock_icon@2x.png in Resources */,
 				42995D431796394C00B19FEF /* HTCalibrationTriggersViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1098,6 +1173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				424FB9431A52330D00BD62C7 /* PickOneSettingsTableViewController.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				C300637015BF6B6800068870 /* PLTContextServer.m in Sources */,
 				42B36A4E182C36770017F943 /* AFURLConnectionOperation.m in Sources */,
@@ -1107,12 +1183,13 @@
 				C300638E15C0C51800068870 /* SRWebSocket.m in Sources */,
 				42B36A51182C36770017F943 /* AFURLSessionManager.m in Sources */,
 				42F2A52118A9EE8A00177547 /* BRKPaddle.m in Sources */,
-				C3F97B681607CF7D00BC0B84 /* InfoViewController.m in Sources */,
 				42B36A4A182C36770017F943 /* AFHTTPRequestOperationManager.m in Sources */,
+				42229C091A39297200C707EE /* SecurityViewController.m in Sources */,
 				42EC7B5C1648779A00A782BD /* CC3Foundation.m in Sources */,
 				424E640318E2111000698FAE /* Reachability.m in Sources */,
+				424FB9C71A52853300BD62C7 /* HeadViewController.m in Sources */,
 				42EC7B5D1648779A00A782BD /* CC3GLMatrix.m in Sources */,
-				4226342F18A2510B00FFA4F5 /* StreetView2ViewController.m in Sources */,
+				4226342F18A2510B00FFA4F5 /* StreetViewViewController.m in Sources */,
 				42B36A4C182C36770017F943 /* AFNetworkReachabilityManager.m in Sources */,
 				42EC7B5E1648779A00A782BD /* CC3Kazmath.c in Sources */,
 				42B36A49182C36770017F943 /* AFHTTPRequestOperation.m in Sources */,
@@ -1125,6 +1202,8 @@
 				42BFCBFC16F3EDDB003057C1 /* SensorsViewController.m in Sources */,
 				42F2A53C18AB36CD00177547 /* UIImage+Rotate.m in Sources */,
 				4217B0E716FBFFD1005FDA9C /* NSData+Base64.m in Sources */,
+				424FB9461A52416000BD62C7 /* SliderTableViewCell.m in Sources */,
+				42229BC41A37C4C500C707EE /* KubiViewController.m in Sources */,
 				4217B13216FCEAFA005FDA9C /* UIDevice+ScreenSize.m in Sources */,
 				42082D541702A8070057F63B /* LocationMonitor.m in Sources */,
 				42A2362B17012CCC00329EC1 /* NSURLRequest+GETParams.m in Sources */,
@@ -1160,13 +1239,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (4YX83MU43F)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Morgan Davis (4YX83MU43F)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1182,21 +1262,19 @@
 				INFOPLIST_FILE = "CSR_Wireless_Sensor-Info.plist";
 				INSTALL_GROUP = "";
 				INSTALL_OWNER = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
 					"$(PROJECT_DIR)/TestFlight",
 					"$(PROJECT_DIR)/PLTDevice/lib",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "CSR Wireless Sensor";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "97ac6cc6-4469-4d82-94ce-b6c7776a8512";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "97ac6cc6-4469-4d82-94ce-b6c7776a8512";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -1205,13 +1283,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Morgan Davis (4YX83MU43F)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Morgan Davis (4YX83MU43F)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/Desktop/GoogleMaps-iOS-1.6.2",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CSR_Wireless_Sensor_Prefix.pch;
@@ -1220,21 +1299,19 @@
 				INFOPLIST_FILE = "CSR_Wireless_Sensor-Info.plist";
 				INSTALL_GROUP = "";
 				INSTALL_OWNER = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/mdavis/plantronics-innovation/core-team/Mobile/iOS/PLTSensor/Classes",
 					"$(PROJECT_DIR)/TestFlight",
 					"$(PROJECT_DIR)/PLTDevice/lib",
 				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "CSR Wireless Sensor";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "97ac6cc6-4469-4d82-94ce-b6c7776a8512";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "97ac6cc6-4469-4d82-94ce-b6c7776a8512";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};

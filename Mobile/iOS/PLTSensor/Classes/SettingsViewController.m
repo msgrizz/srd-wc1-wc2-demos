@@ -9,11 +9,12 @@
 #import "SettingsViewController.h"
 #import "PLTContextServer.h"
 #import "SwitchTableViewCell.h"
+#import "SliderTableViewCell.h"
 #import "AppDelegate.h"
 #import "SelectionListViewController.h"
 #import "LocationOverrideViewController.h"
 #import "ServerSettingsViewController.h"
-#import "UITableView+Cells.h"
+#import "UITableView+Cells.h"	
 #import "ServerStatusViewController.h"
 #import "StatusWatcher.h"
 #import "ConfigTempViewController.h"
@@ -22,48 +23,49 @@
 #import "TestFlight.h"
 
 
-NSString *const PLTSettingsPopoverDidDismissNotification =		@"PLTSettingsPopoverDidDismissNotification";
+NSString *const PLTSettingsSecurityEnabledChangedNotification = @"PLTSettingsSecurityEnabledChangedNotification";
+NSString *const PLTSettingsKubiEnabledChangedNotification = @"PLTSettingsKubiEnabledChangedNotification";
 
 
 typedef NS_ENUM(NSUInteger, PLTTableViewSection) {
-    PLTTableViewSectionContextServerStatus,
-    PLTTableViewSectionContextServerConfiguration,
 	PLTTableViewSectionGeneral,
     PLTTableViewSection3DHead,
-    //PLTTableViewSectionSensors,
-    //PLTTableViewSectionStreetViewFirst,
-    //PLTTableViewSectionStreetViewPrecache
-};
-
-typedef NS_ENUM(NSUInteger, PLTTableViewContextServerConfigurationRow) {
-    PLTTableViewContextServerConfigurationRowServerSettings,
-    PLTTableViewContextServerConfigurationRowLocationOverride
+	PLTTableViewSectionStreetView,
+	PLTTableViewSectionSecurity,
+	PLTTableViewSectionKubi
 };
 
 typedef NS_ENUM(NSUInteger, PLTTableViewGeneralRow) {
 	PLTTableViewGeneralRowHTCalibrationTriggers,
-	PLTTableViewGeneralRowMetricUnits,
-    PLTTableViewGeneralRowStatusIcons
+	PLTTableViewGeneralRowMetricUnits
 };
 
 typedef NS_ENUM(NSUInteger, PLTTableView3DHeadOverlaysRow) {
 	PLTTableView3DHeadOverlaysRowGestureDetection,
 	PLTTableView3DHeadOverlaysRowMirrorImage
-    //PLTTableView3DHeadOverlaysRowDebugOverlay
 };
 
-//typedef NS_ENUM(NSUInteger, PLTTableViewSensorsRow) {
-//    PLTTableViewSensorsRowTemperatureCalibration
-//};
+typedef NS_ENUM(NSUInteger, PLTTableViewStreetViewRow) {
+	PLTTableViewStreetViewRowLocationOverride
+};
 
-//typedef NS_ENUM(NSUInteger, PLTTableViewStreetViewOverlaysRow) {
-//	PLTTableViewStreetViewOverlaysRowAngularResolution,
-//    PLTTableViewStreetViewOverlaysRowInfoOverlay,
-//    PLTTableViewStreetViewOverlaysRowDebugOverlay
-//};
+typedef NS_ENUM(NSUInteger, PLTTableViewSecurityRow) {
+	PLTTableViewSecurityRowEnabled,
+	PLTTableViewSecurityRowDevice
+};
+
+typedef NS_ENUM(NSUInteger, PLTTableViewKubiRow) {
+	PLTTableViewKubiRowEnabled,
+	PLTTableViewKubiRowDevice,
+	PLTTableViewKubiRowMode,
+	//PLTTableViewKubiRowSensitivity,
+	PLTTableViewKubiRowMirror
+};
 
 typedef NS_ENUM(NSUInteger, PLTSelectionListViewTag) {
-    PLTSelectionListViewTagAngularResolution
+	PLTSelectionListViewTagSecurityDevice,
+	PLTSelectionListViewTagKubiDevice,
+	PLTSelectionListViewTagKubiMode
 };
 
 typedef NS_ENUM(NSUInteger, PLTAlertViewTag) {
@@ -82,12 +84,13 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 - (void)startConnectionTimer;
 - (void)stopConnectionTimer;
 - (void)connectionTimer:(NSTimer *)theTimer;
-- (void)statusIconsSwitchChanged:(UISwitch *)theSwitch;
-- (void)metricUnitsSwitchChanged:(UISwitch *)theSwitch;
+- (void)metricUnitsSwitch:(UISwitch *)theSwitch;
 - (void)gestureRecognitionSwitch:(UISwitch *)theSwitch;
-- (void)threeDHeadOverlayDebugSwitch:(UISwitch *)theSwitch;
-- (void)streetViewOverlayInfoSwitchChanged:(UISwitch *)theSwitch;
-- (void)streetViewOverlayDebugSwitchChanged:(UISwitch *)theSwitch;
+- (void)mirrorImageSwitch:(UISwitch *)theSwitch;
+- (void)securityEnabledSwitch:(UISwitch *)theSwitch;
+- (void)kubiEnabledSwitch:(UISwitch *)theSwitch;
+//- (void)kubiSensitivitySlider:(UISlider *)theSlider;
+- (void)kubiMirrorSwitch:(UISwitch *)theSwitch;
 - (void)contextServerDidChangeStateNotification:(NSNotification *)note;
 
 @property(nonatomic,assign) BOOL		deviceRegistered;
@@ -95,7 +98,6 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 @property(nonatomic,assign) BOOL		displayingOtherView;
 @property(nonatomic,assign) BOOL		connectedCellIsLarge;
 @property(nonatomic,strong) UIAlertView	*authFailureAlertView;
-//@property(nonatomic,assign) BOOL		isAnimatingIn;
 
 @end
 
@@ -212,19 +214,7 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
     }
 }
 
-- (void)statusIconsSwitchChanged:(UISwitch *)theSwitch
-{
-	if (theSwitch.on) {
-		[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyShowStatusIcons];
-		[[StatusWatcher sharedWatcher] setActiveNavigationBar:self.navigationController.navigationBar animated:YES delayed:NO];
-	}
-	else {
-		[[StatusWatcher sharedWatcher] setActiveNavigationBar:nil animated:YES];
-		[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyShowStatusIcons];
-	}
-}
-
-- (void)metricUnitsSwitchChanged:(UISwitch *)theSwitch
+- (void)metricUnitsSwitch:(UISwitch *)theSwitch
 {
 	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyMetricUnits];
 }
@@ -239,35 +229,42 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKey3DHeadMirrorImage];
 }
 
-- (void)threeDHeadOverlayDebugSwitch:(UISwitch *)theSwitch
+- (void)securityEnabledSwitch:(UISwitch *)theSwitch
 {
-	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKey3DHeadDebugOverlay];
+	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeySecurityEnabled];
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTSettingsSecurityEnabledChangedNotification object:nil];
 }
 
-- (void)streetViewOverlayInfoSwitchChanged:(UISwitch *)theSwitch
+- (void)kubiEnabledSwitch:(UISwitch *)theSwitch
 {
-	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyStreetViewInfoOverlay];
+	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyKubiEnabled];
+	[[NSNotificationCenter defaultCenter] postNotificationName:PLTSettingsKubiEnabledChangedNotification object:nil];
 }
 
-- (void)streetViewOverlayDebugSwitchChanged:(UISwitch *)theSwitch
+//- (void)kubiSensitivitySlider:(UISlider *)theSlider
+//{
+//	
+//}
+
+- (void)kubiMirrorSwitch:(UISwitch *)theSwitch
 {
-	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyStreetViewDebugOverlay];
+	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyKubiMirror];
 }
 
 - (void)contextServerDidChangeStateNotification:(NSNotification *)note
 {
-	NSInteger state = [[note userInfo][PLTContextServerDidChangeStateNotificationInfoKeyState] intValue];
-	//NSLog(@"state: %d",state);
-	NSIndexPath *path = [NSIndexPath indexPathForRow:PLTTableViewContextServerConfigurationRowServerSettings
-										   inSection:PLTTableViewSectionContextServerStatus];
-	// these tend to come in pretty quickly when auto-registering, and animating the table view that quickly causes glitches
-	// we don't really even want animation once the cell is expanded into the "connected" state, anyway, so don't animate after that point.
-	if (state > PLT_CONTEXT_SERVER_AUTHENTICATED) {
-		[self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
-	}
-	else {
-		[self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
-	}
+//	NSInteger state = [[note userInfo][PLTContextServerDidChangeStateNotificationInfoKeyState] intValue];
+//	//NSLog(@"state: %d",state);
+//	NSIndexPath *path = [NSIndexPath indexPathForRow:PLTTableViewContextServerConfigurationRowServerSettings
+//										   inSection:PLTTableViewSectionContextServerStatus];
+//	// these tend to come in pretty quickly when auto-registering, and animating the table view that quickly causes glitches
+//	// we don't really even want animation once the cell is expanded into the "connected" state, anyway, so don't animate after that point.
+//	if (state > PLT_CONTEXT_SERVER_AUTHENTICATED) {
+//		[self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+//	}
+//	else {
+//		[self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationAutomatic];
+//	}
 }
 
 #pragma mark - UITableViewDataSource
@@ -280,13 +277,11 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {
-        case PLTTableViewSectionContextServerStatus: return 1;
-		case PLTTableViewSectionContextServerConfiguration: return 2;
-		case PLTTableViewSectionGeneral: return 3;
-        case PLTTableViewSection3DHead: return 2;
-        //case PLTTableViewSectionSensors: return 1;
-        //case PLTTableViewSectionStreetViewFirst: return 3;
-        //case PLTTableViewSectionStreetViewPrecache: return 1;
+		case PLTTableViewSectionGeneral: return 2;
+		case PLTTableViewSection3DHead: return 2;
+		case PLTTableViewSectionStreetView: return 1;
+		case PLTTableViewSectionSecurity: return 2;
+		case PLTTableViewSectionKubi: return 4;
     }
     return 0;
 }
@@ -295,67 +290,14 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 {
     UITableViewCell *cell = [tableView defaultCell];
 	switch (indexPath.section) {
-        case PLTTableViewSectionContextServerStatus: {
-			PLTContextServer *server = [PLTContextServer sharedContextServer];
-            switch ([server state]) {
-                case PLT_CONTEXT_SERVER_CLOSED: { // disconnected ("Connect")
-                case PLT_CONTEXT_SERVER_CLOSING:
-                    cell.textLabel.text = @"Connect";
-                    cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-					[cell.textLabel sizeToFit];
-					break; }
-                case PLT_CONTEXT_SERVER_OPENING: { // "Connecting..."
-                case PLT_CONTEXT_SERVER_OPEN:
-                    cell.textLabel.text = @"Connecting...";
-                    //cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                    [activityIndicator startAnimating];
-                    cell.accessoryView = activityIndicator;
-                    break; }
-                case PLT_CONTEXT_SERVER_AUTHENTICATING: { // "Authenticating..."
-                    cell.textLabel.text = @"Authenticating...";
-                    //cell.accessoryType = UITableViewCellAccessoryNone;
-                    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-                    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                    [activityIndicator startAnimating];
-                    cell.accessoryView = activityIndicator;
-                    break; }
-                case PLT_CONTEXT_SERVER_AUTHENTICATED: // "Connected"
-					cell = self.connectionStatusCell;
-					self.connectionUsernameLabel.text = server.username;
-					self.connectionStatusLabel.text = @"Connected";
-					break;
-                case PLT_CONTEXT_SERVER_REGISTERING: // "Registering"
-					cell = self.connectionStatusCell;
-					self.connectionUsernameLabel.text = server.username;
-					self.connectionStatusLabel.text = @"Registering...";
-					break;
-				case PLT_CONTEXT_SERVER_REGISTERED: // "Registered"
-                    cell = self.connectionStatusCell;
-					self.connectionUsernameLabel.text = server.username;
-					self.connectionStatusLabel.text = @"Registered";
-                    break;
-            }
-			//[self updatePopoverContentViewSize];
-			break; }
 		case PLTTableViewSectionGeneral: {
 			switch (indexPath.row) {
-				case PLTTableViewGeneralRowStatusIcons: {
-					SwitchTableViewCell *switchCell = [tableView switchCell];
-					cell = switchCell;
-					switchCell.textLabel.text = @"Status Icons";
-					switchCell.target = self;
-					switchCell.action = @selector(statusIconsSwitchChanged:);
-					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeyShowStatusIcons];
-					break; }
 				case PLTTableViewGeneralRowMetricUnits: {
                     SwitchTableViewCell *switchCell = [tableView switchCell];
 					cell = switchCell;
 					switchCell.textLabel.text = @"Metric Units";
 					switchCell.target = self;
-					switchCell.action = @selector(metricUnitsSwitchChanged:);
+					switchCell.action = @selector(metricUnitsSwitch:);
 					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeyMetricUnits];
                     break; }
 				case PLTTableViewGeneralRowHTCalibrationTriggers: {
@@ -369,7 +311,6 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 						detailText = @"Shake & Don";
 					}
 					else if (triggers & PLTHeadTrackingCalibrationTriggerShake) {
-						
 						if (IPAD) detailText = @"Shake iPad";
 						else detailText = @"Shake iPhone";
 					}
@@ -383,24 +324,7 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 				}
 			}
 			break; }
-        case PLTTableViewSectionContextServerConfiguration: {
-            switch (indexPath.row) {
-                case PLTTableViewContextServerConfigurationRowServerSettings:
-                    cell.textLabel.text = @"Server Settings";
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-                    break;
-                case PLTTableViewContextServerConfigurationRowLocationOverride: {
-                    cell = [tableView value1Cell];
-                    cell.textLabel.text = @"Location Override";
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-                    NSString *locationName = [DEFAULTS objectForKey:PLTDefaultsKeyOverrideSelectedLocation];
-                    if ([locationName isEqualToString:@"__none"]) locationName = @"None";
-                    cell.detailTextLabel.text = locationName;
-                    break; }
-            }
-            break; }
+			
         case PLTTableViewSection3DHead: {
 			switch (indexPath.row) {
 				case PLTTableView3DHeadOverlaysRowGestureDetection: {
@@ -421,69 +345,107 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKey3DHeadMirrorImage];
 					return cell;
 					break; }
-//				case PLTTableView3DHeadOverlaysRowDebugOverlay: {
-//					SwitchTableViewCell *switchCell = [tableView switchCell];
-//					cell = switchCell;
-//					cell.textLabel.text = @"Debug Overlay";
-//					switchCell.target = self;
-//					switchCell.action = @selector(threeDHeadOverlayDebugSwitch:);
-//					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKey3DHeadDebugOverlay];
-//					break; }
 				break; }
 			}
-//        case PLTTableViewSectionSensors:
-//            switch (indexPath.row) {
-//                case PLTTableViewSensorsRowTemperatureCalibration:
-//                    cell.textLabel.text = @"Temperature Calibration";
-//                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-//                    break;
-//            }
-//            break;
-//        case PLTTableViewSectionStreetViewFirst:
-//            switch (indexPath.row) {
-//                case PLTTableViewStreetViewOverlaysRowInfoOverlay: {
-//                    SwitchTableViewCell *cell = [tableView switchCell];
-//                    cell.textLabel.text = @"Address Overlay";
-//					cell.target = self;
-//                    cell.action = @selector(streetViewOverlayInfoSwitchChanged:);
-//                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewInfoOverlay];
-//                    return cell;
-//                    break; }
-//                case PLTTableViewStreetViewOverlaysRowDebugOverlay: {
-//                    SwitchTableViewCell *cell = [tableView switchCell];
-//                    cell.textLabel.text = @"Debug Overlay";
-//					cell.target = self;
-//                    cell.action = @selector(streetViewOverlayDebugSwitchChanged:);
-//                    cell.on = [DEFAULTS boolForKey:PLTDefaultsKeyStreetViewDebugOverlay];
-//                    return cell;
-//                    break; }
-//                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
-//                    cell = [tableView value1Cell];
-//                    cell.textLabel.text = @"Angular Resolution";
-//                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//                    cell.textLabel.textAlignment = NSTextAlignmentLeft;
-//                    NSString *detailString;
-//                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
-//                        case 2:
-//                            detailString = @"High";
-//                            break;
-//                        case 5:
-//                            detailString = @"Medium";
-//                            break;
-//                        case 10:
-//                            detailString = @"Low";
-//                            break;
-//                    }
-//                    cell.detailTextLabel.text = detailString;
-//                    break; }
-//            }
-//            break;
-//        case PLTTableViewSectionStreetViewPrecache:
-//            cell.textLabel.text = @"Precache Current Location";
-//            cell.accessoryType = UITableViewCellAccessoryNone;
-//            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-//            break;
+
+		case PLTTableViewSectionStreetView: {
+			switch (indexPath.row) {
+				case PLTTableViewStreetViewRowLocationOverride: {
+					cell = [tableView value1Cell];
+					cell.textLabel.text = @"Location Spoof";
+					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+					cell.textLabel.textAlignment = NSTextAlignmentLeft;
+					NSString *locationName = [DEFAULTS objectForKey:PLTDefaultsKeyOverrideSelectedLocation];
+					if ([locationName isEqualToString:@"__none"]) locationName = @"None";
+					cell.detailTextLabel.text = locationName;
+
+					break; }
+			}
+			break; }
+			
+		case PLTTableViewSectionSecurity: {
+			switch (indexPath.row) {
+				case PLTTableViewSecurityRowEnabled: {
+					SwitchTableViewCell *switchCell = [tableView switchCell];
+					cell = switchCell;
+					switchCell.textLabel.text = @"Enabled";
+					switchCell.target = self;
+					switchCell.action = @selector(securityEnabledSwitch:);
+					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled];
+					break; }
+				case PLTTableViewSecurityRowDevice: {
+					cell = [tableView value1Cell];
+					cell.textLabel.text = @"Device";
+					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+					cell.textLabel.textAlignment = NSTextAlignmentLeft;
+					cell.detailTextLabel.text = @"Some Lock";
+					
+//					NSString *detailText = @"";
+//					NSUInteger triggers = [(NSNumber *)[DEFAULTS objectForKey:PLTDefaultsKeyHeadTrackingCalibrationTriggers] unsignedIntegerValue];
+//					if ((triggers & PLTHeadTrackingCalibrationTriggerShake) && (triggers & PLTHeadTrackingCalibrationTriggerDon)) {
+//						detailText = @"Shake & Don";
+//					}
+//					else if (triggers & PLTHeadTrackingCalibrationTriggerShake) {
+//						
+//						if (IPAD) detailText = @"Shake iPad";
+//						else detailText = @"Shake iPhone";
+//					}
+//					else if (triggers & PLTHeadTrackingCalibrationTriggerDon) {
+//						detailText = @"Don Headset";
+//					}
+//					else {
+//						detailText = @"None";
+//					}
+//					cell.detailTextLabel.text = detailText;
+					break; }
+			}
+			break; }
+			
+		case PLTTableViewSectionKubi: {
+			switch (indexPath.row) {
+				case PLTTableViewKubiRowEnabled: {
+					SwitchTableViewCell *switchCell = [tableView switchCell];
+					cell = switchCell;
+					switchCell.textLabel.text = @"Enabled";
+					switchCell.target = self;
+					switchCell.action = @selector(kubiEnabledSwitch:);
+					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeyKubiEnabled];
+					break; }
+				case PLTTableViewKubiRowDevice: {
+					cell = [tableView value1Cell];
+					cell.textLabel.text = @"Device";
+					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+					cell.textLabel.textAlignment = NSTextAlignmentLeft;
+					cell.detailTextLabel.text = @"Some Kubi";
+					break; }
+				case PLTTableViewKubiRowMode: {
+					cell = [tableView value1Cell];
+					cell.textLabel.text = @"Mode";
+					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+					cell.textLabel.textAlignment = NSTextAlignmentLeft;
+					cell.detailTextLabel.text = @"Some Mode";
+					break; }
+//				case PLTTableViewKubiRowSensitivity: {
+//					SliderTableViewCell *sliderCell = [tableView sliderCell];
+//					cell = sliderCell;
+//					sliderCell.textLabel.text = @"Sensitivity";
+//					sliderCell.target = self;
+//					sliderCell.action = @selector(kubiSensitivitySlider:);
+//#warning defaults
+//					sliderCell.minValue = 0;
+//					sliderCell.maxValue = 100;
+//					sliderCell.value = 50;
+//					break; }
+				case PLTTableViewKubiRowMirror: {
+					SwitchTableViewCell *switchCell = [tableView switchCell];
+					cell = switchCell;
+					switchCell.textLabel.text = @"Mirror";
+					switchCell.target = self;
+					switchCell.action = @selector(kubiMirrorSwitch:);
+					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeyKubiMirror];
+					break; }
+			}
+			break; }
     }
     
     return cell;
@@ -494,27 +456,11 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case PLTTableViewSectionContextServerStatus:
-            return @"Context Server";
-            break;
-        case PLTTableViewSectionContextServerConfiguration:
-            return nil;
-            break;
-	case PLTTableViewSectionGeneral:
-			return @"General";
-			break;
-        case PLTTableViewSection3DHead:
-            return @"3D Head";
-            break;
-//        case PLTTableViewSectionSensors:
-//            return @"Sensors";
-//            break;
-//        case PLTTableViewSectionStreetViewFirst:
-//            return @"Street View";
-//            break;
-//        case PLTTableViewSectionStreetViewPrecache:
-//            return nil;
-//            break;
+		case PLTTableViewSectionGeneral: return @"General";
+		case PLTTableViewSection3DHead: return @"Head";
+		case PLTTableViewSectionStreetView: return @"Street View";
+		case PLTTableViewSectionSecurity: return @"Security";
+		case PLTTableViewSectionKubi: return @"Kubi";
     }
     return nil;
 }
@@ -522,119 +468,75 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
-        case PLTTableViewSectionContextServerStatus:
-			return YES;
-        case PLTTableViewSectionContextServerConfiguration:
-			return YES;
-		case PLTTableViewSectionGeneral:
-			if (indexPath.row == PLTTableViewGeneralRowHTCalibrationTriggers) return YES;
-			return NO;
-//		case PLTTableViewSectionSensors:
-//			return YES;
-//        case PLTTableViewSectionStreetViewFirst: {
-//            switch (indexPath.row) {
-//                case PLTTableViewStreetViewOverlaysRowAngularResolution:
-//					return YES;
-//            }
-//            break; }
-//        case PLTTableViewSectionStreetViewPrecache:
-//			return YES;
-    }
-    return NO;
+		case PLTTableViewSectionGeneral: {
+			switch (indexPath.row) {
+				case PLTTableViewGeneralRowHTCalibrationTriggers: return YES;
+			}
+			break; }
+		case PLTTableViewSectionStreetView: {
+			switch (indexPath.row) {
+				case PLTTableViewStreetViewRowLocationOverride: return YES;
+			}
+			break; }
+		case PLTTableViewSectionSecurity: {
+			switch (indexPath.row) {
+				case PLTTableViewSecurityRowDevice: return YES;
+			}
+			break; }
+		case PLTTableViewSectionKubi: {
+			switch (indexPath.row) {
+				case PLTTableViewKubiRowDevice: return YES;
+					case PLTTableViewKubiRowMode: return YES;
+			}
+			break; }
+	}
+	return NO;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	self.navigationController.delegate = self;
-    
-    switch (indexPath.section) {
-        case PLTTableViewSectionContextServerStatus: {
-            PLTContextServer *server = [PLTContextServer sharedContextServer];
-            switch ([server state]) {
-                case PLT_CONTEXT_SERVER_AUTHENTICATED:
-                case PLT_CONTEXT_SERVER_REGISTERING:
-                case PLT_CONTEXT_SERVER_REGISTERED: {
-                    ServerStatusViewController *controller = [[ServerStatusViewController alloc] initWithNibName:nil bundle:nil];
-                    controller.delegate = self;
-                    [self.navigationController pushViewController:controller animated:YES];
-                    break; }
-                default: {
-                    if (!([[DEFAULTS objectForKey:PLTDefaultsKeyContextServerUsername] length] && [[DEFAULTS objectForKey:PLTDefaultsKeyContextServerPassword] length])) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Missing Credentials"
-                                                                        message:@"Please set a username and password in \"Server Settings.\""
-                                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        alert.tag = PLTAlertViewTagMissingCredentials;
-                        [alert show];
-                    }
-                    else {
-						[(AppDelegate *)[UIApplication sharedApplication].delegate connectToContextServer];
-					}
-                    break; }
-            }
-            break; }
-        case PLTTableViewSectionContextServerConfiguration: {
-            switch (indexPath.row) {
-                case PLTTableViewContextServerConfigurationRowServerSettings: {
-                    ServerSettingsViewController *controler = [[ServerSettingsViewController alloc] initWithNibName:nil bundle:nil];
-                    [self.navigationController pushViewController:controler animated:YES];
-                    break; }
-                case PLTTableViewContextServerConfigurationRowLocationOverride: {
-                    LocationOverrideViewController *controller = [[LocationOverrideViewController alloc] initWithNibName:nil bundle:nil];
-                    [self.navigationController pushViewController:controller animated:YES];
-                    break; }
-            }
-            break; }
-		case PLTTableViewSectionGeneral:
-			if (indexPath.row == PLTTableViewGeneralRowHTCalibrationTriggers) {
-				HTCalibrationTriggersViewController *vc = [[HTCalibrationTriggersViewController alloc] initWithNibName:nil bundle:nil];
-				[self.navigationController pushViewController:vc animated:YES];
+	
+	switch (indexPath.section) {
+		case PLTTableViewSectionGeneral: {
+			switch (indexPath.row) {
+				case PLTTableViewGeneralRowHTCalibrationTriggers: {
+					HTCalibrationTriggersViewController *vc = [[HTCalibrationTriggersViewController alloc] initWithNibName:nil bundle:nil];
+					[self.navigationController pushViewController:vc animated:YES];
+					break; }
 			}
-			break;
-//        case PLTTableViewSectionStreetViewFirst: {
-//            switch (indexPath.row) {
-//                case PLTTableViewStreetViewOverlaysRowAngularResolution: {
-//                    SelectionListViewController *listController = [[SelectionListViewController alloc] initWithNibName:nil bundle:nil];
-//                    listController.delegate = self;
-//                    listController.tag = PLTSelectionListViewTagAngularResolution;
-//                    listController.title = @"Angular Resolution";
-//                    listController.listItems = @[
-//												 @{@"label" : @"High", @"context" : @2, @"enabled" : @NO},
-//			 @{@"label" : @"Medium", @"context" : @5, @"enabled" : @YES},
-//			 @{@"label" : @"Low", @"context" : @10, @"enabled" : @YES}];
-//                    // this is kind of a crappy way to do this... how to improve it?
-//                    switch ([DEFAULTS integerForKey:PLTDefaultsKeyStreetViewRoundingMultiple]) {
-//                        case 2:
-//                            listController.selectedIndex = 0;
-//                            break;
-//                        case 5:
-//                            listController.selectedIndex = 1;
-//                            break;
-//                        case 10:
-//                            listController.selectedIndex = 2;
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                    [self.navigationController pushViewController:listController animated:YES];
-//                    break; }
-//            }
-//            break; }
-//        case PLTTableViewSectionStreetViewPrecache:
-//            [self.delegate settingsViewControllerDidClickStreetViewPrecache:self];
-//            break;
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    switch ([[PLTContextServer sharedContextServer] state]) {
-        case PLT_CONTEXT_SERVER_AUTHENTICATED:
-        case PLT_CONTEXT_SERVER_REGISTERING:
-        case PLT_CONTEXT_SERVER_REGISTERED:
-            if ((indexPath.section==0) && (indexPath.row==0)) return 62;
-        default:
-            return 44;
+			break; }
+			
+		case PLTTableViewSectionStreetView: {
+			switch (indexPath.row) {
+				case PLTTableViewStreetViewRowLocationOverride: {
+					LocationOverrideViewController *controller = [[LocationOverrideViewController alloc] initWithNibName:nil bundle:nil];
+					[self.navigationController pushViewController:controller animated:YES];
+					break; }
+			}
+			break; }
+			
+		case PLTTableViewSectionSecurity: {
+			switch (indexPath.row) {
+				case PLTTableViewSecurityRowDevice:
+					break;
+			}
+			break; }
+			
+		case PLTTableViewSectionKubi: {
+			switch (indexPath.row) {
+				case PLTTableViewKubiRowDevice:
+					break;
+				case PLTTableViewKubiRowMode: {
+					SelectionListViewController *selectionController = [[SelectionListViewController alloc] initWithNibName:nil bundle:nil];
+					selectionController.delegate = self;
+					selectionController.listItems = @[@"Joystick", @"Absolute"];
+#warning read from defaults
+					selectionController.selectedIndex = 0;
+					break; }
+			}
+			break; }
     }
 }
 
@@ -654,6 +556,8 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 	
 	if (viewController != self) {
 		viewController.contentSizeForViewInPopover = navigationController.contentSizeForViewInPopover;
+		//NSLog(@"navigationController.contentSizeForViewInPopover: %@", NSStringFromCGSize(navigationController.contentSizeForViewInPopover));
+		//viewController.preferredContentSize = navigationController.preferredContentSize;
 	}
 }
 
@@ -812,18 +716,19 @@ SelectionListViewControllerDelegate, UIAlertViewDelegate, UINavigationController
 - (void)selectionListViewController:(SelectionListViewController *)theController didSelectItemWithLabel:(NSString *)label context:(id)context index:(NSUInteger)index
 {
     switch (theController.tag) {
-        case PLTSelectionListViewTagAngularResolution:
-            [DEFAULTS setInteger:[(NSNumber *)context integerValue] forKey:PLTDefaultsKeyStreetViewRoundingMultiple];
-            break;
+		case PLTSelectionListViewTagSecurityDevice: {
+			//[DEFAULTS setInteger:[(NSNumber *)context integerValue] forKey:PLTDefaultsKeyStreetViewRoundingMultiple];
+			break; }
+			
+		case PLTSelectionListViewTagKubiDevice: {
+			
+			break; }
+			
+		case PLTSelectionListViewTagKubiMode: {
+			
+			break; }
     }
 }
-
-//#pragma mark - ConfigTempViewControllerDelegate
-//
-//- (void)configTempViewController:(ConfigTempViewController *)controller didAcceptMetric:(BOOL)celcius ambientTemp:(float)ambientTempCelcius
-//{
-//	
-//}
 
 #pragma mark - UIViewController
 

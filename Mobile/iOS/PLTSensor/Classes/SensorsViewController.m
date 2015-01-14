@@ -31,7 +31,11 @@ typedef enum {
 	PLTSensorTableRowPedometer,
     PLTSensorTableRowFreeFall,
     PLTSensorTableRowTaps,
-    //PLTSensorTableRowMagCal,
+	PLTSensorTableRowHeading,
+	PLTSensorTableRowAcceleration,
+	PLTSensorTableRowAngularVelocity,
+	PLTSensorTableRowMagnetism,
+    PLTSensorTableRowMagCal,
     PLTSensorTableRowGyroCal,
 	PLTSensorTableRowHSFWVersion,
 	PLTSensorTableRowHSHWVersion,
@@ -79,13 +83,13 @@ typedef enum {
 	if (d) {
 		NSError *err = nil;
 		
-		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
-		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+//		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
 		
 		[d subscribe:self toService:PLTServiceProximity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
 		if (err) NSLog(@"Error subscribing to proximity service: %@", err);
 		
-		[d subscribe:self toService:PLTServiceOrientationTracking withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		[d subscribe:self toService:PLTServiceOrientation withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
 		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
 		
 		[d subscribe:self toService:PLTServicePedometer withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
@@ -100,10 +104,24 @@ typedef enum {
 		[d subscribe:self toService:PLTServiceMagnetometerCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
 		if (err) NSLog(@"Error subscribing to magnetometer calibration service: %@", err);
 		
-		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
-		if (err) NSLog(@"Error subscribing to gyroscope calibration service: %@", err);
+//		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to gyroscope calibration service: %@", err);
 		
-		// also query a few
+		// WC2
+		
+		[d subscribe:self toService:PLTServiceAcceleration withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceAngularVelocity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceMagnetism withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceHeading withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		// query those that don't update often
 		
 		[d queryInfo:self forService:PLTServiceWearingState error:&err];
 		if (err) NSLog(@"Error querying wearing state service: %@", err);
@@ -137,7 +155,7 @@ typedef enum {
 
 - (void)calOrientation
 {
-	[CONNECTED_DEVICE setCalibration:nil forService:PLTServiceOrientationTracking error:nil];
+	[CONNECTED_DEVICE setCalibration:nil forService:PLTServiceOrientation error:nil];
 }
 
 - (void)resetPed:(id)sender
@@ -170,7 +188,7 @@ typedef enum {
 
 - (void)PLTDevice:(PLTDevice *)aDevice didUpdateInfo:(PLTInfo *)theInfo
 {
-	NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
+	//NSLog(@"PLTDevice: %@ didUpdateInfo: %@", aDevice, theInfo);
 	
 	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
 		PLTEulerAngles eulerAngles = ((PLTOrientationTrackingInfo *)theInfo).eulerAngles;
@@ -264,6 +282,7 @@ typedef enum {
 				else state = @"Not Wearing";
                 cell.detailTextLabel.text = state;
 				break; }
+				
 //            case PLTSensorTableRowTemperature:
 //                cell.textLabel.text = @"temperature";
 //				float celciusOffset = [DEFAULTS floatForKey:PLTDefaultsKeyTemperatureOffsetCelcius];
@@ -276,6 +295,7 @@ typedef enum {
 //                                             (celciusMetric ? lroundf(temp_c_calibrated) : lroundf((temp_c_calibrated)*9.0/5.0+32.0)),
 //											 (celciusMetric ? @"C" : @"F")];
 //                break;
+				
 			case PLTSensorTableRowLocalProximity: {
 				cell.textLabel.text = @"local proximity";
 				PLTProximityInfo *proximityInfo = (PLTProximityInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceProximity error:nil];
@@ -286,6 +306,7 @@ typedef enum {
 					cell.detailTextLabel.text = @"-";
 				}
 				break; }
+				
 			case PLTSensorTableRowRemoteProximity: {
 				cell.textLabel.text = @"remote proximity";
 				PLTProximityInfo *proximityInfo = (PLTProximityInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceProximity error:nil];
@@ -296,6 +317,7 @@ typedef enum {
 					cell.detailTextLabel.text = @"-";
 				}
 				break; }
+				
 			case PLTSensorTableRowFreeFall: {
                 cell.textLabel.text = @"free fall";
 				PLTFreeFallInfo *freeFallInfo = (PLTFreeFallInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceFreeFall error:nil];
@@ -303,19 +325,13 @@ typedef enum {
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",(freeFall?@"Yes":@"No")];
                 cell.detailTextLabel.textColor = (freeFall ? [UIColor redColor] : [UIColor blackColor]);
 				break; }
+				
             case PLTSensorTableRowPedometer: {
                 cell.textLabel.text = @"pedometer";
 				PLTPedometerInfo *pedometerInfo = (PLTPedometerInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServicePedometer error:nil];
                 cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps",pedometerInfo.steps];
-//                static UIButton *clearButton = nil;
-//                if (!clearButton) clearButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) clearButton.frame = CGRectMake(241, 5, 64, 34);
-//				else clearButton.frame = CGRectMake(tableView.frame.size.width - 64 - 14, 12, 64, 34);
-//                [clearButton setTitle:@"Clear" forState:UIControlStateNormal];
-//                clearButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-//                [clearButton addTarget:self action:@selector(resetPed:) forControlEvents:UIControlEventTouchUpInside];
-//                [cell.contentView addSubview:clearButton];
                 break; }
+				
             case PLTSensorTableRowTaps: {
                 cell.textLabel.text = @"taps";
 				PLTTapsInfo *tapsInfo = (PLTTapsInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceTaps error:nil];
@@ -329,31 +345,25 @@ typedef enum {
                     cell.detailTextLabel.textColor = [UIColor blackColor];
                 }
                 break; }
-//            case PLTSensorTableRowMagCal: {
-//                cell.textLabel.text = @"magnetometer";
-//                NSString *magCalStr = nil;
-//                UIColor *color = [UIColor blackColor];
-//                switch (self.magCal) {
-//                    case PLTMagnetometerCalibrationStatusNotCalibrated:
-//                        magCalStr = @"Not Calibrated";
-//                        color = [UIColor redColor];
-//                        break;
-//                    case PLTMagnetometerCalibrationStatusCalibrating1:
-//                    case PLTMagnetometerCalibrationStatusCalibrating2:
-//                        magCalStr = [NSString stringWithFormat:@"%d",self.magCal];
-//                        color = [UIColor orangeColor];
-//                        break;
-//                    case PLTMagnetometerCalibrationStatusCalibrated:
-//                        magCalStr = @"Calibrated";
-//                        color = [UIColor colorWithRed:0 green:(127.0/256.0) blue:0 alpha:1.0];
-//                        break;
-//                    default:
-//                        break;
-//                }
-//                cell.detailTextLabel.text = magCalStr;
-//                cell.detailTextLabel.textColor = color;
-//                break; }
-            case PLTSensorTableRowGyroCal: {
+				
+			case PLTSensorTableRowMagCal: {
+				cell.textLabel.text = @"magnetometer";
+				PLTMagnetometerCalibrationInfo	*magCalInfo = (PLTMagnetometerCalibrationInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceMagnetometerCalibrationStatus error:nil];
+				NSString *magCalStr = nil;
+				UIColor *color = [UIColor blackColor];
+				if (magCalInfo.isCalibrated) {
+					magCalStr = @"Calibrated";
+					color = [UIColor colorWithRed:0 green:(150.0/256.0) blue:0 alpha:1.0];
+				}
+				else {
+					magCalStr = @"Not Calibrated";
+					color = [UIColor redColor];
+				}
+				cell.detailTextLabel.text = magCalStr;
+				cell.detailTextLabel.textColor = color;
+				break; }
+				
+			case PLTSensorTableRowGyroCal: {
                 cell.textLabel.text = @"gyroscope";
 				PLTGyroscopeCalibrationInfo	*gyroCalInfo = (PLTGyroscopeCalibrationInfo *)[CONNECTED_DEVICE cachedInfoForService:PLTServiceGyroscopeCalibrationStatus error:nil];
 				NSString *gyroCalStr = nil;
@@ -368,12 +378,14 @@ typedef enum {
 				}
 				cell.detailTextLabel.text = gyroCalStr;
                 cell.detailTextLabel.textColor = color;
-                break; }
-			case PLTSensorTableRowAppVersion:
+				break; }
+				
+			case PLTSensorTableRowAppVersion: {
                 cell.textLabel.text = @"app version";
                 cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-                break;
-			case PLTSensorTableRowHSFWVersion:
+				break; }
+				
+			case PLTSensorTableRowHSFWVersion: {
                 cell.textLabel.text = @"headset FW vers";
 				if (CONNECTED_DEVICE.firmwareVersion) {
 					cell.detailTextLabel.text = CONNECTED_DEVICE.firmwareVersion;
@@ -381,8 +393,9 @@ typedef enum {
 				else {
 					cell.detailTextLabel.text = @"-";
 				}
-                break;
-			case PLTSensorTableRowHSHWVersion:
+				break; }
+				
+			case PLTSensorTableRowHSHWVersion: {
 				cell.textLabel.text = @"headset HW vers";
 				if (CONNECTED_DEVICE.hardwareVersion) {
 					cell.detailTextLabel.text = CONNECTED_DEVICE.hardwareVersion;
@@ -390,8 +403,9 @@ typedef enum {
 				else {
 					cell.detailTextLabel.text = @"-";
 				}
-				break;
-            case PLTSensorTableRowPacketData: {
+				break; }
+				
+			case PLTSensorTableRowPacketData: {
 				cell.textLabel.text = @"packet data";
 				cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
 				//cell.detailTextLabel.minimumScaleFactor = 2.0;
@@ -403,6 +417,22 @@ typedef enum {
 				if (![cell.detailTextLabel.text length]) {
 					cell.detailTextLabel.text = @"-";
 				}
+				break; }
+				
+			case PLTSensorTableRowHeading: {
+				cell.textLabel.text = @"heading";
+				break; }
+				
+			case PLTSensorTableRowAcceleration: {
+				cell.textLabel.text = @"acceleration";
+				break; }
+				
+			case PLTSensorTableRowAngularVelocity: {
+				cell.textLabel.text = @"angular v.";
+				break; }
+				
+			case PLTSensorTableRowMagnetism: {
+				cell.textLabel.text = @"magnetism";
 				break; }
         }
     }

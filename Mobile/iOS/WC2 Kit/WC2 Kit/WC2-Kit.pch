@@ -1,0 +1,20 @@
+//
+//  WC2-Kit.pch
+//  WC2 Kit
+//
+//  Created by Morgan Davis on 12/30/14.
+//  Copyright (c) 2014 Plantronics. All rights reserved.
+//
+
+
+#ifndef WC2_Kit_WC2_Kit_pch
+#define WC2_Kit_WC2_Kit_pch
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+	#import <UIKit/UIKit.h>
+	#import "Global.h"
+	#import "AppDelegate.h"
+#endif
+
+#endif

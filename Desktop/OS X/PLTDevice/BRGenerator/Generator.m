@@ -16,8 +16,7 @@ NSString *const		TKey_DeckardVersion =					@"deckard_version";
 NSString *const		TKey_MDY =								@"mdy";
 NSString *const		TKey_YYYY =								@"yyyy";
 NSString *const		TKey_IdentifierConstantName =			@"identifier_constant_name";
-NSString *const		TKey_PublicDefinedValuesBlock =			@"public_defined_values_block";
-NSString *const		TKey_PrivateDefinedValuesBlock =		@"private_defined_values_block";
+NSString *const		TKey_DefinedValuesBlock =				@"defined_values_block";
 NSString *const		TKey_ConstructorPrototype =				@"constructor_prototype";
 NSString *const		TKey_PublicPropertiesBlock =			@"public_properties_block";
 NSString *const		TKey_PrivatePropertiesBlock =			@"private_properties_block";
@@ -65,10 +64,9 @@ typedef enum {
 - (void)generateCode;
 - (void)setupOutputDirectory;
 
-- (void)getDefinedValuesBlockForMessage:(DeckardMessage *)message public:(NSString **)public private:(NSString **)private;
+- (NSString *)definedValuesBlockForMessage:(DeckardMessage *)message;
 - (NSString *)constructorPrototypeForMessage:(DeckardMessage *)message;
 - (NSString *)propertiesBlockForPayload:(NSArray *)payload access:(PropertyAccess)access;
-//- (void)getPublicPropertiesBlock:(NSString **)public private:(NSString **)private forMessage:(DeckardMessage *)message;
 - (NSString *)constructorPropertiesInitBlockForMessage:(DeckardMessage *)message;
 - (void)getDescriptionFormatBlock:(NSString **)format arguments:(NSString **)arguments forMessage:(DeckardMessage *)message;
 - (NSString *)objcTypeStringForBRType:(BRPayloadItemType)brType;
@@ -261,9 +259,7 @@ typedef enum {
 		NSString *tval_DescriptionArguments;
 		[self getDescriptionFormatBlock:&tval_DescriptionFormat arguments:&tval_DescriptionArguments forMessage:message];
 		
-		NSString *tval_PublicDefinedValuesBlock;
-		NSString *tval_PrivateDefinedValuesBlock;
-		[self getDefinedValuesBlockForMessage:message public:&tval_PublicDefinedValuesBlock private:&tval_PrivateDefinedValuesBlock];
+		NSString *tval_DefinedValuesBlock = [self definedValuesBlockForMessage:message];
 		
 		// .h and .m
 		
@@ -288,12 +284,11 @@ typedef enum {
 		// .h only
 		
 		[self populateTemplate:templateHBody withString:tval_MessageIdentifier forKey:TKey_MessageIdentifier];
-		[self populateTemplate:templateHBody withString:tval_PublicDefinedValuesBlock forKey:TKey_PublicDefinedValuesBlock];
+		[self populateTemplate:templateHBody withString:tval_DefinedValuesBlock forKey:TKey_DefinedValuesBlock];
 		[self populateTemplate:templateHBody withString:tval_PublicPropertiesBlock forKey:TKey_PublicPropertiesBlock];
 		
 		// .m only
 		
-		[self populateTemplate:templateMBody withString:tval_PrivateDefinedValuesBlock forKey:TKey_PrivateDefinedValuesBlock];
 		[self populateTemplate:templateMBody withString:tval_PrivatePropertiesBlock forKey:TKey_PrivatePropertiesBlock];
 		[self populateTemplate:templateMBody withString:tval_ConstructorPropertiesInitBlock forKey:TKey_ConstructorPropertiesInitBlock];
 		[self populateTemplate:templateMBody withString:tval_PayloadDescriptorsBlock forKey:TKey_PayloadDescriptorsBlock];
@@ -387,11 +382,9 @@ typedef enum {
 	[fm createDirectoryAtPath:[pwd stringByAppendingPathComponent:@"Output/Messages/Exceptions"] withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-//- (NSString *)definedValuesBlockForMessage:(DeckardMessage *)message
-- (void)getDefinedValuesBlockForMessage:(DeckardMessage *)message public:(NSString **)public private:(NSString **)private
+- (NSString *)definedValuesBlockForMessage:(DeckardMessage *)message
 {
-	NSMutableString *publicStr = [NSMutableString string];
-	NSMutableString *privateStr = [NSMutableString string];
+	NSMutableString *str = [NSMutableString string];
 	
 	NSArray *payload = message.payloadIn;
 	if (message.type == DeckardMessageTypeSettingResult || message.type == DeckardMessageTypeEvent || message.type == DeckardMessageTypeException) {
@@ -430,22 +423,16 @@ typedef enum {
 			NSArray *definedValues = item[@"definedValues"];
 			NSString *itemName = [self capitalizedString:item[@"name"]];
 			for (NSDictionary *defined in definedValues) {
+				uint16_t type = [item[@"type"] shortValue];
+				if (type==BRPayloadItemTypeByteArray || type==BRPayloadItemTypeShortArray || type==BRPayloadItemTypeString) continue;
 				NSString *definedName = defined[@"name"];
 				NSString *definedValue = defined[@"value"];
-				NSString *constTypeString = [self stringForDefinedTypeItemType:[item[@"type"] shortValue]];
-				if (!constTypeString) continue; // some defined values don't make a lot of sense...
-				[publicStr appendFormat:@"extern %@ %@_%@_%@;\n", constTypeString, messageName, itemName, definedName];
-				[privateStr appendFormat:@"%@ %@_%@_%@ = %@;\n", constTypeString, messageName, itemName, definedName, definedValue];
+				[str appendFormat:@"#define BRDefinedValue_%@_%@_%@ %@\n", messageName, itemName, definedName, definedValue];
 			}
 		}
-		
-		if (publicStr) *public = publicStr;
-		if (privateStr) *private = privateStr;
 	}
-	else {
-		*public = @"";
-		*private = @"";
-	}
+
+	return str;
 }
 
 - (NSString *)constructorPrototypeForMessage:(DeckardMessage *)message
@@ -744,46 +731,46 @@ typedef enum {
 	}
 }
 
-- (NSString *)stringForDefinedTypeItemType:(BRPayloadItemType)brType
-{
-	switch (brType) {
-		case BRPayloadItemTypeBoolean:
-			return @"const BOOL";
-			break;
-		case BRPayloadItemTypeByte:
-			return @"const uint8_t";
-			break;
-		case BRPayloadItemTypeShort:
-			return @"const int16_t";
-			break;
-		case BRPayloadItemTypeUnsignedShort:
-			return @"const uint16_t";
-			break;
-		case BRPayloadItemTypeLong:
-			return @"const int32_t";
-			break;
-		case BRPayloadItemTypeUnsignedLong:
-			return @"const uint32_t";
-			break;
-		case BRPayloadItemTypeInt:
-			return @"const int32_t";
-			break;
-		case BRPayloadItemTypeUnsignedInt:
-			return @"const uint32_t";
-			break;
-			//		case BRPayloadItemTypeByteArray:
-			//			return @"NSData *";
-			//			break;
-			//		case BRPayloadItemTypeShortArray:
-			//			return @"NSData *";
-			//			break;
-		case BRPayloadItemTypeString:
-			return @"NSString *const";
-			break;
-		default:
-			return nil;
-	}
-}
+//- (NSString *)stringForDefinedTypeItemType:(BRPayloadItemType)brType
+//{
+//	switch (brType) {
+//		case BRPayloadItemTypeBoolean:
+//			return @"const BOOL";
+//			break;
+//		case BRPayloadItemTypeByte:
+//			return @"const uint8_t";
+//			break;
+//		case BRPayloadItemTypeShort:
+//			return @"const int16_t";
+//			break;
+//		case BRPayloadItemTypeUnsignedShort:
+//			return @"const uint16_t";
+//			break;
+//		case BRPayloadItemTypeLong:
+//			return @"const int32_t";
+//			break;
+//		case BRPayloadItemTypeUnsignedLong:
+//			return @"const uint32_t";
+//			break;
+//		case BRPayloadItemTypeInt:
+//			return @"const int32_t";
+//			break;
+//		case BRPayloadItemTypeUnsignedInt:
+//			return @"const uint32_t";
+//			break;
+//			//		case BRPayloadItemTypeByteArray:
+//			//			return @"NSData *";
+//			//			break;
+//			//		case BRPayloadItemTypeShortArray:
+//			//			return @"NSData *";
+//			//			break;
+//		case BRPayloadItemTypeString:
+//			return @"NSString *const";
+//			break;
+//		default:
+//			return nil;
+//	}
+//}
 
 - (void)populateTemplate:(NSMutableString *)template withString:(NSString *)fill forKey:(NSString *)key
 {

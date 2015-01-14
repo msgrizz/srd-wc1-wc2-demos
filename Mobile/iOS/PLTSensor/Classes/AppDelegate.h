@@ -26,17 +26,18 @@ extern NSString *const PLTDefaultsKeyOverrideLocations;
     extern NSString *const PLTDefaultsKeyOverrideLocationLabel;
     extern NSString *const PLTDefaultsKeyOverrideLocationLatitude;
     extern NSString *const PLTDefaultsKeyOverrideLocationLongitude;
-	extern NSString *const PLTDefaultsKeyOverrideLocationStreetViewPrecacheRoundingMultiple;
-	extern NSString *const PLTDefaultsKeyOverrideLocationAskedPrecacheStreetViewRoundingMultiple;
 extern NSString *const PLTDefaultsKeyOverrideSelectedLocation;
 extern NSString *const PLTDefaultsKey3DHeadMirrorImage;
-extern NSString *const PLTDefaultsKey3DHeadDebugOverlay;
-extern NSString *const PLTDefaultsKeyStreetViewInfoOverlay;
-extern NSString *const PLTDefaultsKeyStreetViewDebugOverlay;
-extern NSString *const PLTDefaultsKeyStreetViewRoundingMultiple;
-extern NSString *const PLTDefaultsKeyTemperatureOffsetCelcius;
 extern NSString *const PLTDefaultsKeySendOldSkewlEvents;
 extern NSString *const PLTDefaultsKeyHeadTrackingCalibrationTriggers;
+extern NSString *const PLTDefaultsKeySecurityEnabled;
+extern NSString *const PLTDefaultsKeySecurityLockID;
+extern NSString *const PLTDefaultsKeyKubiEnabled;
+extern NSString *const PLTDefaultsKeyKubiOpenTokAPIKey;
+extern NSString *const PLTDefaultsKeyKubiOpenTokSessionID;
+extern NSString *const PLTDefaultsKeyKubiOpenTokPublisherID;
+extern NSString *const PLTDefaultsKeyKubiMode;
+extern NSString *const PLTDefaultsKeyKubiMirror;
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

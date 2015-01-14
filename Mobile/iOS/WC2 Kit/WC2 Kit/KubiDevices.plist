@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>KubiDeviceName</key>
+		<string>Kubi 1</string>
+		<key>KubiDeviceID</key>
+		<string>686716</string>
+		<key>KubiDeviceTokBoxAPIKey</key>
+		<string>45094402</string>
+		<key>KubiDeviceTokBoxSessionID</key>
+		<string>2_MX40NTA5NDQwMn5-MTQyMDA2MTYxMzQ5N35DcWxLOUR5Njh3eUxJNVVuVDB5NXRRZDN-fg</string>
+		<key>KubiDeviceTokBoxPublisherIDiPad</key>
+		<string>T1==cGFydG5lcl9pZD00NTA5NDQwMiZzaWc9Njg5YTU1ZGY0MDQzMWM0ZmRkNjhlNThiOGQ0MDY4ODVlZDVmMWQ5ZTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UQTVORFF3TW41LU1UUXlNREEyTVRZeE16UTVOMzVEY1d4TE9VUjVOamgzZVV4Sk5WVnVWREI1TlhSUlpETi1mZyZjcmVhdGVfdGltZT0xNDIwMDYxNzMxJm5vbmNlPTAuODExMDg2MTM5NjMyNzk4NyZleHBpcmVfdGltZT0xNDIyNjUzNTky</string>
+		<key>KubiDeviceTokBoxPublisherIDKubi</key>
+		<string>T1==cGFydG5lcl9pZD00NTA5NDQwMiZzaWc9NjkwYTQ3NWY2NjQ1MDZiMzFjZmYwMGY4MjgwYThiNGE1NjhiYmJjNDpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UQTVORFF3TW41LU1UUXlNREEyTVRZeE16UTVOMzVEY1d4TE9VUjVOamgzZVV4Sk5WVnVWREI1TlhSUlpETi1mZyZjcmVhdGVfdGltZT0xNDIwMDYxOTU5Jm5vbmNlPTAuOTM5MDc4NDU3MTEzOTczNiZleHBpcmVfdGltZT0xNDIyNjUzNTky</string>
+	</dict>
+	<dict>
+		<key>KubiDeviceName</key>
+		<string>Kubi 2</string>
+		<key>KubiDeviceID</key>
+		<string>71BBA4</string>
+		<key>KubiDeviceTokBoxAPIKey</key>
+		<string>45118872</string>
+		<key>KubiDeviceTokBoxSessionID</key>
+		<string>1_MX40NTExODg3Mn5-MTQyMDA2MjIyMTQzN35yRVhqRnVUQ2ZPTXBYUzgybENNbS84V0h-fg</string>
+		<key>KubiDeviceTokBoxPublisherIDiPad</key>
+		<string>T1==cGFydG5lcl9pZD00NTExODg3MiZzaWc9NTQ4M2RmYzEzM2JlZTVhZDExZmY0ZWU3OGExNzI2YjEwNWZmNThlYjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5URXhPRGczTW41LU1UUXlNREEyTWpJeU1UUXpOMzV5UlZocVJuVlVRMlpQVFhCWVV6Z3liRU5OYlM4NFYwaC1mZyZjcmVhdGVfdGltZT0xNDIwMDYyMjM1Jm5vbmNlPTAuODY5MjY2NjM5NTEwMTU4OSZleHBpcmVfdGltZT0xNDIyNjU0MTI5</string>
+		<key>KubiDeviceTokBoxPublisherIDKubi</key>
+		<string>T1==cGFydG5lcl9pZD00NTExODg3MiZzaWc9M2ZhYWU0ZWI3ZTkwZTQ1ZmY3N2E3OTU3NmYxODViY2E3MWFhYTVlMTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5URXhPRGczTW41LU1UUXlNREEyTWpJeU1UUXpOMzV5UlZocVJuVlVRMlpQVFhCWVV6Z3liRU5OYlM4NFYwaC1mZyZjcmVhdGVfdGltZT0xNDIwMDYyMjQ5Jm5vbmNlPTAuNzIwODIyMjQ5MjY1NjI1NSZleHBpcmVfdGltZT0xNDIyNjU0MTI5</string>
+	</dict>
+	<dict>
+		<key>KubiDeviceName</key>
+		<string>Kubi 3</string>
+		<key>KubiDeviceID</key>
+		<string>68339E</string>
+		<key>KubiDeviceTokBoxAPIKey</key>
+		<string>45118882</string>
+		<key>KubiDeviceTokBoxSessionID</key>
+		<string>1_MX40NTExODg4Mn5-MTQyMDA2MjI5MjEyNn5SV2ptN28wT0l6bzFjaUt2K0Y4S1V6LzZ-fg</string>
+		<key>KubiDeviceTokBoxPublisherIDiPad</key>
+		<string>T1==cGFydG5lcl9pZD00NTExODg4MiZzaWc9MjBkMjJkN2RiMGVlY2FlMmQ3OTY2YmVmYTM3MTZhNTVkMzI4N2MxNzpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5URXhPRGc0TW41LU1UUXlNREEyTWpJNU1qRXlObjVTVjJwdE4yOHdUMGw2YnpGamFVdDJLMFk0UzFWNkx6Wi1mZyZjcmVhdGVfdGltZT0xNDIwMDYyMzAwJm5vbmNlPTAuNTgyMDgyMTMwMjEzNDY0NCZleHBpcmVfdGltZT0xNDIyNjU0Mjc3</string>
+		<key>KubiDeviceTokBoxPublisherIDKubi</key>
+		<string>T1==cGFydG5lcl9pZD00NTExODg4MiZzaWc9YWYxOWM4NDhiNWQ1NjQzY2FhMGNjY2ZjMzdjMTNkNjA5MDBiODU4Njpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5URXhPRGc0TW41LU1UUXlNREEyTWpJNU1qRXlObjVTVjJwdE4yOHdUMGw2YnpGamFVdDJLMFk0UzFWNkx6Wi1mZyZjcmVhdGVfdGltZT0xNDIwMDYyMzA2Jm5vbmNlPTAuMDU1MjU2NzIxNjE1MTk5NDU2JmV4cGlyZV90aW1lPTE0MjI2NTQyNzc=</string>
+	</dict>
+</array>
+</plist>

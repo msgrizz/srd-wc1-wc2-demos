@@ -13,10 +13,6 @@
 
 @interface PLTInfo()
 
-//@property(readwrite, strong)	PLTDevice			*device;
-//@property(nonatomic,strong,readwrite)	NSDate				*timestamp;
-@property(nonatomic,strong,readwrite)	PLTCalibration		*calibration;
-
 @end
 
 
@@ -33,7 +29,6 @@
 	return self;
 }
 
-#warning BANGLE
 - (id)initWithRequestType:(PLTInfoRequestType)requestType timestamp:(NSDate *)timestamp calibration:(PLTCalibration *)calibration serviceData:(NSData *)serviceData
 {
 	self = [super init];

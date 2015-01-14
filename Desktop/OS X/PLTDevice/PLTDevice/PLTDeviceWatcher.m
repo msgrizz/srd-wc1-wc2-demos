@@ -79,7 +79,10 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 		
 #ifdef TARGET_IOS
 		NSArray *accessories = [[EAAccessoryManager sharedAccessoryManager] connectedAccessories];
-		DLog(DLogLevelInfo, @"Connected accessories: %@",accessories);
+		DLog(DLogLevelInfo, @"Connected accessories:");
+		for (EAAccessory *a in accessories) {
+			NSLog(@"%p, name: %@, serial: %@, connected: %@", a, a.name, a.serialNumber, (a.connected ? @"YES" : @"NO"));
+		}
 		for (EAAccessory *a in accessories) {
 			PLTDevice *device = [[PLTDevice alloc] initWithAccessory:a];
 			[self.devices addObject:device];
@@ -167,7 +170,7 @@ NSString *const PLTDeviceEAProtocolString =					@"com.plantronics.headsetdataser
 
 - (void)accessoryDidDisconnectNotification:(NSNotification *)notification
 {
-	DLog(DLogLevelInfo, @"PLTDeviceWatcher: accessoryDidDisconnectNotification: %@", notification);
+	DLog(DLogLevelInfo, @"PLTDeviceWatcher: accessoryDidDisconnectNotification:");
 	
 	EAAccessory *accessory = notification.userInfo[EAAccessoryKey];
 	if ([accessory.protocolStrings containsObject:PLTDeviceEAProtocolString]) {

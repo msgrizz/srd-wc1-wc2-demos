@@ -327,7 +327,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WebRTC14DemoBeacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -338,7 +340,9 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WebRTC14DemoBeacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -397,6 +401,7 @@
 				423FE1BE19F0668400EF10B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		423FE1BF19F0668400EF10B9 /* Build configuration list for PBXNativeTarget "WebRTC14DemoBeaconTests" */ = {
 			isa = XCConfigurationList;
@@ -405,6 +410,7 @@
 				423FE1C119F0668400EF10B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

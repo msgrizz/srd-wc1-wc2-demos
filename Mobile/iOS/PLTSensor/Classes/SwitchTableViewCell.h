@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface SwitchTableViewCell : UITableViewCell
 
 @property(nonatomic,assign) BOOL    on;

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SettingsInitialized</key>
+	<true/>
+	<key>DefaultsVersion</key>
+	<integer>1</integer>
+	<key>MetricUnits</key>
+	<false/>
+	<key>OverrideLocations</key>
+	<array>
+		<dict>
+			<key>Label</key>
+			<string>Downtown Santa Cruz</string>
+			<key>Latitude</key>
+			<real>36.972478</real>
+			<key>Longitude</key>
+			<real>-122.025717</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>Centrtal Park NYC</string>
+			<key>Latitude</key>
+			<real>40.778726</real>
+			<key>Longitude</key>
+			<real>-73.97239399999999</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>Lafayette Park, San Francisco</string>
+			<key>Latitude</key>
+			<real>37.792702</real>
+			<key>Longitude</key>
+			<real>-122.426156</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+		<dict>
+			<key>Label</key>
+			<string>UCSC Quarry Plaza</string>
+			<key>Latitude</key>
+			<real>36.99717</real>
+			<key>Longitude</key>
+			<real>-122.055382</real>
+			<key>StreetViewPrecacheRoundingMultiple</key>
+			<integer>-1</integer>
+			<key>AskedPrecacheStreetViewRoundingMultiple</key>
+			<integer>-1</integer>
+		</dict>
+	</array>
+	<key>SelectedOverrideLocation</key>
+	<string>__none</string>
+	<key>HeadGestureRecognition</key>
+	<true/>
+	<key>HeadMirrorImage</key>
+	<true/>
+	<key>HTCalibrationTriggers</key>
+	<integer>3</integer>
+	<key>SecurityEnabled</key>
+	<true/>
+	<key>SecurityDevice</key>
+	<dict>
+		<key>SecurityDeviceName</key>
+		<string>Enterprise 1</string>
+		<key>SecurityDeviceID</key>
+		<string>33572b6a-0ca4-4361-804c-15801719a31c</string>
+		<key>SecurityFIDOUsername</key>
+		<string>plt01</string>
+	</dict>
+	<key>KubiEnabled</key>
+	<true/>
+	<key>KubiMode</key>
+	<integer>0</integer>
+	<key>KubiMirror</key>
+	<false/>
+	<key>KubiDevice</key>
+	<dict>
+		<key>KubiDeviceName</key>
+		<string>Kubi 1</string>
+		<key>KubiDeviceTokBoxAPIKey</key>
+		<string>45094402</string>
+		<key>KubiDeviceTokBoxSessionID</key>
+		<string>2_MX40NTA5NDQwMn5-MTQyMDA2MTYxMzQ5N35DcWxLOUR5Njh3eUxJNVVuVDB5NXRRZDN-fg</string>
+		<key>KubiDeviceTokBoxPublisherIDiPad</key>
+		<string>T1==cGFydG5lcl9pZD00NTA5NDQwMiZzaWc9Njg5YTU1ZGY0MDQzMWM0ZmRkNjhlNThiOGQ0MDY4ODVlZDVmMWQ5ZTpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UQTVORFF3TW41LU1UUXlNREEyTVRZeE16UTVOMzVEY1d4TE9VUjVOamgzZVV4Sk5WVnVWREI1TlhSUlpETi1mZyZjcmVhdGVfdGltZT0xNDIwMDYxNzMxJm5vbmNlPTAuODExMDg2MTM5NjMyNzk4NyZleHBpcmVfdGltZT0xNDIyNjUzNTky</string>
+		<key>KubiDeviceTokBoxPublisherIDKubi</key>
+		<string>T1==cGFydG5lcl9pZD00NTA5NDQwMiZzaWc9NjkwYTQ3NWY2NjQ1MDZiMzFjZmYwMGY4MjgwYThiNGE1NjhiYmJjNDpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UQTVORFF3TW41LU1UUXlNREEyTVRZeE16UTVOMzVEY1d4TE9VUjVOamgzZVV4Sk5WVnVWREI1TlhSUlpETi1mZyZjcmVhdGVfdGltZT0xNDIwMDYxOTU5Jm5vbmNlPTAuOTM5MDc4NDU3MTEzOTczNiZleHBpcmVfdGltZT0xNDIyNjUzNTky</string>
+	</dict>
+</dict>
+</plist>

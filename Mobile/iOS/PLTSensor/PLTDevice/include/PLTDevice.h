@@ -20,6 +20,10 @@
 #import "PLTFreeFallInfo.h"
 #import "PLTMagnetometerCalibrationInfo.h"
 #import "PLTGyroscopeCalibrationInfo.h"
+#import "PLTAccelerationInfo.h"
+#import "PLTAngularVelocityInfo.h"
+#import "PLTMagnetismInfo.h"
+#import "PLTHeadingInfo.h"
 
 
 extern NSString *const PLTDeviceAvailableNotification;
@@ -34,12 +38,16 @@ extern NSString *const PLTDeviceConnectionErrorNotificationKey;
 typedef NS_ENUM(NSUInteger, PLTService) {
 	PLTServiceWearingState =					0x1000,
 	PLTServiceProximity =						0x1001,
-	PLTServiceOrientationTracking =				0x0000,
+	PLTServiceOrientation =						0x0000,
+	PLTServiceHeading =							0x0001,
 	PLTServicePedometer =						0x0002,
 	PLTServiceFreeFall =						0x0003,
 	PLTServiceTaps =							0x0004,
 	PLTServiceMagnetometerCalibrationStatus =	0x0005,
-	PLTServiceGyroscopeCalibrationStatus =		0x0006
+	PLTServiceGyroscopeCalibrationStatus =		0x0006,
+	PLTServiceAcceleration =					0x0013,
+	PLTServiceAngularVelocity =					0x0014,
+	PLTServiceMagnetism =						0x0015
 };
 
 typedef NS_ENUM(NSUInteger, PLTSubscriptionMode) {

@@ -38,10 +38,4 @@ extern NSString *const PLTDeviceDataNotificationKey;
 @property(nonatomic,strong)				EAAccessory		*accessory;
 #endif
 
-
-
-
-//#warning TEMPORARY
-//- (void)sneakySneaky:(id)subscriber;
-
 @end

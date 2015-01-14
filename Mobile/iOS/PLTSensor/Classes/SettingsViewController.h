@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString *const PLTSettingsPopoverDidDismissNotification;
+extern NSString *const PLTSettingsSecurityEnabledChangedNotification;
+extern NSString *const PLTSettingsKubiEnabledChangedNotification;
 
 @protocol SettingsViewControllerDelegate;
 

@@ -116,9 +116,9 @@
 		eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
 									[NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 	
-		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 	
-		if (!context || ![EAGLContext setCurrentContext:context]) {
+		if (!eaglContext || ![EAGLContext setCurrentContext:eaglContext]) {
 			//[self release];
 			return nil;
 		}
@@ -238,7 +238,7 @@
 {
     if([[UIApplication sharedApplication] applicationState]==UIApplicationStateActive)
     {
-        [EAGLContext setCurrentContext:context];
+        [EAGLContext setCurrentContext:eaglContext];
         
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
@@ -338,7 +338,7 @@
         
         
         glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-        [context presentRenderbuffer:GL_RENDERBUFFER_OES];
+        [eaglContext presentRenderbuffer:GL_RENDERBUFFER_OES];
         
 //        // multisampling
 //        glBindRenderbuffer(GL_RENDERBUFFER, multisampleFramebuffer);
@@ -356,7 +356,7 @@
 // the same size as our display area.
 -(void)layoutSubviews
 {
-	[EAGLContext setCurrentContext:context];
+	[EAGLContext setCurrentContext:eaglContext];
 	[self destroyFramebuffer];
 	[self createFramebuffer];
 	[self drawView];
@@ -372,7 +372,7 @@
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
 	// This call associates the storage for the current render buffer with the EAGLDrawable (our CAEAGLLayer)
 	// allowing us to draw into a buffer that will later be rendered to screen wherever the layer is (which corresponds with our view).
-	[context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(id<EAGLDrawable>)self.layer];
+	[eaglContext renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(id<EAGLDrawable>)self.layer];
 	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, viewRenderbuffer);
 	
 	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &backingWidth);

@@ -3,6 +3,9 @@ package com.plantronics.BRPlayground;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,12 +44,13 @@ public class MainActivity extends Activity
 	private Communicator 				_communicator; // from appcore
 	private BladeRunnerCommunicator 	_bladeRunnerCommunicator;
 	private EventListener 				_eventListener;
-	private BluetoothDevice 			_connectedBluetoothDevice;
+	private BluetoothDevice _connectedBluetoothDevice;
 	private Set<BluetoothDevice> 		_bladerunnerCapableDevices;
 	private boolean 					_isBladerunnerDevicePresent;
 	private static boolean 				_isBladeRunnerDeviceConnected;
 	private BladeRunnerDevice 			_device;
 	private BladeRunnerDevice 			_sensorsDevice;
+	private BladeRunnerDevice 			_mobileDevice;
 	private BladeRunnerInitializer 		_bladeRunnerInitializer = new BladeRunnerInitializer();
 	private Context 					_context;
 
@@ -328,6 +332,7 @@ public class MainActivity extends Activity
 
 					_device = null;
 					_sensorsDevice = null;
+					_mobileDevice = null;
 					_isBladeRunnerDeviceConnected = false;
 				}
 
@@ -346,6 +351,30 @@ public class MainActivity extends Activity
 								_isBladeRunnerDeviceConnected = true;
 
 								connectionOpened();
+							}
+
+							@Override
+							public void onDeviceDisconnected(BladeRunnerDevice device) {} // handled in _device's onRemoteDeviceDisconnected()
+
+							@Override
+							public void onRemoteDeviceDiscovered(BladeRunnerDevice remoteDevice) {}
+
+							@Override
+							public void onRemoteDeviceDisconnected(BladeRunnerDevice remoteDevice) {}
+						});
+					}
+					else if (port==2 || port==3) {
+
+						_bladeRunnerCommunicator.initialize(remoteDevice, new BladeRunnerCommunicator.InitializationCallback() {
+							@Override
+							public void onInitializationComplete(BladeRunnerDevice device) {
+								Log.i(FN(), "Mobile device connected!");
+
+								_mobileDevice = device;
+
+								Log.i(FN(), "Mobile device commands: " + _mobileDevice.getSupportedCommands());
+
+								//connectionOpened();
 							}
 
 							@Override
@@ -518,27 +547,37 @@ public class MainActivity extends Activity
 	private void getWearingStateButton() {
 		Log.i(FN(), "getWearingStateButton()");
 
-		if (_device != null) {
-			WearingStateRequest request = new WearingStateRequest();
-			_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
-				@Override
-				public void onSuccess(IncomingMessage incomingMessage) {
-					final WearingStateResponse response = (WearingStateResponse)incomingMessage;
-					Log.i(FN(), "********* Wearing state success: " + (response.getWorn() ? "Donned" : "Doffed") + " *********");
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							_wearingTextView.setText("Wearing? " + (response.getWorn() ? "Yes" : "No"));
-						}
-					});
-				}
 
-				@Override
-				public void onFailure(BladerunnerException exception) {
-					Log.e(FN(), "********* Wearing state exception: " + exception + " *********");
-				}
-			});
+		BluetoothManager manager = (BluetoothManager)getSystemService(BLUETOOTH_SERVICE);
+		//BluetoothAdapter adapter = (BluetoothAdapter)manager.getAdapter();
+		List<BluetoothDevice> connectedDevices = manager.getConnectedDevices(BluetoothProfile.GATT_SERVER);
+		for (int i=0; i<connectedDevices.size(); i++) {
+			Log.e(FN(), "connectedDevices: " + connectedDevices.get(i));
 		}
+
+
+
+//		if (_device != null) {
+//			WearingStateRequest request = new WearingStateRequest();
+//			_bladeRunnerCommunicator.execute(request, _device, new MessageCallback() {
+//				@Override
+//				public void onSuccess(IncomingMessage incomingMessage) {
+//					final WearingStateResponse response = (WearingStateResponse)incomingMessage;
+//					Log.i(FN(), "********* Wearing state success: " + (response.getWorn() ? "Donned" : "Doffed") + " *********");
+//					runOnUiThread(new Runnable() {
+//						@Override
+//						public void run() {
+//							_wearingTextView.setText("Wearing? " + (response.getWorn() ? "Yes" : "No"));
+//						}
+//					});
+//				}
+//
+//				@Override
+//				public void onFailure(BladerunnerException exception) {
+//					Log.e(FN(), "********* Wearing state exception: " + exception + " *********");
+//				}
+//			});
+//		}
 	}
 
 	private void subscribeToSignalStrengthButton() {
@@ -732,8 +771,6 @@ public class MainActivity extends Activity
 //			command.setMode(SubscribeToServicesCommand.Mode.ModeOnCchange.getValue());
 //			command.setPeriod(15);
 //			commands.add(command);
-
-			Log.i(FN(), "*** SUBSCRIBING TO ServiceID_HeadOrientation WITH ModePeriodic AND PERIOD 1000 ***");
 
 			for (SubscribeToServicesCommand c : commands) {
 				_bladeRunnerCommunicator.executeWithStreaming(c, _sensorsDevice, new MessageCallback() {
@@ -933,26 +970,44 @@ public class MainActivity extends Activity
 	private void calibratePedometerButton() {
 		Log.i(FN(), "calibratePedometerButton()");
 
-		if (_sensorsDevice != null) {
+		if (_mobileDevice != null) {
 
-			CalibrateServicesCommand request = new CalibrateServicesCommand();
-			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
-			request.setCharacteristic(0);
-			byte[] calData = {(byte)0xFF};
-			request.setCalibrationData(calData);
+			MakeCallCommand command = new MakeCallCommand();
+			command.setDigits("18314715595");
 
-			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+			_bladeRunnerCommunicator.execute(command, _mobileDevice, new MessageCallback() {
 				@Override
 				public void onSuccess(IncomingMessage incomingMessage) {
-					Log.i(FN(), "********* Calibrate service success: " + incomingMessage + " *********");
+					Log.i(FN(), "********* Make call command success: " + incomingMessage + " *********");
 				}
 
 				@Override
 				public void onFailure(BladerunnerException exception) {
-					Log.e(FN(), "********* Calibrate service exception: " + exception + " *********");
+					Log.e(FN(), "********* Make call command exception: " + exception + " *********");
 				}
 			});
 		}
+
+//		if (_sensorsDevice != null) {
+//
+//			CalibrateServicesCommand request = new CalibrateServicesCommand();
+//			request.setServiceID(SubscribeToServicesCommand.ServiceID.ServiceID_Pedometer.getValue());
+//			request.setCharacteristic(0);
+//			byte[] calData = {(byte)0xFF};
+//			request.setCalibrationData(calData);
+//
+//			_bladeRunnerCommunicator.execute(request, _sensorsDevice, new MessageCallback() {
+//				@Override
+//				public void onSuccess(IncomingMessage incomingMessage) {
+//					Log.i(FN(), "********* Calibrate service success: " + incomingMessage + " *********");
+//				}
+//
+//				@Override
+//				public void onFailure(BladerunnerException exception) {
+//					Log.e(FN(), "********* Calibrate service exception: " + exception + " *********");
+//				}
+//			});
+//		}
 	}
 
 	private void eventReceived(Event event) {
@@ -1132,34 +1187,6 @@ public class MainActivity extends Activity
 
 		return new Quaternion(1, 0, 0, 0);
 	}
-
-	// works for 2-byte components
-//	private Quaternion quaternionFromData(byte[] data) {
-//		int w = (data[0] << 8) + data[1];
-//		int x = (data[2] << 8) + data[3];
-//		int y = (data[4] << 8) + data[5];
-//		int z = (data[6] << 8) + data[7];
-//
-//		if (w > 32767) w -= 65536;
-//		if (x > 32767) x -= 65536;
-//		if (y > 32767) y -= 65536;
-//		if (z > 32767) z -= 65536;
-//
-//		double fw = ((double)w) / 16384.0f;
-//		double fx = ((double)x) / 16384.0f;
-//		double fy = ((double)y) / 16384.0f;
-//		double fz = ((double)z) / 16384.0f;
-//
-//		Quaternion q = new Quaternion(fw, fx, fy, fz);
-//		if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
-//			Log.i(FN(), "Bad quaternion! " + q);
-//		}
-//		else {
-//			return q;
-//		}
-//
-//		return null;
-//	}
 
 //	private BladeRunnerDevice getCapableDevice(Object element) {
 //		Set<BladeRunnerDevice> devices = null;

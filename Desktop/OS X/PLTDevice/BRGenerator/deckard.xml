@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Deckard Feature Registry v2.3  -->
-<!-- $Header: //plantronics/NPD/technologies/deckard/dev-2.3/xml/deckard.xml#46 $ -->
-<!-- NOTE:   the range 0xDD00-0xDEF is reserved for  Spokes specific items that don't				  -->
-<!--         belong in the Spokes Compatibility section.									          -->
+<!-- $Header: //plantronics/NPD/technologies/deckard/dev-2.3/xml/deckard.xml#70 $ -->
+<!-- NOTE:   the range 0xDD00-0xDEF is reserved for  Spokes specific items that don't -->
+<!--         belong in the Spokes Compatibility section. -->
 <registry service="82972387-294E-4D62-97B5-2668AA35F618">
     <!-- XXX To do: Add means to declare the relationships between related commands, settings, events -->
     
@@ -34,7 +34,7 @@
             
         </command>
         
-        <command name="Set one boolean" id="0x0050" associatedSettingId="0x0050" associatedEventId="0x0050">
+        <command name="Set one boolean" id="0x0050">
             
             <payload_in>
                 <item type="BOOLEAN" name="value">
@@ -50,7 +50,7 @@
             
         </command>
         
-        <command name="Set one byte" id="0x0051" associatedSettingId="0x0051" associatedEventId="0x0051">
+        <command name="Set one byte" id="0x0051">
             
             <payload_in>
                 <item type="BYTE" name="value">
@@ -66,7 +66,7 @@
             
         </command>
         
-        <command name="Set one short" id="0x0052" associatedSettingId="0x0052" associatedEventId="0x0052">
+        <command name="Set one short" id="0x0052">
             
             <payload_in>
                 <item type="SHORT" name="value">
@@ -82,7 +82,7 @@
             
         </command>
         
-        <command name="Set one int" id="0x0053" associatedSettingId="0x0053" associatedEventId="0x0053">
+        <command name="Set one int" id="0x0053">
             
             <payload_in>
                 <item type="INT" name="value">
@@ -98,7 +98,7 @@
             
         </command>
         
-        <command name="Set one long" id="0x0054" associatedSettingId="0x0054" associatedEventId="0x0054">
+        <command name="Set one long" id="0x0054">
             
             <payload_in>
                 <item type="LONG" name="value">
@@ -114,7 +114,7 @@
             
         </command>
         
-        <command name="Set one string" id="0x0055" associatedSettingId="0x0055" associatedEventId="0x0055">
+        <command name="Set one string" id="0x0055">
             
             <payload_in>
                 <item type="STRING" name="value">
@@ -130,7 +130,7 @@
             
         </command>
         
-        <command name="Set one short array" id="0x0056" associatedSettingId="0x0056" associatedEventId="0x0056">
+        <command name="Set one short array" id="0x0056">
             
             <payload_in>
                 <item type="SHORT_ARRAY" name="value">
@@ -146,7 +146,7 @@
             
         </command>
         
-        <command name="Set one byte array" id="0x0057" associatedSettingId="0x0057" associatedEventId="0x0057">
+        <command name="Set one byte array" id="0x0057">
             
             <payload_in>
                 <item type="BYTE_ARRAY" name="value">
@@ -162,7 +162,7 @@
             
         </command>
         
-        <command name="Set two booleans" id="0x0060" associatedSettingId="0x0060" associatedEventId="0x0060">
+        <command name="Set two booleans" id="0x0060">
             
             <payload_in>
                 <item type="BOOLEAN" name="first value">
@@ -183,7 +183,7 @@
             
         </command>
         
-        <command name="Set two strings" id="0x0061" associatedSettingId="0x0061" associatedEventId="0x0061">
+        <command name="Set two strings" id="0x0061">
             
             <payload_in>
                 <item type="STRING" name="first value">
@@ -545,7 +545,7 @@
             </payload_out>
             
             <comment>
-                For unit testing: Notification that a two bool value has been changed.
+                For unit testing: Notification that two boolean values have been changed.
             </comment>
             
         </event>
@@ -566,7 +566,7 @@
             </payload_out>
             
             <comment>
-                For unit testing: Notification that a two string value has been changed.
+                For unit testing: Notification that two string values has been changed.
             </comment>
             
         </event>
@@ -759,7 +759,7 @@
                             3 = Volume Down<br/>
                             4 = Mobile Call Answer End<br/>
                             5 = Computer Call Answer End<br/>
-                            6 = Desk Phone Call nswer End<br/>
+                            6 = Desk Phone Call Answer End<br/>
                             7 = Hook<br/>
                             8 = VR<br/>
                             <br/>
@@ -801,7 +801,7 @@
                             5 - LED Indication Generation (Defined sequences - eg Pairing, connected, etc)<br/>
                             6 - Charger Connected-Charging / Connected-Not Charging / Not Connected<br/><br/>
                             7 - Battery Level - Full / High / Medium / Low / Empty / Unknown<br/><br/>
-                            8 - USB Audio Event - Telephony On/ Off, Music On/Off<br/><br/>
+                            8 - USB Audio Event - Telephony On/Off, Music On/Off<br/><br/>
                             <br/>
                             The value associated to the indirect event to be simulated.
                             The ushort is split into 2 bytes, with low byte denoting the ID (eg LED),
@@ -892,7 +892,7 @@
         
         <command name="Voice Recognition Test Event Enable-Disable" id="0x100A">
             <payload_in>
-                <item name="voiceRecogntionEventEnable" type="BOOLEAN">
+                <item name="voiceRecognitionEventEnable" type="BOOLEAN">
                     <comment>
                         True to enable Voice recognition event messages, false to disable.
                         NOTE that the Test Interface must be enabled before this command is enabled ("0x1000")
@@ -1126,16 +1126,48 @@
                 </item>
             </payload_out>
             <comment>
-                <![CDATA[<a name="0x1019">
-                         <i>In Deckard 2.3 and later, this Message ID replaces Message ID <a href="#0x1009">0x1009</a>.</i></a><br>]]>
-                Query for the configuration item specified in the Setting request.
+                <![CDATA[
+                    <a name="0x1019">
+                         <i>In Deckard 2.3 and later, this Message ID replaces Message ID <a href="#0x1009">0x1009</a>.</i></a><br>
+                    Query for the configuration item specified in the Setting request.
+                ]]>
             </comment>
         </setting>
-        
+
+        <setting name="Hardware Battery Meter" id="0x101C">
+            <payload_in/>
+            <payload_out>
+                <item name="datapacket" type="BYTE_ARRAY">
+                    <comment>
+                        Diagnostic information relating to the hardware battery meter
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                Diagnostic information relating to the hardware battery meter
+            </comment>
+        </setting>
+
+        <setting name="Software Coulomb Counter" id="0x101E">
+            <payload_in/>
+            <payload_out>
+                <item name="datapacket" type="BYTE_ARRAY">
+                    <comment>
+                        Diagnostic information relating to the software coulomb counter
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                Diagnostic information relating to the software coulomb counter
+            </comment>
+        </setting>
+
         <event name="Test Interface Enable-Disable" id="0x1000">
             <payload_out>
                 <item name="testInterfaceEnable" type="BOOLEAN">
-                    <comment>True indicating test messaging is enabled, false otherwise.</comment>
+                    <comment>
+                        True indicating test messaging is enabled, false otherwise.
+                    </comment>
                 </item>
             </payload_out>
             
@@ -1183,7 +1215,7 @@
         <event name="Voice Recognition Test Event Enable-Disable" id="0x100A">
             
             <payload_out>
-                <item name="voiceRecogntionEventEnable" type="BOOLEAN">
+                <item name="voiceRecognitionEventEnable" type="BOOLEAN">
                     <comment>
                         True indicates Voice Recognition Test Events are enabled. False otherwise.
                     </comment>
@@ -1197,7 +1229,7 @@
         <event name="Voice Recognition Test event" id="0x100B">
             
             <payload_out>
-                <item type="SHORT" name="voiceRecognitonId">
+                <item type="SHORT" name="voiceRecognitionId">
                     <comment>The Voice Recognition event id.</comment>
                 </item>
                 
@@ -1205,7 +1237,7 @@
             
             <comment>
                 The voice recognition event, and the VR event ID.
-                The Short contains  the VR event event ID
+                The Short contains the VR event ID
             </comment>
             
         </event>
@@ -1221,7 +1253,7 @@
             
             <comment>
                 The voice recognition event, and the VR event ID.
-                The Short contains  the VR event event ID
+                The Short contains the VR event ID
             </comment>
             
         </event>
@@ -1250,13 +1282,55 @@
                 Capsense Raw data used for sensor monitoring
             </comment>
         </event>
-				
-		<exception name="Test Interface Is Disabled" id="0x1000">
-			<payload_out/>
-			<comment>
-					This exception is sent in response to a test interface command or setting message when the test interface is not yet enabled.
-			</comment>
-		</exception>
+
+        <event name="Software Battery Diag" id="0x1110">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="softwareBatteryData">
+                    <comment>
+                        Software battery meter data
+                    </comment>
+                </item>
+
+            </payload_out>
+            <comment>
+                Software battery meter raw data
+            </comment>
+        </event>
+
+        <event name="Hardware Battery Diag" id="0x1112">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="hardwareBatteryData">
+                    <comment>
+                        Hardware battery meter data
+                    </comment>
+                </item>
+
+            </payload_out>
+            <comment>
+                Hardware battery meter raw data
+            </comment>
+        </event>
+
+        <event name="Coulomb Counter Diag" id="0x1114">
+            <payload_out>
+                <item type="BYTE_ARRAY" name="CoulombCounterData">
+                    <comment>
+                        Coulomb Counter data
+                    </comment>
+                </item>
+
+            </payload_out>
+            <comment>
+                Coulomb Counter raw data
+            </comment>
+        </event>
+
+        <exception name="Test Interface Is Disabled" id="0x1000">
+            <payload_out/>
+            <comment>
+                This exception is sent in response to a test interface command or setting message when the test interface is not yet enabled.
+            </comment>
+        </exception>
 
     </section>
     
@@ -1289,7 +1363,7 @@
                 <item type="BOOLEAN" name="autoPauseMedia">
                     <comment>
                         If true, enable auto-pause/auto-resume of streaming audio on doff/don. If
-                        false,these physical events will not affect streaming audio.
+                        false, these physical events will not affect streaming audio.
                     </comment>
                 </item>
             </payload_in>
@@ -1361,7 +1435,7 @@
             <comment>
                 This command controls the headset ability to provide don-doff events.
                 If enabled, the headset will provide don events when the user dons the headset, and doff events when the headset is removed.
-                This must be enabled to provide auto answer, anto pause, auto lock, auto transfer functionality.
+                This must be enabled to provide auto answer, auto pause, auto lock, auto transfer functionality.
             </comment>
         </command>
 
@@ -1370,7 +1444,7 @@
                 <item type="BOOLEAN" name="autoMuteCall">
                     <comment>
                         If true, enable auto-mute on/off of active call on doff/don. If
-                        false,these physical events will not affect active call.
+                        false, these physical events will not affect active call.
                     </comment>
                 </item>
             </payload_in>
@@ -1507,7 +1581,7 @@
                 automatically mute on of the active call; donning the headset
                 will resume mute off the active call.
             </comment>
-        </setting>	
+        </setting>
 
         <event name="Wearing state changed" id="0x0200">
             <payload_out>
@@ -1533,7 +1607,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Answer on Don configuration of the device has been changed..
+                Notification that the Answer on Don configuration of the device has been changed.
             </comment>
         </event>
         
@@ -1547,7 +1621,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Auto Pause Media configuration of the device has been changed..
+                Notification that the Auto Pause Media configuration of the device has been changed.
             </comment>
         </event>
         
@@ -1562,7 +1636,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Auto Transfer Call configuration of the device has been changed..
+                Notification that the Auto Transfer Call configuration of the device has been changed.
             </comment>
             
         </event>
@@ -1577,7 +1651,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Auto Lock Button configuration of the device has been changed..
+                Notification that the Auto Lock Button configuration of the device has been changed.
             </comment>
             
         </event>
@@ -1592,7 +1666,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Wearing State Sensor configuration of the device has been changed..
+                Notification that the Wearing State Sensor configuration of the device has been changed.
             </comment>
             
         </event>
@@ -1607,7 +1681,7 @@
             </payload_out>
             
             <comment>
-                Notification that the Auto mute on configuration of the device has been changed..
+                Notification that the Auto mute on configuration of the device has been changed.
             </comment>
         </event> 
 
@@ -1639,14 +1713,14 @@
             
         </command>
         
-        <command name="Configuration for a Connected Headset" id="0x0401" associatedSettingId="0x0401" associatedEventId="0x0401">
+        <command name="Configuration for a Connected Headset" id="0x0401">
             <payload_in>
                 <item name="configuration" type="BYTE">
                     <comment>
                         Byte value to indicate the configuration to be used for the connected headset by the target device.
                     </comment>
-                    <definedValue name="HTopNew" 		value="0x00" />
-                    <definedValue name="HTopLegacy" 	value="0x01" />
+                    <definedValue name="HTopNew" value="0x00" />
+                    <definedValue name="HTopLegacy" value="0x01" />
                 </item>
             </payload_in>
             <payload_out/>
@@ -1679,24 +1753,21 @@
             
         </command>
         
-		<command name="Configure Mute off VP" id="0x0407" associatedSettingId="0x0407" associatedEventId="0x0407">
+        <command name="Configure Mute off VP" id="0x0407">
+            <payload_in>
+                <item type="BOOLEAN" name="enable">
+                    <comment>
+                        Enable/Disable Mute off VP 
+                    </comment> 
+                </item> 
+            </payload_in>
+            <payload_out/>
+            <comment>
+                Enable/disable Mute off VP. Device should return success if it supports this command.
+            </comment>
+        </command>
 
-			<payload_in>
-				<item type="BOOLEAN" name="enable">
-					<comment>
-						Enable/Disable Mute off VP 
-					</comment> 
-				</item> 
-			</payload_in>
-			<payload_out/>
-
-			<comment>
-				Enable/disable Mute off VP. Device should return success if it support this command .
-			</comment>
-
-		</command>
-
-        <command name="Set SCO Open Tone Enable" id="0x0408" associatedSettingId="0x0408" associatedEventId="0x0408">
+        <command name="Set SCO Open Tone Enable" id="0x0408">
             <payload_in>
                 <item type="BOOLEAN" name="enable">
                     <comment>
@@ -1706,11 +1777,11 @@
             </payload_in>
             <payload_out/>
             <comment>
-                Configure device as to it should have an open sco tone.
+                Configure device as to it should have an open SCO tone.
             </comment>
         </command>
 
-        <command name="Configure OLI Feature" id="0x0409" associatedSettingId="0x0409" associatedEventId="0x0409">
+        <command name="Configure OLI Feature" id="0x0409">
             <payload_in>
                 <item type="BYTE" name="OLI_enable">
                     <comment>
@@ -1727,28 +1798,28 @@
             
         </command>
 
-        <command name="Configure Mute Alert" id="0x040A" associateSettingId="0x040A" associateEventId="0x040A">
+        <command name="Configure Mute Alert" id="0x040A">
             <payload_in>
                 <item name="mode" type="BYTE">
                     <comment>
-                        Select between disable , time interval mute alert and voice detect mute alert.
+                        Select between disable, time interval mute alert and voice detect mute alert.
                     </comment>
                 </item>
                 <item name="parameter" type="BYTE">
                     <comment>
-                        When mode is Voice Detect Reminder , item parameter is valid
-                        Otherwise it will be ignored .
-                        When mode is TimeIntervalReminder , command Configure mute reminder timing should be used to configure Time interval.
+                        When mode is Voice Detect Reminder, item parameter is valid
+                        Otherwise it will be ignored.
+                        When mode is TimeIntervalReminder, command "Configure mute reminder timing" must be used to configure Time interval.
                     </comment>
                 </item>
             </payload_in>
             <payload_out/>
             <comment>
-                Configure current mute alert scheme , disabled or time interval reminder or voice detect reminder
+                Configure current mute alert scheme, disabled or time interval reminder or voice detect reminder
             </comment>
         </command>
         
-        <setting name="Configuration for a Connected Headset" id="0x0401" associatedEventId="0x0401">
+        <setting name="Configuration for a Connected Headset" id="0x0401">
             <payload_in/>
             <payload_out>
                 <item name="configuration" type="BYTE">
@@ -1804,35 +1875,35 @@
             
         </setting>
 
-		<setting name="Get Mute off VP" id="0x0407">
+        <setting name="Get Mute off VP" id="0x0407">
             <payload_in/>
             <payload_out>
                 <item type="BOOLEAN" name="enable">
                     <comment>
-						Mute off VP enable status 
+                        Mute off VP enable status 
                     </comment>
                 </item>
             </payload_out>
-			
+                        
             <comment>
-				Device should return Mute off VP  enable status if it support this setting . Otherwise exception should be returned. 
+                Device should return Mute off VP enable status if it support this setting. Otherwise exception should be returned. 
             </comment>
-			
+                        
         </setting>
 
         <setting name="Get SCO Open Tone Enable" id="0x0408">
-			<payload_in/>
-			<payload_out>
-				<item type="BOOLEAN" name="enable">
-					<comment> 
+            <payload_in/>
+            <payload_out>
+                <item type="BOOLEAN" name="enable">
+                    <comment> 
                         SCO Open Tone enable status
-					</comment> 
-				</item>
-			</payload_out> 
-			<comment>
+                    </comment> 
+                </item>
+            </payload_out> 
+            <comment>
                 Allow a device to be queried as to the configured state of the SCO Open Tone
-			</comment>
-		</setting>
+            </comment>
+        </setting>
 
         <setting name="Get OLI feature Enable" id="0x0409">
             <payload_in/>
@@ -1851,7 +1922,7 @@
 
         </setting>
 
-        <setting name="Mute Alert" id="0x040A" associateCommandId="0x040A" associateEventId="0x040A">
+        <setting name="Mute Alert" id="0x040A">
             <payload_in/>
             <payload_out>
                 <item name="mode" type="BYTE">
@@ -1859,23 +1930,23 @@
                     <definedValue name="TimeIntervalReminder" value="0x01"/>
                     <definedValue name="VoiceDetectReminder"  value="0x02"/>
                     <comment>
-                       Current mute alert mode .
+                       Current mute alert mode.
                     </comment>
                 </item>
                 <item name="parameter" type="BYTE">
-                    <definedValue name="VisibleAndAudibleMuteAlert"	value="0x00"/>
-                    <definedValue name="VisibleOnlyMuteAlert" 		value="0x01"/>
-                    <definedValue name="AudibleOnlyMuteAlert" 		value="0x02"/>
+                    <definedValue name="VisibleAndAudibleMuteAlert"     value="0x00"/>
+                    <definedValue name="VisibleOnlyMuteAlert"           value="0x01"/>
+                    <definedValue name="AudibleOnlyMuteAlert"           value="0x02"/>
                     <comment>
-                        When mode is Voice Detect Reminder , item parameter is valid
-                        Otherwise it will be always zero .
-                        When mode is TimeIntervalReminder , setting mute reminder timing should be used to get mute alert Time interval.
+                        When mode is Voice Detect Reminder, item parameter is valid
+                        Otherwise it will be always zero.
+                        When mode is TimeIntervalReminder, setting "Mute reminder timing" must be used to get mute alert Time interval that is set by the "Configure mute reminder timing" command.
                     </comment>
                 </item>
             </payload_out>
             
             <comment>
-                Return current mute alert scheme , disabled or time interval reminder or voice detect reminder
+                Return current mute alert scheme, disabled or time interval reminder or voice detect reminder
             </comment>
         </setting>
         
@@ -1936,21 +2007,21 @@
             
         </event>
         
-		<event name="Mute off VP enable status changed" id="0x0407">
-		
-			<payload_out>
-				<item type="BOOLEAN" name="enable">
-					<comment> 
-						Mute off VP  enable/disable indicator
-					</comment> 
-				</item>
-			</payload_out> 
-			
-			<comment>
-				Device should send Mute off VP  enable status event if Mute off VP enable status is supported and changed . 
-			</comment> 
-			
-		</event>
+        <event name="Mute off VP enable status changed" id="0x0407">
+                
+            <payload_out>
+                <item type="BOOLEAN" name="enable">
+                    <comment> 
+                        Mute off VP  enable/disable indicator
+                    </comment> 
+                </item>
+            </payload_out> 
+                        
+            <comment>
+                Device should send Mute off VP  enable status event if Mute off VP enable status is supported and changed. 
+            </comment> 
+                        
+        </event>
 
         <event name="SCO Open Tone Enable" id="0x0408">
             <payload_out>
@@ -1979,7 +2050,7 @@
             </comment>
         </event>
         
-        <event name="Configure Mute Alert" id="0x040A" associateCommandId="0x040A" associateSettingId="0x040A">
+        <event name="Configure Mute Alert" id="0x040A">
             <payload_out>
                 <item name="mode" type="BYTE">
                     <comment>
@@ -1988,9 +2059,9 @@
                 </item>
                 <item name="parameter" type="BYTE">
                     <comment>
-                        When mode is Voice Detect Reminder , item parameter is valid
-                        Otherwise it will be always zero .
-                        When mode is TimeIntervalReminder , event mute reminder timing will report Mute alert timing .
+                        When mode is Voice Detect Reminder, item parameter is valid
+                        Otherwise it will be always zero.
+                        When mode is TimeIntervalReminder, event "Mute reminder timing" will report Mute alert timing changed by "Configure mute reminder timing" command.
                     </comment>
                 </item>
             </payload_out>
@@ -2111,7 +2182,7 @@
             </comment>
         </command>
         
-        <command name="Configure caller announcement" id="0x0804" associatedSettingId="0x0804" associatedEventId="0x0804">
+        <command name="Configure caller announcement" id="0x0804">
             <payload_in>
                 <item name="value" type="BYTE">
                     <comment>
@@ -2171,19 +2242,19 @@
                 <!-- This parameter is not present in the setting! -->
                 <item type="BYTE" name="timeout">
                     <comment>
-                    If ENABLE is TRUE ,  Find Headset LED Alert should enable and timeout after TIMEOUT seconds.
-                    TIMEOUT is unsigned decimal number , it could not be bigger than 255 and not equal to zero.
-                    If ENABLE is FALSE , Find Headset LED Alert should be disabled right way.
+                    If ENABLE is TRUE,  Find Headset LED Alert should enable and timeout after TIMEOUT seconds.
+                    TIMEOUT is unsigned decimal number, it could not be bigger than 255 and not equal to zero.
+                    If ENABLE is FALSE, Find Headset LED Alert should be disabled right way.
                     </comment>
                 </item>
             </payload_in>
                     <payload_out/>
                 <comment>
                     Enable/disable Find Headset LED Alert.
-                    Device supposes enable command will be send every TIMEOUT seconds or less otherwise Find Headset LED Alert will be terminated .
+                    Device supposes enable command will be send every TIMEOUT seconds or less otherwise Find Headset LED Alert will be terminated.
                 </comment>
         </command>
-		
+
         <command name="Enable TxPower Reporting" id="0x0810">
             <payload_in>
                 <item name="connectionId" type="BYTE">
@@ -2355,22 +2426,21 @@
                 Reads configuration of rssi and near far.
             </comment>
         </setting>
-		
-		
-	    <setting name="Find Headset LED Alert Status" id="0x0808">
-		    <payload_in/>
-		    <payload_out>
-			    <item type="BOOLEAN" name="enable">
-				    <comment>
-				        If enable is true , Find Headset LED Alert is enabled . Otherwise it is disabled .
-    				</comment>
-	    		</item>
-		    </payload_out>
+                
+        <setting name="Find Headset LED Alert Status" id="0x0808">
+            <payload_in/>
+            <payload_out>
+                <item type="BOOLEAN" name="enable">
+                    <comment>
+                        If enable is true, Find Headset LED Alert is enabled. Otherwise it is disabled.
+                    </comment>
+                </item>
+            </payload_out>
  
-		    <comment>
-		        Get current Find Headset LED Alert Status .
-		    </comment>
-	    </setting>
+            <comment>
+                Get current Find Headset LED Alert Status.
+            </comment>
+        </setting>
         
         <setting name="TxPower Reporting" id="0x0810">
             <payload_in>
@@ -2388,7 +2458,7 @@
                 </item>
                 <item type="BOOLEAN" name="enable">
                     <comment>
-                        If enable is true , Transmit Power Reporting is enabled on a device for a connection Id. Otherwise it is disabled .
+                        If enable is true, Transmit Power Reporting is enabled on a device for a connection Id. Otherwise it is disabled.
                     </comment>
                 </item>
             </payload_out>
@@ -2402,9 +2472,9 @@
                 <payload_in/>
                 <payload_out>
                     <item name="mode" type="BYTE">
-                        <definedValue name="disabled"	                    value="0x00"/>
-                        <definedValue name="voiceDetection" 				value="0x01"/>
-                        <definedvalue name="silenceDetection" 				value="0x02"/>
+                        <definedValue name="disabled"         value="0x00"/>
+                        <definedValue name="voiceDetection"   value="0x01"/>
+                        <definedvalue name="silenceDetection" value="0x02"/>
                         <comment>
                             current voice slient detection mode.
                         </comment>
@@ -2582,20 +2652,20 @@
             <payload_out>
                 <item type="BOOLEAN" name="enable">
                     <comment>
-                    If enable is true , Find Headset LED Alert is enabled . Otherwise it is disabled .
+                    If enable is true, Find Headset LED Alert is enabled. Otherwise it is disabled.
                     </comment>
                 </item>
                 <item type="BYTE" name="timeout">
                     <comment>
-                    If enable is TRUE ,  Find Headset LED Alert is enabled and timeout after timeout seconds.
+                    If enable is TRUE,  Find Headset LED Alert is enabled and timeout after timeout seconds.
                     timeout is unsigned decimal number , it could not be bigger than 255 and not equal to zero.
-                    If eneable is FALSE , Find Headset LED Alert is disabled right way.
+                    If eneable is FALSE, Find Headset LED Alert is disabled right way.
                     </comment>
                 </item>
             </payload_out>
 
             <comment>
-            Indicate current Find Headset LED Alert Status .
+            Indicate current Find Headset LED Alert Status.
             </comment>
         </event>
 
@@ -2643,7 +2713,7 @@
                 <payload_out>
                     <item name="mode" type="BYTE">
                         <comment>
-                            For the value of mode , please refer Voice silent detection setting. 
+                            For the value of mode, please refer Voice silent detection setting. 
                             Only VoiceDetection and SilentDetection is valid for this event.
                         </comment>
                     </item>
@@ -2658,7 +2728,7 @@
                 <payload_out>
                     <item name="mode" type="BYTE">
                         <comment>
-                            For the value of mode , please refer Voice silent detection setting. 
+                            For the value of mode, please refer Voice silent detection setting. 
                             Only VoiceDetection and SilentDetection is valid for this event.
                         </comment>
                     </item>
@@ -2676,7 +2746,7 @@
     
     <section title="General Information (0x0Ann)">
         
-        <command name="Tattoo Serial Number" id="0x0A01" associatedSettingId="0x0A01" associatedEventId="0x0A01">
+        <command name="Tattoo Serial Number" id="0x0A01">
             <payload_in>
                 <item name="serial number" type="BYTE_ARRAY">
                     <comment>
@@ -2690,7 +2760,7 @@
             </comment>
         </command>
         
-        <command name="Tattoo Build Code" id="0x0A03" associatedSettingId="0x0A03" associatedEventId="0x0A03">
+        <command name="Tattoo Build Code" id="0x0A03">
             <payload_in>
                 <item name="build code" type="BYTE_ARRAY">
                     <comment>
@@ -2704,12 +2774,12 @@
             </comment>
         </command>
         
-        <command name="Part Number" id="0x0A05" associatedSettingId="0x0A05" associatedEventId="0x0A05">
+        <command name="Part Number" id="0x0A05">
             <payload_in>
                 <item name="part number" type="UNSIGNED_INT">
                     <comment>
                         Four byte number with the upper three bytes containing the hexadecimal value of the decimal
-						part number and the low byte containing a numeric representation of the revision.
+                        part number and the low byte containing a numeric representation of the revision.
                     </comment>
                 </item>
             </payload_in>
@@ -2719,7 +2789,7 @@
             </comment>
         </command>
         
-        <command name="User ID" id="0x0A06" associatedSettingId="0x0A06" associatedEventId="0x0A06">
+        <command name="User ID" id="0x0A06">
             <payload_in>
                 <item name="user ID" type="BYTE_ARRAY">
                     <comment>
@@ -2733,7 +2803,7 @@
             </comment>
         </command>
         
-        <command name="First Date Used" id="0x0A07" associatedSettingId="0x0A07" associatedEventId="0x0A07">
+        <command name="First Date Used" id="0x0A07">
             <payload_in>
                 <item name="month" type="UNSIGNED_SHORT">
                     <comment>
@@ -2773,7 +2843,7 @@
             </comment>
         </command>
         
-        <command name="Last Date Used" id="0x0A09" associatedSettingId="0x0A09" associatedEventId="0x0A09">
+        <command name="Last Date Used" id="0x0A09">
             <payload_in>
                 <item name="month" type="UNSIGNED_SHORT">
                     <comment>
@@ -2797,7 +2867,7 @@
             </comment>
         </command>
         
-        <command name="Last Date Connected" id="0x0A0B" associatedSettingId="0x0A0B" associatedEventId="0x0A0B">
+        <command name="Last Date Connected" id="0x0A0B">
             <payload_in>
                 <item name="month" type="UNSIGNED_SHORT">
                     <comment>
@@ -2836,7 +2906,7 @@
             </comment>
         </command>
         
-        <command name="Time Used" id="0x0A0D" associatedSettingId="0x0A0D" associatedEventId="0x0A0D">
+        <command name="Time Used" id="0x0A0D">
             <payload_in>
                 <item name="total time" type="UNSIGNED_SHORT">
                     <comment>
@@ -2850,7 +2920,7 @@
             </comment>
         </command>
         
-        <command name="User Defined Storage" id="0x0A0F" associatedSettingId="0x0A0F" associatedEventId="0x0A0F">
+        <command name="User Defined Storage" id="0x0A0F">
             <payload_in>
                 <item name="data" type="BYTE_ARRAY">
                     <comment>
@@ -2892,7 +2962,7 @@
             </comment>
         </command>
         
-        <command name="Set Genes GUID" id="0x0A1E" associatedSettingId="0x0A1E" associatedEventId="0x0A1E">
+        <command name="Set Genes GUID" id="0x0A1E">
             <payload_in>
                 <item type="BYTE_ARRAY" name="guid">
                     <comment>
@@ -2927,6 +2997,7 @@
             
             <comment>
                 Change the interval between mute reminders (voice prompt or tone) in the headset.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
                 The device will make a best effort to play the reminders on this schedule, though
                 exact timing is not guaranteed.
             </comment>
@@ -3108,7 +3179,6 @@
             </comment>
         </command>
 
-
         <setting name="Product name" id="0x0A00">
             <payload_in/>
             <payload_out>
@@ -3124,7 +3194,7 @@
             </comment>
         </setting>
         
-        <setting name="Tattoo Serial Number" id="0x0A01" associatedEventId="0x0A01">
+        <setting name="Tattoo Serial Number" id="0x0A01">
             <payload_in/>
             <payload_out>
                 <item name="serial number" type="BYTE_ARRAY">
@@ -3153,7 +3223,7 @@
             </comment>
         </setting>
         
-        <setting name="Tattoo Build Code" id="0x0A03" associatedEventId="0x0A03">
+        <setting name="Tattoo Build Code" id="0x0A03">
             <payload_in/>
             <payload_out>
                 <item name="build code" type="BYTE_ARRAY">
@@ -3188,13 +3258,13 @@
             </comment>
         </setting>
         
-        <setting name="Part Number" id="0x0A05" associatedEventId="0x0A05">
+        <setting name="Part Number" id="0x0A05">
             <payload_in/>
             <payload_out>
                 <item name="part number" type="UNSIGNED_INT">
                     <comment>
                         Four byte number with the upper three bytes containing the hexadecimal value of the decimal
-						part number and the low byte containing a numeric representation of the revision.
+                        part number and the low byte containing a numeric representation of the revision.
                     </comment>
                 </item>
             </payload_out>
@@ -3203,7 +3273,7 @@
             </comment>
         </setting>
         
-        <setting name="User ID" id="0x0A06" associatedEventId="0x0A06">
+        <setting name="User ID" id="0x0A06">
             <payload_in/>
             <payload_out>
                 <item name="user ID" type="BYTE_ARRAY">
@@ -3217,7 +3287,7 @@
             </comment>
         </setting>
         
-        <setting name="First Date Used" id="0x0A07" associatedEventId="0x0A07">
+        <setting name="First Date Used" id="0x0A07">
             <payload_in/>
             <payload_out>
                 <item name="month" type="UNSIGNED_SHORT">
@@ -3241,7 +3311,7 @@
             </comment>
         </setting>
         
-        <setting name="Last Date Used" id="0x0A09" associatedEventId="0x0A09">
+        <setting name="Last Date Used" id="0x0A09">
             <payload_in/>
             <payload_out>
                 <item name="month" type="UNSIGNED_SHORT">
@@ -3265,7 +3335,7 @@
             </comment>
         </setting>
         
-        <setting name="Last Date Connected" id="0x0A0B" associatedEventId="0x0A0B">
+        <setting name="Last Date Connected" id="0x0A0B">
             <payload_in/>
             <payload_out>
                 <item name="month" type="UNSIGNED_SHORT">
@@ -3289,7 +3359,7 @@
             </comment>
         </setting>
         
-        <setting name="Time Used" id="0x0A0D" associatedEventId="0x0A0D">
+        <setting name="Time Used" id="0x0A0D">
             <payload_in/>
             <payload_out>
                 <item name="total time" type="UNSIGNED_SHORT">
@@ -3303,7 +3373,7 @@
             </comment>
         </setting>
         
-        <setting name="User Defined Storage" id="0x0A0F" associatedEventId="0x0A0F">
+        <setting name="User Defined Storage" id="0x0A0F">
             <payload_in/>
             <payload_out>
                 <item name="data" type="BYTE_ARRAY">
@@ -3419,7 +3489,61 @@
                 a high estimate, and charging or not.
             </comment>
         </setting>
-        
+
+        <setting name="Battery Extended info" id="0x0A1B">
+            <payload_in/>
+            <payload_out>
+                <item type="UNSIGNED_SHORT" name="voltage">
+                    <comment>
+                        current battery voltage, in mV
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="remainingcapacity">
+                    <comment>
+                        current battery remaining capacity, in mAh (12.4)
+                    </comment>
+                </item>
+                <item type="SHORT" name="current">
+                    <comment>
+                        current current in/out (-ve) of battery in mA (12.4) (signed)
+                    </comment>
+                </item>
+                <item type="BYTE" name="stateofcharge">
+                    <comment>
+                        Battery state of charge, in %
+                    </comment>
+                </item>
+                <item type="BYTE" name="temperature">
+                    <comment>
+                        Current temperature, in C (signed)
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="totalcapacity">
+                    <comment>
+                        current battery total capacity, in mAh (12.4)
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="totaltalktime">
+                    <comment>
+                        total talk time that is expected from a full battery (minutes)
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="numchargecycles">
+                    <comment>
+                        total number of times that battery has been charged (at least partially)
+                    </comment>
+                </item>
+                <item type="UNSIGNED_SHORT" name="numfullcharges">
+                    <comment>
+                        total number of times that battery has reached full charge
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                Implemented only in devices (typically headsets) equipped with a battery.
+            </comment>
+        </setting>
+
         <setting name="Genes GUID" id="0x0A1E">
             <payload_in/>
             <payload_out>
@@ -3457,6 +3581,7 @@
             
             <comment>
                 Return the interval between mute reminders (voice prompt or tone) in the headset.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
             </comment>
             
         </setting>
@@ -3658,7 +3783,7 @@
                     </comment>
                 </item>
                 <item name="MaintenanceVersion" type="UNSIGNED_SHORT">
-                    <definedValue name="DeckardVersionMaintenance" value="0"/>
+                    <definedValue name="DeckardVersionMaintenance" value="70"/>
                     <comment>
                         The Maintenance version of Deckard xml file to which the device message conform
                     </comment>
@@ -3705,7 +3830,7 @@
                 <item name="part number" type="UNSIGNED_INT">
                     <comment>
                         Four byte number with the upper three bytes containing the hexadecimal value of the decimal
-						part number and the low byte containing a numeric representation of the revision.
+                        part number and the low byte containing a numeric representation of the revision.
                     </comment>
                 </item>
             </payload_out>
@@ -3946,7 +4071,8 @@
                 </item>
             </payload_out>
             <comment>
-                Notification that the Mute Reminder timing has been changed
+                Notification that the Mute Reminder timing has been changed.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
             </comment>
         </event>
         
@@ -4193,7 +4319,7 @@
     
     <section title="Device Status (0x0Enn)">
         
-        <command name="Microphone Mute State" id="0x0E01" associatedSettingId="0x0E01" associatedEventId="0x0E01">
+        <command name="Microphone Mute State" id="0x0E01">
             <payload_in>
                 <item name="state" type="BOOLEAN">
                     <comment>
@@ -4203,11 +4329,11 @@
             </payload_in>
             <payload_out/>
             <comment>
-				Microphone mute state of the device.
+                Microphone mute state of the device.
             </comment>
         </command>
 
-        <command name="Transmit Audio State" id="0x0E03" associatedSettingId="0x0E03" associatedEventId="0x0E03">
+        <command name="Transmit Audio State" id="0x0E03">
             <payload_in>
                 <item name="state" type="BOOLEAN">
                     <comment>
@@ -4217,10 +4343,10 @@
             </payload_in>
             <payload_out/>
             <comment>
-				Transmit (microphone) audio state of the device.
+                Transmit (microphone) audio state of the device.
             </comment>
         </command>
-		
+                
         <command name="Call answer" id="0x0E04">
             <payload_in/>
             <payload_out/>
@@ -4231,7 +4357,7 @@
             </comment>
         </command>
         
-        <command name="Receive Audio State" id="0x0E05" associatedSettingId="0x0E05" associatedEventId="0x0E05">
+        <command name="Receive Audio State" id="0x0E05">
             <payload_in>
                 <item name="state" type="BOOLEAN">
                     <comment>
@@ -4241,7 +4367,7 @@
             </payload_in>
             <payload_out/>
             <comment>
-				Receive (speaker) audio state of the device.
+                Receive (speaker) audio state of the device.
             </comment>
         </command>
 
@@ -4256,7 +4382,7 @@
             
         </command>
         
-        <command name="LED Status Generic" id="0x0E07" associatedSettingId="0x0E07" associatedEventId="0x0E07">
+        <command name="LED Status Generic" id="0x0E07">
             <payload_in>
                 <item name="ID" type="BYTE_ARRAY">
                     <comment>
@@ -4279,7 +4405,7 @@
                 0x0808
             </throws>
             <comment>
-				LED status of the device.  All parameter arrays must be of a matching length or an exception will be returned.
+                LED status of the device.  All parameter arrays must be of a matching length or an exception will be returned.
             </comment>
         </command>
 
@@ -4300,35 +4426,29 @@
             </comment>
         </command>
 
-        <command name="Headset Available" id="0x0E09" associatedSettingId="0x0E09" associatedEventId="0x0E09">
-            <payload_in>
-                <item name="state" type="BOOLEAN">
-                    <comment>
-                        True (1) if the headset is connected and false (0) if the headset is disconnected.
-                    </comment>
-                </item>
-            </payload_in>
+        <command name="Headset Available" id="0x0E09">
+            <payload_in/>
             <payload_out/>
             <comment>
-				Availability of the headset based on connection state (wireless or wired).
+                PLACEHOLDER: This command ID is reserved as the command is not supported but no other command shall use the associated ID per policy.
             </comment>
         </command>
 
-        <command name="Set Speaker Volume" id="0x0E0A" associatedSettingId="0x0E0A" associatedEventId="0x0E0A">
+        <command name="Set Speaker Volume" id="0x0E0A">
             <payload_in>
                 <item name="action" type="BYTE">
                     <comment>
                         <![CDATA[
-                            If action is 0, then the value held in volume can be negative for volume down or positive for volume up<br/>
-                            If action is 1, then the value held in volume is an absolute percentage value with the range 0..100%<br/>
-							If action is 2, then the value held in volume is an absolute dB value<br/>
-                            Support for all action types is not mandatory.
+                                 If action is 0, then the value held in volume can be negative for volume down or positive for volume up<br/>
+                                 If action is 1, then the value held in volume is an absolute percentage value with the range 0..100%<br/>
+                                 If action is 2, then the value held in volume is an absolute dB value<br/>
+                                 Support for all action types is not mandatory.
                         ]]>
                     </comment>
-					<definedValue name="SpeakerVolumeRelativeUpDown"    	value="0x00"/>
-                    <definedValue name="SpeakerVolumeAbsolutePercentage"	value="0x01"/>
-                    <definedValue name="SpeakerVolumeAbsoluteDb"    		value="0x02"/>
-                    <definedValue name="SpeakerVolumeQ8dot8Format"    		value="0x03"/>
+                    <definedValue name="SpeakerVolumeRelativeUpDown"     value="0x00"/>
+                    <definedValue name="SpeakerVolumeAbsolutePercentage" value="0x01"/>
+                    <definedValue name="SpeakerVolumeAbsoluteDb"         value="0x02"/>
+                    <definedValue name="SpeakerVolumeQ8dot8Format"       value="0x03"/>
                 </item>
                 <item name="volume" type="SHORT">
                     <comment>
@@ -4338,21 +4458,15 @@
             </payload_in>
             <payload_out/>
             <comment>
-				Speaker volume of the device.
+                Speaker volume of the device.
             </comment>
         </command>
 
-        <command name="Y Cable Connection" id="0x0E0B" associatedSettingId="0x0E0B" associatedEventId="0x0E0B">
-            <payload_in>
-                <item name="state" type="BOOLEAN">
-                    <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
-                    </comment>
-                </item>
-            </payload_in>
+        <command name="Training Headset Connection" id="0x0E0B">
+            <payload_in/>
             <payload_out/>
             <comment>
-				Connection state for a Y-Cable.
+                PLACEHOLDER: This command ID is reserved as the command is not supported but no other command shall use the associated ID per policy.
             </comment>
         </command>
 
@@ -4397,7 +4511,7 @@
             </comment>
         </command>
 
-        <command name="Configure Current Language" id="0x0E1A" associatedSettingId="0x0E1A" associatedEventId="0x0E1A">
+        <command name="Configure Current Language" id="0x0E1A">
             <payload_in>
                 <item type="UNSIGNED_SHORT" name="LanguageId">
                     <comment>
@@ -4427,9 +4541,8 @@
             <throws>
                 0x0808
             </throws>
-		
             <comment>
-                If the Language ID is valid , the success should be returned .Otherwise "Illegal value" exception should be throw.
+                If the Language ID is valid, the success should be returned. Otherwise "Illegal value" exception should be throw.
             </comment>
         </command>
 
@@ -4448,7 +4561,6 @@
             </comment>
         </command>
 
-		
         <setting name="Call status" id="0x0E02" associatedEventId="0x0E00">
             <payload_in/>
             <payload_out>
@@ -4484,7 +4596,7 @@
             </comment>
         </setting>
 
-        <setting name="Microphone Mute State" id="0x0E01" associatedEventId="0x0E01">
+        <setting name="Microphone Mute State" id="0x0E01">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
@@ -4494,11 +4606,11 @@
                 </item>
             </payload_out>
             <comment>
-				Microphone mute state of the device.
+                Microphone mute state of the device.
             </comment>
         </setting>
 
-        <setting name="Transmit Audio State" id="0x0E03" associatedEventId="0x0E03">
+        <setting name="Transmit Audio State" id="0x0E03">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
@@ -4508,11 +4620,11 @@
                 </item>
             </payload_out>
             <comment>
-				Transmit (microphone) audio state of the device.
+                Transmit (microphone) audio state of the device.
             </comment>
         </setting>
 
-        <setting name="Receive Audio State" id="0x0E05" associatedEventId="0x0E05">
+        <setting name="Receive Audio State" id="0x0E05">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
@@ -4522,11 +4634,11 @@
                 </item>
             </payload_out>
             <comment>
-				Receive (speaker) audio state of the device.
+                Receive (speaker) audio state of the device.
             </comment>
         </setting>
 
-        <setting name="LED Status Generic" id="0x0E07" associatedEventId="0x0E07">
+        <setting name="LED Status Generic" id="0x0E07">
             <payload_in/>
             <payload_out>
                 <item name="ID" type="BYTE_ARRAY">
@@ -4549,34 +4661,34 @@
                     <comment>
                         Array of LED colors.
                     </comment>
-                    <definedValue name="LedColorOff"   			value="0x00"/>
-                    <definedValue name="LedColorGreen"   		value="0x01"/>
-                    <definedValue name="LedColorRed"   			value="0x02"/>
-                    <definedValue name="LedColorGreenAndRed"   	value="0x03"/>
-                    <definedValue name="LedColorBlue"   		value="0x04"/>
-                    <definedValue name="LedColorRedAndBlue"   	value="0x05"/>
-                    <definedValue name="LedColorAmber"   		value="0x06"/>
-                    <definedValue name="LedColorPurple"   		value="0x07"/>
-                    <definedValue name="LedColorWhite"   		value="0x08"/>
-                    <definedValue name="LedColorAmberAndGreen"	value="0x09"/>
-                    <definedValue name="LedColorBlueAndPurple"	value="0x0A"/>
+                    <definedValue name="LedColorOff"           value="0x00"/>
+                    <definedValue name="LedColorGreen"         value="0x01"/>
+                    <definedValue name="LedColorRed"           value="0x02"/>
+                    <definedValue name="LedColorGreenAndRed"   value="0x03"/>
+                    <definedValue name="LedColorBlue"          value="0x04"/>
+                    <definedValue name="LedColorRedAndBlue"    value="0x05"/>
+                    <definedValue name="LedColorAmber"         value="0x06"/>
+                    <definedValue name="LedColorPurple"        value="0x07"/>
+                    <definedValue name="LedColorWhite"         value="0x08"/>
+                    <definedValue name="LedColorAmberAndGreen" value="0x09"/>
+                    <definedValue name="LedColorBlueAndPurple" value="0x0A"/>
                 </item>
                 <item name="state" type="BYTE_ARRAY">
                     <comment>
                         Array of LED states.
                     </comment>
-                    <definedValue name="LedStateOff"   			value="0x00"/>
-                    <definedValue name="LedStateOn"   			value="0x01"/>
-                    <definedValue name="LedStateFlashSlow"   	value="0x02"/>
-                    <definedValue name="LedStateFlashFast"   	value="0x03"/>
+                    <definedValue name="LedStateOff"       value="0x00"/>
+                    <definedValue name="LedStateOn"        value="0x01"/>
+                    <definedValue name="LedStateFlashSlow" value="0x02"/>
+                    <definedValue name="LedStateFlashFast" value="0x03"/>
                 </item>
             </payload_out>
             <comment>
-				LED status of the device.
+                LED status of the device.
             </comment>
         </setting>
         
-        <setting name="Headset Available" id="0x0E09" associatedEventId="0x0E09">
+        <setting name="Headset Available" id="0x0E09">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
@@ -4586,25 +4698,28 @@
                 </item>
             </payload_out>
             <comment>
-				Availability of the headset based on connection state (wireless or wired).
+                Availability of a connectible headset based on connection state (wireless or wired).
+                The connectible headset may or may not be able to communicate messaging itself.
+                This information is intended to be used by an initiator as part of determining the availability of the headset user.
             </comment>
         </setting>
 
-        <setting name="Y Cable Connection" id="0x0E0B" associatedEventId="0x0E0B">
+        <setting name="Training Headset Connection" id="0x0E0B">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
                     <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
+                        True (1) if a training headset or training headset adapter is connected and false (0) if disconnected.
                     </comment>
                 </item>
             </payload_out>
             <comment>
-				Connection state for a Y-Cable.
+                Connection state for a training headset or training headset adapter used primarily for supervisor training of another headset user.
+                This information is intended for use by the initiator to enable data reporting of training occurrences.
             </comment>
         </setting>
-		
-        <setting name="Speaker Volume" id="0x0E0A" associatedEventId="0x0E0A">
+                
+        <setting name="Speaker Volume" id="0x0E0A">
             <payload_in/>
             <payload_out>
                 <item name="volumeValueType" type="BYTE">
@@ -4619,10 +4734,10 @@
                 </item>
             </payload_out>
             <comment>
-				Speaker volume of the device.
+                Speaker volume of the device.
             </comment>
         </setting>
-		
+                
         <setting name="Spoken language" id="0x0E1A">
             <payload_in/>
             <payload_out>
@@ -4662,7 +4777,7 @@
             <payload_out>
                 <item type="SHORT_ARRAY" name="Languages">
                     <comment>
-                        The array of the supported Languages ID . The ID should be  USB language ID.
+                        The array of the supported Languages ID. The ID should be USB language ID.
                     </comment>
                 </item>
             </payload_out>
@@ -4689,7 +4804,7 @@
                     This must be implemented on all devices that feature spoken prompts.
                     ]]>
             </comment>
-    	</setting>
+        </setting>
 
         <setting name="Get Partition Information" id="0x0E1C">
             <payload_in>
@@ -4859,12 +4974,61 @@
                         string if the state is Idle or number is not available.
                     </comment>
                 </item>
+                <item name="name" type="STRING">
+                    <comment>
+                        The incoming or dialed caller name, if available. This will be the empty
+                        string if it is not available.
+                    </comment>
+                </item>
             </payload_out>
 
             <comment>
                 This contains the telephone call state of all devices connected to the device.
                 The returned payload is repeated for each connected device able to make phone calls
                 The device will issue "Headset Call status " event whenever any call of the connected device state changes.
+            </comment>
+        </setting>
+
+        <setting name="Extended Call status" id="0x0E32">
+            <payload_in/>
+            <payload_out>
+                <item name="state" type="BYTE">
+                    <comment>
+                        The current call state. Values are:
+                        <![CDATA[
+                            <br/>
+                            <table>
+                            <tbody>
+                            <tr><th class="topLeft"><b>Value (decimal)</b></th><th class="topLeft"><b>State</b></th></tr>
+                            <tr><td>0</td><td>Idle</td></tr>
+                            <tr><td>1</td><td>Active</td></tr>
+                            <tr><td>2</td><td>Ringing</td></tr>
+                            <tr><td>3</td><td>Dialing</td></tr>
+                            <tr><td>4</td><td>ActiveAndRinging</td></tr>
+                            </tbody>
+                            </table>
+                        ]]>
+                    </comment>
+                </item>
+                <item name="number" type="STRING">
+                    <comment>
+                        The incoming or dialed number, if available. This will be the empty
+                        string if the state is Idle or number is not available.
+                    </comment>
+                </item>
+                <item name="name" type="STRING">
+                    <comment>
+                        The incoming or dialed caller name, if available. This will be the empty
+                        string if it is not available.
+                    </comment>
+                </item>
+            </payload_out>
+
+            <comment>
+                This contains the telephone call state of the device. The device will issue
+                "Extended Call status change" events whenever the state changes.
+
+                This is a super set of the "Call status" setting - only one should be supported on a device
             </comment>
         </setting>
 
@@ -4887,11 +5051,11 @@
                             </table>
                         ]]>
                     </comment>
-                    <definedValue name="CallStatusIdle"    			value="0x00" />
-                    <definedValue name="CallStatusActive"  			value="0x01" />
-                    <definedValue name="CallStatusRinging" 			value="0x02" />
-                    <definedValue name="CallStatusDialing" 			value="0x03" />
-                    <definedValue name="CallStatusActiveAndRinging"	value="0x04" />
+                    <definedValue name="CallStatusIdle"             value="0x00" />
+                    <definedValue name="CallStatusActive"           value="0x01" />
+                    <definedValue name="CallStatusRinging"          value="0x02" />
+                    <definedValue name="CallStatusDialing"          value="0x03" />
+                    <definedValue name="CallStatusActiveAndRinging" value="0x04" />
                 </item>
                 <item name="number" type="STRING">
                     <comment>
@@ -4918,7 +5082,7 @@
                 </item>
             </payload_out>
             <comment>
-				Microphone mute state of the device.
+                Microphone mute state of the device.
             </comment>
         </event>
 
@@ -4932,7 +5096,7 @@
                 </item>
             </payload_out>
             <comment>
-				Transmit (microphone) audio state of the device.
+                Transmit (microphone) audio state of the device.
             </comment>
         </event>
 
@@ -4946,7 +5110,7 @@
                 </item>
             </payload_out>
             <comment>
-				Receive (speaker) audio state of the device.
+                Receive (speaker) audio state of the device.
             </comment>
         </event>
 
@@ -4970,7 +5134,7 @@
                 </item>
             </payload_out>
             <comment>
-				LED status of the device.
+                LED status of the device.
             </comment>
         </event>
         
@@ -4984,10 +5148,12 @@
                 </item>
             </payload_out>
             <comment>
-				Availability of the headset based on connection state (wireless or wired).
+                Availability of a connectible headset based on connection state (wireless or wired).
+                The connectible headset may or may not be able to communicate messaging itself.
+                This information is intended to be used by an initiator as part of determining the availability of the headset user.
             </comment>
         </event>
-		
+                
         <event name="Speaker Volume" id="0x0E0A">
             <payload_in/>
             <payload_out>
@@ -5003,21 +5169,22 @@
                 </item>
             </payload_out>
             <comment>
-				Speaker volume of the device.
+                Speaker volume of the device.
             </comment>
         </event>
 
-        <event name="Y Cable Connection" id="0x0E0B">
+        <event name="Training Headset Connection" id="0x0E0B">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
                     <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
+                        True (1) if a training headset or training headset adapter is connected and false (0) if disconnected.
                     </comment>
                 </item>
             </payload_out>
             <comment>
-				Connection state for a Y-Cable.
+                Connection state for a training headset or training headset adapter used primarily for supervisor training of another headset user.
+                This information is intended for use by the initiator to enable data reporting of training occurrences.
             </comment>
         </event>
         
@@ -5054,7 +5221,7 @@
             </comment>
 
         </event>
-		
+
         <event name="Audio status" id="0x0E1E">
             <payload_out>
                 <item name="codec" type="BYTE">
@@ -5172,12 +5339,60 @@
                         string if the state is Idle or number is not available.
                     </comment>
                 </item>
+                <item name="name" type="STRING">
+                    <comment>
+                        The incoming or dialed caller name, if available. This will be the empty
+                        string if it is not available.
+                    </comment>
+                </item>
             </payload_out>
 
             <comment>
                 This contains the telephone call state of all devices connected to the device.
                 The returned payload is repeated for each connected device able to make phone calls
                 The device will issue "Headset Call status" event whenever any call of the connected device state changes.
+            </comment>
+        </event>
+
+        <event name="Extended Call status change" id="0x0E32">
+            <payload_out>
+                <item name="state" type="BYTE">
+                    <comment>
+                        The current call state. Values are:
+                        <![CDATA[
+                            <br/>
+                            <table>
+                            <tbody>
+                            <tr><th class="topLeft"><b>Value (decimal)</b></th><th class="topLeft"><b>State</b></th></tr>
+                            <tr><td>0</td><td>Idle</td></tr>
+                            <tr><td>1</td><td>Active</td></tr>
+                            <tr><td>2</td><td>Ringing</td></tr>
+                            <tr><td>3</td><td>Dialing</td></tr>
+                            <tr><td>4</td><td>ActiveAndRinging</td></tr>
+                            </tbody>
+                            </table>
+                        ]]>
+                    </comment>
+                </item>
+                <item name="number" type="STRING">
+                    <comment>
+                        The incoming or dialed number, if available. This will be the empty
+                        string if the state is Idle or number is not available.
+                    </comment>
+                </item>
+                <item name="name" type="STRING">
+                    <comment>
+                        The incoming or dialed name, if available. This will be the empty
+                        string name is not available.
+                    </comment>
+                </item>
+            </payload_out>
+
+            <comment>
+                This event is a super set of "Call Status" a single device will only support either Call Status or
+                Extended Call status event, not both.
+                Event issued by the device when its telephone call status changes. The "Extended Call status"
+                setting will always reflect the current call status.
             </comment>
         </event>
 
@@ -5238,7 +5453,7 @@
             ]]>
         </comment>
         
-        <command name="Set Ringtone" id="0x0F02" associatedSettingId="0x0F02" associatedEventId="0x0F02">
+        <command name="Set Ringtone" id="0x0F02">
             <payload_in>
                 <item name="interfaceType" type="BYTE" identifier="true">
                     <comment>
@@ -5261,7 +5476,7 @@
             </comment>
         </command>
         
-        <command name="Set Audio Bandwidth" id="0x0F04" associatedSettingId="0x0F04" associatedEventId="0x0F04">
+        <command name="Set Audio Bandwidth" id="0x0F04">
             <payload_in>
                 <item name="interfaceType" type="BYTE" identifier="true">
                     <comment>
@@ -5285,7 +5500,7 @@
             </comment>
         </command>
         
-        <command name="Set Ringtone Volume" id="0x0F06" associatedSettingId="0x0F06" associatedEventId="0x0F06">
+        <command name="Set Ringtone Volume" id="0x0F06">
             <payload_in>
                 <item name="interfaceType" type="BYTE" identifier="true">
                     <comment>
@@ -5311,7 +5526,7 @@
             </comment>
         </command>
         
-        <command name="Set Default Outbound Interface" id="0x0F08" associatedSettingId="0x0F08" associatedEventId="0x0F08">
+        <command name="Set Default Outbound Interface" id="0x0F08">
             <payload_in>
                 <item name="interfaceType" type="BYTE" identifier="true">
                     <comment>
@@ -5335,10 +5550,10 @@
         
         <command name="Set Tone Control" id="0x0F1A">
             <payload_in> 
-		        <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" identifier="true">
                     <comment>
                         <![CDATA[
-                        The <a href="#interface types">interface, limited to PSTN (0) and VOIP (1)</a>
+                                 The <a href="#interface types">interface, limited to PSTN (0) and VOIP (1)</a>
                         ]]>
                     </comment>
                 </item>
@@ -5352,10 +5567,10 @@
                     <definedValue name="ToneLevelMidTreble" value="5" />
                     <definedValue name="ToneLevelMaxTreble" value="6" />
                 </item>
-	    </payload_in>
-	    <payload_out/>
+            </payload_in>
+            <payload_out/>
             <throws>
-                0x0806	  <!-- Number out of range -->
+                0x0806    <!-- Number out of range -->
             </throws>
             
             <comment>
@@ -5366,12 +5581,12 @@
         <command name="Set Audio Sensing" id="0x0F1C">
             
             <payload_in>            
-	        <item type="BOOLEAN" name="audioSensing">
+                <item type="BOOLEAN" name="audioSensing">
                     <comment>
                         True if the radio link should automatically be established between the base and wireless headset without needing to press the call control button, false otherwise.
                     </comment>
-                </item>            	    
-	    </payload_in>
+                </item>
+            </payload_in>
             <payload_out/>
             
             <comment>
@@ -5406,7 +5621,7 @@
                         Set to true if the base should automatically establish a Bluetooth link to the mobile phone when the headset is undocked from the base and the mobile phone is within range.   Set to false if it should not automatically establish the link.
                     </comment>
                 </item>
-	        </payload_in>
+            </payload_in>
             <payload_out/>
            
             <comment>
@@ -5526,7 +5741,7 @@
             
         </command>
 
-        <command name="Set Volume Control Orientation" id="0x0F2E" associatedSettingId="0x0F2E" associatedEventId="0x0F2E">
+        <command name="Set Volume Control Orientation" id="0x0F2E">
             <payload_in>
                 <item name="orientation" type="BYTE">
                     <comment>
@@ -5544,17 +5759,16 @@
                 Sets the volume control orientation to the right or left ear.
             </comment>
         </command>
-		
-		<command name="Set default feature" id="0x0F13">
+
+        <command name="Set default feature" id="0x0F13">
             
             <payload_in/>
             <payload_out/>
-            <comment>	
+            <comment>
                 sets the default values to certain features.Features that are already locked are ignored.
             </comment>
-	    </command> 
+        </command> 
         
-		
         <setting name="Device interfaces" id="0x0F00">
             <payload_in/>
             <payload_out>
@@ -5676,7 +5890,7 @@
                         PSTN, VOIP
                     </comment>
                 </item>
-	    </payload_out>
+            </payload_out>
             
             <comment>
                 Returns the tone levels for PSTN and VOIP interface types.
@@ -5692,7 +5906,6 @@
                         
                     </comment>
                 </item>
-	    
             </payload_out>
             
             <comment>
@@ -5776,7 +5989,7 @@
                         Returns true if a headset can subscribe to the base without docking, false otherwise.
                     </comment>
                 </item>
-	    </payload_out>
+            </payload_out>
             <comment>
                 Indicates whether or not the headset can subscribe to the base if it is not docked.
             </comment>
@@ -5792,7 +6005,7 @@
                         ]]>
                     </comment>
                 </item>
-	    </payload_out>
+            </payload_out>
             
             <comment>
                 Indicates the system tone volume.
@@ -5843,7 +6056,6 @@
             </comment>
         </setting>
         
-		
         <event name="Set Ringtone" id="0x0F02" >
             <payload_out>
                 <item name="interfaceType" type="BYTE">
@@ -5915,7 +6127,7 @@
     
     <section title="DSP-related Spokes compatibility (0x0Fnn continued)">
         
-        <command name="AAL Acoustic Incident Reporting Enable" id="0x0F01" associatedSettingId="0x0F01" associatedEventId="0x0F01">
+        <command name="AAL Acoustic Incident Reporting Enable" id="0x0F01">
             <payload_in>
                 <item name="enable" type="BOOLEAN">
                     <comment>The acoustic incident reporting enable state: true or false.</comment>
@@ -5927,13 +6139,13 @@
             </comment>
         </command>
         
-        <command name="AAL Acoustic Incident Reporting Thresholds" id="0x0F03" associatedSettingId="0x0F03" associatedEventId="0x0F03">
+        <command name="AAL Acoustic Incident Reporting Thresholds" id="0x0F03">
             <payload_in>
                 <item name="gain threshold" type="BYTE">
                     <comment>The acoustic incident reporting threshold for gain upon which crossed for a set amount of time will result in a report being sent (0 to 12 dB in 1 dB increments).</comment>
                 </item>
                 <item name="time threshold" type="UNSIGNED_SHORT">
-                    <comment>The acoustic incident reporting threshold for the amount of time of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
+                    <comment>The acoustic incident reporting threshold for the amount of time (in milliseconds) of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
                 </item>
             </payload_in>
             <payload_out/>
@@ -5942,7 +6154,7 @@
             </comment>
         </command>
         
-        <command name="AAL Acoustic Incident Report" id="0x0F05" associatedSettingId="0x0F05" associatedEventId="0x0F05">
+        <command name="AAL Acoustic Incident Report" id="0x0F05">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -5950,7 +6162,7 @@
             </comment>
         </command>
         
-        <command name="AAL TWA Reporting Enable" id="0x0F07" associatedSettingId="0x0F07" associatedEventId="0x0F07">
+        <command name="AAL TWA Reporting Enable" id="0x0F07">
             <payload_in>
                 <item name="enable" type="BOOLEAN">
                     <comment>The TWA reporting enable state: true or false.</comment>
@@ -5962,19 +6174,19 @@
             </comment>
         </command>
         
-        <command name="AAL TWA Reporting Time Period" id="0x0F09" associatedSettingId="0x0F09" associatedEventId="0x0F09">
+        <command name="AAL TWA Reporting Time Period" id="0x0F09">
             <payload_in>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
                 </item>
             </payload_in>
             <payload_out/>
             <comment>
-                Set AAL TWA reporting time period frequency.
+                Set AAL TWA reporting time period interval.
             </comment>
         </command>
         
-        <command name="Set Anti-startle" id="0x0F0A" associatedSettingId="0x0F0A" associatedEventId="0x0F0A">
+        <command name="Set Anti-startle" id="0x0F0A">
             <payload_in>
         
                 <item name="enable" type="BOOLEAN">
@@ -5987,7 +6199,7 @@
             </comment>
         </command>
         
-        <command name="AAL TWA Report" id="0x0F0B" associatedSettingId="0x0F0B" associatedEventId="0x0F0B">
+        <command name="AAL TWA Report" id="0x0F0B">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -5995,7 +6207,7 @@
             </comment>
         </command>
         
-        <command name="Set G616" id="0x0F0C" associatedSettingId="0x0F0C" associatedEventId="0x0F0C">
+        <command name="Set G616" id="0x0F0C">
             <payload_in>
                 <item name="enable" type="BOOLEAN">
                     <comment>The new G.616 value, true or false.</comment>
@@ -6007,7 +6219,7 @@
             </comment>
         </command>
         
-        <command name="Conversation Dynamics Reporting Enable" id="0x0F0D" associatedSettingId="0x0F0D" associatedEventId="0x0F0D">
+        <command name="Conversation Dynamics Reporting Enable" id="0x0F0D">
             <payload_in>
                 <item name="enable" type="BOOLEAN">
                     <comment>The conversation dynamics reporting enable state: true or false.</comment>
@@ -6019,7 +6231,7 @@
             </comment>
         </command>
         
-        <command name="Set time-weighted average" id="0x0F0E" associatedSettingId="0x0F0E" associatedEventId="0x0F0E">
+        <command name="Set time-weighted average" id="0x0F0E">
             <payload_in>
                 <item name="twa" type="BYTE">
                     <comment>
@@ -6042,37 +6254,25 @@
             </comment>
         </command>
         
-        <command name="Conversation Dynamics Reporting Time Period" id="0x0F0F" associatedSettingId="0x0F0F" associatedEventId="0x0F0F">
+        <command name="Conversation Dynamics Reporting Time Period" id="0x0F0F">
             <payload_in>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
                 </item>
             </payload_in>
             <payload_out/>
             <comment>
-                Set conversation dynamics reporting time period frequency.
+                Set conversation dynamics reporting time period interval.
             </comment>
         </command>
 
-        <command name="Set time-weighted average period" id="0x0F10" associatedSettingId="0x0F10" associatedEventId="0x0F10">
+        <command name="Set time-weighted average period" id="0x0F10">
             <payload_in>
                 <item name="twa" type="BYTE">
                     <comment>
                         <![CDATA[
-                            The new time-weighted average period value.  Legal values are<br/>
-                            <a name="time-weighted average period values">
-                            <table>
-                            <tbody>
-                            <tr><th class="topLeft"><b>Value (decimal)</b></th><th class="topLeft"><b>TWA Period</b></th></tr>
-                            <tr><td>0</td><td>Off</td></tr>
-                            <tr><td>1</td><td>2 hours</td></tr>
-                            <tr><td>2</td><td>4 hours</td></tr>
-                            <tr><td>3</td><td>6 hours</td></tr>
-                            <tr><td>4</td><td>8 hours</td></tr>
-                            </tbody>
-                            </table>
-                            </a>
-                            The command will throw an exception if another value is supplied.
+                            The new time-weighted average period value.
+                            The command will throw an exception if an illegal value is supplied.
                         ]]>
                     </comment>
                     <definedValue name="TwaPeriod2hours" value="1" />
@@ -6090,7 +6290,7 @@
             </comment>
         </command>
         
-        <command name="Conversation Dynamics Report" id="0x0F11" associatedSettingId="0x0F11" associatedEventId="0x0F11">
+        <command name="Conversation Dynamics Report" id="0x0F11">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -6222,8 +6422,7 @@
             </comment>
         </command>
         
-		
-        <setting name="AAL Acoustic Incident Reporting Enable" id="0x0F01" associatedEventId="0x0F01">
+        <setting name="AAL Acoustic Incident Reporting Enable" id="0x0F01">
             <payload_in/>
             <payload_out>
                 <item name="enable" type="BOOLEAN">
@@ -6235,14 +6434,14 @@
             </comment>
         </setting>
         
-        <setting name="AAL Acoustic Incident Reporting Thresholds" id="0x0F03" associatedEventId="0x0F03">
+        <setting name="AAL Acoustic Incident Reporting Thresholds" id="0x0F03">
             <payload_in/>
             <payload_out>
                 <item name="gain threshold" type="BYTE">
-                    <comment>The acoustic incident reporting threshold for gain upon which crossed for a set amount of time will result in a report being sent (0 to 12 dB in 1 dB increments).</comment>
+                    <comment>The acoustic incident reporting threshold for gain (in dB) upon which crossed for a set amount of time will result in a report being sent (0 to 12 dB in 1 dB increments).</comment>
                 </item>
                 <item name="time threshold" type="UNSIGNED_SHORT">
-                    <comment>The acoustic incident reporting threshold for the amount of time of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
+                    <comment>The acoustic incident reporting threshold for the amount of time (in milliseconds) of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
@@ -6250,7 +6449,7 @@
             </comment>
         </setting>
         
-        <setting name="AAL Acoustic Incident Report" id="0x0F05" associatedEventId="0x0F05">
+        <setting name="AAL Acoustic Incident Report" id="0x0F05">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -6258,7 +6457,7 @@
             </comment>
         </setting>
         
-        <setting name="AAL TWA Reporting Enable" id="0x0F07" associatedEventId="0x0F07">
+        <setting name="AAL TWA Reporting Enable" id="0x0F07">
             <payload_in/>
             <payload_out>
                 <item name="enable" type="BOOLEAN">
@@ -6270,15 +6469,15 @@
             </comment>
         </setting>
         
-        <setting name="AAL TWA Reporting Time Period" id="0x0F09" associatedEventId="0x0F09">
+        <setting name="AAL TWA Reporting Time Period" id="0x0F09">
             <payload_in/>
             <payload_out>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
-                Get AAL TWA reporting time period frequency.
+                Get AAL TWA reporting time period interval.
             </comment>
         </setting>
         
@@ -6295,7 +6494,7 @@
             </comment>
         </setting>
         
-        <setting name="AAL TWA Report" id="0x0F0B" associatedEventId="0x0F0B">
+        <setting name="AAL TWA Report" id="0x0F0B">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -6316,7 +6515,7 @@
             </comment>
         </setting>
         
-        <setting name="Conversation Dynamics Reporting Enable" id="0x0F0D" associatedEventId="0x0F0D">
+        <setting name="Conversation Dynamics Reporting Enable" id="0x0F0D">
             <payload_in/>
             <payload_out>
                 <item name="enable" type="BOOLEAN">
@@ -6346,15 +6545,15 @@
             </comment>
         </setting>
         
-        <setting name="Conversation Dynamics Reporting Time Period" id="0x0F0F" associatedEventId="0x0F0F">
+        <setting name="Conversation Dynamics Reporting Time Period" id="0x0F0F">
             <payload_in/>
             <payload_out>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
-                Get conversation dynamics reporting time period frequency.
+                Get conversation dynamics reporting time period interval.
             </comment>
         </setting>
 
@@ -6376,7 +6575,7 @@
             </comment>
         </setting>
         
-        <setting name="Conversation Dynamics Report" id="0x0F11" associatedEventId="0x0F11">
+        <setting name="Conversation Dynamics Report" id="0x0F11">
             <payload_in/>
             <payload_out/>
             <comment>
@@ -6470,7 +6669,6 @@
             </comment>
         </setting>
 
-		
         <event name="AAL Acoustic Incident Reporting Enable" id="0x0F01">
             <payload_in/>
             <payload_out>
@@ -6487,10 +6685,10 @@
             <payload_in/>
             <payload_out>
                 <item name="gain threshold" type="BYTE">
-                    <comment>The acoustic incident reporting threshold for gain upon which crossed for a set amount of time will result in a report being sent (0 to 12 dB in 1 dB increments).</comment>
+                    <comment>The acoustic incident reporting threshold for gain (in dB) upon which crossed for a set amount of time will result in a report being sent (0 to 12 dB in 1 dB increments).</comment>
                 </item>
                 <item name="time threshold" type="UNSIGNED_SHORT">
-                    <comment>The acoustic incident reporting threshold for the amount of time of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
+                    <comment>The acoustic incident reporting threshold for the amount of time (in milliseconds) of having a gain above the gain threshold will result in a report being sent (1 to 1000 ms in 1 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
@@ -6503,19 +6701,19 @@
             <payload_out>
                 <item name="IncidentType" type="BYTE">
                     <comment>The type of AAL fast SPL limiter provided in response to the acoustic incident.</comment>
-					<definedValue name="G616"    				value="0x00"/>
-					<definedValue name="AntiStartleLevel"    	value="0x01"/>
-					<definedValue name="AntiStartleDuration"	value="0x02"/>
-					<definedValue name="AntiStartleDelta"    	value="0x03"/>
+                    <definedValue name="G616"                value="0x00"/>
+                    <definedValue name="AntiStartleLevel"    value="0x01"/>
+                    <definedValue name="AntiStartleDuration" value="0x02"/>
+                    <definedValue name="AntiStartleDelta"    value="0x03"/>
                 </item>
                 <item name="incident duration" type="UNSIGNED_INT">
-                    <comment>The time duration of the incident (1 to 300,000 ms in 1 ms increments).</comment>
+                    <comment>The time duration (in milliseconds) of the incident (1 to 300,000 ms in 1 ms increments).</comment>
                 </item>
                 <item name="pre limiter spl estimate" type="BYTE">
-                    <comment>The estimate of the highest SPL to which the user would have been exposed had the SPL limiter not been enabled (0 to 200 dB in 1 dB increments).</comment>
+                    <comment>The estimate of the highest SPL (in dB) to which the user would have been exposed had the SPL limiter not been enabled (0 to 200 dB in 1 dB increments).</comment>
                 </item>
                 <item name="gain reduction" type="BYTE">
-                    <comment>The peak total gain reduction applied by all fast SPL limiters during the acoustic event (0 to 50 dB in 1 dB increments).</comment>
+                    <comment>The peak total gain reduction (in dB) applied by all fast SPL limiters during the acoustic event (0 to 50 dB in 1 dB increments).</comment>
                 </item>
             </payload_out>
             <comment>
@@ -6539,11 +6737,11 @@
             <payload_in/>
             <payload_out>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a TWA report is sent out (1 to 10 minutes in 60,000 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
-                Notification of change for AAL TWA reporting time period frequency.
+                Notification of change for AAL TWA reporting time period interval.
             </comment>
         </event>
         
@@ -6551,10 +6749,10 @@
             <payload_in/>
             <payload_out>
                 <item name="pre limiter long term spl estimate" type="BYTE">
-                    <comment>The estimate of the current long term average SPL to which the user would be exposed if the SPL limiter were not enabled (0 to 200 dB in 1 dB increments).</comment>
+                    <comment>The estimate of the current long term average SPL (in dB) to which the user would be exposed if the SPL limiter were not enabled (0 to 200 dB in 1 dB increments).</comment>
                 </item>
                 <item name="post limiter long term spl estimate" type="BYTE">
-                    <comment>The estimate of the long term average SPL to which the user is exposed with the SPL limiter enabled (0 to 200 dB in 1 dB increments).</comment>
+                    <comment>The estimate of the long term average SPL (in dB) to which the user is exposed with the SPL limiter enabled (0 to 200 dB in 1 dB increments).</comment>
                 </item>
             </payload_out>
             <comment>
@@ -6578,11 +6776,11 @@
             <payload_in/>
             <payload_out>
                 <item name="time period" type="UNSIGNED_INT">
-                    <comment>The time period frequency at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) at which a conversation dynamics report is sent out (1 to 60 seconds in 1,000 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
-                Notification of change for conversation dynamics reporting time period frequency.
+                Notification of change for conversation dynamics reporting time period interval.
             </comment>
         </event>
         
@@ -6590,19 +6788,19 @@
             <payload_in/>
             <payload_out>
                 <item name="time period" type="UNSIGNED_SHORT">
-                    <comment>The time period frequency in effect when the conversation dynamics report was sent out (1 to 60 seconds in 1 ms increments).</comment>
+                    <comment>The time period interval (in milliseconds) in effect when the conversation dynamics report was sent out (1 to 60 seconds in 1 ms increments).</comment>
                 </item>
                 <item name="far end duration" type="UNSIGNED_SHORT">
-                    <comment>The duration in which the far end conversation participant was speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
+                    <comment>The duration (in milliseconds) in which the far end conversation participant was speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
                 </item>
                 <item name="near end duration" type="UNSIGNED_SHORT">
-                    <comment>The duration in which the near end conversation participant was speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
+                    <comment>The duration (in milliseconds) in which the near end conversation participant was speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
                 </item>
                 <item name="crosstalk duration" type="UNSIGNED_SHORT">
-                    <comment>The duration in which both the far and near end conversation participants were speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
+                    <comment>The duration (in milliseconds) in which both the far and near end conversation participants were speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
                 </item>
                 <item name="no talk duration" type="UNSIGNED_SHORT">
-                    <comment>The duration in which neither the far or near end conversation participants were speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
+                    <comment>The duration (in milliseconds) in which neither the far or near end conversation participants were speaking since the last report was sent (1 to 60 seconds in 1 ms increments).</comment>
                 </item>
             </payload_out>
             <comment>
@@ -6773,12 +6971,12 @@
             ]]>
         </comment>
         
-        <command name="Set feature lock" id="0x0F12" associatedSettingId="0x0F12" associatedEventId="0x0F12">
+        <command name="Set feature lock" id="0x0F12">
             <payload_in>
                 <item name="commands" type="SHORT_ARRAY">
                     <comment>
                         <![CDATA[
-                            A short array containing the IDs of commands to enable or disable.
+                            A short array containing the IDs of commands to lock
                         ]]>
                     </comment>
                 </item>
@@ -6798,145 +6996,75 @@
                 ]]>
             </comment>
         </command>
-        
-        <command name="Set password" id="0x0F16" associatedSettingId="0x0F16">
-            <payload_in>
-                <item name="password" type="STRING">
-                    <comment>
-                        The password to associate with the device.
-                    </comment>
-                </item>
-            </payload_in>
-            <payload_out/>
-            <comment>
-                Set the device's password value.
-                The device is not expected to undertake any checking mechanism to validate the password.
-            </comment>
-        </command>
-        
+
         <setting name="Feature lock" id="0x0F12">
             <payload_in/>
             <payload_out>
                 <item name="commands" type="SHORT_ARRAY">
                     <comment>
-                        A short array containing the IDs of commands that are disabled.
+                        A short array containing the IDs of commands that are locked.
                     </comment>
                 </item>
             </payload_out>
             
             <comment>
                 <![CDATA[
-                    The setting will return the Deckard command IDs that are disabled on the device.
+                    The setting will return the Deckard command IDs that are locked on the device.
                 ]]>
             </comment>
         </setting>
 
-      <setting name="Feature lock Mask" id="0x0F14">
-        <payload_in/>
-        <payload_out>
-          <item name="commands" type="SHORT_ARRAY">
-            <comment>
-              A short array containing the IDs of Deckard commands that are lockable,
-              regardless of whether they are currently locked or not.
-            </comment>
-          </item>
-        </payload_out>
-
-        <comment>
-          <![CDATA[
-                    The setting will return the Deckard command IDs that are lockable on the device.
-                ]]>
-        </comment>
-      </setting>
-
-      <setting name="Password" id="0x0F16">
+        <setting name="Feature lock Mask" id="0x0F14">
             <payload_in/>
             <payload_out>
-                <item name="password" type="STRING">
-                    <comment>The password associated with the device.</comment>
-                </item>
-            </payload_out>
-            
-            <comment>
-                Return the device's password value.
-            </comment>
-        </setting>
-        
-        <setting name="Protected state" id="0x0F18">
-            <payload_in/>
-            <payload_out>
-                <item name="state" type="BOOLEAN">
+                <item name="commands" type="SHORT_ARRAY">
                     <comment>
-                        The current Protected state.  True if the password is equal to something other
-                        than the device default value, false otherwise.
+                        A short array containing the IDs of Deckard commands that are lockable,
+                        regardless of whether they are currently locked or not.
                     </comment>
                 </item>
             </payload_out>
-            
             <comment>
-                Return the device's Protected state: true true if the password is equal to something other
-                than the device default value, false otherwise.
+                <![CDATA[
+                    The setting will return the Deckard command IDs that are lockable on the device.
+                ]]>
             </comment>
         </setting>
-        
+
         <event name="Set feature lock" id="0x0F12">
             <payload_out>
-              <item name="lock" type="BOOLEAN">
-                <comment>
-                  <![CDATA[
-                      A boolean to denote whether the Deckard IDs have been enabled or disabled on the device
-                      When the boolean is TRUE, the Deckard IDs have been locked.<br/>
-                      when the boolean is FALSE, the Deckard IDs have been unlocked.
+                <item name="commands" type="SHORT_ARRAY">
+                    <comment>
+                        <![CDATA[
+                            A short array containing the IDs of commands that are locked.
                         ]]>
-                </comment>
-              </item>
-              <item name="commands" type="SHORT_ARRAY">
-                <comment>
-                  <![CDATA[
-                            A short array containing the IDs of commands that have changed (either enabled or disabled).
-                        ]]>
-                </comment>
-              </item>
+                    </comment>
+                </item>
             </payload_out>
             <comment>
                 Notification that the Set Feature Lock feature has been updated.
             </comment>
         </event>
 
-      <event name="Password Changed" id="0x0F16">
-        <payload_out/>
-        <comment>
-          Notification that the Password has been updated.
-        </comment>
-      </event>
-
-      <exception name="Feature lock ID Not valid" id="0x0F12">
-        <payload_out>
-          <item name="commands" type="SHORT_ARRAY">
-            <comment>
-              <![CDATA[
-                   A short array containing the IDs of commands that are not valid.
+        <exception name="Feature lock ID Not valid" id="0x0F12">
+            <payload_out>
+                <item name="commands" type="SHORT_ARRAY">
+                    <comment>
+                        <![CDATA[
+                            A short array containing the IDs of commands that are not valid.
                         ]]>
-            </comment>
-          </item>
-        </payload_out>
-        <comment>
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
                 This exception is sent in response to a call to the Set feature lock command.
-        </comment>
-      </exception>
-		
-      <exception name="Feature Is Locked" id="0x0F14">
-        <payload_out/>
-        <comment>
-                This exception is sent in response to a command message for which the command is currently locked.
-        </comment>
-      </exception>
-        
+            </comment>
+        </exception>
     </section>
 
     <section title="HAL Interface (0x11nn)">
 
-        <command name="Hal Current Scenario" id="0x1100" associatedSettingId="0x1100" associatedEventId="0x1100">
+        <command name="Hal Current Scenario" id="0x1100">
             <payload_in>
                 <item name="scenario" type="UNSIGNED_SHORT">
                     <comment>
@@ -7004,7 +7132,7 @@
             </comment>
         </event>
 
-        <command name="Hal Configure Volume" id="0x1102" associatedSettingId="0x1102" associatedEventId="0x1102">
+        <command name="Hal Configure Volume" id="0x1102">
             <payload_in>
                 <item name="scenario" type="UNSIGNED_SHORT">
                     <comment>
@@ -7082,7 +7210,7 @@
             </comment>
         </event>
 
-        <command name="Hal Configure EQ" id="0x1104" associatedSettingId="0x1104" associatedEventId="0x1104">
+        <command name="Hal Configure EQ" id="0x1104">
             <payload_in>
                 <item name="scenario" type="UNSIGNED_SHORT">
                     <comment>
@@ -7298,6 +7426,16 @@
             </comment>
             
         </exception>
+
+        <exception name="Command PEM Locked" id="0x001E" global="true">
+
+            <payload_out/>
+
+            <comment>
+                The device throws this exception when it's sent a command for a command is PEM Locked.
+            </comment>
+
+        </exception>
         
     </section>
     
@@ -7355,7 +7493,6 @@
         </exception>
         
     </section>
-	   
        
     <section title="BaDangle messages (0xFFnn)">
 
@@ -7417,8 +7554,8 @@
                         <![CDATA[
                             An array of service IDs for which invalid or malformed
                             data was supplied. <br/>
-						    Reference "Configure services" command for valid <a href="#ServiceIDs">service IDs</a>.
-						]]>
+                            Reference "Configure services" command for valid <a href="#ServiceIDs">service IDs</a>.
+                        ]]>
                     </comment>
                 </item>
             </payload_out>
@@ -7438,7 +7575,7 @@
                                               Innovation  Commands
          *********************************************************************************************** -->
         
-        <command name="Configure services" id="0xFF00" associatedSettingId="0xFF00" associatedEventId="0xFF00">
+        <command name="Configure services" id="0xFF00">
             <comment>
                 Configure one or more service characteristics.
             </comment>
@@ -7471,21 +7608,21 @@
                                 - configure                     0x0000<br/>
                              NFC                                      <br/>
                                 - write data                    0x0000<br/>
-								- Set NDEF BT Handover          0x0001<br/>
+                                - Set NDEF BT Handover          0x0001<br/>
                         ]]>
                     </comment>
-					<definedValue name="UI_ScrollMessage"       value="0x0000"/>
-					<definedValue name="UI_Marquee"             value="0x0001"/>
-					<definedValue name="UI_DisplayFlip"         value="0x0002"/>
-					<definedValue name="UI_DisplayRotate"       value="0x0003"/>
-					<definedValue name="UI_DisplayMessage"      value="0x0004"/>
-					<definedValue name="UI_DisplayToggle"       value="0x0005"/>
-					<definedValue name="UI_DisplayInvert"       value="0x0006"/>
-					<definedValue name="UI_DisplayClear"        value="0x0007"/>
-					<definedValue name="UI_DisplayPunctuation"  value="0x0008"/>
-					<definedValue name="UI_DisplayIcon"         value="0x0009"/>
-					<definedValue name="RTC_Configure"          value="0x0000"/>
-					<definedValue name="NFC_SetNDEF"            value="0x0000"/>					
+                    <definedValue name="UI_ScrollMessage"       value="0x0000"/>
+                    <definedValue name="UI_Marquee"             value="0x0001"/>
+                    <definedValue name="UI_DisplayFlip"         value="0x0002"/>
+                    <definedValue name="UI_DisplayRotate"       value="0x0003"/>
+                    <definedValue name="UI_DisplayMessage"      value="0x0004"/>
+                    <definedValue name="UI_DisplayToggle"       value="0x0005"/>
+                    <definedValue name="UI_DisplayInvert"       value="0x0006"/>
+                    <definedValue name="UI_DisplayClear"        value="0x0007"/>
+                    <definedValue name="UI_DisplayPunctuation"  value="0x0008"/>
+                    <definedValue name="UI_DisplayIcon"         value="0x0009"/>
+                    <definedValue name="RTC_Configure"          value="0x0000"/>
+                    <definedValue name="NFC_SetNDEF"            value="0x0000"/>                                    
                     <definedValue name="NFC_Write"              value="0x0001"/>
                 </item>
                 <item type="BYTE_ARRAY" name="configuration data">
@@ -7560,8 +7697,8 @@
                                 Unsigned short (2 bytes) containing file selector. <br/>
                                 Unsigned long (4 bytes) containing length of data to follow. <br/>
                                 Byte[] array containing data to write. <br/>
-							- Set NDEF Record <br/>
-							    1 byte - 0x00 disable NFC, 0x01 enable NFC, 0x02-0xFF RFU <br/>							  
+                            - Set NDEF Record <br/>
+                                1 byte - 0x00 disable NFC, 0x01 enable NFC, 0x02-0xFF RFU <br/>                                                       
                          <br/>
                                 
                         Constants:<br/>
@@ -7619,7 +7756,7 @@
             </throws>
         </command>
         
-        <command name="Calibrate services" id="0xFF01" associatedSettingId="0xFF01" associatedEventId="0xFF01">
+        <command name="Calibrate services" id="0xFF01">
             <comment>
                 Calibrate one or more service characteristics.
             </comment>
@@ -7652,17 +7789,17 @@
                             Skin Temp                                         <br/>
                                 - calibration                   0x0000        <br/>
                             Optical Sensor                                    <br/>
-                                - calibrate                     0x0000        <br/>								
+                                - calibrate                     0x0000        <br/>
                         ]]>
                     </comment>
-					<definedValue name="HeadOrientation_Cal"       value="0x0000"/>
-					<definedValue name="Pedometer_Cal"             value="0x0000"/>
-					<definedValue name="FreeFall_Cal"              value="0x0000"/>
-					<definedValue name="Taps_Cal"                  value="0x0000"/>
-					<definedValue name="AmbientTemp1_Cal"          value="0x0000"/>
-					<definedValue name="AmbientTemp2_Cal"          value="0x0000"/>
-                    <definedValue name="SkinTemp_Cal"              value="0x0000"/>
-					<definedValue name="OpticalSensor_Cal"         value="0x0000"/>
+                    <definedValue name="HeadOrientation_Cal" value="0x0000"/>
+                    <definedValue name="Pedometer_Cal"       value="0x0000"/>
+                    <definedValue name="FreeFall_Cal"        value="0x0000"/>
+                    <definedValue name="Taps_Cal"            value="0x0000"/>
+                    <definedValue name="AmbientTemp1_Cal"    value="0x0000"/>
+                    <definedValue name="AmbientTemp2_Cal"    value="0x0000"/>
+                    <definedValue name="SkinTemp_Cal"        value="0x0000"/>
+                    <definedValue name="OpticalSensor_Cal"   value="0x0000"/>
                 </item>
                 <item type="BYTE_ARRAY" name="calibration data">
                     <comment>
@@ -7710,10 +7847,10 @@
                                     0x00000 = enable calibration                                                                              <br/>
                                     0x00001 = start white card test                                                                           <br/>                        
                                     0x00002 = start black card test                                                                           <br/>
-									0x00003 - 0xfffe = RFU                                                                                    <br/>
-									0xffff  = disable calibration                                                                             <br/>
-					]]>
-                    </comment>					
+                                    0x00003 - 0xfffe = RFU                                                                                    <br/>
+                                    0xffff  = disable calibration                                                                             <br/>
+                        ]]>
+                    </comment>
                 </item>
                 <!-- Zero or more following triplets -->
             </payload_in>
@@ -7730,7 +7867,7 @@
             </throws>
         </command>
         
-        <command name="Configure application" id="0xFF02" associatedSettingId="0xFF02" associatedEventId="0xFF02">
+        <command name="Configure application" id="0xFF02">
             <comment>
                 Configure one or more application characteristics.
             </comment>
@@ -7888,7 +8025,7 @@
             </throws>
         </command>
         
-        <command name="Perform application action" id="0xFF03" associatedEventId="0xFF03">
+        <command name="Perform application action" id="0xFF03">
             <comment>
                 Performs an application action.
             </comment>
@@ -7906,10 +8043,10 @@
                             </table>
                         ]]>
                     </comment>
-                    <definedValue name="ApplicationID_AudioPrompt"       value="0x0000"/>
-                    <definedValue name="ApplicationID_HapticPrompt"      value="0x0001"/>
-                    <definedValue name="ApplicationID_Dialog"            value="0x0002"/>
-                    <definedValue name="ApplicationID_Lock"              value="0x0003"/>					
+                    <definedValue name="ApplicationID_AudioPrompt"  value="0x0000"/>
+                    <definedValue name="ApplicationID_HapticPrompt" value="0x0001"/>
+                    <definedValue name="ApplicationID_Dialog"       value="0x0002"/>
+                    <definedValue name="ApplicationID_Lock"         value="0x0003"/>
                 </item>
                 <item type="UNSIGNED_SHORT" name="action">
                     <comment>
@@ -7930,17 +8067,17 @@
                             </table>
                         ]]>
                     </comment>
-                    <definedValue name="AudioPromptCanned"               value="0x0000"/>
-                    <definedValue name="AudioPromptTTS"                  value="0x0001"/>
-                    <definedValue name="AudioPromptWav"                  value="0x0002"/>
-                    <definedValue name="HapticPromptCanned"              value="0x0000"/>					
-                    <definedValue name="HapticPromptCustom"              value="0x0001"/>
-                    <definedValue name="DialogAlert"                     value="0x0000"/>
-                    <definedValue name="DialogYesNo"                     value="0x0001"/>
-				    <definedValue name="DialogEnterOneNumber"            value="0x0002"/>
-                    <definedValue name="DialogChooseOne"                 value="0x0003"/>
-                    <definedValue name="DialogChooseMulti"               value="0x0004"/>
-					<definedValue name="LockConfig"                      value="0x0000"/>
+                    <definedValue name="AudioPromptCanned"    value="0x0000"/>
+                    <definedValue name="AudioPromptTTS"       value="0x0001"/>
+                    <definedValue name="AudioPromptWav"       value="0x0002"/>
+                    <definedValue name="HapticPromptCanned"   value="0x0000"/>
+                    <definedValue name="HapticPromptCustom"   value="0x0001"/>
+                    <definedValue name="DialogAlert"          value="0x0000"/>
+                    <definedValue name="DialogYesNo"          value="0x0001"/>
+                    <definedValue name="DialogEnterOneNumber" value="0x0002"/>
+                    <definedValue name="DialogChooseOne"      value="0x0003"/>
+                    <definedValue name="DialogChooseMulti"    value="0x0004"/>
+                    <definedValue name="LockConfig"           value="0x0000"/>
                 </item>
                 <item type="BYTE_ARRAY" name="operating data">
                     <comment>
@@ -8056,7 +8193,7 @@
                         <![CDATA[
                         <a name="ServiceIDs">
                         <table>
-                            <tr><td>Head orientation                <td/><td>0x0000<td/><tr/>
+                            <tr><td>Orientation                     <td/><td>0x0000<td/><tr/>
                             <tr><td>Heading                         <td/><td>0x0001<td/><tr/>
                             <tr><td>Pedometer                       <td/><td>0x0002<td/><tr/>
                             <tr><td>Free Fall                       <td/><td>0x0003<td/><tr/>
@@ -8082,7 +8219,7 @@
                         </a>
                         ]]>
                     </comment>
-                    <definedValue name="ServiceID_HeadOrientation"               value="0x0000"/>
+                    <definedValue name="ServiceID_Orientation"                   value="0x0000"/>
                     <definedValue name="ServiceID_Heading"                       value="0x0001"/>
                     <definedValue name="ServiceID_Pedometer"                     value="0x0002"/>
                     <definedValue name="ServiceID_FreeFall"                      value="0x0003"/>
@@ -8110,7 +8247,7 @@
                         <![CDATA[
                         <a name="CharacteristicIDs">
                             <tr><td>                               <td/><td>service data<td/><tr/>
-                            <tr><td>Head orientation               <td/><td>0x0000<td/><tr/>
+                            <tr><td>Orientation                    <td/><td>0x0000<td/><tr/>
                             <tr><td>Heading                        <td/><td>0x0000<td/><tr/>
                             <tr><td>Pedometer                      <td/><td>0x0000<td/><tr/>
                             <tr><td>Free Fall                      <td/><td>0x0000<td/><tr/>
@@ -8135,8 +8272,8 @@
                         </a>
                         ]]>
                     </comment>
-                    <definedValue name="Characteristic_HeadOrientation_QuaternionData"            value="0x0000"/>
-                    <definedValue name="Characteristic_HeadOrientation_EulerAnglesData"           value="0x0001"/>
+                    <definedValue name="Characteristic_Orientation_QuaternionData"                value="0x0000"/>
+                    <definedValue name="Characteristic_Orientation_EulerAnglesData"               value="0x0001"/>
                     <definedValue name="Characteristic_Pedometer_ServiceData"                     value="0x0000"/>
                     <definedValue name="Characteristic_FreeFall_ServiceData"                      value="0x0000"/>
                     <definedValue name="Characteristic_Taps_ServiceData"                          value="0x0000"/>
@@ -8194,7 +8331,7 @@
                         ]]>
                     </comment>
                     <definedValue name="ModeOff"        value="0"/>
-                    <definedValue name="ModeOnCchange"  value="1"/>
+                    <definedValue name="ModeOnChange"   value="1"/>
                     <definedValue name="ModePeriodic"   value="2"/>
                 </item>
                 <item type="UNSIGNED_SHORT" name="period">
@@ -8225,25 +8362,32 @@
             </throws>
         </command>
 
-        <command name="Pass Through Protocol" id="0xFF0F" associatedEventId="0xFF0F">
+        <command name="Pass Through Protocol" id="0xFF0F">
             <comment>
                 <![CDATA[
-                    <p>A generic means of transporting some other protocol's messages inside of Bladerunner packets.<br />
+                    <p>A generic means of transporting some other protocol's messages inside of Deckard packets.<br />
                     In a initiator/receiver connection, packets are sent from the initiator with this command and received <br />
                     from the receiver via event ID 0xFF0F. <br />
-                    In a connection where both devices are initiator, packets are send to each other using this command. The event is not needed.<br />
+                    In a connection where both devices are initiator, packets are sent to each other using this command. The event is not needed.<br />
                     </p>
                 ]]>
             </comment>
             
             <payload_in>
-                <item type="UNSIGNED_SHORT" name="protocol ID" identifier="true">
+                <item type="UNSIGNED_SHORT" name="protocol_id">
                     <comment>
                         <![CDATA[
                             <p>A unique identifier for the protocol being passed through. <br />
                             Examples: APDU, HTTP, FTP, etc <br /></p>
+                            <table>
+                            <tbody>
+                            <tr><th> <b>Protocol</b></th><th> <b>Value (decimal)</b></th></tr>
+                            <tr> <td> None </td> <td> 0 </td> </tr>
+                            <tr> <td> APDU </td> <td> 1 </td> </tr>
+                            </table>
                         ]]>
                     </comment>
+                    <definedValue name="ProtocolNone"        value="0"/>
                     <definedValue name="ProtocolAPDU"        value="1"/>
                 </item>
                 <item type="BYTE_ARRAY" name="data">
@@ -8332,7 +8476,7 @@
                 <item type="UNSIGNED_SHORT" name="service ID">
                     <comment>
                         <![CDATA[
-                            Reference Calibrate services command for valid <a href="#ServiceIDs">service IDs</a> .
+                            Reference Calibrate services command for valid <a href="#ServiceIDs">service IDs</a>.
                         ]]>
                     </comment>
                 </item>
@@ -8585,22 +8729,22 @@
                             </table>
                         ]]>
                     </comment>
-					<definedValue name="WearingDon"                  value="0x00"/>
-					<definedValue name="WearingDoff"                 value="0x01"/>
-					<definedValue name="TapXUp"                      value="0x01"/>
-					<definedValue name="TapXDown"                    value="0x02"/>                
-					<definedValue name="TapYUp"                      value="0x03"/>
-					<definedValue name="TapYDown"                    value="0x04"/> 
-					<definedValue name="TapZUp"                      value="0x05"/>
-					<definedValue name="TapZDown"                    value="0x06"/> 					
-					<definedValue name="CalibrateStatus_None"        value="0x00"/>
-					<definedValue name="CalibrateStatus_Step1"       value="0x01"/> 
-					<definedValue name="CalibrateStatus_Step2"       value="0x02"/>
-					<definedValue name="CalibrateStatus_Calibrated"  value="0x03"/>
-					<definedValue name="Button_Up"                   value="0x01"/>
-					<definedValue name="Button_Down"                 value="0x00"/>
-					
-				</item>
+                    <definedValue name="WearingDon"                  value="0x00"/>
+                    <definedValue name="WearingDoff"                 value="0x01"/>
+                    <definedValue name="TapXUp"                      value="0x01"/>
+                    <definedValue name="TapXDown"                    value="0x02"/>                
+                    <definedValue name="TapYUp"                      value="0x03"/>
+                    <definedValue name="TapYDown"                    value="0x04"/> 
+                    <definedValue name="TapZUp"                      value="0x05"/>
+                    <definedValue name="TapZDown"                    value="0x06"/>                                         
+                    <definedValue name="CalibrateStatus_None"        value="0x00"/>
+                    <definedValue name="CalibrateStatus_Step1"       value="0x01"/> 
+                    <definedValue name="CalibrateStatus_Step2"       value="0x02"/>
+                    <definedValue name="CalibrateStatus_Calibrated"  value="0x03"/>
+                    <definedValue name="Button_Up"                   value="0x01"/>
+                    <definedValue name="Button_Down"                 value="0x00"/>
+                    
+                </item>
             </payload_out>
             <comment>
             </comment>
@@ -8873,7 +9017,7 @@
             </comment>
         </event>
 
-        <event name="Pass Through Protocol" id="0xFF0F" associatedCommandId="0xFF0F">
+        <event name="Pass Through Protocol" id="0xFF0F">
             <comment>
                 <![CDATA[
                     <p>Receiver -> initiator data path for initiator/receiver connections. See "Pass Through Protocol" command 0xFF0F for details.<br />
@@ -8883,9 +9027,20 @@
             
             <payload_out>
                 <item type="UNSIGNED_SHORT" name="protocol ID" identifier="true">
-                    <definedValue name="ProtocolAPDU"        value="1"/>
+                    <comment>
+                        <![CDATA[
+                            <p>A unique identifier for the protocol being passed through. <br />
+                            See command 0xFF0F "Pass Through Protocol" for specifics. <br /></p>
+                        ]]>
+                    </comment>
                 </item>
                 <item type="BYTE_ARRAY" name="data">               
+                    <comment>
+                        <![CDATA[
+                            <p>A blob of response data from the specified protocol. <br />
+                            Examples: ADPU from secure element <br /></p>
+                        ]]>
+                    </comment>                  
                 </item>
             </payload_out>
         </event>
@@ -8893,4 +9048,3 @@
     </section>
 
 </registry>
-

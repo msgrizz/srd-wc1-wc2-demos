@@ -82,10 +82,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java">
+      <file leaf-file-name="Device.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="172" column="65" selection-start="5573" selection-end="5573" vertical-scroll-proportion="0.7302632" vertical-offset="1620" max-vertical-offset="6156">
+            <state line="874" column="25" selection-start="28860" selection-end="28869" vertical-scroll-proportion="0.7645195" vertical-offset="9764" max-vertical-offset="28296">
               <folding />
             </state>
           </provider>
@@ -126,10 +126,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="300" />
+    <option name="x" value="50" />
     <option name="y" value="23" />
     <option name="width" value="1620" />
-    <option name="height" value="1173" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -158,7 +158,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -313,6 +312,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -336,12 +337,6 @@
     <property name="SearchEverywhereHistory" value="" />
   </component>
   <component name="RunManager" selected="Android Application.PLTDeviceTest">
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <method />
-    </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -395,19 +390,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -519,7 +501,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="300" y="23" width="1620" height="1173" extended-state="0" />
+    <frame x="50" y="23" width="1620" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -533,15 +515,17 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23482032" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45085663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45085663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21166033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21166033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3261066" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956687" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -573,269 +557,275 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="0" selection-start="3103" selection-end="3103" vertical-scroll-proportion="0.0" vertical-offset="397" max-vertical-offset="26592" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1005" column="31" selection-start="31681" selection-end="31681" vertical-scroll-proportion="0.0" vertical-offset="11428" max-vertical-offset="21408" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="70" selection-start="2153" selection-end="2153" vertical-scroll-proportion="0.0" vertical-offset="200" max-vertical-offset="18936" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="70" selection-start="2153" selection-end="2153" vertical-scroll-proportion="0.0" vertical-offset="200" max-vertical-offset="18936" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="70" selection-start="2153" selection-end="2153" vertical-scroll-proportion="0.0" vertical-offset="200" max-vertical-offset="18936" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="53" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="4740" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="53" selection-start="1745" selection-end="1745" vertical-scroll-proportion="0.0" vertical-offset="221" max-vertical-offset="4740" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="384" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="890" selection-end="890" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="384" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="674" selection-end="674" vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="300" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/main.xml">
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
+      </provider>
       <provider selected="true" editor-type-id="android-designer">
         <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1260" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="37" selection-start="88" selection-end="88" vertical-scroll-proportion="0.032388665" vertical-offset="0" max-vertical-offset="741" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/local.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="100" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/PLTDeviceTest.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1107" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/protocol/event/SignalStrengthEvent.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="29" selection-start="1252" selection-end="1252" vertical-scroll-proportion="0.27726433" vertical-offset="0" max-vertical-offset="1082" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/protocol/command/ConfigureApplicationCommand.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="187" selection-end="187" vertical-scroll-proportion="0.06642067" vertical-offset="0" max-vertical-offset="1084" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="120" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/res/layout/main.xml">
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
+      </provider>
       <provider selected="true" editor-type-id="android-designer">
         <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state line="42" column="30" selection-start="0" selection-end="3292" vertical-scroll-proportion="0.46537396" vertical-offset="0" max-vertical-offset="1260" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/mdavis_macbookpro_1081/plantronics/NPD/programs/mobile/handset_android/BladeRunner/main/BladeRunnerClientSdk/src/com/plantronics/bladerunner/communicator/BladeRunnerCommunicator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="0" selection-start="2243" selection-end="2243" vertical-scroll-proportion="0.58135283" vertical-offset="0" max-vertical-offset="9624" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/protocol/event/ApplicationActionResultEvent.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0770878" vertical-offset="0" max-vertical-offset="934" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/protocol/event/SubscribedServiceDataEvent.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0770878" vertical-offset="0" max-vertical-offset="934" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/model/device/BladeRunnerDeviceManager.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="85" selection-start="1812" selection-end="1812" vertical-scroll-proportion="0.5091938" vertical-offset="0" max-vertical-offset="707" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/model/device/BladeRunnerDevice.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="24" selection-start="1118" selection-end="1123" vertical-scroll-proportion="0.33285302" vertical-offset="21" max-vertical-offset="960" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/android/bluetooth/BluetoothDevice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="576" column="18" selection-start="21674" selection-end="21674" vertical-scroll-proportion="0.0" vertical-offset="6912" max-vertical-offset="13608" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/communicator/BladeRunnerCommunicator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="8" selection-start="127" selection-end="167" vertical-scroll-proportion="0.044901777" vertical-offset="0" max-vertical-offset="1740" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file:///opt/cisco/anyconnect/profile/plt_anyconnect.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="732" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/ConnectionListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="17" selection-start="92" selection-end="92" vertical-scroll-proportion="0.06504065" vertical-offset="0" max-vertical-offset="1107" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/PairingListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="17" selection-start="91" selection-end="91" vertical-scroll-proportion="0.05420054" vertical-offset="0" max-vertical-offset="1107" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Subscription.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="304" selection-end="304" vertical-scroll-proportion="0.27530363" vertical-offset="0" max-vertical-offset="741" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/TapsInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="16" selection-start="545" selection-end="545" vertical-scroll-proportion="0.07692308" vertical-offset="181" max-vertical-offset="792" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/Quaternion.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="48" selection-start="343" selection-end="343" vertical-scroll-proportion="0.0" vertical-offset="252" max-vertical-offset="1128" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/PedometerInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="29" selection-start="252" selection-end="252" vertical-scroll-proportion="0.2749591" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/OrientationTrackingInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="30" selection-start="1107" selection-end="1107" vertical-scroll-proportion="0.46972176" vertical-offset="109" max-vertical-offset="720" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/MagnetometerCalInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="70" selection-start="753" selection-end="753" vertical-scroll-proportion="0.5106383" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/Info.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="32" selection-start="721" selection-end="721" vertical-scroll-proportion="0.5482815" vertical-offset="25" max-vertical-offset="636" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/GyroscopeCalInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="70" selection-start="719" selection-end="719" vertical-scroll-proportion="0.5106383" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/FreeFallInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="70" selection-start="858" selection-end="858" vertical-scroll-proportion="0.62847793" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/WearingStateInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="68" selection-start="711" selection-end="711" vertical-scroll-proportion="0.5106383" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/EulerAngles.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="47" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="216" max-vertical-offset="864" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/PedometerCalibration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="22" selection-start="220" selection-end="220" vertical-scroll-proportion="0.11924119" vertical-offset="0" max-vertical-offset="1107" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/OrientationTrackingCalibration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="63" selection-start="536" selection-end="536" vertical-scroll-proportion="0.18428184" vertical-offset="0" max-vertical-offset="1107" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/InfoListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="17" selection-start="134" selection-end="134" vertical-scroll-proportion="0.08672087" vertical-offset="0" max-vertical-offset="1107" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Library/android-sdk-macosx/sources/android-17/java/lang/StringBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="19" selection-start="1667" selection-end="1667" vertical-scroll-proportion="0.0" vertical-offset="516" max-vertical-offset="8484" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/libs/BladeRunnerClientSDK.jar!/com/plantronics/bladerunner/protocol/setting/GenesGUIDResponse.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="18" selection-start="713" selection-end="713" vertical-scroll-proportion="0.30716723" vertical-offset="0" max-vertical-offset="586" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/configuration/Configuration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="101" selection-end="101" vertical-scroll-proportion="0.09819967" vertical-offset="0" max-vertical-offset="611" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/info/ProximityInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="45" selection-start="319" selection-end="336" vertical-scroll-proportion="0.14092141" vertical-offset="0" max-vertical-offset="1107" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/calibration/Calibration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="99" selection-end="99" vertical-scroll-proportion="0.09787928" vertical-offset="0" max-vertical-offset="613" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="11" selection-start="1257" selection-end="1257" vertical-scroll-proportion="0.49423394" vertical-offset="0" max-vertical-offset="607">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="166" column="45" selection-start="7266" selection-end="7266" vertical-scroll-proportion="0.45362562" vertical-offset="1723" max-vertical-offset="28296">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1110" selection-end="1110" vertical-scroll-proportion="0.57425743" vertical-offset="0" max-vertical-offset="606">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PLTDeviceTest/src/com/plantronics/device/test/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="172" column="65" selection-start="5573" selection-end="5573" vertical-scroll-proportion="0.7302632" vertical-offset="1620" max-vertical-offset="6156">
+        <state line="17" column="25" selection-start="660" selection-end="660" vertical-scroll-proportion="0.18411553" vertical-offset="0" max-vertical-offset="6156">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/InfoListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="288" selection-end="288" vertical-scroll-proportion="0.14079422" vertical-offset="0" max-vertical-offset="1108">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/PairingListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="17" selection-start="91" selection-end="91" vertical-scroll-proportion="0.054151624" vertical-offset="0" max-vertical-offset="1108">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/ConnectionListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="275" selection-end="275" vertical-scroll-proportion="0.1299639" vertical-offset="0" max-vertical-offset="1108">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="874" column="25" selection-start="28860" selection-end="28869" vertical-scroll-proportion="0.7645195" vertical-offset="9764" max-vertical-offset="28296">
           <folding />
         </state>
       </provider>

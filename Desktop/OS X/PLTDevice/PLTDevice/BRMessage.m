@@ -82,21 +82,24 @@
 				break;
 				
 			case BRPayloadItemTypeByteArray: {
-				NSData *data = [value pointerValue];
+				//NSData *data = [value pointerValue];
+				NSData *data = (NSData *)value;
 				len += sizeof(uint16_t);
 				uint16_t dataLen = [data length];
 				len += dataLen;
 				break; }
 				
 			case BRPayloadItemTypeShortArray: {
-				NSData *data = [value pointerValue];
+				//NSData *data = [value pointerValue];
+				NSData *data = (NSData *)value;
 				len += sizeof(uint16_t);
 				uint16_t dataLen = [data length];
 				len += dataLen * 2;
 				break; }
 				
 			case BRPayloadItemTypeString: {
-				NSString *string = [value pointerValue];
+				//NSString *string = [value pointerValue];
+				NSString *string = (NSString *)value;
 				len += sizeof(uint16_t);
 				uint16_t stringLen = [string length];
 				len += stringLen * 2;

@@ -14,8 +14,13 @@
 #import "BRRemoteDevice_Private.h"
 #import "BRMessage.h"
 #import "BRMessage_Private.h"
+#import	"BRIncomingMessage.h"
 #import "BRIncomingMessage_Private.h"
+#import "BROutgoingMessage.h"
 #import "BROutgoingMessage_Private.h"
+#import "BRSettingResult.h"
+#import "BREvent.h"
+#import "BRException.h"
 #import "BRHostVersionNegotiateMessage.h"
 #import "BRDeviceProtocolVersionMessage.h"
 #import "BRMetadataMessage.h"
@@ -45,7 +50,9 @@
 #endif
 
 
+#define MESSAGE_DELAY		300 // ms
 #define DISCONNECT_DELAY	250 // ms
+
 
 #ifdef TARGET_IOS
 NSString *const BRDeviceEAProtocolString =							@"com.plantronics.headsetdataservice";
@@ -60,6 +67,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 @interface BRDevice () <EAAccessoryDelegate, NSStreamDelegate>
 #endif
 
+- (void)_sendMessage:(BRMessage *)message;
 - (void)checkInputBuffer;
 #ifdef TARGET_IOS
 - (void)checkOutputBuffers;
@@ -68,6 +76,9 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 - (void)startCloseSessionTimer;
 - (void)cancelCloseSessionTimer;
 - (void)closeSessionTimer:(NSTimer *)aTimer;
+#ifdef DELAY_MESSAGES
+- (void)checkSendMessage:(NSTimer *)aTimer;
+#endif
 
 @property(nonatomic,strong)				NSMutableData				*inputBuffer;
 @property(nonatomic,strong,readwrite)	NSMutableDictionary			*remoteDevices;
@@ -79,6 +90,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 @property(nonatomic,strong)				EASession					*session;
 @property(nonatomic,assign)             BOOL                        streamOpened;
 @property(nonatomic,strong)				NSMutableArray				*outputBuffers;
+#endif
+#ifdef DELAY_MESSAGES
+@property(nonatomic,strong)				NSMutableArray				*outputMessageQueue;
+@property(nonatomic,strong)				NSDate						*lastMessageSendDate;
+@property(nonatomic,strong)				NSTimer						*checkSendMessageTimer;
 #endif
 
 @end
@@ -140,7 +156,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 #endif
 	
 #ifdef TARGET_IOS
-	DLog(DLogLevelInfo, @"Opening session with accessory %@...", self.accessory);
+	DLog(DLogLevelInfo, @"Opening connection to accessory %@...", [self.accessory name]);
 	
 	if (!self.isConnected) {
 		if (!self.session) {
@@ -151,7 +167,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				self.streamOpened = NO;
 				self.remoteDevices = [NSMutableDictionary dictionary];
 				
-				DLog(DLogLevelDebug, @"Attempting to create data session with accessory %@", [self.accessory name]);
+				DLog(DLogLevelDebug, @"Attempting to create data session with accessory %@...", [self.accessory name]);
 				
 #ifdef GENESIS
 				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:@"com.plantronics.opportunity"];
@@ -159,7 +175,9 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				self.session = [[EASession alloc] initWithAccessory:self.accessory forProtocol:BRDeviceEAProtocolString];
 #endif
 				if (self.session) {
+#ifndef TERSE_LOGGING
 					DLog(DLogLevelDebug, @"Created EA session: %@", self.session);
+#endif
 					
 					// open input and output streams
 					[[self.session inputStream] setDelegate:self];
@@ -203,7 +221,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 	DLog(DLogLevelInfo, @"Closing connection (%@)...", self.bluetoothAddress);
 #endif
 #ifdef TARGET_IOS
-	DLog(DLogLevelInfo, @"Closing connection to accessory %@...", self.accessory);
+	DLog(DLogLevelInfo, @"Closing connection to accessory %@...", [self.accessory name]);
 #endif
 	
 	self.state = BRDeviceStateClosingSession;
@@ -223,42 +241,84 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)sendMessage:(BRMessage *)message
 {
-	NSData *messageData = message.data; // message.data computes payload on each call...
+#ifdef DELAY_MESSAGES
+	if (!self.outputMessageQueue) self.outputMessageQueue = [NSMutableArray array];
+	[self.outputMessageQueue addObject:message];
 	
-#if defined(TARGET_IOS) && defined(MFI_SEQUENCE_PREFIXES)
-	NSMutableData *mfiHeaderData = [[NSData dataWithHexString:@"0101"] mutableCopy]; // add MFI prefix...
-	[mfiHeaderData appendData:messageData];
-	messageData = mfiHeaderData;
-#endif
-	
-	if ([message.address integerValue] == 0) {
-		if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
-			[self.delegate BRDevice:self willSendData:messageData];
-		}
+	NSTimeInterval timeDelta = [[NSDate date] timeIntervalSinceDate:self.lastMessageSendDate];
+	if (!self.lastMessageSendDate || timeDelta >= MESSAGE_DELAY) {
+		DLog(DLogLevelTrace, @"%.0fms since last message >= MESSAGE_DELAY: sending...");
+		[self _sendMessage:self.outputMessageQueue[0]];
+		[self.outputMessageQueue removeObjectAtIndex:0];
+		self.checkSendMessageTimer = [NSTimer scheduledTimerWithTimeInterval:((float)MESSAGE_DELAY)/1000.0 target:self selector:@selector(checkSendMessage:) userInfo:nil repeats:NO];
 	}
-	else {//([message.address integerValue] != 0) {
-		NSString *portString = [message.address substringToIndex:1];
-		uint8_t port = [portString integerValue];
-		BRRemoteDevice *remoteDevice = self.remoteDevices[@(port)];
-		if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
-			[remoteDevice BRDevice:self willSendData:messageData];
+	else {
+		NSTimeInterval interval = MESSAGE_DELAY - timeDelta;
+		DLog(DLogLevelTrace, @"%.0fms since last message < MESSAGE_DELAY: waiting %.0fms.", timeDelta, interval);
+		NSTimeInterval actualInterval = ((float)interval)/1000.0;
+		DLog(DLogLevelTrace, @"actualInterval: %.2f",actualInterval);
+		if (self.checkSendMessageTimer) {
+			if ([self.checkSendMessageTimer isValid]) {
+				[self.checkSendMessageTimer invalidate];
+			}
+			self.checkSendMessageTimer = nil;
 		}
+		self.checkSendMessageTimer = [NSTimer scheduledTimerWithTimeInterval:actualInterval target:self selector:@selector(checkSendMessage:) userInfo:nil repeats:NO];
 	}
-	
-#ifdef TARGET_OSX
-    [self.RFCOMMChannel writeAsync:(void *)[messageData bytes] length:[messageData length] refcon:nil];
-#endif
-#ifdef TARGET_IOS
-	[self.outputBuffers addObject:messageData];
-	[self checkOutputBuffers];
+#else
+	[self _sendMessage:message];
 #endif
 }
 
 #pragma mark - Private
 
+- (void)_sendMessage:(BRMessage *)message
+{
+	@synchronized(self) {
+		DLog(DLogLevelDebug, @"Sending %@...", message);
+		
+		// actually sends a message
+		NSData *messageData = message.data; // message.data computes payload on each call...
+		
+#if defined(TARGET_IOS) && defined(MFI_SEQUENCE_PREFIXES)
+		NSMutableData *mfiHeaderData = [[NSData dataWithHexString:@"0101"] mutableCopy]; // add MFI prefix...
+		[mfiHeaderData appendData:messageData];
+		messageData = mfiHeaderData;
+#endif
+		
+		if ([message.address integerValue] == 0) {
+			if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
+				[self.delegate BRDevice:self willSendData:messageData];
+			}
+		}
+		else {//([message.address integerValue] != 0) {
+			NSString *portString = [message.address substringToIndex:1];
+			uint8_t port = [portString integerValue];
+			BRRemoteDevice *remoteDevice = self.remoteDevices[@(port)];
+			if ([self.delegate respondsToSelector:@selector(BRDevice:willSendData:)]) {
+				[remoteDevice BRDevice:self willSendData:messageData];
+			}
+		}
+		
+#ifdef TARGET_OSX
+		[self.RFCOMMChannel writeAsync:(void *)[messageData bytes] length:[messageData length] refcon:nil];
+#endif
+#ifdef TARGET_IOS
+		[self.outputBuffers addObject:messageData];
+		[self checkOutputBuffers];
+#endif
+		
+#ifdef DELAY_MESSAGES
+		self.lastMessageSendDate = [NSDate date];
+#endif
+	}
+}
+
 - (void)checkInputBuffer
 {
+#ifndef TERSE_LOGGING
 	DLog(DLogLevelTrace, @"checkInputBuffer");
+#endif
 	
 	// the theory is that the beginning of the data will always be the start of a message
 	// the buffer may not contain a whole message, or it may overflow into part or all of a new message
@@ -304,19 +364,26 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 
 - (void)checkOutputBuffers
 {
+#ifndef TERSE_LOGGING
 	DLog(DLogLevelTrace, @"checkOutputBuffers: (num messages: %d)", [self.outputBuffers count]);
-	
+#endif
 	NSOutputStream *outputStream = [self.session outputStream];
 	NSMutableData *outData;
 	if ([self.outputBuffers count]) {
+#ifndef TERSE_LOGGING
 		DLog(DLogLevelTrace, @"*** SENDING ***");
+#endif
 		outData = self.outputBuffers[0];
 	}
 	else {
+#ifndef TERSE_LOGGING
 		DLog(DLogLevelTrace, @"*** NOTHING TO SEND ***");
+#endif
 	}
 	while(self.session && [outputStream hasSpaceAvailable] && [outData length]) {
+#ifndef TERSE_LOGGING
 		DLog(DLogLevelTrace, @"(data)");
+#endif
 		NSInteger len = [outputStream write:(void *)[outData bytes] maxLength:[outData length]];
 		switch (len) {
 			case 0: // reached fixed-length capacity (?)
@@ -329,11 +396,15 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 			default: { // data written
 				DLog(DLogLevelTrace, @"Wrote %ld bytes.", (long)len);
 				if (len == [outData length]) {
+#ifndef TERSE_LOGGING
 					DLog(DLogLevelTrace, @"(whole message)");
+#endif
 					[self.outputBuffers removeObjectAtIndex:0];
 				}
 				else {
+#ifndef TERSE_LOGGING
 					DLog(DLogLevelTrace, @"(partial message)");
+#endif
 #warning wait and re-send whole message at once?
 					NSRange range = NSMakeRange(0, len);
 					[outData replaceBytesInRange:range withBytes:nil length:0];
@@ -381,6 +452,7 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeMetadata: {
 				BRMetadataMessage *metadata = (BRMetadataMessage *)[BRMetadataMessage messageWithData:data];
+				DLog(DLogLevelTrace, @"BRMessageTypeMetadata: %@", metadata);
 				if (destinationDevice == self) {
 					self.commands = metadata.commands;
 					self.settings = metadata.settings;
@@ -412,6 +484,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeCommandResultException: {
 				BRException *exception = (BRException *)[BRIncomingMessageMux messageWithData:data];
+#ifdef TERSE_LOGGING
+				DLog(DLogLevelTrace, @"BRMessageTypeCommandResultException: %@", NSStringFromClass([exception class]));
+#else
+				DLog(DLogLevelTrace, @"BRMessageTypeCommandResultException: %@", exception);
+#endif
 				
 				if (destinationDevice == self) {
 					[self.delegate BRDevice:self didRaiseCommandException:exception];
@@ -423,6 +500,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeSettingResultSuccess: {
 				BRSettingResult *result = (BRSettingResult *)[BRIncomingMessageMux messageWithData:data];
+#ifdef TERSE_LOGGING
+				DLog(DLogLevelTrace, @"BRMessageTypeSettingResultSuccess: %@", NSStringFromClass([result class]));
+#else
+				DLog(DLogLevelTrace, @"BRMessageTypeSettingResultSuccess: %@", result);
+#endif
 				
 				if (destinationDevice == self) {
 					[self.delegate BRDevice:self didReceiveSettingResult:result];
@@ -434,6 +516,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeSettingResultException: {
 				BRException *exception = (BRException *)[BRIncomingMessageMux messageWithData:data];
+#ifdef TERSE_LOGGING
+				DLog(DLogLevelTrace, @"BRMessageTypeSettingResultException: %@", NSStringFromClass([exception class]));
+#else
+				DLog(DLogLevelTrace, @"BRMessageTypeSettingResultException: %@", exception);
+#endif
 				
 				if (destinationDevice == self) {
 					[self.delegate BRDevice:self didRaiseSettingException:exception];
@@ -445,6 +532,11 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 				
 			case BRMessageTypeEvent: {
 				BREvent *event = (BREvent *)[BRIncomingMessageMux messageWithData:data];
+#ifdef TERSE_LOGGING
+				DLog(DLogLevelTrace, @"BRMessageTypeEvent: %@", NSStringFromClass([event class]));
+#else
+				DLog(DLogLevelTrace, @"BRMessageTypeEvent: %@", event);
+#endif
 				
 				if ([event isKindOfClass:[BRConnectedDeviceEvent class]]) {
 					uint8_t devPort;
@@ -545,6 +637,26 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 	[self.delegate BRDeviceDidDisconnect:self];
 #endif
 }
+
+#ifdef DELAY_MESSAGES
+- (void)checkSendMessage:(NSTimer *)aTimer
+{
+	DLog(DLogLevelTrace, @"checkSendMessage:");
+	
+	if ([self.outputMessageQueue count]) {
+		[self _sendMessage:self.outputMessageQueue[0]];
+		[self.outputMessageQueue removeObjectAtIndex:0];
+		
+		if (self.checkSendMessageTimer) {
+			if ([self.checkSendMessageTimer isValid]) {
+				[self.checkSendMessageTimer invalidate];
+			}
+			self.checkSendMessageTimer = nil;
+		}
+		self.checkSendMessageTimer = [NSTimer scheduledTimerWithTimeInterval:((float)MESSAGE_DELAY)/1000.0 target:self selector:@selector(checkSendMessage:) userInfo:nil repeats:NO];
+	}
+}
+#endif
 
 #pragma mark - IOBluetoothRFCOMMChannelDelegate
 
@@ -679,10 +791,12 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 	if (streamEvent & NSStreamEventHasBytesAvailable) {
 		//NSLog(@"NSStreamEventHasBytesAvailable:");
 		
-		uint8_t buf[4096*3]; // maximum deckard message size (with address type 1) x 3.
-		NSUInteger len = [[self.session inputStream] read:buf maxLength:4096*3];
+		uint8_t buf[4096*4]; // maximum deckard message size (with address type 1) x 4.
+		NSUInteger len = [[self.session inputStream] read:buf maxLength:4096*4];
 		
 		NSData *data = [NSData dataWithBytes:buf length:len];
+		
+		DLog(DLogLevelTrace, @"<== %@", [data hexStringWithSpaceEvery:2]);
 
 		// since the "MFI prefix" is added to every BUFFER, not every MESSAGE, from it for each buffer
 #ifdef MFI_SEQUENCE_PREFIXES
@@ -732,14 +846,24 @@ NSString *const BRDeviceErrorDomain =								@"com.plantronics.BRDevice";
 - (NSString *)description
 {
 #ifdef TARGET_OSX
-    return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%lu), delegate=%@",
-            self, self.bluetoothAddress, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], 
-			(unsigned long)[self.events count], (unsigned long)[self.remoteDevices count], self.delegate];
+	#ifdef TERSE_LOGGING
+		return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@",
+				self, self.bluetoothAddress];
+	#else
+		return [NSString stringWithFormat:@"<BRDevice %p> bluetoothAddress=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%lu), delegate=%@",
+				self, self.bluetoothAddress, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], 
+				(unsigned long)[self.events count], (unsigned long)[self.remoteDevices count], self.delegate];
+	#endif
 #endif
 #ifdef TARGET_IOS
-	return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%d), delegate=%@",
-            self, self.accessory.name, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], 
-			(unsigned long)[self.events count], [self.remoteDevices count], self.delegate];
+	#ifdef TERSE_LOGGING
+	return [NSString stringWithFormat:@"<BRDevice %p> accessory.name=%@",
+            self, self.accessory.name];
+	#else
+		return [NSString stringWithFormat:@"<BRDevice %p> accessory=%@, isConnected=%@, commands=(%lu), settings=(%lu), events=(%lu), remoteDevices=(%d), delegate=%@",
+				self, self.accessory.name, (self.isConnected ? @"YES" : @"NO"), (unsigned long)[self.commands count], (unsigned long)[self.settings count], 
+				(unsigned long)[self.events count], [self.remoteDevices count], self.delegate];
+	#endif
 #endif
 }
 

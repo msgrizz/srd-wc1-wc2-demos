@@ -32,39 +32,295 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="08d9b7eb-6f79-4334-acbe-963571ee8a77" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRawMessage.h" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRawMessage.m" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests-Info.plist" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/BRDeviceTestTests.m" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTestTests/en.lproj/InfoPlist.strings" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibrateServiceCommand.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibrateServiceCommand.m" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/PLTDeviceTestTests-Info.plist" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/PLTDeviceTestTests.m" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTestTests/en.lproj/InfoPlist.strings" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/PLTDeviceTests-Info.plist" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/PLTDeviceTests.m" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTests/en.lproj/InfoPlist.strings" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/DialogTabIcon.imageset/dialogTabIcon@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/lib/libPLTDevice.a" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/lib/libPLTDevice.a" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/MusicTabIcon.imageset/musicTabIcon@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/PlayMusicButton.imageset/playbutton@2x.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/AppDelegate.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/AppDelegate.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRApplicationActionResultEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRCalibratePedometerServiceCommand.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRCloseSessionMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRCommand.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRConfigureApplicationCommad.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDevice.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceConnectedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceDisconnectedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceInfoSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceInfoSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceNotReadyException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDeviceProtocolVersionMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRDevice_Private.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BREvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRFreeFallEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRFreeFallSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRGenesGUIDSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRGenesGUIDSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRGyroscopeCalStatusEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRGyroscopeCalStatusSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRHostVersionNegotiateMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRIllegalValueException.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRIncomingMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRIncomingMessage_Private.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRMagnetometerCalStatusEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRMagnetometerCalStatusSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRMessage_Private.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRMetadataMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BROrientationTrackingEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BROrientationTrackingSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BROutgoingMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BROutgoingMessage_Private.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRPedometerEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRPedometerSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRPerformApplicationActionCommand.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRProductNameSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRProductNameSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRRawMessage.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRRemoteDevice.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRRemoteDevice_Private.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRServiceCalibrationSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRServiceDataSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRServiceSubscriptionChangedEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSignalStrengthEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSignalStrengthSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSignalStrengthSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSubscribeToServiceCommand.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRSubscribeToSignalStrengthCommand.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRTapsEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRTapsSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRWearingStateEvent.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRWearingStateSettingRequest.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/BRWearingStateSettingResponse.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;STests/BangleTD_STests.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/ConfigurationViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/ConfigurationViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/AppIcon.appiconset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/DialogButton.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/DialogTabIcon.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/LaunchImage.launchimage/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/LockButton.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/MusicTabIcon.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/PauseMusicButton.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/PlayMusicButton.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/SensorsTabIcon.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Images.xcassets/UnlockButton.imageset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/DialogViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/DialogViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Info.plist" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;STests/Info.plist" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/LockViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/LockViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/Base.lproj/Main.storyboard" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/MusicViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/MusicViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSArray+PrettyPrint.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSArray+PrettyPrint.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSData+Hash.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSData+Hash.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSData+HexStrings.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/NSData+HexStrings.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTAmbientHumidityInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTAmbientPressureInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTConfiguration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTConfiguration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTDevice.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTDevice.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTDevice_Bangle.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTDevice_Internal.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTFreeFallInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTFreeFallInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTGyroscopeCalibrationInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTGyroscopeCalibrationInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTMagnetometerCalibrationInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTMagnetometerCalibrationInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTOrientationTrackingCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTOrientationTrackingCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTOrientationTrackingInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTOrientationTrackingInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTPedometerCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTPedometerCalibration.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTPedometerInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTPedometerInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTProximityInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTProximityInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTSkinTemperatureInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTTapsInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTTapsInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/PLTDevice/include/PLTWearingStateInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/PLTDevice/include/PLTWearingStateInfo.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/SensorsViewController.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/SensorsViewController.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/UITableView+Cells.h" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/UITableView+Cells.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S.xcodeproj/project.xcworkspace/contents.xcworkspacedata" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/gameofthrones.mp3" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S/main.m" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../iOS/BangleTD&amp;S/BangleTD&amp;S.xcodeproj/project.pbxproj" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice.xcodeproj/project.pbxproj" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice.xcodeproj/project.xcworkspace/contents.xcworkspacedata" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRApplicationActionResultEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRApplicationActionResultEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCalibratePedometerServiceCommand.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCalibratePedometerServiceCommand.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCloseSessionMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCloseSessionMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCommand.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRCommand.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDevice.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDevice.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceConnectedEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceConnectedEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceDisconnectedEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceDisconnectedEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceInfoSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceInfoSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceInfoSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceInfoSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceNotReadyException.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceNotReadyException.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceProtocolVersionMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDeviceProtocolVersionMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRDevice_Private.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BREvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BREvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRException.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRException.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRFreeFallEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRFreeFallEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRFreeFallSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRFreeFallSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGenesGUIDSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGenesGUIDSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGenesGUIDSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGenesGUIDSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGyroscopeCalStatusEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGyroscopeCalStatusEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGyroscopeCalStatusSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRGyroscopeCalStatusSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRHeaders.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRHostVersionNegotiateMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRHostVersionNegotiateMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRIllegalValueException.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRIllegalValueException.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRIncomingMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRIncomingMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRIncomingMessage_Private.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMagnetometerCalStatusEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMagnetometerCalStatusEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMagnetometerCalStatusSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMagnetometerCalStatusSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMessage_Private.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMetadataMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRMetadataMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROrientationTrackingEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROrientationTrackingEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROrientationTrackingSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROrientationTrackingSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROutgoingMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROutgoingMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BROutgoingMessage_Private.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPedometerEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPedometerEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPedometerSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPedometerSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPerformApplicationActionCommand.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRPerformApplicationActionCommand.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRProductNameSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRProductNameSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRProductNameSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRProductNameSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRRawMessage.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRRawMessage.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRRemoteDevice.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRRemoteDevice.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRRemoteDevice_Private.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceCalibrationSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceCalibrationSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceDataSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceDataSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceSubscriptionChangedEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRServiceSubscriptionChangedEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSignalStrengthSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSubscribeToServiceCommand.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSubscribeToServiceCommand.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSubscribeToSignalStrengthCommand.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRSubscribeToSignalStrengthCommand.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRTapsEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRTapsEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRTapsSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRTapsSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateEvent.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateEvent.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateSettingRequest.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateSettingRequest.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateSettingResponse.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/BRWearingStateSettingResponse.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/Info.plist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/NSArray+PrettyPrint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/NSArray+PrettyPrint.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/NSData+HexStrings.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDevice/NSData+HexStrings.m" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/BRDeviceTests/Info.plist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/BRDevice/makefile" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../BRPlayground/libs/BladeRunnerClientSDK.jar" afterPath="$PROJECT_DIR$/../BRPlayground/libs/BladeRunnerClientSDK.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTHeadsetManager.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTDeviceHandler.h" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTHeadsetManager.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/PLTDeviceHandler.m" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTDevice/PLTDevice.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.xcworkspace/xcuserdata/mdavis.xcuserdatad/UserInterfaceState.xcuserstate" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibratePedometerServiceCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRCalibratePedometerServiceCommand.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking/AFURLConnectionOperation.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/AFNetworking/AFURLConnectionOperation.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_OSX/AppDelegate.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_OSX/AppDelegate.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/AppDelegate.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/AppDelegate.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDevice.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceConnectedEvent.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRDeviceInfoSettingRequest.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRMessage.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceCalibrationSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceCalibrationSettingRequest.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRServiceDataSettingRequest.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSignalStrengthSettingRequest.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRSubscribeToSignalStrengthCommand.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRWearingStateSettingRequest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRException.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Breakout/BRKStageViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Breakout/BRKStageViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BROrientationTrackingEvent.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/BRPlayground.iml" afterPath="$PROJECT_DIR$/../BRPlayground/BRPlayground.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRemoteDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/BRRemoteDevice.m" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR_Wireless_Sensor-Info.plist" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.h" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/LocationOverrideViewController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/ConfigTempViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/ConfigTempViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/Configuration.h" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/Configuration.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../PLTDevice/src/com/plantronics/device/Device.java" afterPath="$PROJECT_DIR$/../PLTDevice/src/com/plantronics/device/Device.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/HTCalibrationTriggersViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/HTCalibrationTriggersViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/LocationMonitor.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/LocationMonitor.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" afterPath="$PROJECT_DIR$/../BRPlayground/src/com/plantronics/BRPlayground/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest_OSX/Base.lproj/MainMenu.xib" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest_OSX/Base.lproj/MainMenu.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_OSX/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_OSX/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest_OSX/MainWindowController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDeviceTest_OSX/MainWindowController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/3D/PLT3DViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice/PLTDevice.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController_iOS7.xib" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SensorsViewController_iOS7.xib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SettingsViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/SettingsViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StatusWatcher.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StatusWatcher.m" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetView2ViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetView2ViewController.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/PLTDevice.xcodeproj/project.pbxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.m" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/Classes/StreetViewViewController.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_iOS/ViewController.m" afterPath="$PROJECT_DIR$/../../../Desktop/OS X/PLTDevice/BRDeviceTest_iOS/ViewController.m" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/../../iOS/PLTSensor/CSR Wireless Sensor.xcodeproj/project.pbxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BRPlayground/project.properties" afterPath="$PROJECT_DIR$/../BRPlayground/project.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../PLTDevice/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../PLTDevice/.idea/workspace.xml" />
     </list>
     <ignored path="DX650 Seamless Transfer.iws" />
@@ -129,10 +385,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SettingsActivity.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
+      <file leaf-file-name="MainApp.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="5" selection-start="3040" selection-end="3040" vertical-scroll-proportion="0.44929796" vertical-offset="888" max-vertical-offset="1596">
+            <state line="424" column="0" selection-start="15893" selection-end="15893" vertical-scroll-proportion="0.08679928" vertical-offset="4992" max-vertical-offset="14352">
               <folding />
             </state>
           </provider>
@@ -177,10 +433,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="392" />
-    <option name="y" value="22" />
+    <option name="x" value="413" />
+    <option name="y" value="23" />
     <option name="width" value="1453" />
-    <option name="height" value="1024" />
+    <option name="height" value="1173" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -661,7 +917,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="392" y="22" width="1453" height="1024" extended-state="0" />
+    <frame x="413" y="23" width="1453" height="1173" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292683" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -675,7 +931,7 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32985386" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32912534" sideWeight="0.99587345" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -694,7 +950,7 @@
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USERS">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
     </option>
   </component>
@@ -717,6 +973,20 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="424" column="0" selection-start="15893" selection-end="15893" vertical-scroll-proportion="0.0" vertical-offset="4992" max-vertical-offset="14352">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="5" selection-start="3040" selection-end="3040" vertical-scroll-proportion="0.0" vertical-offset="888" max-vertical-offset="1596">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="599" column="12" selection-start="21488" selection-end="21911" vertical-scroll-proportion="0.0" vertical-offset="312" max-vertical-offset="14352">
@@ -869,16 +1139,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="42" selection-start="3045" selection-end="3047" vertical-scroll-proportion="0.33333334" vertical-offset="623" max-vertical-offset="14352">
+        <state line="76" column="27" selection-start="2624" selection-end="2624" vertical-scroll-proportion="0.3833635" vertical-offset="488" max-vertical-offset="1596">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/SettingsActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/plantronics/DX650SeamlessTransfer/MainApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="5" selection-start="3040" selection-end="3040" vertical-scroll-proportion="0.44929796" vertical-offset="888" max-vertical-offset="1596">
+        <state line="424" column="0" selection-start="15893" selection-end="15893" vertical-scroll-proportion="0.08679928" vertical-offset="4992" max-vertical-offset="14352">
           <folding />
         </state>
       </provider>
