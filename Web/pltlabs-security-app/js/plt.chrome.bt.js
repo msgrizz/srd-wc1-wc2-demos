@@ -159,7 +159,7 @@ var plt = (function(my){
       throw "device and message parameters are required"
     }
     //this variable is required to maintain correct scoping when calling the send function
-    chrome.bluetoothSocket.send(device.socketId, message.messageBytes);
+    chrome.bluetoothSocket.send(device.socketId, message.messageBytes, function(bytesSent){console.log("device has been sent " + bytesSent + " bytes");});
   };
   
   my.calibrateHeadOrientation = function(device){
@@ -226,21 +226,23 @@ var plt = (function(my){
        case plt.msg.EVENT_TYPE:
         switch(message.payload.messageId){
           case plt.msg.SUBSCRIBED_SERVICE_DATA_EVENT:
-            if (device.calibrateQuaternionFlag) {
-              device.calibrationQuaternion = message.payload.quaternion;
-              device.calibrateQuaternionFlag = false;
-              console.log("calibration quaternion stored for device" + JSON.stringify(device.calibrationQuaternion));
-            }
-            if (device.calibrationQuaternion && message.payload.serviceID == plt.msg.TYPE_SERVICEID_HEADORIENTATION){
-              //inverse the calibration quaterion
-               var iQ = inverseQuaternion(device.calibrationQuaternion);
-               var calQ = multiplyQuaternions(iQ, message.payload.quaternion);
-               message.payload.calibratedQuaternion = calQ;
-               message.payload.eulerAngles = quaternionToEuler(calQ).eulerAngles;
-            }
-            else{
-               message.payload.eulerAngles = quaternionToEuler(message.payload.quaternion).eulerAngles;
-            }
+	    if(message.payload.serviceID == plt.msg.TYPE_SERVICEID_HEADORIENTATION){
+	      if (device.calibrateQuaternionFlag) {
+		device.calibrationQuaternion = message.payload.quaternion;
+		device.calibrateQuaternionFlag = false;
+		console.log("calibration quaternion stored for device" + JSON.stringify(device.calibrationQuaternion));
+	      }
+	      if (device.calibrationQuaternion){
+		//inverse the calibration quaterion
+		 var iQ = inverseQuaternion(device.calibrationQuaternion);
+		 var calQ = multiplyQuaternions(iQ, message.payload.quaternion);
+		 message.payload.calibratedQuaternion = calQ;
+		 message.payload.eulerAngles = quaternionToEuler(calQ).eulerAngles;
+	      }
+	      else{
+		 message.payload.eulerAngles = quaternionToEuler(message.payload.quaternion).eulerAngles;
+	      }
+	    }
             break;
         }
         if(eventListener){

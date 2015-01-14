@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Deckard Feature Registry v2.3  -->
-<!-- $Header: //plantronics/NPD/technologies/deckard/dev-2.3/xml/deckard.xml#68 $ -->
+<!-- $Header: //plantronics/NPD/technologies/deckard/dev-2.3/xml/deckard.xml#77 $ -->
 <!-- NOTE:   the range 0xDD00-0xDEF is reserved for  Spokes specific items that don't -->
 <!--         belong in the Spokes Compatibility section. -->
 <registry service="82972387-294E-4D62-97B5-2668AA35F618">
@@ -1583,6 +1583,23 @@
             </comment>
         </setting>
 
+        <setting name="Mic Boom Position" id="0x021C">
+            <payload_in/>
+            <payload_out>
+                <item name="Orientation" type="BYTE">
+                    <definedValue name="mic_middle" value="0x00"/>
+                    <definedValue name="mic_left"   value="0x01"/>
+                    <definedValue name="mic_right"  value="0x02"/>
+                    <comment>
+                        Current position of the boom.
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                On headset with a movable microphone boom, allow the position of the boom to to queried.
+            </comment>
+        </setting>
+
         <event name="Wearing state changed" id="0x0200">
             <payload_out>
                 <item type="BOOLEAN" name="Worn">
@@ -1685,6 +1702,19 @@
             </comment>
         </event> 
 
+        <event name="Mic Boom Position" id="0x021C">
+            <payload_out>
+                <item name="Orientation" type="BYTE">
+                    <comment>
+                        Current position of the boom.
+                        See event of same id for returned values
+                    </comment>
+                </item>
+            </payload_out>
+            <comment>
+                On headset with a movable microphone boom, inform of a change in the position of the boom.
+            </comment>
+        </event>
     </section>
     
     <section title="General Configuration (0x04nn)">
@@ -1798,7 +1828,7 @@
             
         </command>
 
-        <command name="Configure Mute Alert" id="0x040A" associateSettingId="0x040A" associateEventId="0x040A">
+        <command name="Configure Mute Alert" id="0x040A">
             <payload_in>
                 <item name="mode" type="BYTE">
                     <comment>
@@ -1809,7 +1839,7 @@
                     <comment>
                         When mode is Voice Detect Reminder, item parameter is valid
                         Otherwise it will be ignored.
-                        When mode is TimeIntervalReminder, command Configure mute reminder timing should be used to configure Time interval.
+                        When mode is TimeIntervalReminder, command "Configure mute reminder timing" must be used to configure Time interval.
                     </comment>
                 </item>
             </payload_in>
@@ -1922,7 +1952,7 @@
 
         </setting>
 
-        <setting name="Mute Alert" id="0x040A" associateCommandId="0x040A" associateEventId="0x040A">
+        <setting name="Mute Alert" id="0x040A">
             <payload_in/>
             <payload_out>
                 <item name="mode" type="BYTE">
@@ -1940,7 +1970,7 @@
                     <comment>
                         When mode is Voice Detect Reminder, item parameter is valid
                         Otherwise it will be always zero.
-                        When mode is TimeIntervalReminder, setting mute reminder timing should be used to get mute alert Time interval.
+                        When mode is TimeIntervalReminder, setting "Mute reminder timing" must be used to get mute alert Time interval that is set by the "Configure mute reminder timing" command.
                     </comment>
                 </item>
             </payload_out>
@@ -2050,7 +2080,7 @@
             </comment>
         </event>
         
-        <event name="Configure Mute Alert" id="0x040A" associateCommandId="0x040A" associateSettingId="0x040A">
+        <event name="Configure Mute Alert" id="0x040A">
             <payload_out>
                 <item name="mode" type="BYTE">
                     <comment>
@@ -2061,7 +2091,7 @@
                     <comment>
                         When mode is Voice Detect Reminder, item parameter is valid
                         Otherwise it will be always zero.
-                        When mode is TimeIntervalReminder, event mute reminder timing will report Mute alert timing.
+                        When mode is TimeIntervalReminder, event "Mute reminder timing" will report Mute alert timing changed by "Configure mute reminder timing" command.
                     </comment>
                 </item>
             </payload_out>
@@ -2076,7 +2106,7 @@
         
         <command name="Configure signal strength events" id="0x0800" associatedSettingId="0x0806" associatedEventId="0x0800" streamingId="0x0806">
             <payload_in>
-                <item name="connectionId" type="BYTE" identifier="true">
+                <item name="connectionId" type="BYTE" required="true">
                     <comment>
                         The connection ID of the link being used to generate the signal strength event.
                     </comment>
@@ -2298,7 +2328,7 @@
 
         <setting name="Current signal strength" id="0x0800" associatedEventId="0x0806">
             <payload_in>
-                <item name="connectionId" type="BYTE">
+                <item name="connectionId" type="BYTE" required="true">
                     <comment>
                         The connection ID of the link being requested to provide the signal strength information.
                     </comment>
@@ -2362,7 +2392,7 @@
         
         <setting name="Signal strength configuration" id="0x0806" associatedEventId="0x0800">
             <payload_in>
-                <item name="connectionId" type="BYTE" identifier="true">
+                <item name="connectionId" type="BYTE" required="true">
                     <comment>
                         The connection ID of the link being used to generate the signal strength event.
                     </comment>
@@ -2435,6 +2465,13 @@
                         If enable is true, Find Headset LED Alert is enabled. Otherwise it is disabled.
                     </comment>
                 </item>
+				<item type="BYTE" name="timeout">
+                    <comment>
+                    If ENABLE is TRUE,  Find Headset LED Alert should enable and timeout after TIMEOUT seconds.
+                    TIMEOUT is unsigned decimal number, it could not be bigger than 255 and not equal to zero.
+                    If ENABLE is FALSE, Find Headset LED Alert should be disabled right way.
+                    </comment>
+                </item>
             </payload_out>
  
             <comment>
@@ -2488,7 +2525,7 @@
         
         <event name="Configure signal strength event" id="0x0800">
             <payload_out>
-                <item name="connectionId" type="BYTE" identifier="true">
+                <item name="connectionId" type="BYTE">
                     <comment>
                         The connection ID of the link being used to generate the signal strength event.
                     </comment>
@@ -2997,6 +3034,7 @@
             
             <comment>
                 Change the interval between mute reminders (voice prompt or tone) in the headset.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
                 The device will make a best effort to play the reminders on this schedule, though
                 exact timing is not guaranteed.
             </comment>
@@ -3580,6 +3618,7 @@
             
             <comment>
                 Return the interval between mute reminders (voice prompt or tone) in the headset.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
             </comment>
             
         </setting>
@@ -3781,7 +3820,7 @@
                     </comment>
                 </item>
                 <item name="MaintenanceVersion" type="UNSIGNED_SHORT">
-                    <definedValue name="DeckardVersionMaintenance" value="68"/>
+                    <definedValue name="DeckardVersionMaintenance" value="76"/>
                     <comment>
                         The Maintenance version of Deckard xml file to which the device message conform
                     </comment>
@@ -4069,7 +4108,8 @@
                 </item>
             </payload_out>
             <comment>
-                Notification that the Mute Reminder timing has been changed
+                Notification that the Mute Reminder timing has been changed.
+                This value is used when "Mute Alert" is set to use the "TimeIntervalReminder" type of alert.
             </comment>
         </event>
         
@@ -4424,16 +4464,10 @@
         </command>
 
         <command name="Headset Available" id="0x0E09">
-            <payload_in>
-                <item name="state" type="BOOLEAN">
-                    <comment>
-                        True (1) if the headset is connected and false (0) if the headset is disconnected.
-                    </comment>
-                </item>
-            </payload_in>
+            <payload_in/>
             <payload_out/>
             <comment>
-                Availability of the headset based on connection state (wireless or wired).
+                PLACEHOLDER: This command ID is reserved as the command is not supported but no other command shall use the associated ID per policy.
             </comment>
         </command>
 
@@ -4465,17 +4499,11 @@
             </comment>
         </command>
 
-        <command name="Y Cable Connection" id="0x0E0B">
-            <payload_in>
-                <item name="state" type="BOOLEAN">
-                    <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
-                    </comment>
-                </item>
-            </payload_in>
+        <command name="Training Headset Connection" id="0x0E0B">
+            <payload_in/>
             <payload_out/>
             <comment>
-                Connection state for a Y-Cable.
+                PLACEHOLDER: This command ID is reserved as the command is not supported but no other command shall use the associated ID per policy.
             </comment>
         </command>
 
@@ -4557,7 +4585,7 @@
 
         <command name="Remove Partition Information" id="0x0E1C">
             <payload_in>
-                <item name="partitionId" type="UNSIGNED_SHORT">
+                <item name="partitionId" type="UNSIGNED_SHORT" required="true">
                     <comment>
                         The partition id to remove
                     </comment>
@@ -4707,21 +4735,24 @@
                 </item>
             </payload_out>
             <comment>
-                Availability of the headset based on connection state (wireless or wired).
+                Availability of a connectible headset based on connection state (wireless or wired).
+                The connectible headset may or may not be able to communicate messaging itself.
+                This information is intended to be used by an initiator as part of determining the availability of the headset user.
             </comment>
         </setting>
 
-        <setting name="Y Cable Connection" id="0x0E0B">
+        <setting name="Training Headset Connection" id="0x0E0B">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
                     <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
+                        True (1) if a training headset or training headset adapter is connected and false (0) if disconnected.
                     </comment>
                 </item>
             </payload_out>
             <comment>
-                Connection state for a Y-Cable.
+                Connection state for a training headset or training headset adapter used primarily for supervisor training of another headset user.
+                This information is intended for use by the initiator to enable data reporting of training occurrences.
             </comment>
         </setting>
                 
@@ -4814,7 +4845,7 @@
 
         <setting name="Get Partition Information" id="0x0E1C">
             <payload_in>
-                <item name="partition" type="UNSIGNED_SHORT">
+                <item name="partition" type="UNSIGNED_SHORT" required="true">
                     <comment>
                         The partition to obtain information about
                     </comment>
@@ -5154,7 +5185,9 @@
                 </item>
             </payload_out>
             <comment>
-                Availability of the headset based on connection state (wireless or wired).
+                Availability of a connectible headset based on connection state (wireless or wired).
+                The connectible headset may or may not be able to communicate messaging itself.
+                This information is intended to be used by an initiator as part of determining the availability of the headset user.
             </comment>
         </event>
                 
@@ -5177,17 +5210,18 @@
             </comment>
         </event>
 
-        <event name="Y Cable Connection" id="0x0E0B">
+        <event name="Training Headset Connection" id="0x0E0B">
             <payload_in/>
             <payload_out>
                 <item name="state" type="BOOLEAN">
                     <comment>
-                        True (1) if the Y-Cable is connected and false (0) if the Y-Cable is disconnected.
+                        True (1) if a training headset or training headset adapter is connected and false (0) if disconnected.
                     </comment>
                 </item>
             </payload_out>
             <comment>
-                Connection state for a Y-Cable.
+                Connection state for a training headset or training headset adapter used primarily for supervisor training of another headset user.
+                This information is intended for use by the initiator to enable data reporting of training occurrences.
             </comment>
         </event>
         
@@ -5458,7 +5492,7 @@
         
         <command name="Set Ringtone" id="0x0F02">
             <payload_in>
-                <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" required="true">
                     <comment>
                         <![CDATA[
                             The <a href="#interface types"> interface</a>
@@ -5481,7 +5515,7 @@
         
         <command name="Set Audio Bandwidth" id="0x0F04">
             <payload_in>
-                <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" required="true">
                     <comment>
                         <![CDATA[
                             The<a href="#interface types">interface</a>
@@ -5505,7 +5539,7 @@
         
         <command name="Set Ringtone Volume" id="0x0F06">
             <payload_in>
-                <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" required="true">
                     <comment>
                         <![CDATA[
                             The <a href="#interface types">interface</a>
@@ -5531,7 +5565,7 @@
         
         <command name="Set Default Outbound Interface" id="0x0F08">
             <payload_in>
-                <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" required="true">
                     <comment>
                         <![CDATA[
                             The <a href="#interface types">interface</a>
@@ -5553,7 +5587,7 @@
         
         <command name="Set Tone Control" id="0x0F1A">
             <payload_in> 
-                <item name="interfaceType" type="BYTE" identifier="true">
+                <item name="interfaceType" type="BYTE" required="true">
                     <comment>
                         <![CDATA[
                                  The <a href="#interface types">interface, limited to PSTN (0) and VOIP (1)</a>
@@ -7497,14 +7531,14 @@
         
     </section>
        
-    <section title="BaDangle messages (0xFFnn)">
+    <section title="Wearable messages (0xFFnn)">
 
         <comment>
-            Messages intended to be used for communicating with the BaDangle device.
+            Messages intended to be used for communicating with Wearable devices.
         </comment>
         
         <!-- ***********************************************************************************************
-                                                Innovation Exceptions
+                                                Wearable Exceptions
          *********************************************************************************************** -->
         
         <exception name="Invalid service IDs" id="0xFF90">
@@ -7575,7 +7609,7 @@
         </exception>
         
         <!-- ***********************************************************************************************
-                                              Innovation  Commands
+                                              Wearable Commands
          *********************************************************************************************** -->
         
         <command name="Configure services" id="0xFF00">
@@ -7584,14 +7618,14 @@
             </comment>
             
             <payload_in>
-                <item type="UNSIGNED_SHORT" name="service ID" identifier="true">
+                <item type="UNSIGNED_SHORT" name="service ID" required="true">
                     <comment>
                         <![CDATA[
                             Reference "Configure services" command for valid <a href="#ServiceIDs">service IDs</a>.
                         ]]>
                     </comment>
                 </item>
-                <item type="UNSIGNED_SHORT" name="characteristic" identifier="true">
+                <item type="UNSIGNED_SHORT" name="characteristic" required="true">
                     <comment>
                         <![CDATA[
                             Valid service characteristics (prefixed with "-"):<br/>
@@ -7765,14 +7799,14 @@
             </comment>
             
             <payload_in>
-                <item type="UNSIGNED_SHORT" name="service ID" identifier="true">
+                <item type="UNSIGNED_SHORT" name="service ID" required="true">
                     <comment>
                         <![CDATA[
                            Reference "Configure services" command for valid <a href="#ServiceIDs">service IDs</a>.
                         ]]>
                     </comment>
                 </item>
-                <item type="UNSIGNED_SHORT" name="characteristic" identifier="false">
+                <item type="UNSIGNED_SHORT" name="characteristic" required="false">
                     <comment>
                         <![CDATA[
                             Valid service characteristics (prefixed with "-"):<br/>
@@ -7876,7 +7910,7 @@
             </comment>
             
             <payload_in>
-                <item type="UNSIGNED_SHORT" name="feature_ID" identifier="true">
+                <item type="UNSIGNED_SHORT" name="feature_ID" required="true">
                     <comment>
                         <![CDATA[
                             <a name="FeatureIDs">
@@ -7901,7 +7935,7 @@
                     <definedValue name="FeatureID_EnablePanicSequence" value="0x0005"/>
                     <definedValue name="FeatureID_DateAndTime"         value="0x0006"/>
                 </item>
-                <item type="UNSIGNED_SHORT" name="characteristic" identifier="true">
+                <item type="UNSIGNED_SHORT" name="characteristic" required="true">
                     <comment>
                         <![CDATA[
                             Valid application characteristics (prefixed with "-"):  <br/>
@@ -8218,6 +8252,7 @@
                             <tr><td>Acceleration                    <td/><td>0x0013<td/><tr/>
                             <tr><td>Angular velocity                <td/><td>0x0014<td/><tr/>
                             <tr><td>Magnetic field                  <td/><td>0x0015<td/><tr/>
+                            <tr><td>Voice event                     <td/><td>0x0016<td/><tr/>
                         </table>
                         </a>
                         ]]>
@@ -8244,6 +8279,7 @@
                     <definedValue name="ServiceID_Acceleration"                  value="0x0013"/>
                     <definedValue name="ServiceID_AngularVelocity"               value="0x0014"/>
                     <definedValue name="ServiceID_MagneticField"                 value="0x0015"/>
+                    <definedValue name="ServiceID_VoiceEvent"                    value="0x0016"/>
                 </item>
                 <item type="UNSIGNED_SHORT" name="characteristic">
                     <comment>
@@ -8271,6 +8307,7 @@
                             <tr><td>Acceleration                   <td/><td>0x0000<td/><tr/>
                             <tr><td>Angular velocity               <td/><td>0x0000<td/><tr/>
                             <tr><td>Magnetic field                 <td/><td>0x0000<td/><tr/>
+                            <tr><td>Launch it                      <td/><td>0x0000<td/><tr/>
                         </table>
                         </a>
                         ]]>
@@ -8323,6 +8360,7 @@
                     <definedValue name="Characteristic_Acceleration_ServiceData"                  value="0x0000"/>
                     <definedValue name="Characteristic_AngularVelocity_ServiceData"               value="0x0000"/>
                     <definedValue name="Characteristic_MagneticField_ServiceData"                 value="0x0000"/>
+                    <definedValue name="Characteristic_LaunchIt"                                  value="0x0000"/>
                 </item>
                 <item type="UNSIGNED_SHORT" name="mode" enabler="true">
                     <comment>
@@ -8393,7 +8431,7 @@
                     <definedValue name="ProtocolNone"        value="0"/>
                     <definedValue name="ProtocolAPDU"        value="1"/>
                 </item>
-                <item type="BYTE_ARRAY" name="data">
+                <item type="BYTE_ARRAY" name="dataBlob">
                     <comment>
                         <![CDATA[
                             <p>A blob of outgoing data from the specified protocol. <br />
@@ -8407,7 +8445,7 @@
         </command>
         
         <!-- ***********************************************************************************************
-                                                Innovation Settings
+                                                Wearable Settings
          *********************************************************************************************** -->
         
         <setting name="Query services configuration data" id="0xFF00">
@@ -8802,7 +8840,7 @@
         </setting>
         
         <!-- ***********************************************************************************************
-                                                Innovation Events
+                                                Wearable Events
          *********************************************************************************************** -->
 
         <event name="Subscribe to services" id="0xFF0A">
@@ -9029,7 +9067,7 @@
             </comment>
             
             <payload_out>
-                <item type="UNSIGNED_SHORT" name="protocol ID" identifier="true">
+                <item type="UNSIGNED_SHORT" name="protocol ID">
                     <comment>
                         <![CDATA[
                             <p>A unique identifier for the protocol being passed through. <br />
@@ -9037,7 +9075,7 @@
                         ]]>
                     </comment>
                 </item>
-                <item type="BYTE_ARRAY" name="data">               
+                <item type="BYTE_ARRAY" name="dataBlob">               
                     <comment>
                         <![CDATA[
                             <p>A blob of response data from the specified protocol. <br />

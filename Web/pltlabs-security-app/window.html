@@ -23,45 +23,101 @@
             </span>
         </div>
         <div id="controlPanel">
-            <div id="accordion">
                 <h3>Device</h3>
                 <div>
-                    <table width="800px">
+                    <table>
                         <tr>
-                            <td><span>Connect to Plantronics Device</span></td>
-                            <td>
+                            <td class="row-left"><span>Connect to Plantronics Device</span></td>
+                            <td class="row-right">
                                 <input type="checkbox" name="chkPLTDevice" id="chkPLTDevice" />
                             </td>
                         </tr>
                         <tr>
-                            <td><span>Product Name:</span></td>
-                            <td><span class="sensor-data" id="productName"></span></td>
+                            <td class="row-left"><span>Product Name:</span></td>
+                            <td class="row-right"><span class="sensor-data" id="productName"></span></td>
                         </tr>
                         <tr>
-                            <td><span>Bluetooth Address:</span></td>
-                            <td><span class="sensor-data" id="bdAddress"></span></td>
+                            <td class="row-left"><span>Bluetooth Address:</span></td>
+                            <td class="row-right"><span class="sensor-data" id="bdAddress"></span></td>
                         </tr>
                         <tr>
-                            <td><span>Firmware Version:</span></td>
-                            <td><span class="sensor-data" id="firmwareVersion"></span></td>
+                            <td class="row-left"><span>Firmware Version:</span></td>
+                            <td class="row-right"><span class="sensor-data" id="firmwareVersion"></span></td>
                         </tr>
                         <tr>
-                            <td><span>PLT Labs M2M Messaging Version:</span></td>
-                            <td><span class="sensor-data" id="deckardVersion"></span></td>
+                            <td class="row-left"><span>PLT Labs M2M Messaging Version:</span></td>
+                            <td class="row-right"><span class="sensor-data" id="deckardVersion"></span></td>
                         </tr>
                         <tr>
-                            <td><span>Battery Level:</span></td>
-                            <td><span class="sensor-data" id="batteryLevel"></span></td>
+                            <td class="row-left"><span>Battery Level:</span></td>
+                            <td class="row-right"><span class="sensor-data" id="batteryLevel"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="row-left"><span>Enable Voice Events</span></td>
+                            <td class="row-right">
+                                <input type="checkbox" name="chkEnableVoice" id="chkEnableVoice" />
+                                <br>
+                                <span id="voiceEvent"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Server Connection Info</span></td>
+                            <td><input id="serverAddress" type="text" value="http://127.0.0.1:8080"><span>server address:port</span><br>
+                                <input type="text" name="username" id="username" value="plt01"> Username (Valid users: joe, mary, plt01 ... plt20)<br>
+                                <input type="password" name="password" id="password" value="1234">Password (1234 for all accounts)<br>                         
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Check for Enrollments</span></td>
+                            <td>
+                                <input type="button" name="btnCheckEnrollment" id="btnCheckEnrollment" value="Check Enrollments"/>
+                                <span id="enrollmentResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Touch Secure Element</span></td>
+                            <td>
+                                <input type="checkbox" name="chkTouchSecureElement" id="chkTouchSecureElement"/>
+                                <span id="touchState">Not Touched</span>
+                            </td>
+                        </tr>
+                    
+                         <tr>
+                            <td><span>Ping Secure Element</span></td>
+                            <td>
+                                <input type="button" name="btnPing" id="btnPing" value="Ping"/>
+                                <span id="pingResult"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span>Enroll</span></td>
+                            <td>
+                                <input type="button" name="btnEnroll" id="btnEnroll" value="Enroll"/><br>
+                                <span id="enrollState">Not Enrolled</span><br>
+                                <span>Public Key: <span id="publicKey"></span></span><br>
+                                <span>Key Handle: <span id="keyHandle"></span></span><br>
+                                
+                            </td>
+                        </tr>
+                         <tr>
+                            <td><span>Authenticate (Sign)</span></td>
+                            <td>
+                                <input type="button" name="btnSign" id="btnSign" value="Sign"/> <img src="img/vault.jpeg" width="96" id="authResultImg"></img> <span id="signingstate"></span>
+                            </td>
                         </tr>
                     </table>
-                </div>
             </div>
         </div>   
        </div>
       <script src="js/vendor/jquery-1.10.2.min.js"></script>
       <script src="js/vendor/jquery-ui-1.10.4.custom.min.js"></script>
+      <script src="js/vendor/core-min.js"></script>
+      <script src="js/vendor/enc-utf16-min.js"></script>
+      <script src="js/vendor/enc-base64-min.js"></script>
+      <script src="js/vendor/sha256.js"></script>
       <script src="js/plt.chrome.bt.js"></script>
       <script src="js/plt.msg.js"></script>
+      <script src="js/plt.fido.js"></script>
       <script src="js/app.js"></script>
       
     </body>
