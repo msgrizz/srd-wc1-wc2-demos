@@ -2,21 +2,12 @@
 //  BRConfigureApplicationCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRConfigureApplicationCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_DisplayReadout = 0x0000;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_Units = 0x0001;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_LockOnPowerup = 0x0002;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_LockOnDoff = 0x0003;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_EnableButtonLock = 0x0004;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_EnablePanicSequence = 0x0005;
-const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_DateAndTime = 0x0006;
 
 
 @implementation BRConfigureApplicationCommand

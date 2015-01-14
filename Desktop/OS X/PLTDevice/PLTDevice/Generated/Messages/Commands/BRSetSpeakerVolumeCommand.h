@@ -2,7 +2,7 @@
 //  BRSetSpeakerVolumeCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,10 +11,10 @@
 
 #define BR_SET_SPEAKER_VOLUME 0x0E0A
 
-extern const uint8_t SetSpeakerVolumeCommand_Action_SpeakerVolumeRelativeUpDown;
-extern const uint8_t SetSpeakerVolumeCommand_Action_SpeakerVolumeAbsolutePercentage;
-extern const uint8_t SetSpeakerVolumeCommand_Action_SpeakerVolumeAbsoluteDb;
-extern const uint8_t SetSpeakerVolumeCommand_Action_SpeakerVolumeQ8dot8Format;
+#define BRDefinedValue_SetSpeakerVolumeCommand_Action_SpeakerVolumeRelativeUpDown 0x00
+#define BRDefinedValue_SetSpeakerVolumeCommand_Action_SpeakerVolumeAbsolutePercentage 0x01
+#define BRDefinedValue_SetSpeakerVolumeCommand_Action_SpeakerVolumeAbsoluteDb 0x02
+#define BRDefinedValue_SetSpeakerVolumeCommand_Action_SpeakerVolumeQ8dot8Format 0x03
 
 
 @interface BRSetSpeakerVolumeCommand : BRCommand

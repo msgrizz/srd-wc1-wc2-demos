@@ -2,7 +2,7 @@
 //  BRConfigureApplicationCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,13 +11,13 @@
 
 #define BR_CONFIGURE_APPLICATION 0xFF02
 
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_DisplayReadout;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_Units;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_LockOnPowerup;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_LockOnDoff;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_EnableButtonLock;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_EnablePanicSequence;
-extern const uint16_t ConfigureApplicationCommand_FeatureID_FeatureID_DateAndTime;
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_DisplayReadout 0x0000
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_Units 0x0001
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_LockOnPowerup 0x0002
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_LockOnDoff 0x0003
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_EnableButtonLock 0x0004
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_EnablePanicSequence 0x0005
+#define BRDefinedValue_ConfigureApplicationCommand_FeatureID_FeatureID_DateAndTime 0x0006
 
 
 @interface BRConfigureApplicationCommand : BRCommand

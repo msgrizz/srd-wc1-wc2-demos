@@ -2,7 +2,7 @@
 //  BRConfigureOLIFeatureCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,8 +11,8 @@
 
 #define BR_CONFIGURE_OLI_FEATURE 0x0409
 
-extern const uint8_t ConfigureOLIFeatureCommand_OLIenable_enable;
-extern const uint8_t ConfigureOLIFeatureCommand_OLIenable_disable;
+#define BRDefinedValue_ConfigureOLIFeatureCommand_OLIenable_enable 1
+#define BRDefinedValue_ConfigureOLIFeatureCommand_OLIenable_disable 0
 
 
 @interface BRConfigureOLIFeatureCommand : BRCommand

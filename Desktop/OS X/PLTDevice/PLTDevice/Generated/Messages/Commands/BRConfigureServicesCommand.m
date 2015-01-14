@@ -2,27 +2,12 @@
 //  BRConfigureServicesCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRConfigureServicesCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint16_t ConfigureServicesCommand_Characteristic_UI_ScrollMessage = 0x0000;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_Marquee = 0x0001;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayFlip = 0x0002;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayRotate = 0x0003;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayMessage = 0x0004;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayToggle = 0x0005;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayInvert = 0x0006;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayClear = 0x0007;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayPunctuation = 0x0008;
-const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayIcon = 0x0009;
-const uint16_t ConfigureServicesCommand_Characteristic_RTC_Configure = 0x0000;
-const uint16_t ConfigureServicesCommand_Characteristic_NFC_SetNDEF = 0x0000;
-const uint16_t ConfigureServicesCommand_Characteristic_NFC_Write = 0x0001;
 
 
 @implementation BRConfigureServicesCommand

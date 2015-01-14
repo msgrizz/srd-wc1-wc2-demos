@@ -2,7 +2,7 @@
 //  BRHeadsetAvailableCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -15,9 +15,8 @@
 
 @interface BRHeadsetAvailableCommand : BRCommand
 
-+ (BRHeadsetAvailableCommand *)commandWithState:(BOOL)state;
++ (BRHeadsetAvailableCommand *)command;
 
-@property(nonatomic,assign) BOOL state;
 
 
 @end

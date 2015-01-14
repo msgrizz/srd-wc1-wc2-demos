@@ -2,17 +2,12 @@
 //  BRSetTimeweightedAverageCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRSetTimeweightedAverageCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint8_t SetTimeweightedAverageCommand_Twa_TwaOff = 0;
-const uint8_t SetTimeweightedAverageCommand_Twa_Twa85dB = 1;
-const uint8_t SetTimeweightedAverageCommand_Twa_Twa80dB = 2;
 
 
 @implementation BRSetTimeweightedAverageCommand

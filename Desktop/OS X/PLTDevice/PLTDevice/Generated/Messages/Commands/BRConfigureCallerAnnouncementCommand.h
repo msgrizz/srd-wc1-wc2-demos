@@ -2,7 +2,7 @@
 //  BRConfigureCallerAnnouncementCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,8 +11,8 @@
 
 #define BR_CONFIGURE_CALLER_ANNOUNCEMENT 0x0804
 
-extern const uint8_t ConfigureCallerAnnouncementCommand_Value_DoNotAnnounceCallers;
-extern const uint8_t ConfigureCallerAnnouncementCommand_Value_AnnounceAllCallers;
+#define BRDefinedValue_ConfigureCallerAnnouncementCommand_Value_DoNotAnnounceCallers 0x00
+#define BRDefinedValue_ConfigureCallerAnnouncementCommand_Value_AnnounceAllCallers 0xFF
 
 
 @interface BRConfigureCallerAnnouncementCommand : BRCommand

@@ -2,7 +2,7 @@
 //  BRPassThroughProtocolCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -10,18 +10,15 @@
 #import "BRMessage_Private.h"
 
 
-const uint16_t PassThroughProtocolCommand_ProtocolID_ProtocolAPDU = 1;
-
-
 @implementation BRPassThroughProtocolCommand
 
 #pragma mark - Public
 
-+ (BRPassThroughProtocolCommand *)commandWithProtocolID:(uint16_t)protocolID data:(NSData *)data
++ (BRPassThroughProtocolCommand *)commandWithProtocolid:(uint16_t)protocolid messageData:(NSData *)messageData
 {
 	BRPassThroughProtocolCommand *instance = [[BRPassThroughProtocolCommand alloc] init];
-	instance.protocolID = protocolID;
-	instance.data = data;
+	instance.protocolid = protocolid;
+	instance.messageData = messageData;
 	return instance;
 }
 
@@ -37,8 +34,8 @@ const uint16_t PassThroughProtocolCommand_ProtocolID_ProtocolAPDU = 1;
 {
 	// auto-generated to hold name, order and type information for payload items
 	return @[
-			@{@"name": @"protocolID", @"type": @(BRPayloadItemTypeUnsignedShort)},
-			@{@"name": @"data", @"type": @(BRPayloadItemTypeByteArray)}
+			@{@"name": @"protocolid", @"type": @(BRPayloadItemTypeUnsignedShort)},
+			@{@"name": @"messageData", @"type": @(BRPayloadItemTypeByteArray)}
 			 ];
 }
 
@@ -46,8 +43,8 @@ const uint16_t PassThroughProtocolCommand_ProtocolID_ProtocolAPDU = 1;
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRPassThroughProtocolCommand %p> protocolID=0x%04X, data=%@",
-            self, self.protocolID, self.data];
+    return [NSString stringWithFormat:@"<BRPassThroughProtocolCommand %p> protocolid=0x%04X, messageData=%@",
+            self, self.protocolid, self.messageData];
 }
 
 @end

@@ -2,21 +2,12 @@
 //  BRSetToneControlCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRSetToneControlCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMaxBass = 0;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMidBass = 1;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMinBass = 2;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelNoBoost = 3;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMinTreble = 4;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMidTreble = 5;
-const uint8_t SetToneControlCommand_ToneLevel_ToneLevelMaxTreble = 6;
 
 
 @implementation BRSetToneControlCommand

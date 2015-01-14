@@ -2,16 +2,12 @@
 //  BRConfigurationForAConnectedHeadsetCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRConfigurationForAConnectedHeadsetCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint8_t ConfigurationForAConnectedHeadsetCommand_Configuration_HTopNew = 0x00;
-const uint8_t ConfigurationForAConnectedHeadsetCommand_Configuration_HTopLegacy = 0x01;
 
 
 @implementation BRConfigurationForAConnectedHeadsetCommand

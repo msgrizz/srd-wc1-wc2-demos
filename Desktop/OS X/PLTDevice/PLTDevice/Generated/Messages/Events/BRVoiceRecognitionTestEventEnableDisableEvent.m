@@ -2,7 +2,7 @@
 //  BRVoiceRecognitionTestEventEnableDisableEvent.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -10,11 +10,9 @@
 #import "BRMessage_Private.h"
 
 
-
-
 @interface BRVoiceRecognitionTestEventEnableDisableEvent ()
 
-@property(nonatomic,assign,readwrite) BOOL voiceRecogntionEventEnable;
+@property(nonatomic,assign,readwrite) BOOL voiceRecognitionEventEnable;
 
 
 @end
@@ -36,7 +34,7 @@
 {
 	// auto-generated to hold name, order and type information for payload items
 	return @[
-			@{@"name": @"voiceRecogntionEventEnable", @"type": @(BRPayloadItemTypeBoolean)}
+			@{@"name": @"voiceRecognitionEventEnable", @"type": @(BRPayloadItemTypeBoolean)}
 			 ];
 }
 
@@ -44,8 +42,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRVoiceRecognitionTestEventEnableDisableEvent %p> voiceRecogntionEventEnable=%@",
-            self, (self.voiceRecogntionEventEnable ? @"YES" : @"NO")];
+    return [NSString stringWithFormat:@"<BRVoiceRecognitionTestEventEnableDisableEvent %p> voiceRecognitionEventEnable=%@",
+            self, (self.voiceRecognitionEventEnable ? @"YES" : @"NO")];
 }
 
 @end

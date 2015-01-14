@@ -2,7 +2,7 @@
 //  BRPassThroughProtocolCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,15 +11,16 @@
 
 #define BR_PASS_THROUGH_PROTOCOL 0xFF0F
 
-extern const uint16_t PassThroughProtocolCommand_ProtocolID_ProtocolAPDU;
+#define BRDefinedValue_PassThroughProtocolCommand_Protocolid_ProtocolNone 0
+#define BRDefinedValue_PassThroughProtocolCommand_Protocolid_ProtocolAPDU 1
 
 
 @interface BRPassThroughProtocolCommand : BRCommand
 
-+ (BRPassThroughProtocolCommand *)commandWithProtocolID:(uint16_t)protocolID data:(NSData *)data;
++ (BRPassThroughProtocolCommand *)commandWithProtocolid:(uint16_t)protocolid messageData:(NSData *)messageData;
 
-@property(nonatomic,assign) uint16_t protocolID;
-@property(nonatomic,strong) NSData * data;
+@property(nonatomic,assign) uint16_t protocolid;
+@property(nonatomic,strong) NSData * messageData;
 
 
 @end

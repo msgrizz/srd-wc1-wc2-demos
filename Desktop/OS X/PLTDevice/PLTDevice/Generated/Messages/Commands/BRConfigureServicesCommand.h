@@ -2,7 +2,7 @@
 //  BRConfigureServicesCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,19 +11,19 @@
 
 #define BR_CONFIGURE_SERVICES 0xFF00
 
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_ScrollMessage;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_Marquee;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayFlip;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayRotate;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayMessage;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayToggle;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayInvert;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayClear;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayPunctuation;
-extern const uint16_t ConfigureServicesCommand_Characteristic_UI_DisplayIcon;
-extern const uint16_t ConfigureServicesCommand_Characteristic_RTC_Configure;
-extern const uint16_t ConfigureServicesCommand_Characteristic_NFC_SetNDEF;
-extern const uint16_t ConfigureServicesCommand_Characteristic_NFC_Write;
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_ScrollMessage 0x0000
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_Marquee 0x0001
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayFlip 0x0002
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayRotate 0x0003
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayMessage 0x0004
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayToggle 0x0005
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayInvert 0x0006
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayClear 0x0007
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayPunctuation 0x0008
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_UI_DisplayIcon 0x0009
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_RTC_Configure 0x0000
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_NFC_SetNDEF 0x0000
+#define BRDefinedValue_ConfigureServicesCommand_Characteristic_NFC_Write 0x0001
 
 
 @interface BRConfigureServicesCommand : BRCommand

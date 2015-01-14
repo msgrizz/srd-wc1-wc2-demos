@@ -2,7 +2,7 @@
 //  BRSetAudioBandwidthCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,8 +11,8 @@
 
 #define BR_SET_AUDIO_BANDWIDTH 0x0F04
 
-extern const uint8_t SetAudioBandwidthCommand_Bandwidth_BandwidthNarrowband;
-extern const uint8_t SetAudioBandwidthCommand_Bandwidth_BandwidthWideband;
+#define BRDefinedValue_SetAudioBandwidthCommand_Bandwidth_BandwidthNarrowband 1
+#define BRDefinedValue_SetAudioBandwidthCommand_Bandwidth_BandwidthWideband 2
 
 
 @interface BRSetAudioBandwidthCommand : BRCommand

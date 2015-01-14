@@ -2,7 +2,7 @@
 //  BRHalCurrentScenarioCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,14 +11,14 @@
 
 #define BR_HAL_CURRENT_SCENARIO 0x1100
 
-extern const uint16_t HalCurrentScenarioCommand_Scenario_Current;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_MixedGaming;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_MixedGamingNoChat;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_MixedGamingChatIn;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_Conference;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_Phone;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_Media;
-extern const uint16_t HalCurrentScenarioCommand_Scenario_Gaming;
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_Current 0
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_MixedGaming 1
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_MixedGamingNoChat 2
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_MixedGamingChatIn 3
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_Conference 4
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_Phone 5
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_Media 6
+#define BRDefinedValue_HalCurrentScenarioCommand_Scenario_Gaming 7
 
 
 @interface BRHalCurrentScenarioCommand : BRCommand

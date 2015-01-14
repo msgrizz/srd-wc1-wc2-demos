@@ -2,7 +2,7 @@
 //  BRConfigureDevicePowerStateCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 
 #define BR_CONFIGURE_DEVICE_POWER_STATE 0x0814
 
-extern const uint8_t ConfigureDevicePowerStateCommand_DeviceState_PowerOff;
-extern const uint8_t ConfigureDevicePowerStateCommand_DeviceState_PowerOn;
-extern const uint8_t ConfigureDevicePowerStateCommand_DeviceState_Restart;
-extern const uint8_t ConfigureDevicePowerStateCommand_DeviceState_Hibernate;
-extern const uint8_t ConfigureDevicePowerStateCommand_DeviceState_UpGrade;
+#define BRDefinedValue_ConfigureDevicePowerStateCommand_DeviceState_PowerOff 0x00
+#define BRDefinedValue_ConfigureDevicePowerStateCommand_DeviceState_PowerOn 0x01
+#define BRDefinedValue_ConfigureDevicePowerStateCommand_DeviceState_Restart 0x02
+#define BRDefinedValue_ConfigureDevicePowerStateCommand_DeviceState_Hibernate 0x03
+#define BRDefinedValue_ConfigureDevicePowerStateCommand_DeviceState_UpGrade 0x04
 
 
 @interface BRConfigureDevicePowerStateCommand : BRCommand

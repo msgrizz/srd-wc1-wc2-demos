@@ -2,7 +2,7 @@
 //  BRSetPowerLevelCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -11,9 +11,9 @@
 
 #define BR_SET_POWER_LEVEL 0x0F2A
 
-extern const uint8_t SetPowerLevelCommand_PowerLevel_powerLevelFixedLow;
-extern const uint8_t SetPowerLevelCommand_PowerLevel_powerLevelAdaptiveMedium;
-extern const uint8_t SetPowerLevelCommand_PowerLevel_powerLevelAdaptiveHigh;
+#define BRDefinedValue_SetPowerLevelCommand_PowerLevel_powerLevelFixedLow 0
+#define BRDefinedValue_SetPowerLevelCommand_PowerLevel_powerLevelAdaptiveMedium 1
+#define BRDefinedValue_SetPowerLevelCommand_PowerLevel_powerLevelAdaptiveHigh 2
 
 
 @interface BRSetPowerLevelCommand : BRCommand

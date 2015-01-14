@@ -2,18 +2,12 @@
 //  BRSetTimeweightedAveragePeriodCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
 #import "BRSetTimeweightedAveragePeriodCommand.h"
 #import "BRMessage_Private.h"
-
-
-const uint8_t SetTimeweightedAveragePeriodCommand_Twa_TwaPeriod2hours = 1;
-const uint8_t SetTimeweightedAveragePeriodCommand_Twa_TwaPeriod4hours = 2;
-const uint8_t SetTimeweightedAveragePeriodCommand_Twa_TwaPeriod6hours = 3;
-const uint8_t SetTimeweightedAveragePeriodCommand_Twa_TwaPeriod8hours = 4;
 
 
 @implementation BRSetTimeweightedAveragePeriodCommand

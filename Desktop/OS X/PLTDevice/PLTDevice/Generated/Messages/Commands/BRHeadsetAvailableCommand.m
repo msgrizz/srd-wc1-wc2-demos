@@ -2,7 +2,7 @@
 //  BRHeadsetAvailableCommand.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -10,16 +10,14 @@
 #import "BRMessage_Private.h"
 
 
-
-
 @implementation BRHeadsetAvailableCommand
 
 #pragma mark - Public
 
-+ (BRHeadsetAvailableCommand *)commandWithState:(BOOL)state
++ (BRHeadsetAvailableCommand *)command
 {
 	BRHeadsetAvailableCommand *instance = [[BRHeadsetAvailableCommand alloc] init];
-	instance.state = state;
+
 	return instance;
 }
 
@@ -35,7 +33,7 @@
 {
 	// auto-generated to hold name, order and type information for payload items
 	return @[
-			@{@"name": @"state", @"type": @(BRPayloadItemTypeBoolean)}
+
 			 ];
 }
 
@@ -43,8 +41,8 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<BRHeadsetAvailableCommand %p> state=%@",
-            self, (self.state ? @"YES" : @"NO")];
+    return [NSString stringWithFormat:@"<BRHeadsetAvailableCommand %p>",
+            self];
 }
 
 @end

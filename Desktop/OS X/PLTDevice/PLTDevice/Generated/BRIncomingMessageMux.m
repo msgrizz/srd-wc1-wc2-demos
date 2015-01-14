@@ -2,7 +2,7 @@
 //  BRIncomingMessageMux.m
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/03/14.
+//  Auto-generated from deckard.xml v2.3 on 10/08/14.
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
@@ -32,8 +32,6 @@
 
 		case BRMessageTypeCommandResultException:
 		case BRMessageTypeSettingResultException:
-			DLog(DLogLevelError, @"*** BRMessageType...ResultException ***");
-
 			switch (deckardID) {
 				case BR_SIMULATED_EXCEPTION_EXCEPTION:
 					class = [BRSimulatedExceptionException class];
@@ -49,9 +47,6 @@
 					break;
 				case BR_FEATURE_LOCK_ID_NOT_VALID_EXCEPTION:
 					class = [BRFeatureLockIDNotValidException class];
-					break;
-				case BR_FEATURE_IS_LOCKED_EXCEPTION:
-					class = [BRFeatureIsLockedException class];
 					break;
 				case BR_COMMAND_UNKNOWN_EXCEPTION:
 					class = [BRCommandUnknownException class];
@@ -73,6 +68,9 @@
 					break;
 				case BR_MEMORY_ALLOCATION_FAILED_EXCEPTION:
 					class = [BRMemoryAllocationFailedException class];
+					break;
+				case BR_COMMAND_PEM_LOCKED_EXCEPTION:
+					class = [BRCommandPEMLockedException class];
 					break;
 				case BR_NUMBER_OUT_OF_RANGE_EXCEPTION:
 					class = [BRNumberOutOfRangeException class];
@@ -110,8 +108,6 @@
 			break;
 			
 		case BRMessageTypeSettingResultSuccess:
-			DLog(DLogLevelTrace, @"BRMessageTypeSettingResultSuccess");
-			
 			switch (deckardID) {
 				case BR_ONE_BOOLEAN_SETTING_RESULT:
 					class = [BROneBooleanSettingResult class];
@@ -169,6 +165,12 @@
 					break;
 				case BR_SINGLE_NVRAM_CONFIGURATION_READ_WITH_ADDRESS_ECHO_SETTING_RESULT:
 					class = [BRSingleNVRAMConfigurationReadWithAddressEchoSettingResult class];
+					break;
+				case BR_HARDWARE_BATTERY_METER_SETTING_RESULT:
+					class = [BRHardwareBatteryMeterSettingResult class];
+					break;
+				case BR_SOFTWARE_COULOMB_COUNTER_SETTING_RESULT:
+					class = [BRSoftwareCoulombCounterSettingResult class];
 					break;
 				case BR_WEARING_STATE_SETTING_RESULT:
 					class = [BRWearingStateSettingResult class];
@@ -281,6 +283,9 @@
 				case BR_BATTERY_INFO_SETTING_RESULT:
 					class = [BRBatteryInfoSettingResult class];
 					break;
+				case BR_BATTERY_EXTENDED_INFO_SETTING_RESULT:
+					class = [BRBatteryExtendedInfoSettingResult class];
+					break;
 				case BR_GENES_GUID_SETTING_RESULT:
 					class = [BRGenesGUIDSettingResult class];
 					break;
@@ -332,8 +337,8 @@
 				case BR_HEADSET_AVAILABLE_SETTING_RESULT:
 					class = [BRHeadsetAvailableSettingResult class];
 					break;
-				case BR_Y_CABLE_CONNECTION_SETTING_RESULT:
-					class = [BRYCableConnectionSettingResult class];
+				case BR_TRAINING_HEADSET_CONNECTION_SETTING_RESULT:
+					class = [BRTrainingHeadsetConnectionSettingResult class];
 					break;
 				case BR_SPEAKER_VOLUME_SETTING_RESULT:
 					class = [BRSpeakerVolumeSettingResult class];
@@ -355,6 +360,9 @@
 					break;
 				case BR_HEADSET_CALL_STATUS_SETTING_RESULT:
 					class = [BRHeadsetCallStatusSettingResult class];
+					break;
+				case BR_EXTENDED_CALL_STATUS_SETTING_RESULT:
+					class = [BRExtendedCallStatusSettingResult class];
 					break;
 				case BR_DEVICE_INTERFACES_SETTING_RESULT:
 					class = [BRDeviceInterfacesSettingResult class];
@@ -455,12 +463,6 @@
 				case BR_FEATURE_LOCK_MASK_SETTING_RESULT:
 					class = [BRFeatureLockMaskSettingResult class];
 					break;
-				case BR_PASSWORD_SETTING_RESULT:
-					class = [BRPasswordSettingResult class];
-					break;
-				case BR_PROTECTED_STATE_SETTING_RESULT:
-					class = [BRProtectedStateSettingResult class];
-					break;
 				case BR_HAL_CURRENT_SCENARIO_SETTING_RESULT:
 					class = [BRHalCurrentScenarioSettingResult class];
 					break;
@@ -497,8 +499,6 @@
 			break;
 
 		case BRMessageTypeEvent:
-			DLog(DLogLevelTrace, @"BRMessageTypeEvent");
-
 			switch (deckardID) {
 				case BR_PERIODIC_TEST_EVENT_EVENT:
 					class = [BRPeriodicTestEventEvent class];
@@ -556,6 +556,15 @@
 					break;
 				case BR_CAPSENSE_RAW_DATA_EVENT_EVENT:
 					class = [BRCapsenseRawDataEventEvent class];
+					break;
+				case BR_SOFTWARE_BATTERY_DIAG_EVENT:
+					class = [BRSoftwareBatteryDiagEvent class];
+					break;
+				case BR_HARDWARE_BATTERY_DIAG_EVENT:
+					class = [BRHardwareBatteryDiagEvent class];
+					break;
+				case BR_COULOMB_COUNTER_DIAG_EVENT:
+					class = [BRCoulombCounterDiagEvent class];
 					break;
 				case BR_WEARING_STATE_CHANGED_EVENT:
 					class = [BRWearingStateChangedEvent class];
@@ -728,8 +737,8 @@
 				case BR_SPEAKER_VOLUME_EVENT:
 					class = [BRSpeakerVolumeEvent class];
 					break;
-				case BR_Y_CABLE_CONNECTION_EVENT:
-					class = [BRYCableConnectionEvent class];
+				case BR_TRAINING_HEADSET_CONNECTION_EVENT:
+					class = [BRTrainingHeadsetConnectionEvent class];
 					break;
 				case BR_CURRENT_SELECTED_LANGUAGE_CHANGED_EVENT:
 					class = [BRCurrentSelectedLanguageChangedEvent class];
@@ -739,6 +748,9 @@
 					break;
 				case BR_HEADSET_CALL_STATUS_EVENT:
 					class = [BRHeadsetCallStatusEvent class];
+					break;
+				case BR_EXTENDED_CALL_STATUS_CHANGE_EVENT:
+					class = [BRExtendedCallStatusChangeEvent class];
 					break;
 				case BR_SET_RINGTONE_EVENT:
 					class = [BRSetRingtoneEvent class];
@@ -808,9 +820,6 @@
 					break;
 				case BR_SET_FEATURE_LOCK_EVENT:
 					class = [BRSetFeatureLockEvent class];
-					break;
-				case BR_PASSWORD_CHANGED_EVENT:
-					class = [BRPasswordChangedEvent class];
 					break;
 				case BR_HAL_CURRENT_SCENARIO_EVENT:
 					class = [BRHalCurrentScenarioEvent class];
