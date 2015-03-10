@@ -1,0 +1,55 @@
+//
+//  BRAudioStatusEvent.m
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v2.3 on 01/28/15.
+//  Copyright (c) 2015 Plantronics. All rights reserved.
+//
+
+#import "BRAudioStatusEvent.h"
+#import "BRMessage_Private.h"
+
+
+@interface BRAudioStatusEvent ()
+
+@property(nonatomic,assign,readwrite) uint8_t codec;
+@property(nonatomic,assign,readwrite) uint8_t port;
+@property(nonatomic,assign,readwrite) uint8_t speakerGain;
+@property(nonatomic,assign,readwrite) uint8_t micGain;
+
+
+@end
+
+
+@implementation BRAudioStatusEvent
+
+#pragma mark - Public
+
+@dynamic deckardID;
+- (uint16_t)deckardID
+{
+	return BR_AUDIO_STATUS_EVENT;
+}
+
+#pragma mark BRMessage
+
+- (NSArray *)payloadDescriptors
+{
+	// auto-generated to hold name, order and type information for payload items
+	return @[
+			@{@"name": @"codec", @"type": @(BRPayloadItemTypeByte)},
+			@{@"name": @"port", @"type": @(BRPayloadItemTypeByte)},
+			@{@"name": @"speakerGain", @"type": @(BRPayloadItemTypeByte)},
+			@{@"name": @"micGain", @"type": @(BRPayloadItemTypeByte)}
+			 ];
+}
+
+#pragma mark - NSObject
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<BRAudioStatusEvent %p> codec=0x%02X, port=0x%02X, speakerGain=0x%02X, micGain=0x%02X",
+            self, self.codec, self.port, self.speakerGain, self.micGain];
+}
+
+@end

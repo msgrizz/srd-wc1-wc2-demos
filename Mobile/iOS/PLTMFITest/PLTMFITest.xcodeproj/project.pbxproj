@@ -1,0 +1,389 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4283035219E59DB900007470 /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4283035119E59DB900007470 /* UIView+Toast.m */; };
+		42930FE719AD703600CDC2C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42930FE619AD703600CDC2C6 /* main.m */; };
+		42930FEA19AD703600CDC2C6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42930FE919AD703600CDC2C6 /* AppDelegate.m */; };
+		42930FED19AD703600CDC2C6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42930FEC19AD703600CDC2C6 /* ViewController.m */; };
+		42930FF019AD703600CDC2C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42930FEE19AD703600CDC2C6 /* Main.storyboard */; };
+		42930FF219AD703600CDC2C6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42930FF119AD703600CDC2C6 /* Images.xcassets */; };
+		4293101919AD723F00CDC2C6 /* libPLTDevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4293101819AD723F00CDC2C6 /* libPLTDevice.a */; };
+		4293101B19AD751000CDC2C6 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4293101A19AD751000CDC2C6 /* ExternalAccessory.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4283035019E59DB900007470 /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
+		4283035119E59DB900007470 /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
+		42930FE119AD703600CDC2C6 /* PLTMFITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PLTMFITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42930FE519AD703600CDC2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42930FE619AD703600CDC2C6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		42930FE819AD703600CDC2C6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		42930FE919AD703600CDC2C6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		42930FEB19AD703600CDC2C6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		42930FEC19AD703600CDC2C6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		42930FEF19AD703600CDC2C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		42930FF119AD703600CDC2C6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4293100919AD723F00CDC2C6 /* PLTCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTCalibration.h; sourceTree = "<group>"; };
+		4293100A19AD723F00CDC2C6 /* PLTConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTConfiguration.h; sourceTree = "<group>"; };
+		4293100B19AD723F00CDC2C6 /* PLTDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTDevice.h; sourceTree = "<group>"; };
+		4293100C19AD723F00CDC2C6 /* PLTFreeFallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTFreeFallInfo.h; sourceTree = "<group>"; };
+		4293100D19AD723F00CDC2C6 /* PLTGyroscopeCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTGyroscopeCalibrationInfo.h; sourceTree = "<group>"; };
+		4293100E19AD723F00CDC2C6 /* PLTInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTInfo.h; sourceTree = "<group>"; };
+		4293100F19AD723F00CDC2C6 /* PLTMagnetometerCalibrationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTMagnetometerCalibrationInfo.h; sourceTree = "<group>"; };
+		4293101019AD723F00CDC2C6 /* PLTOrientationTrackingCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingCalibration.h; sourceTree = "<group>"; };
+		4293101119AD723F00CDC2C6 /* PLTOrientationTrackingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTOrientationTrackingInfo.h; sourceTree = "<group>"; };
+		4293101219AD723F00CDC2C6 /* PLTPedometerCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerCalibration.h; sourceTree = "<group>"; };
+		4293101319AD723F00CDC2C6 /* PLTPedometerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTPedometerInfo.h; sourceTree = "<group>"; };
+		4293101419AD723F00CDC2C6 /* PLTProximityInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTProximityInfo.h; sourceTree = "<group>"; };
+		4293101519AD723F00CDC2C6 /* PLTTapsInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTTapsInfo.h; sourceTree = "<group>"; };
+		4293101619AD723F00CDC2C6 /* PLTWearingStateInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLTWearingStateInfo.h; sourceTree = "<group>"; };
+		4293101819AD723F00CDC2C6 /* libPLTDevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPLTDevice.a; sourceTree = "<group>"; };
+		4293101A19AD751000CDC2C6 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		42930FDE19AD703600CDC2C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4293101B19AD751000CDC2C6 /* ExternalAccessory.framework in Frameworks */,
+				4293101919AD723F00CDC2C6 /* libPLTDevice.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4283034F19E59DB900007470 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				4283035019E59DB900007470 /* UIView+Toast.h */,
+				4283035119E59DB900007470 /* UIView+Toast.m */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+		42930FD819AD703600CDC2C6 = {
+			isa = PBXGroup;
+			children = (
+				42930FE319AD703600CDC2C6 /* PLTMFITest */,
+				4293100719AD723F00CDC2C6 /* PLTDevice */,
+				4293101A19AD751000CDC2C6 /* ExternalAccessory.framework */,
+				42930FE219AD703600CDC2C6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42930FE219AD703600CDC2C6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42930FE119AD703600CDC2C6 /* PLTMFITest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		42930FE319AD703600CDC2C6 /* PLTMFITest */ = {
+			isa = PBXGroup;
+			children = (
+				42930FE819AD703600CDC2C6 /* AppDelegate.h */,
+				42930FE919AD703600CDC2C6 /* AppDelegate.m */,
+				42930FEB19AD703600CDC2C6 /* ViewController.h */,
+				42930FEC19AD703600CDC2C6 /* ViewController.m */,
+				42930FEE19AD703600CDC2C6 /* Main.storyboard */,
+				42930FF119AD703600CDC2C6 /* Images.xcassets */,
+				42930FE419AD703600CDC2C6 /* Supporting Files */,
+			);
+			path = PLTMFITest;
+			sourceTree = "<group>";
+		};
+		42930FE419AD703600CDC2C6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4283034F19E59DB900007470 /* Toast */,
+				42930FE519AD703600CDC2C6 /* Info.plist */,
+				42930FE619AD703600CDC2C6 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4293100719AD723F00CDC2C6 /* PLTDevice */ = {
+			isa = PBXGroup;
+			children = (
+				4293100819AD723F00CDC2C6 /* include */,
+				4293101719AD723F00CDC2C6 /* lib */,
+			);
+			path = PLTDevice;
+			sourceTree = "<group>";
+		};
+		4293100819AD723F00CDC2C6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4293100919AD723F00CDC2C6 /* PLTCalibration.h */,
+				4293100A19AD723F00CDC2C6 /* PLTConfiguration.h */,
+				4293100B19AD723F00CDC2C6 /* PLTDevice.h */,
+				4293100C19AD723F00CDC2C6 /* PLTFreeFallInfo.h */,
+				4293100D19AD723F00CDC2C6 /* PLTGyroscopeCalibrationInfo.h */,
+				4293100E19AD723F00CDC2C6 /* PLTInfo.h */,
+				4293100F19AD723F00CDC2C6 /* PLTMagnetometerCalibrationInfo.h */,
+				4293101019AD723F00CDC2C6 /* PLTOrientationTrackingCalibration.h */,
+				4293101119AD723F00CDC2C6 /* PLTOrientationTrackingInfo.h */,
+				4293101219AD723F00CDC2C6 /* PLTPedometerCalibration.h */,
+				4293101319AD723F00CDC2C6 /* PLTPedometerInfo.h */,
+				4293101419AD723F00CDC2C6 /* PLTProximityInfo.h */,
+				4293101519AD723F00CDC2C6 /* PLTTapsInfo.h */,
+				4293101619AD723F00CDC2C6 /* PLTWearingStateInfo.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		4293101719AD723F00CDC2C6 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				4293101819AD723F00CDC2C6 /* libPLTDevice.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42930FE019AD703600CDC2C6 /* PLTMFITest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4293100119AD703700CDC2C6 /* Build configuration list for PBXNativeTarget "PLTMFITest" */;
+			buildPhases = (
+				42930FDD19AD703600CDC2C6 /* Sources */,
+				42930FDE19AD703600CDC2C6 /* Frameworks */,
+				42930FDF19AD703600CDC2C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PLTMFITest;
+			productName = PLTMFITest;
+			productReference = 42930FE119AD703600CDC2C6 /* PLTMFITest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42930FD919AD703600CDC2C6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = Plantronics;
+				TargetAttributes = {
+					42930FE019AD703600CDC2C6 = {
+						CreatedOnToolsVersion = 6.0;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 42930FDC19AD703600CDC2C6 /* Build configuration list for PBXProject "PLTMFITest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 42930FD819AD703600CDC2C6;
+			productRefGroup = 42930FE219AD703600CDC2C6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42930FE019AD703600CDC2C6 /* PLTMFITest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42930FDF19AD703600CDC2C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42930FF019AD703600CDC2C6 /* Main.storyboard in Resources */,
+				42930FF219AD703600CDC2C6 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		42930FDD19AD703600CDC2C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4283035219E59DB900007470 /* UIView+Toast.m in Sources */,
+				42930FED19AD703600CDC2C6 /* ViewController.m in Sources */,
+				42930FEA19AD703600CDC2C6 /* AppDelegate.m in Sources */,
+				42930FE719AD703600CDC2C6 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		42930FEE19AD703600CDC2C6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				42930FEF19AD703600CDC2C6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		42930FFF19AD703700CDC2C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4293100019AD703700CDC2C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4293100219AD703700CDC2C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				INFOPLIST_FILE = PLTMFITest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PLTDevice/lib",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4f4fa371-069b-400a-a1e2-15741fe56e70";
+			};
+			name = Debug;
+		};
+		4293100319AD703700CDC2C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kim Huelsing (7M73RDQWJ4)";
+				INFOPLIST_FILE = PLTMFITest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PLTDevice/lib",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4f4fa371-069b-400a-a1e2-15741fe56e70";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42930FDC19AD703600CDC2C6 /* Build configuration list for PBXProject "PLTMFITest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42930FFF19AD703700CDC2C6 /* Debug */,
+				4293100019AD703700CDC2C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4293100119AD703700CDC2C6 /* Build configuration list for PBXNativeTarget "PLTMFITest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4293100219AD703700CDC2C6 /* Debug */,
+				4293100319AD703700CDC2C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 42930FD919AD703600CDC2C6 /* Project object */;
+}

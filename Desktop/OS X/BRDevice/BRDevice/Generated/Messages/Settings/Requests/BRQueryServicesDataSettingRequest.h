@@ -1,0 +1,38 @@
+//
+//  BRQueryServicesDataSettingRequest.h
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v2.3 on 01/28/15.
+//  Copyright (c) 2015 Plantronics. All rights reserved.
+//
+
+#import "BRSettingRequest.h"
+
+
+#define BR_QUERY_SERVICES_DATA_SETTING_REQUEST 0xFF0D
+
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_WearingDon 0x00
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_WearingDoff 0x01
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapXUp 0x01
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapXDown 0x02
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapYUp 0x03
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapYDown 0x04
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapZUp 0x05
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_TapZDown 0x06
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_CalibrateStatus_None 0x00
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_CalibrateStatus_Step1 0x01
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_CalibrateStatus_Step2 0x02
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_CalibrateStatus_Calibrated 0x03
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_Button_Up 0x01
+#define BRDefinedValue_QueryServicesDataSettingRequest_Characteristic_Button_Down 0x00
+
+
+@interface BRQueryServicesDataSettingRequest : BRSettingRequest
+
++ (BRQueryServicesDataSettingRequest *)requestWithServiceID:(uint16_t)serviceID characteristic:(uint16_t)characteristic;
+
+@property(nonatomic,assign) uint16_t serviceID;
+@property(nonatomic,assign) uint16_t characteristic;
+
+
+@end

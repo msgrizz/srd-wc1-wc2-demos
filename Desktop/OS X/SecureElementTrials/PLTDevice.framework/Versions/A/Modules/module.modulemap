@@ -1,0 +1,6 @@
+framework module PLTDevice {
+  umbrella header "PLTDevice.h"
+
+  export *
+  module * { export * }
+}

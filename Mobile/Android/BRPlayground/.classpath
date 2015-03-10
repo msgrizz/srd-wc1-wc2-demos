@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/BRPlayground/src"/>
+	<classpathentry kind="src" path="/BRPlayground/gen"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/android-support-v4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/otto-1.3.3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/BladeRunnerClientSdk"/>
+	<classpathentry kind="output" path="/classes/production/BRPlayground"/>
+</classpath>
