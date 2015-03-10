@@ -1,0 +1,19 @@
+//
+//  BRIncomingMessageDecoder.h
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v<#deckard_version#> on <#mdy#>.
+//  Copyright (c) <#yyyy#> Plantronics. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+
+@class BRIncomingMessage;
+
+
+@interface BRIncomingMessageDecoder : NSObject
+
++ (BRIncomingMessage *)messageWithData:(NSData *)data;
+
+@end

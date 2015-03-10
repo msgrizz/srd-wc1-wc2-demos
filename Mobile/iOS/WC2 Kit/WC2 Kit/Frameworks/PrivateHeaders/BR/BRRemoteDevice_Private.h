@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
-#import "BRRemoteDevice.h"
+//#import "BRRemoteDevice.h"
+#import "BRDevice.h"
 
 
 @interface BRRemoteDevice () <BRDeviceDelegate>

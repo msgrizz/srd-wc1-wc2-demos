@@ -8,12 +8,12 @@
 
 
 #import "StreetViewViewController.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "PLTDeviceHelper.h"
 #import "LocationMonitor.h"
 #import "Reachability.h"
 #import "LocationOverrideViewController.h"
-#import "PLTDevice.h"
 
 
 #define CAMERA_FOV						80.0
@@ -110,10 +110,12 @@
                             
     if (status==ReachableViaWiFi || status==ReachableViaWWAN) {
         self.reachabilityImageView.alpha = 0.0;
+		//self.panoramaView.alpha = 1.0;
         return YES;
     }
     else {
         self.reachabilityImageView.alpha = 1.0;
+		//self.panoramaView.alpha = 0;
     }
     return NO;
 }
@@ -189,7 +191,8 @@
     [super viewDidLoad];
     
     self.panoramaView = [GMSPanoramaView panoramaWithFrame:CGRectZero nearCoordinate:[LocationMonitor sharedMonitor].location.coordinate];
-    self.panoramaView.backgroundColor = [UIColor grayColor];
+	self.view.backgroundColor = [UIColor colorWithRed:64.0/256.0 green:66.0/256.0 blue:74.0/256.0 alpha:1.0];
+    self.panoramaView.backgroundColor = [UIColor colorWithRed:64.0/256.0 green:66.0/256.0 blue:74.0/256.0 alpha:1.0];
     self.panoramaView.delegate = self;
     self.panoramaView.orientationGestures = NO;
     self.panoramaView.zoomGestures = NO;
@@ -227,6 +230,7 @@
     [super viewWillAppear:animated];
     
     self.reachabilityImageView.alpha = 0.0;
+	//self.panoramaView.alpha = 1.0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -236,7 +240,8 @@
     if (!self.reachabilityImageView) {
         self.reachabilityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
         self.reachabilityImageView.contentMode = UIViewContentModeCenter;
-        self.reachabilityImageView.image = [UIImage imageNamed:(IPAD ? @"no_internet_ipad.png" : @"no_internet_iphone.png")];
+        //self.reachabilityImageView.image = [UIImage imageNamed:(IPAD ? @"no_internet_ipad.png" : @"no_internet_iphone.png")];
+		self.reachabilityImageView.image = [UIImage imageNamed:@"no_internet_connection.png"];
         self.reachabilityImageView.alpha = 0.0;
         [self.view addSubview:self.reachabilityImageView];
     }

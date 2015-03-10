@@ -1,0 +1,6 @@
+framework module PLTDevice_iOS {
+  umbrella header "PLTDevice_iOS.h"
+
+  export *
+  module * { export * }
+}

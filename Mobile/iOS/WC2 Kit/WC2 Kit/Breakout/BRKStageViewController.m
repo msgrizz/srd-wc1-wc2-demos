@@ -23,11 +23,11 @@
 
 #import "BRKStageViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
+#import "PLTDeviceHelper.h"
 #import "BRKPaddle.h"
 #import "BRKBall.h"
 #import "BRKBlock.h"
-#import "PLTDeviceHelper.h"
-#import "PLTDevice.h"
 
 
 typedef enum {

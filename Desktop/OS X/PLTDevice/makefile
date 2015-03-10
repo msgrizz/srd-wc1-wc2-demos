@@ -1,67 +1,73 @@
 XBUILD=/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild
 PROJECT_ROOT=.
 PROJECT=$(PROJECT_ROOT)/PLTDevice.xcodeproj
+
 TARGET_OSX=PLTDevice_OSX
 TARGET_IOS=PLTDevice_iOS
-PRODUCT_NAME=PLTDevice
+
 BUILD=$(PROJECT_ROOT)/build
-BUILD_OSX=$(BUILD)/osx
-BUILD_IOS=$(BUILD)/ios
-WORKING_IOS=$(BUILD)/Release-iphoneos
+
+PRODUCT_NAME_OSX=PLTDevice_OSX.framework
+PRODUCT_NAME_IOS=PLTDevice_iOS.framework
+
+BIN_OSX=$(TARGET_OSX)
+BIN_IOS=$(TARGET_IOS)
+
+XC_BUILD_OSX=$(BUILD)/Release
+XC_BUILD_IOS_DEVICE=$(BUILD)/Release-iphoneos
+XC_BUILD_IOS_SIMULATOR=$(BUILD)/Release-iphonesimulator
+
+XC_PRODUCT_OSX=$(XC_BUILD_OSX)/$(PRODUCT_NAME_OSX)
+XC_PRODUCT_IOS_DEVICE=$(XC_BUILD_IOS_DEVICE)/$(PRODUCT_NAME_IOS)
+XC_PRODUCT_IOS_SIMULATOR=$(XC_BUILD_IOS_SIMULATOR)/$(PRODUCT_NAME_IOS)
+
+TEMP=$(BUILD)/temp
 
 all: osx ios
 
-#libi386.a:
-#	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphonesimulator -configuration Release clean build
-#	-mv $(PROJECT_ROOT)/build/Release-iphonesimulator/lib$(PRODUCT_NAME).a $(BUILD_IOS)/$@
-
-ios_armv7.a:
-	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7 -configuration Release clean build
-	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
-
-ios_armv7s.a:
-	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7s -configuration Release clean build
-	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
-
-ios_arm64.a:
-	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch arm64 -configuration Release clean build
-	-mv -f $(WORKING_IOS)/lib$(PRODUCT_NAME).a $(WORKING_IOS)/$@
-
-ios_headers:
-	mkdir -p $(BUILD_IOS)/$(PRODUCT_NAME)/
-	-rm -rf $(BUILD_IOS)/$(PRODUCT_NAME)/include
-	-mv -f $(WORKING_IOS)/usr/local/include $(BUILD_IOS)/$(PRODUCT_NAME)/
-
 osx_64:
-	mkdir -p $(BUILD_OSX)
-	$(XBUILD) -project $(PROJECT) -target $(TARGET_OSX) -sdk macosx -arch x86_64 -configuration Release clean build
-	-rm -rf $(BUILD_OSX)/$(PRODUCT_NAME).framework
-	-rm -rf $(BUILD_OSX)/$(PRODUCT_NAME).framework.dSYM
-	-mv -f $(BUILD)/Release/$(PRODUCT_NAME).framework $(BUILD_OSX)/
-	-mv -f $(BUILD)/Release/$(PRODUCT_NAME).framework.dSYM $(BUILD_OSX)/
+	$(XBUILD) -project $(PROJECT) -target $(TARGET_OSX) -sdk macosx -arch x86_64 -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build
+	-mv -f $(XC_PRODUCT_OSX) $(BUILD)/$(PRODUCT_NAME_OSX)/
+	-rm -rf $(XC_BUILD_OSX)
 
-ios_all: ios_armv7.a ios_armv7s.a ios_arm64.a ios_headers
-	mkdir -p $(BUILD_IOS)/$(PRODUCT_NAME)/lib
-	lipo -create -output $(BUILD_IOS)/$(PRODUCT_NAME)/lib/lib$(PRODUCT_NAME).a $(WORKING_IOS)/ios_armv7.a $(WORKING_IOS)/ios_armv7s.a $(WORKING_IOS)/ios_arm64.a
+ios_i386:
+	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphonesimulator -arch i386 -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build
+	-mv -f $(XC_PRODUCT_IOS_SIMULATOR) $(TEMP)/$(PRODUCT_NAME_IOS).i386
+	-rm -rf $(XC_BUILD_IOS_SIMULATOR)
 
-osx_all: osx_64
+ios_armv7:
+	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7 -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build
+	-mv -f $(XC_PRODUCT_IOS_DEVICE) $(TEMP)/$(PRODUCT_NAME_IOS).armv7
+	-rm -rf $(XC_BUILD_IOS_DEVICE)
 
-osx: osx_all clean_osx
+ios_armv7s:
+	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch armv7s -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build
+	-mv -f $(XC_PRODUCT_IOS_DEVICE) $(TEMP)/$(PRODUCT_NAME_IOS).armv7s
+	-rm -rf $(XC_BUILD_IOS_DEVICE)
 
-ios: ios_all clean_ios
+ios_arm64:
+	$(XBUILD) -project $(PROJECT) -target $(TARGET_IOS) -sdk iphoneos -arch arm64 -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clean build
+	-mv -f $(XC_PRODUCT_IOS_DEVICE) $(TEMP)/$(PRODUCT_NAME_IOS).arm64
+	-rm -rf $(XC_BUILD_IOS_DEVICE)
 
-clean_osx:
+ios_combine:
+	# start with arm64 as a template
+	-cp -r $(TEMP)/$(PRODUCT_NAME_IOS).arm64 $(BUILD)/$(PRODUCT_NAME_IOS)
+	# remove binary
+	-rm $(BUILD)/$(PRODUCT_NAME_IOS)/$(BIN_IOS)
+	# create fat binary with lipo
+	lipo -create -output $(BUILD)/$(PRODUCT_NAME_IOS)/$(BIN_IOS) $(TEMP)/$(PRODUCT_NAME_IOS).i386/$(BIN_IOS) $(TEMP)/$(PRODUCT_NAME_IOS).armv7/$(BIN_IOS) $(TEMP)/$(PRODUCT_NAME_IOS).armv7s/$(BIN_IOS) $(TEMP)/$(PRODUCT_NAME_IOS).arm64/$(BIN_IOS)
+
+setup:
+	mkdir -p $(TEMP)
+
+osx: setup osx_64 clean
+
+ios: setup ios_i386 ios_armv7 ios_armv7s ios_arm64 ios_combine clean
+
+clean:
 	-rm -rf $(BUILD)/PLTDevice.build
-	-rm -rf $(BUILD)/Release
-
-clean_ios:
-	-rm -rf $(BUILD)/PLTDevice.build
-	-rm -rf $(BUILD)/Release-iphoneos
-	-rm -rf $(BUILD_IOS)/libarmv7.a
-	-rm -rf $(BUILD_IOS)/libarmv7s.a
-	-rm -rf $(BUILD_IOS)/libarm64.a
-
-clean: clean_osx clean_ios
-
-cleanAll: clean
-	-rm -rf $(BUILD)
+	-rm -rf $(XC_BUILD_OSX)
+	-rm -rf $(XC_BUILD_IOS_DEVICE)
+	-rm -rf $(XC_BUILD_IOS_SIMULATOR)
+	-rm -rf $(TEMP)

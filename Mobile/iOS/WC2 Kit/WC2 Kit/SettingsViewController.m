@@ -20,7 +20,7 @@
 #import "SecurityHelper.h"
 
 
-NSString *const PLTSettingsSecurityEnabledChangedNotification = @"PLTSettingsSecurityEnabledChangedNotification";
+//NSString *const PLTSettingsSecurityEnabledChangedNotification = @"PLTSettingsSecurityEnabledChangedNotification";
 NSString *const PLTSettingsSecurityDeviceChangedNotification = @"PLTSettingsSecurityDeviceChangedNotification";
 NSString *const PLTSettingsKubiEnabledChangedNotification = @"PLTSettingsKubiEnabledChangedNotification";
 NSString *const PLTSettingsKubiDeviceChangedNotification = @"PLTSettingsKubiDeviceChangedNotification";
@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, PLTTableViewStreetViewRow) {
 };
 
 typedef NS_ENUM(NSUInteger, PLTTableViewSecurityRow) {
-	PLTTableViewSecurityRowEnabled,
+//	PLTTableViewSecurityRowEnabled,
 	PLTTableViewSecurityRowDevice,
 	PLTTableViewSecurityRowEnroll
 };
@@ -111,11 +111,11 @@ typedef NS_ENUM(NSUInteger, PLTSelectionListViewTag) {
 	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeyHeadMirrorImage];
 }
 
-- (void)securityEnabledSwitch:(UISwitch *)theSwitch
-{
-	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeySecurityEnabled];
-	[[NSNotificationCenter defaultCenter] postNotificationName:PLTSettingsSecurityEnabledChangedNotification object:nil];
-}
+//- (void)securityEnabledSwitch:(UISwitch *)theSwitch
+//{
+//	[DEFAULTS setBool:theSwitch.on forKey:PLTDefaultsKeySecurityEnabled];
+//	[[NSNotificationCenter defaultCenter] postNotificationName:PLTSettingsSecurityEnabledChangedNotification object:nil];
+//}
 
 - (void)kubiEnabledSwitch:(UISwitch *)theSwitch
 {
@@ -233,14 +233,14 @@ typedef NS_ENUM(NSUInteger, PLTSelectionListViewTag) {
 			
 		case PLTTableViewSectionSecurity: {
 			switch (indexPath.row) {
-				case PLTTableViewSecurityRowEnabled: {
-					SwitchTableViewCell *switchCell = [tableView switchCell];
-					cell = switchCell;
-					switchCell.textLabel.text = @"Enabled";
-					switchCell.target = self;
-					switchCell.action = @selector(securityEnabledSwitch:);
-					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled];
-					break; }
+//				case PLTTableViewSecurityRowEnabled: {
+//					SwitchTableViewCell *switchCell = [tableView switchCell];
+//					cell = switchCell;
+//					switchCell.textLabel.text = @"Enabled";
+//					switchCell.target = self;
+//					switchCell.action = @selector(securityEnabledSwitch:);
+//					switchCell.on = [DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled];
+//					break; }
 				case PLTTableViewSecurityRowDevice: {
 					cell = [tableView value1Cell];
 					cell.textLabel.text = @"Lock";

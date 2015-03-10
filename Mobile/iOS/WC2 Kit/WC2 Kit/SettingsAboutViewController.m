@@ -7,9 +7,9 @@
 //
 
 #import "SettingsAboutViewController.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "UITableView+Cells.h"
 #import "PLTDeviceHelper.h"
-#import "PLTDevice.h"
 #import "SettingsPacketDataViewController.h"
 
 

@@ -2,8 +2,8 @@
 //  BRPassThroughProtocolCommand.h
 //  BRDevice
 //
-//  Auto-generated from deckard.xml v2.3 on 10/08/14.
-//  Copyright (c) 2014 Plantronics. All rights reserved.
+//  Auto-generated from deckard.xml v2.3 on 01/30/15.
+//  Copyright (c) 2015 Plantronics. All rights reserved.
 //
 
 #import "BRCommand.h"
@@ -17,10 +17,10 @@
 
 @interface BRPassThroughProtocolCommand : BRCommand
 
-+ (BRPassThroughProtocolCommand *)commandWithProtocolid:(uint16_t)protocolid messageData:(NSData *)messageData;
++ (BRPassThroughProtocolCommand *)commandWithProtocolid:(uint16_t)protocolid _data:(NSData *)_data;
 
 @property(nonatomic,assign) uint16_t protocolid;
-@property(nonatomic,strong) NSData * messageData;
+@property(nonatomic,strong) NSData * _data;
 
 
 @end

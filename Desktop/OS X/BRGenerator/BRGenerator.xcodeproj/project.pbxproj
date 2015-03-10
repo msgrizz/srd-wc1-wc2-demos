@@ -1,0 +1,337 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		426426C61A798C1400D3CDEF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 426426C51A798C1400D3CDEF /* main.m */; };
+		426426D01A798C4200D3CDEF /* DeckardMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 426426CD1A798C4200D3CDEF /* DeckardMessage.m */; };
+		426426D11A798C4200D3CDEF /* Generator.m in Sources */ = {isa = PBXBuildFile; fileRef = 426426CF1A798C4200D3CDEF /* Generator.m */; };
+		426426D81A798CE000D3CDEF /* deckard.xml in Copy deckard.xml */ = {isa = PBXBuildFile; fileRef = 426426D71A798CDC00D3CDEF /* deckard.xml */; };
+		426426EA1A798D1000D3CDEF /* BRIncomingMessageDecoder.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426DD1A798D0D00D3CDEF /* BRIncomingMessageDecoder.h.template */; };
+		426426EB1A798D1200D3CDEF /* BRIncomingMessageDecoder.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426DE1A798D0D00D3CDEF /* BRIncomingMessageDecoder.m.template */; };
+		426426EC1A798D1400D3CDEF /* BRTypeImports.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426DF1A798D0D00D3CDEF /* BRTypeImports.h.template */; };
+		426426ED1A798D1600D3CDEF /* Command.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E01A798D0D00D3CDEF /* Command.h.template */; };
+		426426EE1A798D1700D3CDEF /* Command.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E11A798D0D00D3CDEF /* Command.m.template */; };
+		426426EF1A798D1A00D3CDEF /* Event.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E21A798D0D00D3CDEF /* Event.h.template */; };
+		426426F01A798D1C00D3CDEF /* Event.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E31A798D0D00D3CDEF /* Event.m.template */; };
+		426426F11A798D1D00D3CDEF /* Exception.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E41A798D0D00D3CDEF /* Exception.h.template */; };
+		426426F21A798D1E00D3CDEF /* Exception.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E51A798D0D00D3CDEF /* Exception.m.template */; };
+		426426F31A798D1F00D3CDEF /* SettingRequest.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E61A798D0D00D3CDEF /* SettingRequest.h.template */; };
+		426426F41A798D2000D3CDEF /* SettingRequest.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E71A798D0D00D3CDEF /* SettingRequest.m.template */; };
+		426426F51A798D2100D3CDEF /* SettingResult.h.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E81A798D0D00D3CDEF /* SettingResult.h.template */; };
+		426426F61A798D2200D3CDEF /* SettingResult.m.template in Copy Templates */ = {isa = PBXBuildFile; fileRef = 426426E91A798D0D00D3CDEF /* SettingResult.m.template */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		426426C01A798C1400D3CDEF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		426426D51A798CB600D3CDEF /* Copy Templates */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Templates;
+			dstSubfolderSpec = 16;
+			files = (
+				426426EF1A798D1A00D3CDEF /* Event.h.template in Copy Templates */,
+				426426EA1A798D1000D3CDEF /* BRIncomingMessageDecoder.h.template in Copy Templates */,
+				426426EB1A798D1200D3CDEF /* BRIncomingMessageDecoder.m.template in Copy Templates */,
+				426426F01A798D1C00D3CDEF /* Event.m.template in Copy Templates */,
+				426426F11A798D1D00D3CDEF /* Exception.h.template in Copy Templates */,
+				426426F31A798D1F00D3CDEF /* SettingRequest.h.template in Copy Templates */,
+				426426F51A798D2100D3CDEF /* SettingResult.h.template in Copy Templates */,
+				426426F61A798D2200D3CDEF /* SettingResult.m.template in Copy Templates */,
+				426426F41A798D2000D3CDEF /* SettingRequest.m.template in Copy Templates */,
+				426426EC1A798D1400D3CDEF /* BRTypeImports.h.template in Copy Templates */,
+				426426F21A798D1E00D3CDEF /* Exception.m.template in Copy Templates */,
+				426426EE1A798D1700D3CDEF /* Command.m.template in Copy Templates */,
+				426426ED1A798D1600D3CDEF /* Command.h.template in Copy Templates */,
+			);
+			name = "Copy Templates";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		426426D61A798CC100D3CDEF /* Copy deckard.xml */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				426426D81A798CE000D3CDEF /* deckard.xml in Copy deckard.xml */,
+			);
+			name = "Copy deckard.xml";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		426426C21A798C1400D3CDEF /* BRGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BRGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
+		426426C51A798C1400D3CDEF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		426426CC1A798C4200D3CDEF /* DeckardMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeckardMessage.h; sourceTree = "<group>"; };
+		426426CD1A798C4200D3CDEF /* DeckardMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeckardMessage.m; sourceTree = "<group>"; };
+		426426CE1A798C4200D3CDEF /* Generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Generator.h; sourceTree = "<group>"; };
+		426426CF1A798C4200D3CDEF /* Generator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Generator.m; sourceTree = "<group>"; };
+		426426D71A798CDC00D3CDEF /* deckard.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = deckard.xml; sourceTree = "<group>"; };
+		426426DD1A798D0D00D3CDEF /* BRIncomingMessageDecoder.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = BRIncomingMessageDecoder.h.template; path = Templates/BRIncomingMessageDecoder.h.template; sourceTree = "<group>"; };
+		426426DE1A798D0D00D3CDEF /* BRIncomingMessageDecoder.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = BRIncomingMessageDecoder.m.template; path = Templates/BRIncomingMessageDecoder.m.template; sourceTree = "<group>"; };
+		426426DF1A798D0D00D3CDEF /* BRTypeImports.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = BRTypeImports.h.template; path = Templates/BRTypeImports.h.template; sourceTree = "<group>"; };
+		426426E01A798D0D00D3CDEF /* Command.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Command.h.template; path = Templates/Command.h.template; sourceTree = "<group>"; };
+		426426E11A798D0D00D3CDEF /* Command.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Command.m.template; path = Templates/Command.m.template; sourceTree = "<group>"; };
+		426426E21A798D0D00D3CDEF /* Event.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Event.h.template; path = Templates/Event.h.template; sourceTree = "<group>"; };
+		426426E31A798D0D00D3CDEF /* Event.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Event.m.template; path = Templates/Event.m.template; sourceTree = "<group>"; };
+		426426E41A798D0D00D3CDEF /* Exception.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Exception.h.template; path = Templates/Exception.h.template; sourceTree = "<group>"; };
+		426426E51A798D0D00D3CDEF /* Exception.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = Exception.m.template; path = Templates/Exception.m.template; sourceTree = "<group>"; };
+		426426E61A798D0D00D3CDEF /* SettingRequest.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = SettingRequest.h.template; path = Templates/SettingRequest.h.template; sourceTree = "<group>"; };
+		426426E71A798D0D00D3CDEF /* SettingRequest.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = SettingRequest.m.template; path = Templates/SettingRequest.m.template; sourceTree = "<group>"; };
+		426426E81A798D0D00D3CDEF /* SettingResult.h.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = SettingResult.h.template; path = Templates/SettingResult.h.template; sourceTree = "<group>"; };
+		426426E91A798D0D00D3CDEF /* SettingResult.m.template */ = {isa = PBXFileReference; lastKnownFileType = text; name = SettingResult.m.template; path = Templates/SettingResult.m.template; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		426426BF1A798C1400D3CDEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		426426B91A798C1400D3CDEF = {
+			isa = PBXGroup;
+			children = (
+				426426C41A798C1400D3CDEF /* BRGenerator */,
+				426426C31A798C1400D3CDEF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		426426C31A798C1400D3CDEF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				426426C21A798C1400D3CDEF /* BRGenerator */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		426426C41A798C1400D3CDEF /* BRGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				426426C51A798C1400D3CDEF /* main.m */,
+				426426CE1A798C4200D3CDEF /* Generator.h */,
+				426426CF1A798C4200D3CDEF /* Generator.m */,
+				426426CC1A798C4200D3CDEF /* DeckardMessage.h */,
+				426426CD1A798C4200D3CDEF /* DeckardMessage.m */,
+				426426D71A798CDC00D3CDEF /* deckard.xml */,
+				426426DC1A798D0300D3CDEF /* Templates */,
+			);
+			path = BRGenerator;
+			sourceTree = "<group>";
+		};
+		426426DC1A798D0300D3CDEF /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				426426DD1A798D0D00D3CDEF /* BRIncomingMessageDecoder.h.template */,
+				426426DE1A798D0D00D3CDEF /* BRIncomingMessageDecoder.m.template */,
+				426426DF1A798D0D00D3CDEF /* BRTypeImports.h.template */,
+				426426E01A798D0D00D3CDEF /* Command.h.template */,
+				426426E11A798D0D00D3CDEF /* Command.m.template */,
+				426426E21A798D0D00D3CDEF /* Event.h.template */,
+				426426E31A798D0D00D3CDEF /* Event.m.template */,
+				426426E41A798D0D00D3CDEF /* Exception.h.template */,
+				426426E51A798D0D00D3CDEF /* Exception.m.template */,
+				426426E61A798D0D00D3CDEF /* SettingRequest.h.template */,
+				426426E71A798D0D00D3CDEF /* SettingRequest.m.template */,
+				426426E81A798D0D00D3CDEF /* SettingResult.h.template */,
+				426426E91A798D0D00D3CDEF /* SettingResult.m.template */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		426426C11A798C1400D3CDEF /* BRGenerator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 426426C91A798C1400D3CDEF /* Build configuration list for PBXNativeTarget "BRGenerator" */;
+			buildPhases = (
+				426426BE1A798C1400D3CDEF /* Sources */,
+				426426BF1A798C1400D3CDEF /* Frameworks */,
+				426426C01A798C1400D3CDEF /* CopyFiles */,
+				426426D51A798CB600D3CDEF /* Copy Templates */,
+				426426D61A798CC100D3CDEF /* Copy deckard.xml */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BRGenerator;
+			productName = BRGenerator;
+			productReference = 426426C21A798C1400D3CDEF /* BRGenerator */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		426426BA1A798C1400D3CDEF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Plantronics;
+				TargetAttributes = {
+					426426C11A798C1400D3CDEF = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 426426BD1A798C1400D3CDEF /* Build configuration list for PBXProject "BRGenerator" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 426426B91A798C1400D3CDEF;
+			productRefGroup = 426426C31A798C1400D3CDEF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				426426C11A798C1400D3CDEF /* BRGenerator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		426426BE1A798C1400D3CDEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				426426D01A798C4200D3CDEF /* DeckardMessage.m in Sources */,
+				426426C61A798C1400D3CDEF /* main.m in Sources */,
+				426426D11A798C4200D3CDEF /* Generator.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		426426C71A798C1400D3CDEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		426426C81A798C1400D3CDEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		426426CA1A798C1400D3CDEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		426426CB1A798C1400D3CDEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		426426BD1A798C1400D3CDEF /* Build configuration list for PBXProject "BRGenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				426426C71A798C1400D3CDEF /* Debug */,
+				426426C81A798C1400D3CDEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		426426C91A798C1400D3CDEF /* Build configuration list for PBXNativeTarget "BRGenerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				426426CA1A798C1400D3CDEF /* Debug */,
+				426426CB1A798C1400D3CDEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 426426BA1A798C1400D3CDEF /* Project object */;
+}

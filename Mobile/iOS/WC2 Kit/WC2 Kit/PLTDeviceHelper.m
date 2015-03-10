@@ -2,8 +2,8 @@
 //  PLTDeviceHelper.h
 //
 
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "PLTDeviceHelper.h"
-#import "PLTDevice.h"
 
 
 #define DON_CALIBRATE_DELAY			2.0 // seconds

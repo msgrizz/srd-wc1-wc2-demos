@@ -85,7 +85,7 @@
       <file leaf-file-name="Device.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="874" column="25" selection-start="28860" selection-end="28869" vertical-scroll-proportion="0.7645195" vertical-offset="9764" max-vertical-offset="28296">
+            <state line="1190" column="17" selection-start="39128" selection-end="39128" vertical-scroll-proportion="0.33297986" vertical-offset="13966" max-vertical-offset="28296">
               <folding />
             </state>
           </provider>
@@ -126,10 +126,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="50" />
+    <option name="x" value="33" />
     <option name="y" value="23" />
     <option name="width" value="1620" />
-    <option name="height" value="1027" />
+    <option name="height" value="1023" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -157,7 +157,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -312,7 +312,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -501,7 +501,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="50" y="23" width="1620" height="1027" extended-state="0" />
+    <frame x="33" y="23" width="1620" height="1023" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -521,7 +521,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21166033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21166033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3261066" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -825,7 +825,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/plantronics/device/Device.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="874" column="25" selection-start="28860" selection-end="28869" vertical-scroll-proportion="0.7645195" vertical-offset="9764" max-vertical-offset="28296">
+        <state line="1190" column="17" selection-start="39128" selection-end="39128" vertical-scroll-proportion="0.33297986" vertical-offset="13966" max-vertical-offset="28296">
           <folding />
         </state>
       </provider>

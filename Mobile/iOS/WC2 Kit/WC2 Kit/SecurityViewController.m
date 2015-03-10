@@ -8,19 +8,26 @@
 
 #import "SecurityViewController.h"
 #import <LocalAuthentication/LocalAuthentication.h>
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
+#import "PLTDevice_Internal.h"
 #import "PLTDeviceHelper.h"
 #import "Reachability.h"
-#import "PLTDevice.h"
 #import "SettingsViewController.h"
 #import "PLTDevice_Internal.h"
 #import "BRDevice.h"
 #import "BRSubscribeToServicesCommand.h"
 #import "BRSubscribedServiceDataEvent.h"
-#import "PLTDevice_Internal.h"
 #import "SecurityHelper.h"
 
 
-#define SENSOR_DEVICE CONNECTED_DEVICE.brDevice.remoteDevices[@(5)]
+#define RELOCK_DELAY	30.0 // s
+#define SENSOR_DEVICE	CONNECTED_DEVICE.brDevice.remoteDevices[@(5)]
+
+
+typedef enum {
+	PLTLockStateLocked,
+	PLTLockStateUnlocked
+} PLTLockState;
 
 
 @interface SecurityViewController () <PLTDeviceSubscriber, PLTDeviceBRDevicePassthroughDelegate, SecurityHelperSignDelegate, NSURLConnectionDelegate>
@@ -35,14 +42,19 @@
 - (BOOL)checkReachability;
 - (void)deviceChanged:(NSNotification *)aNotification;
 - (void)checReadyForVoiceCommand;
-- (void)unlockLock:(NSString *)lockID;
+- (void)setLockState:(PLTLockState)state lockID:(NSString *)lockID;
+- (void)startLockTimer;
+- (void)stopLockTimer;
+- (void)lockTimer:(NSTimer *)aTimer;
 - (void)resetState;
 
 @property(nonatomic,strong)	Reachability						*reachability;
 @property(nonatomic,strong)	UIImageView							*reachabilityImageView;
 @property(nonatomic,assign) BOOL								touchIDAuthenticated;
 @property(nonatomic,assign) BOOL								fidoAuthenticated;
+@property(nonatomic,assign) BOOL								unlocked;
 @property(nonatomic,strong) NSURLConnection						*lockConnection;
+@property(nonatomic,strong) NSTimer								*lockTimer;
 @property(nonatomic,strong)	IBOutlet UIButton					*touchIDButton;
 @property(nonatomic,strong)	IBOutlet UIButton					*fidoButton;
 @property(nonatomic,strong)	IBOutlet UIActivityIndicatorView	*fidoStatusProgressView;
@@ -110,22 +122,32 @@
 	if (self.touchIDAuthenticated && self.fidoAuthenticated) {
 		NSDictionary *device = [DEFAULTS objectForKey:PLTDefaultsKeySecurityDevice];
 		NSLog(@"Unlocking %@...", device[PLTDefaultsKeySecurityDeviceName]);
-		
 		NSString *lockID = device[PLTDefaultsKeySecurityDeviceID];
-		[self unlockLock:lockID];
+		[self setLockState:PLTLockStateUnlocked lockID:lockID];
+		[self startLockTimer];
 		
-		self.touchIDAuthenticated = NO;
-		self.fidoAuthenticated = NO;
-		self.touchIDButton.enabled = YES;
-		self.fidoButton.enabled = YES;
-		self.touchIDStatusImageView.image = nil;
-		self.fidoStatusImageView.image = nil;
-		self.fidoStatusProgressView.hidden = YES;
-		self.fidoStatusLabel.text = @"";
-		self.authStatusLabel.hidden = YES;
+		self.unlocked = YES;
+//		self.touchIDAuthenticated = NO;
+//		self.fidoAuthenticated = NO;
+//		self.touchIDButton.enabled = YES;
+//		self.fidoButton.enabled = YES;
+//		self.touchIDStatusImageView.image = nil;
+//		self.fidoStatusImageView.image = nil;
+//		self.fidoStatusProgressView.hidden = YES;
+//		self.fidoStatusLabel.text = @"";
+//		self.authStatusLabel.hidden = YES;
 	}
 	else {
 		NSLog(@"Not authenticated.");
+	}
+}
+
+- (void)didGetLockVoiceCommand
+{
+	NSLog(@"didGetLockVoiceCommand");
+	
+	if (self.unlocked) {
+		[self resetState];
 	}
 }
 
@@ -137,12 +159,16 @@
 
 - (void)deviceDidOpenConnectionNotification:(NSNotification *)note
 {
+	NSLog(@"deviceDidOpenConnectionNotification");
+	
 	[self resetState];
 	[self subscribeToServices];
 }
 
 - (void)deviceDidCloseConnectionNotification:(NSNotification *)note
 {
+	NSLog(@"deviceDidCloseConnectionNotification:");
+	
 	[self resetState];
 }
 
@@ -212,13 +238,14 @@
 	}
 }
 
-- (void)unlockLock:(NSString *)lockID
+- (void)setLockState:(PLTLockState)state lockID:(NSString *)lockID
 {
-	NSString *accessToken = @"3b60a122bcc30af7ea82189e195dabf33b7b939e04dd00cab7aa411b72f5dd6d";
+	NSString *accessToken = @"0ed01e72a1374dd306f92e4b042653e37c13bb2f65517963fcc42f6c27636881";
 	NSString *urlString = [NSString stringWithFormat:@"https://api.lockitron.com/v2/locks/%@", lockID];
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
 	[request setHTTPMethod:@"PUT"];
-	NSString *argString = [NSString stringWithFormat:@"access_token=%@&state=unlock", accessToken];
+	NSString *lockUnlock = (state == PLTLockStateLocked ? @"lock" : @"unlock");
+	NSString *argString = [NSString stringWithFormat:@"access_token=%@&state=%@", accessToken, lockUnlock];
 	NSData *argData = [argString dataUsingEncoding:NSUTF8StringEncoding];
 	[request setHTTPBody:argData];
 	[request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[argData length]] forHTTPHeaderField:@"Content-Length"];
@@ -227,8 +254,36 @@
 	self.lockConnection = [NSURLConnection connectionWithRequest:request delegate:self];
 }
 
+- (void)startLockTimer
+{
+	NSLog(@"startLockTimer");
+	[self stopLockTimer];
+	self.lockTimer = [NSTimer scheduledTimerWithTimeInterval:RELOCK_DELAY target:self selector:@selector(lockTimer:) userInfo:nil repeats:NO];
+}
+
+- (void)stopLockTimer
+{
+	NSLog(@"stopLockTimer");
+	if (self.lockTimer) {
+		[self.lockTimer invalidate];
+		self.lockTimer = nil;
+	}
+}
+
+- (void)lockTimer:(NSTimer *)aTimer
+{
+	NSLog(@"lockTimer:");
+	[self resetState];
+}
+
 - (void)resetState
 {
+	NSDictionary *device = [DEFAULTS objectForKey:PLTDefaultsKeySecurityDevice];
+	NSLog(@"Locking %@...", device[PLTDefaultsKeySecurityDeviceName]);
+	NSString *lockID = device[PLTDefaultsKeySecurityDeviceID];
+	[self stopLockTimer];
+	[self setLockState:PLTLockStateLocked lockID:lockID];
+	
 	self.touchIDAuthenticated = NO;
 	self.fidoAuthenticated = NO;
 	self.touchIDButton.enabled = (CONNECTED_DEVICE != nil);
@@ -279,8 +334,11 @@
 			uint8_t command;
 			[sde.serviceData getBytes:&command length:sizeof(uint8_t)];
 			NSLog(@"Voice command with ID: %02X", command);
-			if (command == 0x0B) {
+			if (command == 0x0B) { // "unlock"
 				[self didGetUnlockVoiceCommand];
+			}
+			else if (command==0x08) { // "secure"
+				[self didGetLockVoiceCommand];
 			}
 		}
 	}
@@ -416,6 +474,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	//self = [super initWithNibName:@"SecurityViewController_3D" bundle:nibBundleOrNil];
 	
 	self.title = @"Security";
 	self.tabBarItem.title = @"Security";
@@ -496,6 +555,7 @@
 {
 	[super viewWillDisappear:animated];
 	
+	[self resetState];
 	[self unsubscribeFromServices];
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 	[nc removeObserver:self name:PLTDeviceDidOpenConnectionNotification object:nil];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-extern NSString *const PLTSettingsSecurityEnabledChangedNotification;
+//extern NSString *const PLTSettingsSecurityEnabledChangedNotification;
 extern NSString *const PLTSettingsSecurityDeviceChangedNotification;
 extern NSString *const PLTSettingsKubiEnabledChangedNotification;
 extern NSString *const PLTSettingsKubiDeviceChangedNotification;

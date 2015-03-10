@@ -7,7 +7,7 @@
 //
 
 #import "HeadViewController.h"
-#import "PLTDevice.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "PLTDeviceHelper.h"
 #import <SceneKit/SceneKit.h>
 
@@ -85,11 +85,11 @@
 	if ([theInfo isKindOfClass:[PLTOrientationTrackingInfo class]]) {
 		PLTQuaternion quaternion = ((PLTOrientationTrackingInfo *)theInfo).quaternion;
 		
-		PLTQuaternion absQuaternion = {fabs(quaternion.x),fabs(quaternion.y),fabs(quaternion.z),fabs(quaternion.w)};
-		if (absQuaternion.x<.00001 || absQuaternion.y<.00001 || absQuaternion.z<.00001 || absQuaternion.w<.00001) {
-			NSLog(@"*** BAD QUATERNION! ***");
-			return;
-		}
+//		PLTQuaternion absQuaternion = {fabs(quaternion.x),fabs(quaternion.y),fabs(quaternion.z),fabs(quaternion.w)};
+//		if (absQuaternion.x<.00001 || absQuaternion.y<.00001 || absQuaternion.z<.00001 || absQuaternion.w<.00001) {
+//			NSLog(@"*** BAD QUATERNION! ***");
+//			return;
+//		}
 		
 #ifdef SCENE_KIT
 		int mirror = ([DEFAULTS boolForKey:PLTDefaultsKeyHeadMirrorImage] ? 1 : -1);
@@ -161,7 +161,7 @@
 	camera.xFov = 30;
 	camera.yFov = 30;
 	cameraNode.camera = camera;
-	cameraNode.position = SCNVector3Make(0, -.48, 1.85); // horizontal, vertical (neg down), depth (neg farther)
+	cameraNode.position = SCNVector3Make(0, -.48, 2.35); // horizontal, vertical (neg down), depth (neg farther)
 	[scene.rootNode addChildNode:cameraNode];
 	
 //	SCNNode *lightNode = [SCNNode node];
@@ -176,11 +176,15 @@
 	view.antialiasingMode = SCNAntialiasingModeMultisampling4X;
 	view.allowsCameraControl = NO;
 	view.autoenablesDefaultLighting = NO;
-	view.backgroundColor = [UIColor whiteColor];
-
+	view.backgroundColor = [UIColor colorWithRed:64.0/256.0 green:66.0/256.0 blue:74.0/256.0 alpha:1.0];//[UIColor whiteColor];
+	
+//	for (SCNNode *n in scene.rootNode.childNodes) {
+//		NSLog(@"node: %@", n.name);
+//	}
 	
 	SCNNode *skin = [scene.rootNode childNodeWithName:@"skin" recursively:YES];
 	SCNNode *hair = [scene.rootNode childNodeWithName:@"hair" recursively:YES];
+	[hair.geometry.materials[0] setDoubleSided:YES];
 	SCNNode *reye = [scene.rootNode childNodeWithName:@"reye" recursively:YES];
 	SCNNode *leye = [scene.rootNode childNodeWithName:@"leye" recursively:YES];
 	
@@ -189,6 +193,7 @@
 	SCNMatrix4 translation = SCNMatrix4MakeTranslation(0, .5, -.25); // horizontal, vertical (neg up), depth (neg closer)
 	for (SCNNode *n in self.rotateNodes) {
 		n.pivot = translation;
+		//n.geometry.subdivisionLevel = 1;
 	}
 #else
 	ScarlettView *view = [[ScarlettView alloc] initWithFrame:[UIScreen mainScreen].bounds];

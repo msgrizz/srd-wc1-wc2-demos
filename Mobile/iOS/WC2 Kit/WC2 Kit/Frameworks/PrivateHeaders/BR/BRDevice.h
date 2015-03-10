@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 Plantronics. All rights reserved.
 //
 
+
 #import <Foundation/Foundation.h>
+
 
 @class BRMessage;
 @class BREvent;
@@ -23,6 +25,11 @@
 @protocol BRDeviceDelegate;
 
 
+extern NSString *const BRDeviceDidAppearNotification;
+extern NSString *const BRDeviceDidDisappearNotification;
+extern NSString *const BRDeviceNotificationKey;
+
+
 #ifdef TARGET_IOS
 typedef NS_ENUM(NSInteger, BRDeviceError) {
 	BRDeviceErrorFailedToCreateDataSession =		1,
@@ -33,6 +40,8 @@ typedef NS_ENUM(NSInteger, BRDeviceError) {
 
 
 @interface BRDevice : NSObject
+
++ (NSArray *)availableDevices;
 
 #ifdef TARGET_OSX
 + (BRDevice *)deviceWithAddress:(NSString *)BTAddress;

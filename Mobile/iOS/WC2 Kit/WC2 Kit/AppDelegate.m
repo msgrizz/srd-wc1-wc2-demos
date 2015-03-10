@@ -14,7 +14,9 @@
 #import "SensorsViewController.h"
 #import "StreetViewViewController.h"
 #import "KubiViewController.h"
-#import "SecurityViewController.h"
+//#import "SecurityViewController.h"
+#import "Security3DViewController.h"
+#import "VoiceViewController.h"
 #import "LocationMonitor.h"
 #import "PLTDeviceHelper.h"
 #import "SettingsNavigationController.h"
@@ -46,7 +48,7 @@ NSString *const PLTDefaultsKeyOverrideSelectedLocation =					@"SelectedOverrideL
 NSString *const PLTDefaultsKeyHeadGestureRecognition =						@"HeadGestureRecognition";
 NSString *const PLTDefaultsKeyHeadMirrorImage =								@"HeadMirrorImage";
 NSString *const PLTDefaultsKeyHTCalibrationTriggers =						@"HTCalibrationTriggers";
-NSString *const PLTDefaultsKeySecurityEnabled =								@"SecurityEnabled";
+//NSString *const PLTDefaultsKeySecurityEnabled =								@"SecurityEnabled";
 NSString *const PLTDefaultsKeySecurityDevice =								@"SecurityDevice";
 NSString *const PLTDefaultsKeySecurityDeviceName =										@"SecurityDeviceName";
 NSString *const PLTDefaultsKeySecurityDeviceID =										@"SecurityDeviceID";
@@ -73,7 +75,9 @@ NSString *const PLTDefaultsKeyKubiMirror =									@"KubiMirror";
 @property(nonatomic,retain) StreetViewViewController	*streetViewViewController;
 @property(nonatomic,retain) BRKStageViewController      *gameViewController;
 @property(nonatomic,retain) KubiViewController			*kubiViewController;
-@property(nonatomic,retain) SecurityViewController		*securityViewController;
+//@property(nonatomic,retain) SecurityViewController		*securityViewController;
+@property(nonatomic,retain) Security3DViewController	*security3DViewController;
+@property(nonatomic,retain) VoiceViewController			*voiceViewController;
 @property(strong,nonatomic) UITabBarController          *tabBarController;
 @property(nonatomic,strong) NSDate                      *lastPacketBroadcastDate;
 @property(nonatomic,strong) UIPopoverController         *settingsPopoverController;
@@ -124,22 +128,22 @@ NSString *const PLTDefaultsKeyKubiMirror =									@"KubiMirror";
 	[DEFAULTS synchronize];
 }
 
-- (void)securityEnabledChangedNotification:(NSNotification *)aNotification
-{
-	NSMutableArray *controllers = [self.tabBarController.viewControllers mutableCopy];
-	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
-		if ([controllers lastObject] == self.kubiViewController.navigationController) {
-			[controllers insertObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController] atIndex:[controllers count]-1]; // insert before Kubi
-		}
-		else {
-			[controllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
-		}
-	}
-	else {
-		[controllers removeObject:self.securityViewController.navigationController];
-	}
-	[self.tabBarController setViewControllers:controllers animated:YES];
-}
+//- (void)securityEnabledChangedNotification:(NSNotification *)aNotification
+//{
+//	NSMutableArray *controllers = [self.tabBarController.viewControllers mutableCopy];
+//	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
+//		if ([controllers lastObject] == self.kubiViewController.navigationController) {
+//			[controllers insertObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController] atIndex:[controllers count]-1]; // insert before Kubi
+//		}
+//		else {
+//			[controllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
+//		}
+//	}
+//	else {
+//		[controllers removeObject:self.securityViewController.navigationController];
+//	}
+//	[self.tabBarController setViewControllers:controllers animated:YES];
+//}
 
 - (void)kubiEnabledChangedNotification:(NSNotification *)aNotification
 {
@@ -170,23 +174,27 @@ NSString *const PLTDefaultsKeyKubiMirror =									@"KubiMirror";
 	self.sensorsViewController = [[SensorsViewController alloc] initWithNibName:nil bundle:nil];
 	self.streetViewViewController = [[StreetViewViewController alloc] initWithNibName:nil bundle:nil];
 	self.gameViewController = [[BRKStageViewController alloc] initWithNibName:nil bundle:nil];
-	self.securityViewController = [[SecurityViewController alloc] initWithNibName:nil bundle:nil];
+	//self.securityViewController = [[SecurityViewController alloc] initWithNibName:nil bundle:nil];
+	self.security3DViewController = [[Security3DViewController alloc] initWithNibName:nil bundle:nil];
 	self.kubiViewController = [[KubiViewController alloc] initWithNibName:nil bundle:nil];
+	self.voiceViewController = [[VoiceViewController alloc] initWithNibName:nil bundle:nil];
 	self.settingsViewController = [[SettingsViewController alloc] initWithNibName:nil bundle:nil];
 	self.settingsViewController.delegate = self;
 	
 	self.tabBarController = [[UITabBarController alloc] init];
 	NSMutableArray *viewControllers = [@[[[UINavigationController alloc] initWithRootViewController:self.sensorsViewController],
 										 [[UINavigationController alloc] initWithRootViewController:self.headViewController],
-										 [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController]] mutableCopy];
+										 [[UINavigationController alloc] initWithRootViewController:self.streetViewViewController],
+										[[UINavigationController alloc] initWithRootViewController:self. security3DViewController],
+										 [[UINavigationController alloc] initWithRootViewController:self.voiceViewController]] mutableCopy];
 	
 //	if (IPHONE5 || IPAD) {
 //		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.gameViewController]];
 //	}
 	
-	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
-		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
-	}
+//	if ([DEFAULTS boolForKey:PLTDefaultsKeySecurityEnabled]) {
+//		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.securityViewController]];
+//	}
 	
 	if ([DEFAULTS boolForKey:PLTDefaultsKeyKubiEnabled]) {
 		[viewControllers addObject:[[UINavigationController alloc] initWithRootViewController:self.kubiViewController]];
@@ -201,7 +209,7 @@ NSString *const PLTDefaultsKeyKubiMirror =									@"KubiMirror";
 	[[LocationMonitor sharedMonitor] startUpdatingLocation];
 	[[PLTDeviceHelper sharedHelper] setHeadTrackingCalibrationTriggers:[[DEFAULTS objectForKey:PLTDefaultsKeyHTCalibrationTriggers] unsignedIntegerValue]];
 	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-	[nc addObserver:self selector:@selector(securityEnabledChangedNotification:) name:PLTSettingsSecurityEnabledChangedNotification object:nil];
+//	[nc addObserver:self selector:@selector(securityEnabledChangedNotification:) name:PLTSettingsSecurityEnabledChangedNotification object:nil];
 	[nc addObserver:self selector:@selector(kubiEnabledChangedNotification:) name:PLTSettingsKubiEnabledChangedNotification object:nil];
 
 	[UIApplication sharedApplication].idleTimerDisabled = YES;

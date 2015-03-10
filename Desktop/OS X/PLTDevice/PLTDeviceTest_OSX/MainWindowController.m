@@ -8,14 +8,8 @@
 
 #import "MainWindowController.h"
 #import "PLTDevice.h"
-
 #import "BRRawMessage.h"
-#import "NSData+HexStrings.h"
-
-
-
-//#warning TESTING
-//extern BOOL _stopParsing;
+#import "BRDeviceUtilities.h"
 
 
 @interface MainWindowController () <PLTDeviceSubscriber>
@@ -77,16 +71,71 @@
 	NSLog(@"subscribeToServicesButton:");
 	
 	if (self.device.isConnectionOpen) {
-		[self.device subscribe:self toService:PLTServiceOrientation				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device setCalibration:nil forService:PLTServiceOrientation error:nil];
+//		[self.device subscribe:self toService:PLTServiceOrientation				withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device setCalibration:nil forService:PLTServiceOrientation error:nil];
+//		
+////		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device subscribe:self toService:PLTServiceTaps							withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+////		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+//		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
 		
-//		[self.device subscribe:self toService:PLTServicePedometer						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceFreeFall						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceTaps							withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceMagnetometerCalibrationStatus	withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceGyroscopeCalibrationStatus		withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-//		[self.device subscribe:self toService:PLTServiceWearingState					withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
-		[self.device subscribe:self toService:PLTServiceProximity						withMode:PLTSubscriptionModeOnChange	andPeriod:0		error:nil];
+		
+		PLTDevice *d = self.device;
+		NSError *err = nil;
+		[d queryInfo:self forService:PLTServiceWearingState error:&err];
+		if (err) NSLog(@"Error querying wearing state service: %@", err);
+		
+		//		[d queryInfo:self forService:PLTServicePedometer error:&err];
+		//		if (err) NSLog(@"Error querying pedometer service: %@", err);
+		//		
+		//		[d queryInfo:self forService:PLTServiceMagnetometerCalibrationStatus error:&err];
+		//		if (err) NSLog(@"Error querying magnetometer calibration service: %@", err);
+		//		
+		//		[d queryInfo:self forService:PLTServiceGyroscopeCalibrationStatus error:&err];
+		//		if (err) NSLog(@"Error querying gyroscope calibration service: %@", err);
+		
+		// subscribe to WC1
+		
+		[d subscribe:self toService:PLTServiceWearingState withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+//		[d subscribe:self toService:PLTServiceProximity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+//		if (err) NSLog(@"Error subscribing to proximity service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceOrientation withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to orientation tracking state service: %@", err);
+		
+		[d subscribe:self toService:PLTServicePedometer withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to pedometer service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceFreeFall withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to free fall service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceTaps withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to taps service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceMagnetometerCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to magnetometer calibration service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceGyroscopeCalibrationStatus withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to gyroscope calibration service: %@", err);
+		
+		// subscribe to WC2
+		
+		[d subscribe:self toService:PLTServiceAcceleration withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceAngularVelocity withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceMagnetism withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
+		
+		[d subscribe:self toService:PLTServiceHeading withMode:PLTSubscriptionModeOnChange andPeriod:0 error:&err];
+		if (err) NSLog(@"Error subscribing to wearing state service: %@", err);
 	}
 }
 

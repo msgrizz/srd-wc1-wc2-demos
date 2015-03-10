@@ -23,6 +23,7 @@
 //#define SECURITY_FIDO_ADDRESS					@"http://10.0.1.33:8080" // Media booth
 //#define SECURITY_FIDO_ADDRESS					@"http://172.20.10.9:8080" // Cary NXP
 //#define SECURITY_FIDO_ADDRESS					@"http://10.50.8.2:8080" // CES
-#define SECURITY_FIDO_ADDRESS					@"http://10.1.47.230:8080" // SCZ Dell #1
+//#define SECURITY_FIDO_ADDRESS					@"http://10.1.47.230:8080" // SCZ Dell #1
+#define SECURITY_FIDO_ADDRESS					@"http://10.0.1.100:8080" // temp
 #define SECURITY_FIDO_PASSWORD					@"1234"
 #define MIN_PERIODIC_SUBSCRIPTION_PERIOD		100

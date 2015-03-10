@@ -22,7 +22,7 @@ extern NSString *const PLTDefaultsKeyOverrideSelectedLocation;
 extern NSString *const PLTDefaultsKeyHeadGestureRecognition;
 extern NSString *const PLTDefaultsKeyHeadMirrorImage;
 extern NSString *const PLTDefaultsKeyHTCalibrationTriggers;
-extern NSString *const PLTDefaultsKeySecurityEnabled;
+//extern NSString *const PLTDefaultsKeySecurityEnabled;
 extern NSString *const PLTDefaultsKeySecurityDevice;
 extern NSString *const PLTDefaultsKeySecurityDeviceName;
 extern NSString *const PLTDefaultsKeySecurityDeviceID;

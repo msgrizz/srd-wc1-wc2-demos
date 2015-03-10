@@ -8,9 +8,9 @@
 
 #import "SensorsViewController.h"
 #import "PLTDeviceHelper.h"
-#import "PLTDevice.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "PLTDevice_Internal.h"
-#import "NSData+HexStrings.h"
+#import "BRDeviceUtilities.h"
 #import <SceneKit/SceneKit.h>
 
 
@@ -175,14 +175,16 @@ typedef enum {
 - (void)deviceWillSendDataNotification:(NSNotification *)note
 {
 	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
-	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	//NSString *hexString = [data hexStringWithSpaceEvery:2];
+	NSString *hexString = BRDeviceHexStringFromData(data, 2);
 	self.packetDataLabel.text = [NSString stringWithFormat:@"--> %@", hexString];
 }
 
 - (void)deviceDidReceiveDataNotification:(NSNotification *)note
 {
 	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
-	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	//NSString *hexString = [data hexStringWithSpaceEvery:2];
+	NSString *hexString = BRDeviceHexStringFromData(data, 2);
 	self.packetDataLabel.text = [NSString stringWithFormat:@"<-- %@", hexString];
 }
 

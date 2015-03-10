@@ -33,8 +33,8 @@
 
 - (BOOL)isEqual:(PLTAmbientPressureInfo *)info
 {
-#warning ugh
-	return (info.pressure==self.pressure);
+	float absPressure = fabsf(info.pressure - self.pressure);
+	return (absPressure<.01);
 }
 
 - (NSString *)description

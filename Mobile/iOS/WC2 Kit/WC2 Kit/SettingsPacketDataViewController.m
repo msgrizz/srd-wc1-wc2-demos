@@ -7,9 +7,9 @@
 //
 
 #import "SettingsPacketDataViewController.h"
-#import "PLTDevice.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "PLTDevice_Internal.h"
-#import "NSData+HexStrings.h"
+#import "BRDeviceUtilities.h"
 
 
 @interface SettingsPacketDataViewController ()
@@ -40,7 +40,8 @@
 - (void)deviceWillSendDataNotification:(NSNotification *)note
 {
 	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
-	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	//NSString *hexString = [data hexStringWithSpaceEvery:2];
+	NSString *hexString = BRDeviceHexStringFromData(data, 2);
 	UITextView *tv = (UITextView *)self.view;
 	tv.text = [NSString stringWithFormat:@"%@\n--> %@", tv.text, hexString];
 	[self scrollLog];
@@ -49,7 +50,8 @@
 - (void)deviceDidReceiveDataNotification:(NSNotification *)note
 {
 	NSData *data = (NSData *)note.userInfo[PLTDeviceDataNotificationKey];
-	NSString *hexString = [data hexStringWithSpaceEvery:2];
+	//NSString *hexString = [data hexStringWithSpaceEvery:2];
+	NSString *hexString = BRDeviceHexStringFromData(data, 2);
 	UITextView *tv = (UITextView *)self.view;
 	tv.text = [NSString stringWithFormat:@"%@\n<-- %@", tv.text, hexString];
 	[self scrollLog];

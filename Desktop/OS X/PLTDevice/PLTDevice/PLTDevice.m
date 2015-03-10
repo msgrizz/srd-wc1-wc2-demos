@@ -6,13 +6,20 @@
 //  Copyright (c) 2013 Plantronics, Inc. All rights reserved.
 //
 
-#import "Configuration.h"
+#import "BRDevice.h"
+#import "PLTDeviceConfiguration.h"
 #import "PLTDLog.h"
+#import "BRDeviceWatcher.h"
+#import "BRDevice_Private.h"
 
 #ifdef TARGET_OSX
+#import "PLTDevice_OSX.h"
+#import "BRDevice_OSX.h"
 #import <CoreServices/CoreServices.h>
 #endif
 #ifdef TARGET_IOS
+#import "PLTDevice_iOS.h"
+#import "BRDevice_iOS.h"
 #import <UIKit/UIKit.h>
 #import <ExternalAccessory/ExternalAccessory.h>
 #endif
@@ -35,39 +42,8 @@
 #import "PLTMagnetismInfo_Internal.h"
 #import "PLTHeadingInfo_Internal.h"
 
-#import "BRDevice.h"
-#import "BRRemoteDevice.h"
-#import "BRMessage_Private.h"
-#import "BRIncomingMessage_Private.h"
-
-#import "BRSubscribeToServicesCommand.h"
-#import "BRConfigureSignalStrengthEventsCommand.h"
-
-#import "BRWearingStateSettingRequest.h"
-#import "BRQueryServicesDataSettingRequest.h"
-#import "BRProductNameSettingRequest.h"
-#import "BRGenesGUIDSettingRequest.h"
-#import "BRGetDeviceInfoSettingRequest.h"
-#import "BRCurrentSignalStrengthSettingRequest.h"
-
-#import "BRProductNameSettingResult.h"
-#import "BRGenesGUIDSettingResult.h"
-#import "BRGetDeviceInfoSettingResult.h"
-#import "BRCurrentSignalStrengthSettingResult.h"
-#import "BRQueryServicesDataSettingResult.h"
-#import "BRWearingStateSettingResult.h"
-
-#import "BRSignalStrengthEvent.h"
-#import "BRWearingStateChangedEvent.h"
-
-#import "BRException.h"
-
-#import "NSData+HexStrings.h"
-#import "NSArray+PrettyPrint.h"
-
 #warning BANGLE
 #import "PLTDevice_Bangle.h"
-#import "BRSubscribedServiceDataEvent.h"
 #import "PLTSkinTemperatureInfo.h"
 #import "PLTAmbientHumidityInfo.h"
 #import "PLTAmbientPressureInfo.h"
@@ -93,13 +69,6 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
-
-
-//typedef struct {
-//	double x;
-//	double y;
-//	double z;
-//} PLTDeviceVec3;
 
 
 @interface PLTSubscription ()
@@ -136,7 +105,7 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 - (void)signalStrengthTimer:(NSTimer *)aTimer;
 - (NSError *)connectionNotOpenError;
 - (PLTQuaternion)quaternionFromServiceData:(NSData *)serviceData;
-//- (PLTDeviceVec3)vec3FromServiceData:(NSData *)serviceData;
+- (BOOL)checkQuaternion:(PLTQuaternion)quaternion;
 - (uint32_t)pedometerCountFromServiceData:(NSData *)serviceData;
 - (BOOL)freeFallFromServiceData:(NSData *)serviceData;
 - (void)getTapsFromServiceData:(NSData *)serviceData count:(uint8_t *)count direction:(uint8_t *)direction;
@@ -187,6 +156,8 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 
 + (NSArray *)availableDevices
 {
+	[PLTDLogger sharedLogger];
+	
 #ifdef TARGET_OSX
 	SInt32 major, minor, bugfix;
 	Gestalt(gestaltSystemVersionMajor, &major);
@@ -199,20 +170,21 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 	}
 #endif
 #ifdef TARGET_IOS
-	if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+	if (SYSTEM_VERSION_LESS_THAN(@"8.0")) {
 		[NSException raise:@"Incompatible OS version"
-					format:@"PLTDevice is not compatible with this version of iOS (%@). Please install iOS 7.0 or later.", [[UIDevice currentDevice] systemVersion]];
+					format:@"PLTDevice is not compatible with this version of iOS (%@). Please install iOS 8.0 or later.", [[UIDevice currentDevice] systemVersion]];
 	}
+	#if TARGET_IPHONE_SIMULATOR
+	NSLog(@"*** Note: PLTDevice is running in iOS Simulator, therefore device connectivity will not function. To enable this functionality please run your app on an actual iOS device. ***");
+	#endif
 #endif
 	
-	if (![[NSData data] respondsToSelector:@selector(hexStringWithSpaceEvery:)]) {
-		[NSException raise:@"PLT categories not found"
-					format:@"PLT categories don't appear to be loaded. Make sure to link with the \"-ObjC\" linker flag."];
-	}
+//	if (![[NSData data] respondsToSelector:@selector(hexStringWithSpaceEvery:)]) {
+//		[NSException raise:@"PLT categories not found"
+//					format:@"PLT categories don't appear to be loaded. Make sure to link with the \"-ObjC\" linker flag."];
+//	}
 	
-	[PLTDLogger sharedLogger];
-
-	return [[PLTDeviceWatcher sharedWatcher] devices];
+	return [PLTDeviceWatcher sharedWatcher].devices;
 }
 
 - (void)openConnection:(NSError **)error
@@ -423,7 +395,7 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 							
 							BRSubscribeToServicesCommand *command = [BRSubscribeToServicesCommand commandWithServiceID:newSubscription.service
 																										characteristic:0
-																												  mode:newSubscription.mode
+																												  mode:newSubscription.mode 
 																												period:newSubscription.period];
 							
 							[self.brSensorsDevice sendMessage:command];
@@ -715,25 +687,40 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 
 #pragma mark - Private
 
++ (PLTDevice *)deviceWithBRDevice:(BRDevice *)brDevice
+{
+	PLTDevice *pltDevice = [[PLTDevice alloc] init];
+	if (pltDevice) {
+		pltDevice.brDevice = brDevice;
 #ifdef TARGET_OSX
-- (PLTDevice *)initWithBluetoothAddress:(NSString *)address
-{
-	if (self = [super init]) {
-		self.address = address;
-    }
-    return self;
-}
+		pltDevice.address = brDevice.bluetoothAddress;
 #endif
-
 #ifdef TARGET_IOS
-- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory
-{
-	if (self = [super init]) {
-		self.accessory = anAccessory;
-    }
-    return self;
-}
+		pltDevice.accessory = brDevice.accessory;
 #endif
+	}
+	return pltDevice;
+}
+
+//#ifdef TARGET_OSX
+//- (PLTDevice *)initWithBluetoothAddress:(NSString *)address
+//{
+//	if (self = [super init]) {
+//		self.address = address;
+//    }
+//    return self;
+//}
+//#endif
+//
+//#ifdef TARGET_IOS
+//- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory
+//{
+//	if (self = [super init]) {
+//		self.accessory = anAccessory;
+//    }
+//    return self;
+//}
+//#endif
 
 - (void)didOpenBRConnection
 {
@@ -823,7 +810,7 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 		uint8_t *guid = malloc([guidData length]);
 		[guidData getBytes:guid length:[guidData length]];
 		
-		NSString *serial = [guidData hexStringWithSpaceEvery:0];
+		NSString *serial = BRDeviceHexStringFromData(guidData, 0);
 		NSMutableString *hyphenSerial = [NSMutableString string];
 		for (int i=0; i<[serial length]; i++) {
 			[hyphenSerial appendString:[serial substringWithRange:NSMakeRange(i, 1)]];
@@ -1155,15 +1142,17 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 	double fy = ((double)y) / 16384.0f;
 	double fz = ((double)z) / 16384.0f;
 	
-	PLTQuaternion q = (PLTQuaternion){fw, fx, fy, fz};
-	if (q.w>1.0001f || q.x>1.0001f || q.y>1.0001f || q.z>1.0001f) {
-		NSLog(@"Bad quaternion! { %f, %f, %f, %f }", q.w, q.x, q.y, q.z);
+	return (PLTQuaternion){fw, fx, fy, fz};
+}
+
+- (BOOL)checkQuaternion:(PLTQuaternion)quaternion
+{
+	PLTQuaternion absQuaternion = {fabs(quaternion.x),fabs(quaternion.y),fabs(quaternion.z),fabs(quaternion.w)};
+	if (absQuaternion.x<.00001 || absQuaternion.y<.00001 || absQuaternion.z<.00001 || absQuaternion.w<.00001) {
+		DLog(DLogLevelError, @"*** BAD QUATERNION! ***");
+		return NO;
 	}
-	else {
-		return q;
-	}
-	
-	return (PLTQuaternion){1, 0, 0, 0};
+	return YES;
 }
 
 //- (PLTDeviceVec3)vec3FromServiceData:(NSData *)serviceData
@@ -1285,14 +1274,16 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 				service = PLTServiceOrientation;
 				subscribers = ((PLTSubscription *)self.subscriptions[@(service)]).subscribers;
 				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
-				if (self.queryingOrientationForCalibration) {
-					self.orientationCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
-					self.queryingOrientationForCalibration = NO;
+				if ([self checkQuaternion:quaternion]) {
+					if (self.queryingOrientationForCalibration) {
+						self.orientationCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
+						self.queryingOrientationForCalibration = NO;
+					}
+					info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
+																		 timestamp:timestamp
+																	   calibration:self.orientationCalibration
+																		quaternion:quaternion];
 				}
-				info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
-																	 timestamp:timestamp
-																   calibration:self.orientationCalibration
-																	quaternion:quaternion];
 				break; }
 			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Pedometer: {
 				service = PLTServicePedometer;
@@ -1582,16 +1573,18 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 		switch (serviceID) {
 			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Orientation: {
 				PLTQuaternion quaternion = [self quaternionFromServiceData:serviceData];
-				if (self.queryingOrientationForCalibration) {
-					self.orientationCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
-					self.queryingOrientationForCalibration = NO;
-				}
-				else {
-					service = PLTServiceOrientation;
-					info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
-																		 timestamp:timestamp
-																	   calibration:self.orientationCalibration
-																		quaternion:quaternion];
+				if ([self checkQuaternion:quaternion]) {
+					if (self.queryingOrientationForCalibration) {
+						self.orientationCalibration = [PLTOrientationTrackingCalibration calibrationWithReferenceQuaternion:quaternion];
+						self.queryingOrientationForCalibration = NO;
+					}
+					else {
+						service = PLTServiceOrientation;
+						info = [[PLTOrientationTrackingInfo alloc] initWithRequestType:requestType
+																			 timestamp:timestamp
+																		   calibration:self.orientationCalibration
+																			quaternion:quaternion];
+					}
 				}
 				break; }
 			case BRDefinedValue_SubscribeToServicesCommand_ServiceID_ServiceID_Pedometer: {
@@ -1762,12 +1755,13 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
     DLog(DLogLevelError, @"BRDevice: %@ didRaiseSettingException: %@", device, exception);
 	[self.passthroughDelegate BRDevice:device didRaiseSettingException:exception];
 	
-	uint16_t exceptionID = exception.deckardID;
-	if (exceptionID == 0x0A1E) {
-		if (!self.isConnectionOpen) { // really we should have states for all steps in the handshake... maybe add this later...
-			[self didGetGUID:nil];
-		}
-	}
+#warning Use BRDeviceUtilities to get deckard ID
+	//	uint16_t exceptionID = exception.deckardID;
+	//	if (exceptionID == 0x0A1E) {
+	//		if (!self.isConnectionOpen) { // really we should have states for all steps in the handshake... maybe add this later...
+	//			[self didGetGUID:nil];
+	//		}
+	//	}
 }
 
 - (void)BRDevice:(BRDevice *)device didRaiseCommandException:(BRException *)exception
@@ -1804,7 +1798,7 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 {
 	[self.passthroughDelegate BRDevice:device willSendData:data];
 	
-    NSString *hexString = [data hexStringWithSpaceEvery:2];
+	NSString *hexString = BRDeviceHexStringFromData(data, 2);
     DLog(DLogLevelTrace, @"--> %@", hexString);
 	
 	NSDictionary *userInfo = @{PLTDeviceDataNotificationKey: data};
@@ -1815,7 +1809,7 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 {
 	[self.passthroughDelegate BRDevice:device didReceiveData:data];
 	
-    NSString *hexString = [data hexStringWithSpaceEvery:2];
+    NSString *hexString = BRDeviceHexStringFromData(data, 2);
     DLog(DLogLevelTrace, @"<-- %@", hexString);
 	
 	NSDictionary *userInfo = @{PLTDeviceDataNotificationKey: data};
@@ -1843,11 +1837,11 @@ NSString *const PLTDeviceErrorDomain =										@"com.plantronics.PLTDevice";
 {
 #ifdef TARGET_OSX
 	return [NSString stringWithFormat:@"<PLTDevice: %p> address=%@, model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion=%@, supportedServices=%@, isConnectionOpen=%@",
-			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];	
+			self, self.address, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, BRDeviceDescriptionFromArrayOfShortIntegers(self.supportedServices), (self.isConnectionOpen ? @"YES" : @"NO")];	
 #endif
 #ifdef TARGET_IOS
 	return [NSString stringWithFormat:@"<PLTDevice: %p> model=%@, name=%@, serialNumber=%@, hardwareVersion=%@, firmwareVersion=%@, supportedServices=%@, isConnectionOpen=%@",
-			self, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, [self.supportedServices hexDescriptionFromShortIntegerArray], (self.isConnectionOpen ? @"YES" : @"NO")];
+			self, self.model, self.name, self.serialNumber, self.hardwareVersion, self.firmwareVersion, BRDeviceDescriptionFromArrayOfShortIntegers(self.supportedServices), (self.isConnectionOpen ? @"YES" : @"NO")];
 #endif
 }
 

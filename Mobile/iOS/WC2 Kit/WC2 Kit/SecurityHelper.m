@@ -7,10 +7,9 @@
 //
 
 #import "SecurityHelper.h"
-#import "PLTDevice.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
 #import "PLTDevice_Internal.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "BRDevice.h"
 #import "BRDevice_Private.h"
 #import "BRRemoteDevice.h"
 #import "BRPassThroughProtocolCommand.h"
@@ -194,7 +193,7 @@ NSData *PLTURLSafeBase64Decode(NSString *input) {
 - (void)sendCommandAPDU:(NSData *)apduData
 {
 	BRPassThroughProtocolCommand *cmd = [BRPassThroughProtocolCommand commandWithProtocolid:BRDefinedValue_PassThroughProtocolCommand_Protocolid_ProtocolAPDU
-																				messageData:apduData];
+																					  _data:apduData];
 	[SENSOR_DEVICE sendMessage:cmd];
 }
 
@@ -767,8 +766,8 @@ NSData *PLTURLSafeBase64Decode(NSString *input) {
 	
 	if ([event isKindOfClass:[BRPassThroughProtocolEvent class]]) {
 		BRPassThroughProtocolEvent *e = (BRPassThroughProtocolEvent *)event;
-		NSLog(@"Result APDU: %@", PLTHexStringFromData(e.messageData, 0));
-		[self parseResultAPDU:e.messageData];
+		NSLog(@"Result APDU: %@", PLTHexStringFromData(e._data, 0));
+		[self parseResultAPDU:e._data];
 	}
 }
 

@@ -1,6 +1,6 @@
 PLTDevice
 =========
-This source is used to develop and test the BRDevice and PLTDevice libraries for both OS X and iOS.
+This source is used to develop and test the PLTDevice libraries for both OS X and iOS.
 To build the PLTDevice library use the included makefile.
 
 ### Building for iOS:

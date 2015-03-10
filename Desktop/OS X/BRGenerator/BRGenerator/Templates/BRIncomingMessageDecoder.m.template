@@ -1,0 +1,74 @@
+//
+//  BRIncomingMessageDecoder.m
+//  BRDevice
+//
+//  Auto-generated from deckard.xml v<#deckard_version#> on <#mdy#>.
+//  Copyright (c) <#yyyy#> Plantronics. All rights reserved.
+//
+
+#import "BRIncomingMessageDecoder.h"
+#import "BRIncomingMessage.h"
+#import "BRTypeImports.h"
+#import "PLTDLog.h"
+#import "BRDeviceUtilities.h"
+
+
+@implementation BRIncomingMessageDecoder
+
++ (BRIncomingMessage *)messageWithData:(NSData *)data
+{
+	BRMessageType messageType = BRDeviceMessageTypeFromMessageData(data);
+	uint16_t deckardID = BRDeviceDeckardIDFromMessageData(data);
+			
+	Class class = nil;
+
+	switch (messageType) {
+
+		case BRMessageTypeCommandResultSuccess:
+			class = [BRCommandResult class];
+			break;
+
+		case BRMessageTypeCommandResultException:
+		case BRMessageTypeSettingResultException:
+			switch (deckardID) {
+<#exception_decoder_case_block#>
+				default:
+					NSLog(@"Error: unknown Deckard exception 0x%04X", deckardID);
+					// some way to relay this would be nice
+					break;
+			}
+			break;
+			
+		case BRMessageTypeSettingResultSuccess:
+			switch (deckardID) {
+<#setting_result_success_decoder_case_block#>
+				default:
+					NSLog(@"Error: unknown Deckard setting 0x%04X", deckardID);
+					// some way to relay this would be nice
+					break;
+			}
+			break;
+
+		case BRMessageTypeEvent:
+			switch (deckardID) {
+<#event_decoder_case_block#>
+				default:
+					NSLog(@"Error: unknown Deckard event 0x%04X", deckardID);
+					// some way to relay this would be nice
+					break;
+			}
+			break;
+
+		default:
+			DLog(DLogLevelWarn, @"Error: unknown message type 0x%01X", messageType);
+			break;
+	}
+
+	if (class) {
+		return [class messageWithData:data];
+	}
+
+	return nil;
+}
+
+@end

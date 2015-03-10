@@ -28,13 +28,15 @@ extern NSString *const PLTDeviceDataNotificationKey;
 
 @interface PLTDevice ()
 
-#ifdef TARGET_OSX
-- (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
-#endif
++ (PLTDevice *)deviceWithBRDevice:(BRDevice *)brDevice;
 
-#ifdef TARGET_IOS
-- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory;
-#endif
+//#ifdef TARGET_OSX
+//- (PLTDevice *)initWithBluetoothAddress:(NSString *)address;
+//#endif
+//
+//#ifdef TARGET_IOS
+//- (PLTDevice *)initWithAccessory:(EAAccessory *)anAccessory;
+//#endif
 
 // this should be readonly here, but in implementation it complains about being already declaired... (because this is a class extension?)
 @property(nonatomic,strong,readwrite)	BRDevice									*brDevice;

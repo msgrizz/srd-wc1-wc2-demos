@@ -7,11 +7,11 @@
 //
 
 #import "KubiViewController.h"
+#import <PLTDevice_iOS/PLTDevice_iOS.h>
+#import <OpenTok/OpenTok.h>
 #import "PLTDeviceHelper.h"
 #import "Reachability.h"
 #import "SettingsViewController.h"
-#import "PLTDevice.h"
-#import <OpenTok/OpenTok.h>
 
 
 NSString *NSStringFromPLTKubiPositioningMode(PLTKubiPositioningMode mode)
@@ -620,7 +620,7 @@ NSString *NSStringFromPLTKubiPositioningMode(PLTKubiPositioningMode mode)
 	
 	self.navigationController.navigationBarHidden = NO;
 	
-	self.view.backgroundColor = [UIColor grayColor];
+	self.view.backgroundColor = [UIColor colorWithRed:64.0/256.0 green:66.0/256.0 blue:74.0/256.0 alpha:1.0];
 	
 	UIImage *pltImage = [UIImage imageNamed:@"pltlabs_nav_banner.png"];
 	CGRect navFrame = self.navigationController.navigationBar.frame;
@@ -661,7 +661,7 @@ NSString *NSStringFromPLTKubiPositioningMode(PLTKubiPositioningMode mode)
 	if (!self.reachabilityImageView) {
 		self.reachabilityImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
 		self.reachabilityImageView.contentMode = UIViewContentModeCenter;
-		self.reachabilityImageView.image = [UIImage imageNamed:(IPAD ? @"no_internet_ipad.png" : @"no_internet_iphone.png")];
+		self.reachabilityImageView.image = [UIImage imageNamed:@"no_internet_connection.png"];
 		self.reachabilityImageView.alpha = 0.0;
 		[self.view addSubview:self.reachabilityImageView];
 	}
