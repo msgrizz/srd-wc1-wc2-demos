@@ -29,21 +29,17 @@ var plt = (function(my){
   //maintain the current active socket connections
   var deviceConnections = {};
   if(chrome.bluetooth){
-    chrome.bluetooth.onDeviceRemoved.addListener(onDeviceRemoved);
-    
-    chrome.bluetooth.onDeviceAdded.addListener(function(device){
-        var pltDevices = [];
-        console.log('device added sending to deivce listener!');
-        if(device.connected == true && device.name.indexOf("PLT_") != -1) {
-          pltDevices.push(device);
-          if (deviceListener) {
-            deviceListener(pltDevices);
-          }
-        }
-      });
-    
-    chrome.bluetooth.onDeviceChanged.addListener(function(device){
-        console.log('device changed sending to deivce listener!');
+    chrome.bluetooth.onDeviceRemoved.addListener(function(device){
+    for(var i = 0; i < deviceConnections.length; i++){
+       var d = deviceConnections[i];
+       if(d.address == device.address){
+         d.splice(i, 1);
+         if(onDeviceDisconnectCallback){
+           onDeviceDisconnectCallback(device);
+         }
+         break;
+       }
+     }
     });
   }
   
@@ -159,7 +155,7 @@ var plt = (function(my){
       throw "device and message parameters are required"
     }
     //this variable is required to maintain correct scoping when calling the send function
-    chrome.bluetoothSocket.send(device.socketId, message.messageBytes);
+    chrome.bluetoothSocket.send(device.socketId, message.messageBytes, function(bytesSent){console.log("device has been sent " + bytesSent + " bytes");});
   };
   
   my.calibrateHeadOrientation = function(device){
@@ -319,19 +315,6 @@ var plt = (function(my){
     
   };
   
-  //handles device removed events from the chrome api
-  var onDeviceRemoved = function(device){
-    for(var i = 0; i < deviceConnections.length; i++){
-       var d = deviceConnections[i];
-       if(d.address == device.address){
-         d.splice(i, 1);
-         if(onDeviceDisconnectCallback){
-           onDeviceDisconnectCallback(device);
-         }
-         break;
-       }
-     }
-  }
    
   return my;  
 })(plt || {});
