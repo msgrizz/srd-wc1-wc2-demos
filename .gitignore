@@ -194,3 +194,5 @@ Desktop/PC/OfficeAutomationServer/OfficeAutomationServer/obj/Debug/OfficeAutomat
 *.suo
 Desktop/PC/OfficeAutomationServer/OfficeAutomationServer/obj/Debug/OfficeAutomationServer.exe
 Desktop/PC/OfficeAutomationServer/OfficeAutomationServer/obj/Debug/OfficeAutomationServer.pdb
+*.cachefile
+*.user
