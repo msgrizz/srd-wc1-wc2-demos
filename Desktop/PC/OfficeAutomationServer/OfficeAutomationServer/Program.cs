@@ -19,7 +19,7 @@ namespace OfficeAutomationServer
         private static string m_assemblyVersion;
         private static string m_fileVersion;
         private static volatile object m_loglocker = new Object();
-        private static bool m_quit = false;
+        private static volatile bool m_quit = false; // using volatile so can access/update from multiple threads
 
         // DecaWave connection
         private static volatile bool _shouldStop;
@@ -31,6 +31,12 @@ namespace OfficeAutomationServer
         private static int m_port = 8784;
         private static bool m_debug = false;
         private static System.Timers.Timer periodicReporter;
+        private static int c_reportinitialperiod = 5000;
+        private static int c_reportnormalperiod = 30000;
+        private static int m_reportperiod = c_reportinitialperiod;
+
+        // Server socket
+        private static ServerListenThread m_socketServerObject = null;
 
         static void Main(string[] args)
         {
@@ -74,16 +80,41 @@ namespace OfficeAutomationServer
                 decaWaveThread.Start();
 
                 periodicReporter = new System.Timers.Timer();
-                periodicReporter.Interval = 5000;
+                periodicReporter.Interval = m_reportperiod;
                 periodicReporter.AutoReset = true;
                 periodicReporter.Elapsed += PeriodicReporter_Elapsed;
                 periodicReporter.Start();
 
-                while (!m_quit) // todo, what will cause main thread to quit? (or just Ctrl-C?)
+                // create socket server
+                try
                 {
-                    Thread.Sleep(1000); // sleep main thread while decawave thread works
+                    // Create the thread object. This does not start the thread.
+                    m_socketServerObject = new ServerListenThread();
+                    Thread socketServerThread = new Thread(m_socketServerObject.DoWork);
+
+                    // Start the worker thread.
+                    socketServerThread.Start();
+                    Console.WriteLine("main thread: Starting socket server thread...");
+
+                    // Loop until worker thread activates. 
+                    while (!socketServerThread.IsAlive)
+                    {
+                        Thread.Sleep(100);
+                    };
+
+                    DebugPrint(MethodInfo.GetCurrentMethod().Name, "Server Socket is ready on port 9050");
+
+                    while (!m_quit)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+                catch (Exception exc2)
+                {
+                    DebugPrint(MethodInfo.GetCurrentMethod().Name, "Error: " + exc2.ToString());
                 }
 
+                m_socketServerObject.RequestStop();
                 periodicReporter.Stop();
                 RequestStop();
             }
@@ -91,14 +122,29 @@ namespace OfficeAutomationServer
             DebugPrint(MethodInfo.GetCurrentMethod().Name, APP_NAME + ": shutdown.");
         }
 
+        /// <summary>
+        /// Generate a report of how many tags and stale tags are being tracked
+        /// A tag has had an update in last 20 seconds
+        /// If no update for >=20 seconds it becomes a stale tag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void PeriodicReporter_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
+            // after first report change report periodicity to 30seconds (from 5 seconds)
+            if (m_reportperiod == c_reportinitialperiod)
+            {
+                periodicReporter.Stop();
+                m_reportperiod = c_reportnormalperiod;
+                periodicReporter.Interval = m_reportperiod;
+                periodicReporter.Start();
+            }
             int numtags = 0;
             int numstaletags = 0;
             DateTime now = DateTime.Now;
             lock (m_updateLock)
             {
-                if (m_tags.Count() > 1)
+                if (m_tags.Count() > 0)
                 {
                     IEnumerator enumerator = m_tags.Keys.GetEnumerator();
                     while (enumerator.MoveNext())
@@ -309,6 +355,67 @@ namespace OfficeAutomationServer
         public static void RequestStop()
         {
             _shouldStop = true;
+        }
+
+        // note: any client can do any command on APE GUI automation - there is no arbitration at all at this point
+        public static void HandleInputCommand(string strin)
+        {
+            try
+            {
+                switch (strin.ToUpper())
+                {
+                    case "SHUTDOWN":
+                        m_quit = true;
+                        break;
+                    case "1":
+                    //    m_onebuttons[6].Click();
+                        break;
+                    //case "2":
+                    //    m_onebuttons[5].Click();
+                    //    break;
+                    //case "3":
+                    //    m_onebuttons[4].Click();
+                    //    break;
+                    //case "4":
+                    //    m_onebuttons[3].Click();
+                    //    break;
+                    //case "5":
+                    //    m_onebuttons[2].Click();
+                    //    break;
+                    //case "6":
+                    //    m_onebuttons[1].Click();
+                    //    break;
+                    //case "7":
+                    //    m_onebuttons[0].Click();
+                    //    break;
+                    //case "A":
+                    //    m_zerobuttons[6].Click();
+                    //    break;
+                    //case "B":
+                    //    m_zerobuttons[5].Click();
+                    //    break;
+                    //case "C":
+                    //    m_zerobuttons[4].Click();
+                    //    break;
+                    //case "D":
+                    //    m_zerobuttons[3].Click();
+                    //    break;
+                    //case "E":
+                    //    m_zerobuttons[2].Click();
+                    //    break;
+                    //case "F":
+                    //    m_zerobuttons[1].Click();
+                    //    break;
+                    //case "G":
+                    //    m_zerobuttons[0].Click();
+                    //    break;
+                }
+            }
+            catch (Exception e)
+            {
+                DebugPrint(MethodInfo.GetCurrentMethod().Name,
+                    String.Format("Excepion: {0}", e.ToString()));
+            }
         }
     }
 }
