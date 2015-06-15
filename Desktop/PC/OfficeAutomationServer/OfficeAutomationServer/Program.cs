@@ -35,6 +35,19 @@ namespace OfficeAutomationServer
         private static int c_reportnormalperiod = 30000;
         private static int m_reportperiod = c_reportinitialperiod;
 
+        // track client connection objects (so we can send messages to them)
+        private static List<ConnectionThread> m_clientconnections = new List<ConnectionThread>();
+        private static volatile object m_clientlistlocker = new Object();
+
+        internal static void AddConnection(ConnectionThread newconnection)
+        {
+            lock (m_clientlistlocker)
+            {
+                m_clientconnections.Add(newconnection);
+            }
+        }
+
+
         // Server socket
         private static ServerListenThread m_socketServerObject = null;
 
@@ -288,6 +301,8 @@ namespace OfficeAutomationServer
                                                     tagMsg.coordinates.x,
                                                     tagMsg.coordinates.y,
                                                     tagMsg.coordinates.z);
+
+                                                SendToRegisteredClients(line);
                                             }
                                             else
                                             {
@@ -334,6 +349,22 @@ namespace OfficeAutomationServer
             DebugPrint(MethodInfo.GetCurrentMethod().Name, "worker thread: terminating gracefully.");
         }
 
+        // send data from OpenRTLS server (tag positions in JSON format, etc)
+        // to registered tcp/ip client connections
+        private static void SendToRegisteredClients(string line)
+        {
+            lock (m_clientlistlocker)
+            {
+                foreach (ConnectionThread client in m_clientconnections)
+                {
+                    if (client.SubscribedToTagUpdates)
+                    {
+                        client.QueueMessageToSend(line);
+                    }
+                }
+            }
+        }
+
         public static void UpdateTagXYZ(string id, Decimal x, Decimal y, Decimal z)
         {
             lock (m_updateLock)
@@ -357,9 +388,14 @@ namespace OfficeAutomationServer
             _shouldStop = true;
         }
 
-        // note: any client can do any command on APE GUI automation - there is no arbitration at all at this point
-        public static void HandleInputCommand(string strin)
+        /// <summary>
+        /// Handle server-level commands from client
+        /// </summary>
+        /// <param name="strin">string containing the command</param>
+        /// <returns>bool indicating whether command was handled</returns>
+        public static bool HandleInputCommand(string strin, ConnectionThread client)
         {
+            bool handled = true;
             try
             {
                 switch (strin.ToUpper())
@@ -367,48 +403,15 @@ namespace OfficeAutomationServer
                     case "SHUTDOWN":
                         m_quit = true;
                         break;
-                    case "1":
-                    //    m_onebuttons[6].Click();
+                    case "VERSION":
+                    case "GETVERSION":
+                        client.QueueMessageToSend(
+                            "OAS version information: Assembly = " + m_assemblyVersion
+                                + " File = " + m_fileVersion);
                         break;
-                    //case "2":
-                    //    m_onebuttons[5].Click();
-                    //    break;
-                    //case "3":
-                    //    m_onebuttons[4].Click();
-                    //    break;
-                    //case "4":
-                    //    m_onebuttons[3].Click();
-                    //    break;
-                    //case "5":
-                    //    m_onebuttons[2].Click();
-                    //    break;
-                    //case "6":
-                    //    m_onebuttons[1].Click();
-                    //    break;
-                    //case "7":
-                    //    m_onebuttons[0].Click();
-                    //    break;
-                    //case "A":
-                    //    m_zerobuttons[6].Click();
-                    //    break;
-                    //case "B":
-                    //    m_zerobuttons[5].Click();
-                    //    break;
-                    //case "C":
-                    //    m_zerobuttons[4].Click();
-                    //    break;
-                    //case "D":
-                    //    m_zerobuttons[3].Click();
-                    //    break;
-                    //case "E":
-                    //    m_zerobuttons[2].Click();
-                    //    break;
-                    //case "F":
-                    //    m_zerobuttons[1].Click();
-                    //    break;
-                    //case "G":
-                    //    m_zerobuttons[0].Click();
-                    //    break;
+                    default:
+                        handled = false;
+                        break;
                 }
             }
             catch (Exception e)
@@ -416,6 +419,7 @@ namespace OfficeAutomationServer
                 DebugPrint(MethodInfo.GetCurrentMethod().Name,
                     String.Format("Excepion: {0}", e.ToString()));
             }
+            return handled;
         }
     }
 }
