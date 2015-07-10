@@ -36,10 +36,10 @@ namespace OfficeAutomationServer
         private static int m_reportperiod = c_reportinitialperiod;
 
         // track client connection objects (so we can send messages to them)
-        private static List<ConnectionThread> m_clientconnections = new List<ConnectionThread>();
+        private static List<ClientConnectionThread> m_clientconnections = new List<ClientConnectionThread>();
         private static volatile object m_clientlistlocker = new Object();
 
-        internal static void AddConnection(ConnectionThread newconnection)
+        internal static void AddConnection(ClientConnectionThread newconnection)
         {
             lock (m_clientlistlocker)
             {
@@ -239,106 +239,119 @@ namespace OfficeAutomationServer
                 if (!connected)
                 {
                     svcClient = new SvcClient(m_ip, m_port);
-                    string listener = svcClient.request("{\"command\":\"getLsListener\"}");
-                    connected = true;
-
-                    try
+                    string listener = null;
+                    if (svcClient.ConnectOk)
                     {
-                        var lsAddress = System.Web.Helpers.Json.Decode(listener);
+                        listener = svcClient.request("{\"command\":\"getLsListener\"}");
+                    }
+                    if (svcClient.ConnectOk && listener != null)
+                    {
+                        connected = true;
 
-                        if (lsAddress.mode == "unicast")
+                        try
                         {
-                            DebugPrint(MethodInfo.GetCurrentMethod().Name, string.Format("Received LS listener: {0}\n", lsAddress.mode));
+                            var lsAddress = System.Web.Helpers.Json.Decode(listener);
 
-                            UdpClient socket = new UdpClient();
-                            IPEndPoint localEp = new IPEndPoint(IPAddress.Parse(lsAddress.ip), 8787);
-                            socket.Client.Bind(localEp);
-                            socket.Client.ReceiveTimeout = 20000;
-                            bool isTimeExpired = false;
-                            // Data buffer for incoming data.
-                            byte[] recvData;
-
-                            while (!_shouldStop && !isTimeExpired)
+                            if (lsAddress.mode == "unicast")
                             {
-                                try
-                                {
-                                    recvData = socket.Receive(ref localEp);
-                                    if (recvData.Length > 0)
-                                    {
-                                        string recv =
-                                            Encoding.ASCII.GetString(recvData, 0, recvData.Length);
-                                        if (m_debug)
-                                        {
-                                            DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Received: ");
-                                        }
-                                        string[] lines = recv.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-                                        foreach (string line in lines)
-                                        {
+                                DebugPrint(MethodInfo.GetCurrentMethod().Name, string.Format("Received LS listener: {0}\n", lsAddress.mode));
 
-                                            var tagMsg = System.Web.Helpers.Json.Decode(line);
-                                            if (tagMsg != null &&
-                                                tagMsg.id != null &&
-                                                tagMsg.coordinates != null &&
-                                                tagMsg.coordinates.x != null &&
-                                                tagMsg.coordinates.y != null)
+                                UdpClient socket = new UdpClient();
+                                IPEndPoint localEp = new IPEndPoint(IPAddress.Parse(lsAddress.ip), 8787);
+                                socket.Client.Bind(localEp);
+                                socket.Client.ReceiveTimeout = 20000;
+                                bool isTimeExpired = false;
+                                // Data buffer for incoming data.
+                                byte[] recvData;
+
+                                while (!_shouldStop && !isTimeExpired)
+                                {
+                                    try
+                                    {
+                                        recvData = socket.Receive(ref localEp);
+                                        if (recvData.Length > 0)
+                                        {
+                                            string recv =
+                                                Encoding.ASCII.GetString(recvData, 0, recvData.Length);
+                                            if (m_debug)
                                             {
-                                                if (m_debug)
+                                                DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Received: ");
+                                            }
+                                            string[] lines = recv.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                                            foreach (string line in lines)
+                                            {
+
+                                                var tagMsg = System.Web.Helpers.Json.Decode(line);
+                                                if (tagMsg != null &&
+                                                    tagMsg.id != null &&
+                                                    tagMsg.coordinates != null &&
+                                                    tagMsg.coordinates.x != null &&
+                                                    tagMsg.coordinates.y != null)
                                                 {
-                                                    DebugPrint(MethodInfo.GetCurrentMethod().Name,
-                                                        string.Format("ID: {0}, x: {1}, y: {2}",
+                                                    if (m_debug)
+                                                    {
+                                                        DebugPrint(MethodInfo.GetCurrentMethod().Name,
+                                                            string.Format("ID: {0}, x: {1}, y: {2}",
+                                                            tagMsg.id,
+                                                            tagMsg.coordinates.x,
+                                                            tagMsg.coordinates.y
+                                                            )
+                                                        );
+                                                    }
+
+                                                    // TODO communicate here to registered/interested clients
+                                                    // that the xyz pos of a tag has been updated
+
+                                                    UpdateTagXYZ(
                                                         tagMsg.id,
                                                         tagMsg.coordinates.x,
-                                                        tagMsg.coordinates.y
-                                                        )
-                                                    );
+                                                        tagMsg.coordinates.y,
+                                                        tagMsg.coordinates.z);
+
+                                                    SendToRegisteredClients(line);
                                                 }
-
-                                                // TODO communicate here to registered/interested clients
-                                                // that the xyz pos of a tag has been updated
-
-                                                UpdateTagXYZ(
-                                                    tagMsg.id,
-                                                    tagMsg.coordinates.x,
-                                                    tagMsg.coordinates.y,
-                                                    tagMsg.coordinates.z);
-
-                                                SendToRegisteredClients(line);
-                                            }
-                                            else
-                                            {
-                                                if (m_debug)
+                                                else
                                                 {
-                                                    DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Recv'd tag msg with NO coords ");
-                                                    if (tagMsg != null &&
-                                                        tagMsg.id != null)
+                                                    if (m_debug)
                                                     {
-                                                        DebugPrint(MethodInfo.GetCurrentMethod().Name, "from tag ID: " + tagMsg.id);
+                                                        DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Recv'd tag msg with NO coords ");
+                                                        if (tagMsg != null &&
+                                                            tagMsg.id != null)
+                                                        {
+                                                            DebugPrint(MethodInfo.GetCurrentMethod().Name, "from tag ID: " + tagMsg.id);
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    else
-                                    {
-                                        if (m_debug)
+                                        else
                                         {
-                                            DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Received empty");
+                                            if (m_debug)
+                                            {
+                                                DebugPrint(MethodInfo.GetCurrentMethod().Name, "LS: Received empty");
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                    DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
-                                    isTimeExpired = true;
-                                    _shouldStop = true;
+                                    catch (Exception e)
+                                    {
+                                        DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                                        isTimeExpired = true;
+                                        _shouldStop = true;
+                                    }
                                 }
                             }
-                        }
 
+                        }
+                        catch (Exception e)
+                        {
+                            DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                        }
                     }
-                    catch (Exception e)
+                    else
                     {
-                        DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                        DebugPrint(MethodInfo.GetCurrentMethod().Name, "Connection to RTLS server failed/timed out, will quit.");
+                        _shouldStop = true;
+                        m_quit = true;
                     }
                 }
 
@@ -355,7 +368,7 @@ namespace OfficeAutomationServer
         {
             lock (m_clientlistlocker)
             {
-                foreach (ConnectionThread client in m_clientconnections)
+                foreach (ClientConnectionThread client in m_clientconnections)
                 {
                     if (client.SubscribedToTagUpdates)
                     {
@@ -393,7 +406,7 @@ namespace OfficeAutomationServer
         /// </summary>
         /// <param name="strin">string containing the command</param>
         /// <returns>bool indicating whether command was handled</returns>
-        public static bool HandleInputCommand(string strin, ConnectionThread client)
+        public static bool HandleInputCommand(string strin, ClientConnectionThread client)
         {
             bool handled = true;
             try

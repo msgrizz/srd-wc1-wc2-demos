@@ -1,0 +1,195 @@
+SmartLockID Version History
+
+Document Author: Lewis Collins
+
+
+Version 1.5.0.4
+Date: 8th Jun 2015
+New features:
+- Adding option to suppress the lock reason dialogs which
+  are shown when you log back in or interupt the screen saver
+  following a screen lock. (Requested by MD)
+
+Version 1.5.0.3
+Date: 13th Jun 2014
+New features:
+- Fixing issue with working folder of SmartLock shortcut
+  Now will be the install directory
+
+Version 1.5.0.2
+Date: 8th Nov 2013
+New features:
+- Fixing Windows startup problem - now connects to Spokes in Win start
+- Adding Proximity Sensitivity adjustment feature
+
+Version 1.5.0.0 (1.5.0.1)
+Date: 17th Sep 2013
+New features:
+- Re-compiling against Spokes 3.0 - New product name: SmartLock for Spokes 3.0
+- Changing installer dependency to require Spokes 3.0 COM Service in registry
+
+Version 1.1.0.9
+Date: 22nd Apr 2013
+New features:
+- Adding link to survey in the unlock dialog to obtain personal unlock key
+Bug fixes:
+- Fixed the working folder of the application to be C:\Program Files (x86)\Plantronics\SmartLockID\
+  and not the folder of parent process (typically Explorer.exe)
+
+
+Version 1.1.0.8
+Date: 25th Feb 2013
+Bug fixes:
+- Put back in the reverse proximity (mobile out of range) handling to lock screen
+
+
+Version 1.1.0.7
+Date: 13th Feb 2013
+Bug fixes:
+- Fixed the only one instance startup code
+- Prevented initial dock status from locking app on startup
+- Fixed start menu shortcut
+
+
+Version 1.1.0.6
+Date: 6th Feb 2013
+Bug fixes:
+- Removed mobile caller id features (will go into seperate app going forward)
+- Incorporated Spokes Wrapper for C#
+- Minor GUI enhancement
+- Added code to bring rf/audio link up and down when using voice alerts with audio sensing off in PCP
+
+
+Version 1.1.0.5
+Date: 14th Jan 2013
+Bug fixes:
+- Removed code that wrongly brought up rf link of PLT device when playing
+audio sounds effects for MobileCall features (ring tones / background audio), and 
+voice prompts.
+
+
+Version 1.1.0.4
+Date: 9th Jan 2012
+New features:
+- Added Skype avatar images
+- Volume slider set audio volue for ring tones / background audio / voice prompts
+- Changed help screen to show Skype not Outlook
+- Changed expiry time from 45 to 30 days
+Bug fixes:
+- Fixed startup directory when it runs with Windows start so it now can find ringtones, settings etc.
+- Improved skype lookup, some bugs fixed
+
+
+Version 1.1.0.3 ALPHA
+Date: 7th Jan 2013
+New features:
+- Lync 2013 support (used latest API, tested with Lync 2013)
+- Replaced Outlook lookup with Skype lookup, so far contact name only
+- Replace WAV resources (that were making EXE too big) with seperate MP3 files
+- New option to choose default audio device for ring tones / background audio / voice prompts
+- Allow user to drop in additional MP3/WAV files into Ring tones / Background Audio files
+- Voice prompts (optional, disabled by default)
+
+
+Version 1.1.0.2
+Date: 9th Nov 2012
+New features:
+- Add a context menu to system tray icon permitting accessing settings or Exit application,
+to address lack of Exit issue raised by Naser
+- Experimentally added 2 Outlook DLLs to the installer to see if it cure's crash seen by Naser when
+turning on Outlook feature, thought to be caused by the following dependencies missing on target system:
+Microsoft.Office.Interop.Outlook.dll, Office.dll
+
+
+Version 1.1.0.1
+Date: 1st Nov 2012
+New features:
+- Minor bug fixes with the unlock on don / near features (for non-password protected screen saver)
+
+
+Version 1.1.0.0
+
+New features:
+- change beta period to 45 days
+- add new eula rtf
+- allow to enter key to unlock beta period, allow you to do that even if expired...
+- disable Outlook feature by default (to avoid the Outlook email sync and 64-bit issues seen)
+- running second instance of app will open options dialog of first instance of app
+
+
+Version 1.0.0.9
+
+New features:
+Final changes for Gartner:
+- grey out docking option vpro's
+- installer start menu not in sub-folder
+- add upgrade paths for older versions
+- outgoing call trigger background noise
+- beta timeout - 1 month
+- add a tab that says help 
+  - list of devices supported
+  - list of supported platforms (windows 7, outlook 2010, lync 2010)
+  - device that is connected (removed from misc tab)
+  - add in the expiry timer (days)
+  - software revision (removed from misc tab)
+
+
+Version 1.0.0.8
+
+New features:
+- Adding new InstallShield setup project to solution
+- Defining as version 1.0.0.8, able to upgrade interim versions from 1.0.0.4 up
+- Adding mandatory installer dependency on Spokes (with advisory message where to get it when it is not found)
+
+
+Version 1.0.0.7
+
+New features:
+- Hide mobile call answer/reject/end buttons for device that does not support that feature (Savi 7xx/Blackwire C710/C720 etc)
+- Adjust mobile call GUI layout to match UX team design (also to prevent caller id/button overlap spotted by Ian D)
+- Add debug code around sound playing
+- Add debug code to show audio device settings
+
+
+Version 1.0.0.6
+
+New features:
+- adding product version info to Misc tab
+
+
+Version 1.0.0.5
+
+New features:
+- adding multi-resolution icons
+
+
+Version 1.0.0.4
+
+New features:
+- merging UX team graphics for SmartLock part of application
+- adding retries and exception handling to Spokes connection (to try to catch null reference exception reported during Start With Windows)
+- re-added screen lock feature: no locking when on active call (erroneous events have been known to lock screen during a Lync call)
+- re-added screen lock feature: enable/disable screen lock options based on device capabilities (proximity support, etc)
+- fixed potential null reference problem with spokes atdcommand / caller id code on headsets that don't support it
+- improved logging for Spokes/Outlook/Lync connections
+- minor bug fix affecting debug mode
+- auto end screen saver based on near/donned or undocked if using non-password protected screen saver
+- merging Wei's MobileCall changes from MobileCallDemo line
+- fixes to options dialog so it handles close with X correctly
+- UX team look and feel to options dialog
+- adding missing resource files (images and an icon)
+- adding new icons to the EXE
+- add ux graphic to options dialog
+- tiny bug fix to tell ScreenLockID not to do any locking action while screen is locked...
+- fix problem showing mobilecall window when going on call and hide window option is in use
+- updating version number
+- minor fix to ensure we always get ProductName or InternalName in connected device information in Misc tab
+- update version info
+- fix to lock message form to handle close with X correctly
+- fix to toast popup message form to handle close with X correctly
+
+
+Version DISK1 1.09
+
+New features:
+- Baseline build consisting of core Screen Lock, Mobile Call and Outlook caller contact picture retrieval

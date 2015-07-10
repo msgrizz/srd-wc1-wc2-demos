@@ -12,9 +12,11 @@ namespace OfficeAutomationServer
     class SvcClient
     {
         Socket svcSocket;
+        public bool ConnectOk { get; set; }
 
         public SvcClient(string ip, int port)
         {
+            ConnectOk = false;
             try
             {
                 IPAddress ipAddress = IPAddress.Parse(ip);
@@ -25,10 +27,13 @@ namespace OfficeAutomationServer
                     SocketType.Stream, ProtocolType.Tcp);
 
                 svcSocket.Connect(remoteEP);
+
+                ConnectOk = true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                ConnectOk = false;
             }
         }
 
@@ -41,11 +46,13 @@ namespace OfficeAutomationServer
             try
             {
                 // Send the data through the socket.
+                svcSocket.SendTimeout = 1000;
+                svcSocket.ReceiveTimeout = 1000;
                 int bytesSent = svcSocket.Send(Encoding.ASCII.GetBytes(jsonStr));
 
                 // Receive the response from the remote device.
                 int bytesRec = svcSocket.Receive(bytes);
-                Console.WriteLine("Echoed test = {0}",
+                Console.WriteLine("From RTLS server = {0}",
                     Encoding.ASCII.GetString(bytes, 0, bytesRec));
 
                 recvMessage = Encoding.ASCII.GetString(bytes, 0, bytesRec);
