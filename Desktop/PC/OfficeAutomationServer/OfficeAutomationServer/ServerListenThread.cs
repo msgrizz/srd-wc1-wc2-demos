@@ -20,7 +20,7 @@ namespace OfficeAutomationServer
         {
             try
             {
-                TcpListener client = new TcpListener(IPAddress.Parse("127.0.0.1"), 9050);
+                TcpListener client = new TcpListener(IPAddress.Parse("0.0.0.0"), 9050);
                 client.Start();
 
                 Console.WriteLine("server thread: working...");

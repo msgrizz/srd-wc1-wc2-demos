@@ -73,7 +73,7 @@ namespace DecaWaveClientSocketScratchPad
 
             DebugPrint(MethodInfo.GetCurrentMethod().Name, APP_NAME + ": shutdown.");
 
-            Thread.Sleep(500);
+            Thread.Sleep(1500);
             Console.Write("Press enter to continue...");
             Console.ReadLine();
         }
