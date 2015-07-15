@@ -135,6 +135,9 @@ namespace OfficeAutomationServer
                         case "GOODBYE":
                             m_quit = true;
                             break;
+                        case "GEOFENCE":
+                            DoGeoFence();
+                            break;
                         case "SUBSCRIBEALL":
                             SubscribedToTagUpdates = true;
                             break;
@@ -163,6 +166,20 @@ namespace OfficeAutomationServer
             ns.Close();
             client.Close();
         }
+
+        private void DoGeoFence()
+        {
+            // create a 2 meter geofence around the user's tag location
+            // this will be stored in memory, will it also go into database?
+            // probably yes, so oas can survive restart and maintain the active geofences
+            //
+            // question: how to cope with moving laptop?
+            // should laptop have a tag? OR should you be able to overide the geofence.
+            // maybe provide easy "cancel geofence e.g. for 5/15 mins" options on system tray
+
+
+        }
+
 
         /// <summary>
         /// Generate a text list of all available commands

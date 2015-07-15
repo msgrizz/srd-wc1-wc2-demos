@@ -98,6 +98,9 @@ namespace DecaWaveClientSocketScratchPad
                 case "OFF":
                     connector.SendCommand("SUBSCRIBEOFF");
                     break;
+                case "GF":
+                    connector.SendCommand("GEOFENCE");
+                    break;
             }
         }
 
