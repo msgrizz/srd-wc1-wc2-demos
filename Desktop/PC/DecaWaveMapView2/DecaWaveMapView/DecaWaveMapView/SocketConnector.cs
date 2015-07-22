@@ -5,8 +5,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Reflection;
 
-namespace DecaWaveClientSocketScratchPad
+namespace DecaWaveMapView
 {
     class SocketConnector
     {
@@ -14,7 +15,7 @@ namespace DecaWaveClientSocketScratchPad
         int m_port;
 
         /// <summary>
-        /// Event args for OnCall event handler
+        /// Event args for MessageReceived event handler
         /// </summary>
         public class MessageReceivedArgs : EventArgs
         {
@@ -43,10 +44,13 @@ namespace DecaWaveClientSocketScratchPad
         object m_checkIOlock = new object();
         int m_checkIOtimeout = 100;
 
-        public SocketConnector(string host, int port)
+        Game1 m_game;
+
+        public SocketConnector(string host, int port, Game1 game)
         {
             m_host = host;
             m_port = port;
+            m_game = game;
 
             socketThread = new Thread(this.DoSocketWork);
             socketThread.Start();
@@ -59,14 +63,14 @@ namespace DecaWaveClientSocketScratchPad
             byte[] buffer = new byte[1024];
             byte[] outbuffer;
 
-            Console.WriteLine("worker thread: working...");
+            m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "worker thread: working...");
 
             TcpClient client = new TcpClient(m_host, m_port);
             NetworkStream ns = client.GetStream();
 
-            string welcome = "help\r\n";
-            outbuffer = Encoding.ASCII.GetBytes(welcome);
-            ns.Write(outbuffer, 0, outbuffer.Length);
+            //string welcome = "help\r\n";
+            //outbuffer = Encoding.ASCII.GetBytes(welcome);
+            //ns.Write(outbuffer, 0, outbuffer.Length);
             ns.ReadTimeout = 1000;
 
             if (!m_quit && client.Connected)
@@ -118,12 +122,12 @@ namespace DecaWaveClientSocketScratchPad
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("info: error reading from client");
+                    m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "info: error reading from client");
                     m_quit = true;
                 }
                 string strin = sb.ToString();
 
-                Console.WriteLine("\r\nRECV: "+strin);
+                //DEBUG: m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "\r\nRECV: " + strin);
                 // pass received message to registered apps
                 OnMessageReceived(new MessageReceivedArgs(strin));
 
@@ -161,11 +165,11 @@ namespace DecaWaveClientSocketScratchPad
                 //    }
             }
             SendToServer(ns, "Bye!");
-            Console.WriteLine("server thread: closing client connection...");
+            m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "server thread: closing client connection...");
             ns.Close();
             client.Close();
 
-            Console.WriteLine("worker thread: terminating gracefully.");
+            m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "worker thread: terminating gracefully.");
         }
 
         internal void SendCommand(string command)
@@ -193,10 +197,12 @@ namespace DecaWaveClientSocketScratchPad
             try
             {
                 ns.Write(outbuffer, 0, outbuffer.Length);
+                m_game.LogMessage(MethodInfo.GetCurrentMethod().Name,
+                    "Written: " + msg);
             }
             catch (Exception)
             {
-                Console.WriteLine("info: error writing to server");
+                m_game.LogMessage(MethodInfo.GetCurrentMethod().Name, "info: error writing to server");
                 m_quit = true;
             }
         }

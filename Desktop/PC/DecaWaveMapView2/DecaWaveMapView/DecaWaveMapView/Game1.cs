@@ -13,12 +13,19 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Collections;
-using DecaWaveClientSocketScratchPad;
+using System.Reflection;
 
 namespace DecaWaveMapView
 {
     /// <summary>
-    /// This is the main type for your game
+    /// Marauder's Map Decawave sample application
+    /// v1.0.0.10
+    /// 
+    /// Example usage (can pass command line params:
+    /// 
+    ///   DecaWaveMapView 10.76.201.21 9050 debugon
+    ///   
+    /// NOTE: defaults are 10.76.201.21 9050 debugoff
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
@@ -74,14 +81,31 @@ namespace DecaWaveMapView
         private static volatile object m_loglocker = new Object();
         private static volatile bool m_quit = false; // using volatile so can access/update from multiple threads
 
-        private static string m_host;
+        private static string m_host = "10.76.201.21";
         private static int m_port = 9050;
         private static bool m_debug = false;
 
         private static SocketConnector connector;
 
-        public Game1()
+        private DebugForm m_debugwindow = null;
+        private string[] m_args;
+        private bool m_showanchors = false;
+        private Texture2D m_anchorimage;
+        private Vector2 m_anchororigin;
+        private Vector2[] m_anchorpositions = new []
+            {
+                new Vector2(16.3f,2.85f),
+                new Vector2(11.1f,4.2f),
+                new Vector2(17.1f,14.2f),
+                new Vector2(12.8f,11.9f),
+                new Vector2(18.75f,18.6f),
+                new Vector2(9.4f,20.0f)
+            };
+
+
+        public Game1(string[] args)
         {
+            m_args = args;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -97,8 +121,38 @@ namespace DecaWaveMapView
         /// </summary>
         protected override void Initialize()
         {
+            // new, game config form
+            DoOpenDebugWindow();
+
             // TODO: Add your initialization logic here
-            connector = new SocketConnector("10.76.201.21", 9050);
+            if (m_args.Count() > 0)
+            {
+                m_host = m_args[0];
+                if (m_args.Count() > 1)
+                {
+                    try
+                    {
+                        m_port = Convert.ToInt32(m_args[1]);
+                    }
+                    catch (Exception)
+                    {
+                        m_port = 9050;
+                    }
+                }
+                if (m_args.Count() > 2)
+                {
+                    try
+                    {
+                        m_debug = (m_args[2].ToUpper() == "DEBUGON");
+                    }
+                    catch (Exception)
+                    {
+                        m_debug = false;
+                    }
+                }
+            }
+
+            connector = new SocketConnector(m_host, m_port, this);
             connector.Connected += new SocketConnector.ConnectedEventHandler(connector_Connected);
             connector.MessageReceived += new SocketConnector.MessageReceivedEventHandler(connector_MessageReceived);
 
@@ -124,6 +178,10 @@ namespace DecaWaveMapView
             m_screenmax_y = graphics.GraphicsDevice.Viewport.Height;
             m_halfscreenmax_x = m_screenmax_x / 2;
             m_halfscreenmax_y = m_screenmax_y / 2;
+
+            m_anchorimage = Content.Load<Texture2D>("Anchor");
+            m_anchororigin.X = m_anchorimage.Width / 2;
+            m_anchororigin.Y = m_anchorimage.Height / 2;
 
             font = Content.Load<SpriteFont>("SpriteFont1");
 
@@ -219,6 +277,8 @@ namespace DecaWaveMapView
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            m_debugwindow.SetExitting(true);
+            RemoveDebugWindow();
             RequestStop();
             m_breadcrumbtimer.Stop();
         }
@@ -264,6 +324,15 @@ namespace DecaWaveMapView
                 m_screenmax_y = graphics.GraphicsDevice.Viewport.Height;
                 m_halfscreenmax_x = m_screenmax_x / 2;
                 m_halfscreenmax_y = m_screenmax_y / 2;
+            }
+
+            // D - open debug window
+            if ((currentKeyboardState.IsKeyUp(Keys.D)) && (oldKeyboardState.IsKeyDown(Keys.D)))
+            {
+                if (m_debugwindow == null)
+                {
+                    DoOpenDebugWindow();
+                }
             }
 
             // add markers at current positions of all the tags in tag list
@@ -484,8 +553,24 @@ namespace DecaWaveMapView
                         );
                 }
             }
+            else
+            {
+                // non debug mode commands
+                // A - show anchors
+                if ((currentKeyboardState.IsKeyUp(Keys.A)) && (oldKeyboardState.IsKeyDown(Keys.A)))
+                {
+                    m_showanchors = !m_showanchors;
+                }
+            }
 
             base.Update(gameTime);
+        }
+
+        private void DoOpenDebugWindow()
+        {
+            m_debugwindow = new DebugForm(this);
+            m_debugwindow.Show();
+            m_debugwindow.BringToFront();
         }
 
         /// <summary>
@@ -648,6 +733,22 @@ namespace DecaWaveMapView
                 GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.LineList, vertices, 0, 4);
             }
 
+            // draw anchors?
+            if (m_showanchors)
+            {
+                foreach (Vector2 anchorpos in m_anchorpositions)
+                {
+                    float tmpx = (anchorpos.X + m_masteroffset_x) * m_scalefactor;
+                    if (m_inv_x) tmpx = -tmpx;
+                    float tmpy = (anchorpos.Y + m_masteroffset_y) * m_scalefactor;
+                    if (m_inv_y) tmpy = -tmpy;
+                    Vector2 pos = new Vector2(m_halfscreenmax_x + tmpx,
+                        m_halfscreenmax_y + tmpy);
+                    spriteBatch.Draw(m_anchorimage,
+                        pos, null, Color.White, 0f, m_anchororigin, 0.5f, SpriteEffects.None, 0f);
+                }
+            }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -694,23 +795,46 @@ namespace DecaWaveMapView
 
         void connector_MessageReceived(object sender, SocketConnector.MessageReceivedArgs e)
         {
+            string recv = "";
             try {
                 if (e.Message!=null && e.Message.Length>0)
                 {
                     string recvstr = e.Message;
                     string[] recv2 = recvstr.Split(new[] { "}{" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (recv2 == null || recv2.Count() == 0)
+                    {
+                        recv2 = new string[1];
+                        recv2[0] = e.Message;
+                    }
                     if (recv2.Count() > 0)
                     {
+                        LogMessage(MethodInfo.GetCurrentMethod().Name, "recv'd " + recv2.Count() + " lines.");
                         int i = 0;
                         foreach (string recviter in recv2)
                         {
-                            // hack repair strings
-                            string recv = recviter;
-                            if (i == 0) recv += "}";
-                            if (i > 0 && i < recv2.Count() - 1) recv = "{" + recv + "}";
-                            if (i == recv2.Count() - 1) recv = "{" + recv;
+                            // hack repair 2
+                            recv = recviter.Replace("{{", "{");
+                            recv = recv.Replace("}}", "}");
 
-                            System.Console.Write("LS: Received: ");
+                            // hack repair strings
+                            if (i == 0 && !recv.EndsWith("}"))
+                            {
+                                recv += "}";
+                            }
+                            if (i > 0 && i < recv2.Count() - 1)
+                            {
+                                if (!recv.StartsWith("{"))
+                                    recv = "{" + recv;
+                                if (!recv.EndsWith("}"))
+                                    recv = recv + "}";
+                            }
+                            if (i == recv2.Count() - 1)
+                            {
+                                if (!recv.StartsWith("{"))
+                                    recv = "{" + recv;
+                            }
+
+                            //LogMessage(MethodInfo.GetCurrentMethod().Name, "LS: Received: ");
                             var tagMsg = System.Web.Helpers.Json.Decode(recv);
                             if (tagMsg != null &&
                                 tagMsg.id != null &&
@@ -718,13 +842,13 @@ namespace DecaWaveMapView
                                 tagMsg.coordinates.x != null &&
                                 tagMsg.coordinates.y != null)
                             {
-                                System.Console.WriteLine(
-                                    string.Format("ID: {0}, x: {1}, y: {2}",
-                                    tagMsg.id,
-                                    tagMsg.coordinates.x,
-                                    tagMsg.coordinates.y
-                                    )
-                                );
+                                //LogMessage(MethodInfo.GetCurrentMethod().Name, 
+                                //    string.Format("ID: {0}, x: {1}, y: {2}",
+                                //    tagMsg.id,
+                                //    tagMsg.coordinates.x,
+                                //    tagMsg.coordinates.y
+                                //    )
+                                //);
 
                                 UpdateTagXYZ(
                                     tagMsg.id,
@@ -734,28 +858,39 @@ namespace DecaWaveMapView
                             }
                             else
                             {
-                                System.Console.Write("LS: Recv'd tag msg with NO coords ");
+                                LogMessage(MethodInfo.GetCurrentMethod().Name, "LS: Recv'd tag msg with NO coords ");
                                 if (tagMsg != null &&
                                     tagMsg.id != null)
                                 {
-                                    System.Console.Write("from tag ID: " + tagMsg.id);
+                                    LogMessage(MethodInfo.GetCurrentMethod().Name, "from tag ID: " + tagMsg.id);
                                 }
-                                System.Console.WriteLine();
+                                LogMessage(MethodInfo.GetCurrentMethod().Name, "");
                             }
                             i++;
                         }
-                        System.Console.Write("LS: Recv'd msg with no data");
+                    }
+                    else
+                    {
+                        LogMessage(MethodInfo.GetCurrentMethod().Name, "LS: Recv'd msg with no data");
                     }
                 }
                 else
                 {
-                    System.Console.WriteLine("LS: Received empty");
+                    LogMessage(MethodInfo.GetCurrentMethod().Name, "LS: Received empty");
                 }
             }
             catch (Exception exc)
             {
-                System.Console.WriteLine("INFO: "+exc);
+                LogMessage(MethodInfo.GetCurrentMethod().Name, "INFO: "+exc);
                 //throw new Exception("message receive error", exc);
+            }
+        }
+
+        public void LogMessage(string callingmethodname, string message)
+        {
+            if (m_debugwindow != null)
+            {
+                m_debugwindow.AppendToOutputWindow(callingmethodname, message);
             }
         }
 
@@ -768,6 +903,11 @@ namespace DecaWaveMapView
         public void RequestStop()
         {
             connector.ShutDown();
+        }
+
+        internal void RemoveDebugWindow()
+        {
+            m_debugwindow = null;
         }
     }
 
