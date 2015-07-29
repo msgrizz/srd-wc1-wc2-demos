@@ -27,6 +27,7 @@ namespace OfficeAutomationServer
                     SocketType.Stream, ProtocolType.Tcp);
 
                 svcSocket.Connect(remoteEP);
+                //svcSocket.Blocking = false;
 
                 ConnectOk = true;
             }

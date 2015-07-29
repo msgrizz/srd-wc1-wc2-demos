@@ -39,6 +39,9 @@ namespace OfficeAutomationServer
         private static List<ClientConnectionThread> m_clientconnections = new List<ClientConnectionThread>();
         private static volatile object m_clientlistlocker = new Object();
 
+        // NEW LC 29-07-2015 Test Harness mode
+        private static bool m_testmode = false;
+
         internal static void AddConnection(ClientConnectionThread newconnection)
         {
             lock (m_clientlistlocker)
@@ -50,6 +53,16 @@ namespace OfficeAutomationServer
 
         // Server socket
         private static ServerListenThread m_socketServerObject = null;
+        private static List<TagXYZ> dummytags;
+        private static decimal tag1offset;
+        private static decimal tag1vel;
+        private static decimal tag2offset;
+        private static decimal tag2vel;
+        private static decimal tag3offset;
+        private static decimal tag3vel;
+        private static decimal tag3orig;
+        private static decimal tag2orig;
+        private static decimal tag1orig;
 
         static void Main(string[] args)
         {
@@ -82,6 +95,8 @@ namespace OfficeAutomationServer
                     try
                     {
                         m_debug = (args[2].ToUpper() == "DEBUGON");
+                        m_testmode = (args[2].ToUpper() == "TESTMODE");
+                        m_debug = m_testmode;
                     }
                     catch (Exception)
                     {
@@ -89,8 +104,16 @@ namespace OfficeAutomationServer
                     }
                 }
 
-                decaWaveThread = new Thread(DoDecaWaveWork);
-                decaWaveThread.Start();
+                if (m_testmode)
+                {
+                    decaWaveThread = new Thread(DoDecaWaveTestHarnessWork);
+                    decaWaveThread.Start();
+                }
+                else
+                {
+                    decaWaveThread = new Thread(DoDecaWaveWork);
+                    decaWaveThread.Start();
+                }
 
                 periodicReporter = new System.Timers.Timer();
                 periodicReporter.Interval = m_reportperiod;
@@ -175,7 +198,9 @@ namespace OfficeAutomationServer
                     }
                 }
                 DebugPrint(MethodInfo.GetCurrentMethod().Name,
-                    String.Format("Currently tracking {0} tags. There are {1} stale tags.", numtags, numstaletags));
+                    String.Format(
+                        m_testmode ? "TESTMODE:" : "" +
+                        "Currently tracking {0} tags. There are {1} stale tags.", numtags, numstaletags));
             }
         }
 
@@ -259,6 +284,7 @@ namespace OfficeAutomationServer
                                 UdpClient socket = new UdpClient();
                                 IPEndPoint localEp = new IPEndPoint(IPAddress.Parse(lsAddress.ip), 8787);
                                 socket.Client.Bind(localEp);
+                                //socket.Client.Blocking = false;
                                 socket.Client.ReceiveTimeout = 20000;
                                 bool isTimeExpired = false;
                                 // Data buffer for incoming data.
@@ -345,6 +371,8 @@ namespace OfficeAutomationServer
                         catch (Exception e)
                         {
                             DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                            _shouldStop = true;
+                            m_quit = true;
                         }
                     }
                     else
@@ -359,8 +387,194 @@ namespace OfficeAutomationServer
                 DebugPrint(MethodInfo.GetCurrentMethod().Name, ".");
             }
             svcClient.close();
-            DebugPrint(MethodInfo.GetCurrentMethod().Name, "worker thread: terminating gracefully.");
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "worker thread: terminating gracefully (socket closed).");
         }
+
+        private static void DoDecaWaveTestHarnessWork()
+        {
+            bool connected = false;
+
+            dummytags = new List<TagXYZ>();
+            dummytags.Add(new TagXYZ(
+                18.662m,
+                18.289m,
+                4.445m,
+                "0xDECA313033614013", DateTime.Now));
+            dummytags.Add(new TagXYZ(
+                16.3m,
+                2.85m,
+                4.445m,
+                "0xDECA393031102335", DateTime.Now));
+            dummytags.Add(new TagXYZ(
+                17.1m,
+                14.2m,
+                4.445m,
+                "0xDECA363031100F1A", DateTime.Now));
+            tag1offset = 0m;
+            tag1vel = 0.2m;
+            tag1orig = 18.662m;
+            tag2offset = 0m;
+            tag2vel = -0.2m;
+            tag2orig = 16.3m;
+            tag3offset = 0m;
+            tag3vel = 0.3m;
+            tag3orig = 4.445m;
+
+            while (!_shouldStop)
+            {
+                DebugPrint(MethodInfo.GetCurrentMethod().Name, "testmode worker thread: working...");
+
+                if (!connected)
+                {
+                    connected = true;
+                    bool isTimeExpired = false;
+                    try
+                    {
+                        while (!_shouldStop && !isTimeExpired)
+                        {
+                            try
+                            {
+                                Thread.Sleep(200);
+                                string recv = GenerateDummyJSON();
+                                if (recv.Length > 0)
+                                {
+                                    if (m_debug)
+                                    {
+                                        DebugPrint(MethodInfo.GetCurrentMethod().Name, "testmode LS: Received: ");
+                                    }
+                                    string[] lines = recv.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                                    foreach (string line in lines)
+                                    {
+
+                                        var tagMsg = System.Web.Helpers.Json.Decode(line);
+                                        if (tagMsg != null &&
+                                            tagMsg.id != null &&
+                                            tagMsg.coordinates != null &&
+                                            tagMsg.coordinates.x != null &&
+                                            tagMsg.coordinates.y != null)
+                                        {
+                                            if (m_debug)
+                                            {
+                                                DebugPrint(MethodInfo.GetCurrentMethod().Name,
+                                                    string.Format("testmode ID: {0}, x: {1}, y: {2}",
+                                                    tagMsg.id,
+                                                    tagMsg.coordinates.x,
+                                                    tagMsg.coordinates.y
+                                                    )
+                                                );
+                                            }
+
+                                            // TODO communicate here to registered/interested clients
+                                            // that the xyz pos of a tag has been updated
+
+                                            UpdateTagXYZ(
+                                                tagMsg.id,
+                                                tagMsg.coordinates.x,
+                                                tagMsg.coordinates.y,
+                                                tagMsg.coordinates.z);
+
+                                            SendToRegisteredClients(line);
+                                        }
+                                        else
+                                        {
+                                            if (m_debug)
+                                            {
+                                                DebugPrint(MethodInfo.GetCurrentMethod().Name, "testmode LS: Recv'd tag msg with NO coords ");
+                                                if (tagMsg != null &&
+                                                    tagMsg.id != null)
+                                                {
+                                                    DebugPrint(MethodInfo.GetCurrentMethod().Name, "from tag ID: " + tagMsg.id);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (m_debug)
+                                    {
+                                        DebugPrint(MethodInfo.GetCurrentMethod().Name, "testmode LS: Received empty");
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                                isTimeExpired = true;
+                                _shouldStop = true;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        DebugPrint(MethodInfo.GetCurrentMethod().Name, e.ToString());
+                        _shouldStop = true;
+                        m_quit = true;
+                    }
+                }
+
+                Thread.Sleep(1000);
+                DebugPrint(MethodInfo.GetCurrentMethod().Name, ".");
+            }
+            DebugPrint(MethodInfo.GetCurrentMethod().Name, "testmode worker thread: terminating gracefully (socket closed).");
+        }
+
+        private static string GenerateDummyJSON()
+        {
+            StringBuilder retval = new StringBuilder();
+            // plan generate 3 lines of JSON for the 3 dummy tags
+            // also animate positions for next time around
+            int i = 1;
+            foreach (TagXYZ tag in dummytags)
+            {
+                // add animation offsets to tag position...
+                Decimal tmpx = tag.x;
+                Decimal tmpy = tag.y;
+                switch (i)
+                {
+                    case 1:
+                        tmpx += tag1offset;
+                        tmpy += tag1offset;
+                        break;
+                    case 2:
+                        tmpx += tag2offset;
+                        tmpy += tag2offset;
+                        break;
+                    case 3:
+                        tmpx += tag3offset;
+                        tmpy += tag3offset;
+                        break;
+                    default:
+                        tmpx += tag1offset;
+                        tmpy += tag1offset;
+                        break;
+                }
+                retval.Append(@"{    ""id"": """);
+                retval.Append(tag.tagData);
+                retval.Append(@""",    ""timestamp"": 1437394859.502,    ""msgid"": 119104,    ""coordinates"": {        ""x"": ");
+                retval.Append(tmpx);
+                retval.Append(@",        ""y"": ");
+                retval.Append(tmpy);
+                retval.Append(@",        ""z"": ");
+                retval.Append(tag.z);
+                retval.Append(@", ""heading"": 0, ""pqf"": 100    },    ""meas"": [        {            ""anchor"": ""0xDECA303035502658"",            ""dist"": 17.038,            ""dqf"": 62        },        {            ""anchor"": ""0xDECA323031601A47"",            ""dist"": 16.705,            ""dqf"": 15        },        {            ""anchor"": ""0xDECA323031902641"",            ""dist"": 5.804,            ""dqf"": 83        },        {            ""anchor"": ""0xDECA323035502670"",            ""dist"": 9.418,            ""dqf"": 79        }    ]}");
+                retval.Append("\r\n");
+                i++;
+            }
+
+            // animate tag positions for next time around
+            // tag 1
+            tag1offset += tag1vel;
+            if (Math.Abs(tag1offset) > 3m) tag1vel = -tag1vel;
+            tag2offset += tag2vel;
+            if (Math.Abs(tag2offset) > 3m) tag2vel = -tag2vel;
+            tag3offset += tag3vel;
+            if (Math.Abs(tag3offset) > 3m) tag3vel = -tag3vel;
+
+            //@"{    ""id"": ""0xDECA313033614013"",    ""timestamp"": 1437394859.502,    ""msgid"": 119104,    ""coordinates"": {        ""x"": 18.662,        ""y"": 18.289,        ""z"": 4.445,        ""heading"": 0,        ""pqf"": 100    },    ""meas"": [        {            ""anchor"": ""0xDECA303035502658"",            ""dist"": 17.038,            ""dqf"": 62        },        {            ""anchor"": ""0xDECA323031601A47"",            ""dist"": 16.705,            ""dqf"": 15        },        {            ""anchor"": ""0xDECA323031902641"",            ""dist"": 5.804,            ""dqf"": 83        },        {            ""anchor"": ""0xDECA323035502670"",            ""dist"": 9.418,            ""dqf"": 79        }    ]}";
+            return retval.ToString();
+        }
+
 
         // send data from OpenRTLS server (tag positions in JSON format, etc)
         // to registered tcp/ip client connections
