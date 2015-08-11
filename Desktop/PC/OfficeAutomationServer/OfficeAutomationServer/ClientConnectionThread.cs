@@ -17,6 +17,14 @@ namespace OfficeAutomationServer
         private static volatile object m_listlocker = new Object();
 
         public volatile bool SubscribedToTagUpdates = false;
+        private bool m_loggedon = false; // if not logged on we can't do much
+        private PermissionLevels m_permissions = PermissionLevels.NormalUser;
+
+        public enum PermissionLevels
+        {
+            NormalUser,
+            AdminUser            
+        }
 
         // lock and short interuptable timeout to wait for incoming message
         object m_checkIOlock = new object();
@@ -106,9 +114,9 @@ namespace OfficeAutomationServer
                                 }
                                 if (bit != null && bit.Length > 0)
                                 {
-                                    string tmp = bit.Replace("\r", string.Empty);
-                                    tmp = tmp.Replace("\n", string.Empty);
-                                    sb.Append(tmp);
+                                    //string tmp = bit.Replace("\r", string.Empty);
+                                    //tmp = tmp.Replace("\n", string.Empty);
+                                    sb.Append(bit);  // tmp
                                 }
                             }
                         }
@@ -123,41 +131,133 @@ namespace OfficeAutomationServer
                     Console.WriteLine("info: error reading from client");
                     m_quit = true;
                 }
-                string strin = sb.ToString();
-                if (!Program.HandleInputCommand(strin, this)) // this handles server-level commands from client
+                string[] commands = sb.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+                foreach (string commanditer in commands)
                 {
-                    // The following handles client-level commands from client:
-                    switch (strin.ToUpper())
+                    string command = commanditer;
+                    string arguments = "";
+                    if (command == null || command.Length < 1) break;
+                    if (!Program.HandleInputCommand(command, this, m_loggedon, m_permissions, ns)) // this handles server-level commands from client
                     {
-                        case "QUIT":
-                        case "EXIT":
-                        case "BYE":
-                        case "GOODBYE":
-                            m_quit = true;
-                            break;
-                        case "GEOFENCE":
-                            DoGeoFence();
-                            break;
-                        case "SUBSCRIBEALL":
-                            SubscribedToTagUpdates = true;
-                            break;
-                        case "SUBSCRIBEOFF":
-                            SubscribedToTagUpdates = false;
-                            break;
-                        case "HELLO":
-                        case "HI":
-                        case "HEY":
-                            SendToClient(ns, "Hey there, how are you?");
-                            break;
-                        case "HELP":
-                            SendToClient(ns, GetHelpText());
-                            break;
-                        default:
-                            if (strin.Length > 0)
-                            {
-                                SendToClient(ns, "Sorry, unrecognised command: \"" + strin + "\"");
-                            }
-                            break;
+                        // NEW LC 10-08-2015 split incoming command into
+                        // command and then any args
+                        int space_pos = command.IndexOf(' ');
+                        if (space_pos > -1 && command != String.Empty)
+                        {
+                            arguments = command.Substring(space_pos + 1);
+                            command = command.Substring(0, space_pos).ToUpper();
+                        }
+
+                        // The following handles client-level commands from client:
+                        switch (command.ToUpper())
+                        {
+                            case "LOGON":
+                                DoProcessLogon(arguments, ns);
+                                break;
+                            case "QUIT":
+                            case "EXIT":
+                            case "BYE":
+                            case "GOODBYE":
+                                m_quit = true;
+                                break;
+                            case "GEOFENCE":
+                                DoGeoFence(ns);
+                                break;
+                            case "SUBSCRIBEALL":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS SUBSCRIBEALL");
+                                    SubscribedToTagUpdates = true;
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED SUBSCRIBEALL " + ErrorCodes.UserNotLoggedOn + " SUBSCRIBEALL command requires that you LOGON first.");
+                                }
+                                break;
+                            case "SUBSCRIBEOFF":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS SUBSCRIBEOFF");
+                                    SubscribedToTagUpdates = false;
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED SUBSCRIBEOFF " + ErrorCodes.UserNotLoggedOn + " SUBSCRIBEOFF command requires that you LOGON first.");
+                                }
+                                break;
+                            case "GETENTITIES":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS GETENTITIES");
+                                    // TODO initiate transfer of entities to
+                                    // client. Each entity as a JSON message.
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED GETENTITIES " + ErrorCodes.UserNotLoggedOn + " GETENTITIES command requires that you LOGON first.");
+                                }
+                                break;
+                            case "UPDATEENTITY":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS UPDATEENTITY");
+                                    // TODO write entity data from JSON
+                                    // in arguments to database
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED UPDATEENTITY " + ErrorCodes.UserNotLoggedOn + " UPDATEENTITY command requires that you LOGON first.");
+                                }
+                                break;
+                            case "DELETEENTITY":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS DELETEENTITY");
+                                    // TODO delete entity from database using entity id in arguments
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED DELETEENTITY " + ErrorCodes.UserNotLoggedOn + " DELETEENTITY command requires that you LOGON first.");
+                                }
+                                break;
+                            case "UPDATEREGION":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS UPDATEREGION");
+                                    // TODO write region data from JSON
+                                    // in arguments to database
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED UPDATEREGION " + ErrorCodes.UserNotLoggedOn + " UPDATEREGION command requires that you LOGON first.");
+                                }
+                                break;
+                            case "DELETEREGION":
+                                if (m_loggedon)
+                                {
+                                    SendToClient(ns, "SUCCESS DELETEREGION");
+                                    // TODO delete region from database using entity id in arguments
+                                }
+                                else
+                                {
+                                    SendToClient(ns, "FAILED DELETEREGION " + ErrorCodes.UserNotLoggedOn + " DELETEREGION command requires that you LOGON first.");
+                                }
+                                break;
+                            case "HELLO":
+                            case "HI":
+                            case "HEY":
+                                SendToClient(ns, "Hey there, how are you?");
+                                break;
+                            case "HELP":
+                                SendToClient(ns, GetHelpText());
+                                break;
+                            default:
+                                if (command.Length > 0)
+                                {
+                                    SendToClient(ns, "Sorry, unrecognised command: \"" + command + "\"");
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -167,7 +267,48 @@ namespace OfficeAutomationServer
             client.Close();
         }
 
-        private void DoGeoFence()
+        private void DoProcessLogon(string arguments, NetworkStream ns)
+        {
+            arguments = arguments.ToUpper();
+            if (arguments.Length == 0)
+            {
+                m_permissions = PermissionLevels.NormalUser;
+                m_loggedon = false;
+                SendToClient(ns, "FAILED LOGON " + ErrorCodes.UserAccountNotRecognized + " Check LOGON command usage:"+ Environment.NewLine+
+                    "LOGON <Windows User Name> - Log on as this user to use OAS features." + Environment.NewLine);
+            }
+            else
+            {
+                if (arguments == "LCOLLINS" || arguments == "SHAYWARD-I")
+                {
+                    m_permissions = PermissionLevels.NormalUser;
+                    m_loggedon = true;
+                    SendToClient(ns, "SUCCESS LOGON");
+                    if (arguments == "LCOLLINS")
+                    {
+                        m_permissions = PermissionLevels.AdminUser;
+                    }
+                }
+                else
+                {
+                    m_permissions = PermissionLevels.NormalUser;
+                    m_loggedon = false;
+                    SendToClient(ns, "FAILED LOGON " + ErrorCodes.UserAccountNotRecognized + " User does not have an account.");
+                }
+            }
+        }
+
+        public enum ErrorCodes
+        {
+            NoError,
+            UnknownError,
+            UserAccountNotRecognized,
+            UserNotLoggedOn,
+            CommandNotImplemented,
+            InsufficientPermissions
+        }
+
+        private void DoGeoFence(NetworkStream ns)
         {
             // create a 2 meter geofence around the user's tag location
             // this will be stored in memory, will it also go into database?
@@ -177,7 +318,14 @@ namespace OfficeAutomationServer
             // should laptop have a tag? OR should you be able to overide the geofence.
             // maybe provide easy "cancel geofence e.g. for 5/15 mins" options on system tray
 
-
+            if (m_loggedon)
+            {
+                SendToClient(ns, "FAILED GEOFENCE " + ErrorCodes.CommandNotImplemented + " GEOFENCE command is not yet implemented.");
+            }
+            else
+            {
+                SendToClient(ns, "FAILED LOGON " + ErrorCodes.UserNotLoggedOn + " GEOGENCE command requires that you LOGON first.");
+            }
         }
 
 
@@ -192,15 +340,22 @@ namespace OfficeAutomationServer
             sb.Append("AVAILABLE COMMANDS:" + Environment.NewLine);
             sb.Append("-------------------" + Environment.NewLine);
             sb.Append("QUIT - closes your client connection" + Environment.NewLine);
+            sb.Append("LOGON <Windows User Name> - Log on as this user to use OAS features." + Environment.NewLine);
+            sb.Append("GEOFENCE - Make a new geofence for current user." + Environment.NewLine);
             sb.Append("SUBSCRIBEALL - subscribe to tag updates for all tags in system" + Environment.NewLine);
             sb.Append("SUBSCRIBEOFF - unsubscribe to tag updates for all tags in system" + Environment.NewLine);
+            sb.Append("GETENTITIES - gets the entity data from database" + Environment.NewLine);
+            sb.Append("UPDATEENTITY <{JSON ENTITY DATA}> - add/update the entity in database" + Environment.NewLine);
+            sb.Append("DELETEENTITY <ENTITY ID> - delete the entity from database" + Environment.NewLine);
+            sb.Append("UPDATEREGION <{JSON REGION DATA}> - add/update the region in database" + Environment.NewLine);
+            sb.Append("DELETEREGION <REGION ID> - delete the region in database" + Environment.NewLine);
             sb.Append("HELP - display this list of available commands" + Environment.NewLine);
             sb.Append("VERSION - displays server version information" + Environment.NewLine);
             sb.Append("SHUTDOWN - shut down the server" + Environment.NewLine);
             return sb.ToString();
         }
 
-        private void SendToClient(NetworkStream ns, string msg)
+        public void SendToClient(NetworkStream ns, string msg)
         {
             byte[] outbuffer;
             outbuffer = Encoding.ASCII.GetBytes(msg + Environment.NewLine);

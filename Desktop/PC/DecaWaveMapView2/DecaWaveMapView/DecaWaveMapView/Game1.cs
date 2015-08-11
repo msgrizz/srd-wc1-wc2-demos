@@ -896,7 +896,7 @@ namespace DecaWaveMapView
 
         void connector_Connected(object sender, EventArgs e)
         {
-            Thread.Sleep(1000);
+            connector.SendCommand("LOGON SHAYWARD-I");
             connector.SendCommand("SUBSCRIBEALL");
         }
 
