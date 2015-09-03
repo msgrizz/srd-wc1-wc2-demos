@@ -30,26 +30,65 @@ namespace MySQLScratchPad
             }
         }
 
+        ~MySQLConnector()
+        {
+            Close();
+        }
+
         internal void Close()
         {
-            m_myConnection.Close();
+            if (m_myConnection != null)
+            {
+                m_myConnection.Close();
+                m_myConnection = null;
+            }
+        }
+
+        static Entity QueryEntityByTagId(string tag_id)
+        {
+            Entity m_retval = null;
+
+            try
+            {
+
+            }
+
+            return m_retval;
         }
     }
 
-    class User
+    class Entity
     {
-        public int m_idusers;
-        public string m_username, m_password, m_pcname,
-            m_tagid, m_text, m_appsettings;
+        public int m_internal_id;
+        public enum EntityType
+        {
+            Asset,
+            Person
+        }
+        public EntityType m_type;
+        public string m_name;
+        public enum EntityDepartment
+        {
+            Engineering,
+            Sales,
+            Marketing
+        }
+        public EntityDepartment m_department;
+        public string m_id, m_tag_id,
+            m_visibility_filter,
+            m_access_filter,
+            m_privilege_filter;
 
-        public User()
+        public Entity()
         {
         }
 
-        public User(string idusers, string username, password,
-            pcname, tagid, text, appsettings)
+        public Entity(int internal_id, EntityType type, string name, EntityDepartment department,
+            string id, string tag_id, string visibility_filter, string access_filter, string privilege_filter)
         {
-
+            m_internal_id = internal_id;
+            m_type = type;
+            //m_
         }
     }
 }
